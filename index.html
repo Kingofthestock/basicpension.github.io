@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2025년 기초연금 빠른 자격 확인</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #04345c;
+      --secondary-color: #0a6fb7;
+      --bg-color: #f0f4f8;
+      --card-bg: #ffffff;
+      --radius: 1rem;
+      font-size: 20px; /* 어르신 가독성 */
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Noto Sans KR", sans-serif;
+      background: var(--bg-color);
+      color: #111;
+      line-height: 1.6;
+    }
+    header {
+      background: var(--primary-color);
+      color: #fff;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    main {
+      max-width: 680px;
+      margin: 1.5rem auto;
+      padding: 1.5rem;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    fieldset {
+      border: none;
+      margin-bottom: 1.5rem;
+    }
+    legend {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+      color: var(--primary-color);
+    }
+    label {
+      display: block;
+      margin: 0.6rem 0 0.3rem;
+    }
+    input,
+    select {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+    }
+    input[type="radio"] {
+      width: auto;
+      margin-right: 0.4rem;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0.4rem 0;
+    }
+    .radio-group small {
+      font-size: 0.9rem;
+      color: #555;
+    }
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1.2rem;
+      background: var(--secondary-color);
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0d83d3;
+    }
+    #result {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      white-space: pre-line;
+    }
+    .apply,
+    .benefits {
+      margin-top: 1rem;
+      border-top: 1px dashed #bbb;
+      padding-top: 1rem;
+    }
+    .apply h3,
+    .benefits h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+    }
+    .apply ul,
+    .benefits ul {
+      padding-left: 1.2rem;
+      margin: 0;
+    }
+    .apply li,
+    .benefits li {
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+    .disclaimer {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>2025 기초연금 자격 빠른 확인</h1>
+  </header>
+  <main>
+    <form id="pensionForm">
+      <fieldset>
+        <legend>1. 기본 정보</legend>
+        <label for="birthYear">출생 연도</label>
+        <select id="birthYear" required></select>
+
+        <label for="birthMonth">출생 월</label>
+        <select id="birthMonth" required></select>
+
+        <label for="household">가구 유형</label>
+        <select id="household" required>
+          <option value="single">단독가구</option>
+          <option value="couple">부부가구</option>
+        </select>
+
+        <label>거주 지역</label>
+        <div class="radio-group" id="areaOptions">
+          <label><input type="radio" name="area" value="big" required /> 대도시 <small>(서울·부산 등 광역시 구)</small></label>
+          <label><input type="radio" name="area" value="mid" /> 중소도시 <small>(인구 50만 미만 시)</small></label>
+          <label><input type="radio" name="area" value="rural" /> 농어촌 <small>(읍·면 지역)</small></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2. 월 소득</legend>
+        <label for="income">월 평균 소득 (예: 120만원)</label>
+        <input type="text" id="income" placeholder="1,200,000원" required />
+      </fieldset>
+
+      <fieldset>
+        <legend>3. 보유 재산</legend>
+        <label for="homeValue">주택 시가</label>
+        <input type="text" id="homeValue" placeholder="1억 5,000만 원" />
+
+        <label for="deposit">전세·보증금</label>
+        <input type="text" id="deposit" placeholder="5000만 원" />
+
+        <label for="savings">예금·적금</label>
+        <input type="text" id="savings" placeholder="3000만 원" />
+
+        <label for="stocks">주식·펀드</label>
+        <input type="text" id="stocks" placeholder="1000만 원" />
+
+        <label for="otherAssets">기타 자산 (선택)</label>
+        <input type="text" id="otherAssets" placeholder="0" />
+      </fieldset>
+
+      <button type="submit">자격 확인하기</button>
+    </form>
+
+    <div id="result"></div>
+    <div id="applyInfo" class="apply" style="display: none;"></div>
+    <div id="benefitBox" class="benefits" style="display: none;"></div>
+    <p class="disclaimer">
+      ※ 본 결과는 2025년 기준 기초연금 선정기준을 간단히 적용한 예비 판정입니다.
+      최종 지급 여부는 국민연금공단 심사 결과에 따릅니다.
+    </p>
+  </main>
+  <script>
+    /* ================= CONFIG ================= */
+    const CONFIG = {
+      year: 2025,
+      incomeThreshold: { single: 2280000, couple: 3648000 }, // 월 소득 기준
+      basicAsset: { big: 135000000, mid: 85000000, rural: 72500000 }, // 공제 자산
+      assetLimit: 209000000, // 순재산가액 기준
+      benefit: { single: 334965, couplePer: 267972 }, // 예상 월 지급액
+    };
+
+    const SENIOR_BENEFITS = [
+      {
+        title: "전국 공통 혜택",
+        list: [
+          "건강보험 본인부담 경감(의료비 30~60% 감면)",
+          "국민건강검진 2년마다 무료",
+          "KTX·고속버스 등 교통 요금 30% 할인",
+          "국립공원·고궁·국립박물관 입장료 면제",
+          "문화누리카드: 연 11만원 문화·여행·스포츠 지원",
+          "치매 조기검진 및 예방 프로그램 무료",
+        ],
+      },
+      {
+        title: "경기도",
+        list: [
+          "NH농협 ‘경기도형 어르신 교통카드’ → 수도권 전철 무료",
+          "경기관광·문화시설 입장료 50% 할인",
+          "전기·가스·수도 요금 경감(기초연금 수급자 대상)",
+        ],
+      },
+      {
+        title: "서울시",
+        list: [
+          "서울시 어르신 교통카드 → 지하철·시내버스 무료",
+          "서울시립 문화시설 관람료 50% 할인",
+          "치매안심센터 프로그램 무료 이용",
+        ],
+      },
+      {
+        title: "부산시",
+        list: [
+          "부산어르신 교통카드 → 도시철도·시내버스 무료",
+          "영화의전당 등 문화시설 할인",
+        ],
+      },
+    ];
+
+    /* ========== 유틸 함수 ========= */
+    function populateBirthSelects() {
+      const yearSel = document.getElementById("birthYear");
+      const monthSel = document.getElementById("birthMonth");
+      const currentYear = new Date().getFullYear();
+      // 100세까지 선택 가능 (현재연도‑100)
+      for (let y = currentYear - 65; y >= currentYear - 100; y--) {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = `${y}년`;
+        yearSel.appendChild(opt);
+      }
+      for (let m = 1; m <= 12; m++) {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = `${m.toString().padStart(2, "0") }월`;
+        monthSel.appendChild(opt);
+      }
+    }
+
+    function numFromText(str) {
+      if (!str) return 0;
+      str = str.replace(/\s|원|,/g, "");
+      let total = 0;
+      const eok = str.match(/([0-9]+)억/);
+      if (eok) {
+        total += parseInt(eok[1]) * 100000000;
+        str = str.replace(eok[0], "");
+      }
+      const man = str.match(/([0-9]+)만/);
+      if (man) {
+        total += parseInt(man[1]) * 10000;
+        str = str.replace(man[0], "");
+      }
+      const nums = str.match(/[0-9]+/g);
+      if (nums) {
+        total += parseInt(nums.join(""));
+      }
+      return isNaN(total) ? 0 : total;
+    }
+
+    function formatKRW(n) {
+      return n.toLocaleString("ko-KR") + "원";
+    }
+
+    function calcAge(byear, bmonth) {
+      const today = new Date();
+      let age = today.getFullYear() - byear;
+      if (bmonth > today.getMonth() + 1) age--;
+      return age;
+    }
+
+    /* ========== 결과 표시 ========= */
+    function buildApplyInfo() {
+      return `\n\u25B6 신청 방법\n\n1) 가까운 동(면) 주민센터 방문\n   - 신분증, 통장사본, 배우자 신분증(부부가구 시)\n2) 온라인 \\u2018복지로(bokjiro.go.kr)\\u2019 홈페이지에서도 가능`; }
+
+    function buildBenefitsHtml() {
+      let html = "<h3>65세 이상 주요 혜택</h3>";
+      SENIOR_BENEFITS.forEach((cat) => {
+        html += `<strong>• ${cat.title}</strong><ul>`;
+        cat.list.forEach((li) => (html += `<li>${li}</li>`));
+        html += "</ul>";
+      });
+      return html;
+    }
+
+    /* ========== 메인 이벤트 ========= */
+    document.addEventListener("DOMContentLoaded", populateBirthSelects);
+
+    document.getElementById("pensionForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const byear = parseInt(document.getElementById("birthYear").value, 10);
+      const bmonth = parseInt(document.getElementById("birthMonth").value, 10);
+      const household = document.getElementById("household").value;
+      const area = document.querySelector("input[name='area']:checked").value;
+
+      const income = numFromText(document.getElementById("income").value);
+      const assetsTotal =
+        numFromText(document.getElementById("homeValue").value) +
+        numFromText(document.getElementById("deposit").value) +
+        numFromText(document.getElementById("savings").value) +
+        numFromText(document.getElementById("stocks").value) +
+        numFromText(document.getElementById("otherAssets").value);
+
+      const age = calcAge(byear, bmonth);
+      const incomeLimit = CONFIG.incomeThreshold[household];
+      const incomeEligible = income <= incomeLimit;
+      const netAsset = Math.max(0, assetsTotal - CONFIG.basicAsset[area]);
+      const assetEligible = netAsset <= CONFIG.assetLimit;
+      const ageEligible = age >= 65;
+
+      let msg = "";
+      if (ageEligible && incomeEligible && assetEligible) {
+        const benefitAmt = household === "single" ? CONFIG.benefit.single : CONFIG.benefit.couplePer;
+        msg += `✅ 기초연금 수급 가능성 높습니다!\n\n예상 월 지급액: ${formatKRW(benefitAmt)}`;
+      } else {
+        msg += "❌ 현재 기준으로는 수급 요건을 충족하지 못합니다.";
+        if (!ageEligible) msg += `\n - 나이 요건: 만 65세까지 ${65 - age}년 남음`;
+        if (!incomeEligible) msg += `\n - 월 소득이 기준보다 ${formatKRW(income - incomeLimit)} 초과`;
+        if (!assetEligible)
+          msg += `\n - 순재산이 기준보다 ${formatKRW(netAsset - CONFIG.assetLimit)} 초과`;
+      }
+
+      document.getElementById("result").textContent = msg;
+      // 신청 안내
+      const applyDiv = document.getElementById("applyInfo");
+      applyDiv.textContent = ""; // reset
+      applyDiv.style.display = "block";
+      applyDiv.innerHTML = `<h3>신청 안내</h3><pre style="white-space:pre-line">${buildApplyInfo()}</pre>`;
+
+      // 65세 혜택 박스
+      const benefitBox = document.getElementById("benefitBox");
+      benefitBox.innerHTML = buildBenefitsHtml();
+      benefitBox.style.display = "block";
+    });
+  </script>
+</body>
+</html>
