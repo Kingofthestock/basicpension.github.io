@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기초연금 확인 및 추억의 게임</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            touch-action: manipulation;
+        }
+        .hidden {
+            display: none;
+        }
+
+        /* --- 기초연금 계산기 스타일 --- */
+        #pension-container {
+            --primary-color: #04345c;
+            --secondary-color: #0a6fb7;
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --radius: 1rem;
+            font-size: 18px; /* 가독성 조정 */
+            background-color: var(--bg-color);
+            color: #111;
+            line-height: 1.6;
+            padding: 1rem 0;
+        }
+        #pension-container header {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+        #pension-container header h1 {
+            margin: 0;
+            font-size: 1.6rem;
+        }
+        #pension-container main {
+            max-width: 680px;
+            margin: 1.5rem auto;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        #pension-container fieldset {
+            border: none;
+            margin-bottom: 1.5rem;
+            padding: 0;
+        }
+        #pension-container legend {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+        #pension-container label {
+            display: block;
+            margin: 0.6rem 0 0.3rem;
+        }
+        #pension-container input,
+        #pension-container select {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+        #pension-container input[type="radio"] {
+            width: auto;
+            margin-right: 0.4rem;
+        }
+        #pension-container .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 0.4rem 0;
+        }
+        #pension-container .radio-group small {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        #pension-container #result {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            white-space: pre-line;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 0.5rem;
+        }
+        #pension-container .apply,
+        #pension-container .benefits {
+            margin-top: 1rem;
+            border-top: 1px dashed #bbb;
+            padding-top: 1rem;
+        }
+        #pension-container .apply h3,
+        #pension-container .benefits h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+        #pension-container .apply ul,
+        #pension-container .benefits ul {
+            padding-left: 1.2rem;
+            margin: 0;
+        }
+        #pension-container .apply li,
+        #pension-container .benefits li {
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+        #pension-container .disclaimer {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        /* --- 오목 게임 스타일 --- */
+        #game-app-container {
+            background-color: #f0f4f8;
+            min-height: 100vh;
+        }
+        .board-container {
+            position: relative;
+            width: 95vw;
+            max-width: 640px;
+            margin: auto;
+            aspect-ratio: 1 / 1;
+        }
+        #game-board {
+            background-color: #e3c16f;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        .status-box {
+            transition: all 0.3s ease;
+        }
+        
+        /* 공용 버튼 */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #4a5568;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 9999px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .back-button:hover {
+            background-color: #2d3748;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- 메인 선택 화면 -->
+    <div id="main-selection" class="flex flex-col items-center justify-center min-h-screen p-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-12 text-center">무엇을 하시겠어요?</h1>
+        <div class="w-full max-w-md mx-auto space-y-6">
+            <button id="select-pension" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 text-xl">
+                2025년 기초연금 자격 확인
+            </button>
+            <button id="select-game" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-5 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 text-xl">
+                추억의 플래시 게임 (오목)
+            </button>
+        </div>
+    </div>
+
+    <!-- 기초연금 계산기 컨테이너 -->
+    <div id="pension-container" class="hidden">
+        <button class="back-button" onclick="showMainSelection()">‹ 뒤로</button>
+        <header>
+            <h1>2025 기초연금 자격 빠른 확인</h1>
+        </header>
+        <main>
+            <form id="pensionForm">
+                <fieldset>
+                    <legend>1. 기본 정보</legend>
+                    <label for="birthYear">출생 연도</label>
+                    <select id="birthYear" required></select>
+                    <label for="birthMonth">출생 월</label>
+                    <select id="birthMonth" required></select>
+                    <label for="household">가구 유형</label>
+                    <select id="household" required>
+                        <option value="single">단독가구</option>
+                        <option value="couple">부부가구</option>
+                    </select>
+                    <label>거주 지역</label>
+                    <div class="radio-group" id="areaOptions">
+                        <label><input type="radio" name="area" value="big" required /> 대도시 <small>(서울·부산 등 광역시 구)</small></label>
+                        <label><input type="radio" name="area" value="mid" /> 중소도시 <small>(인구 50만 미만 시)</small></label>
+                        <label><input type="radio" name="area" value="rural" /> 농어촌 <small>(읍·면 지역)</small></label>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>2. 월 소득</legend>
+                    <label for="income">월 평균 소득 (예: 120만원)</label>
+                    <input type="text" id="income" placeholder="1,200,000원" required />
+                </fieldset>
+                <fieldset>
+                    <legend>3. 보유 재산</legend>
+                    <label for="homeValue">주택 시가</label>
+                    <input type="text" id="homeValue" placeholder="1억 5,000만 원" />
+                    <label for="deposit">전세·보증금</label>
+                    <input type="text" id="deposit" placeholder="5000만 원" />
+                    <label for="savings">예금·적금</label>
+                    <input type="text" id="savings" placeholder="3000만 원" />
+                    <label for="stocks">주식·펀드</label>
+                    <input type="text" id="stocks" placeholder="1000만 원" />
+                    <label for="otherAssets">기타 자산 (선택)</label>
+                    <input type="text" id="otherAssets" placeholder="0" />
+                </fieldset>
+                <button type="submit" class="w-full py-3 text-xl bg-blue-600 text-white rounded-lg hover:bg-blue-700">자격 확인하기</button>
+            </form>
+            <div id="result"></div>
+            <div id="applyInfo" class="apply" style="display: none;"></div>
+            <div id="benefitBox" class="benefits" style="display: none;"></div>
+            <p class="disclaimer">
+                ※ 본 결과는 2025년 기준 기초연금 선정기준을 간단히 적용한 예비 판정입니다.
+                최종 지급 여부는 국민연금공단 심사 결과에 따릅니다.
+            </p>
+        </main>
+    </div>
+
+    <!-- 오목 게임 컨테이너 -->
+    <div id="game-app-container" class="hidden">
+        <button class="back-button" onclick="showMainSelection()">‹ 뒤로</button>
+        <div id="game-mode-selection" class="w-full max-w-md mx-auto text-center flex flex-col justify-center min-h-screen">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-8">오목 게임</h1>
+            <div class="space-y-4">
+                <button id="ai-mode-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 text-xl">
+                    AI 대전
+                </button>
+                <button id="pvp-mode-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 text-xl">
+                    1 vs 1 대전
+                </button>
+            </div>
+        </div>
+        <div id="game-container" class="w-full max-w-2xl mx-auto hidden flex flex-col justify-center min-h-screen p-4">
+            <h1 id="game-title" class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4"></h1>
+            <div id="status-box" class="status-box text-center bg-white p-3 rounded-lg shadow-md mb-4">
+                <p id="status-text" class="text-lg font-semibold text-gray-700">게임을 시작하세요.</p>
+            </div>
+            <div class="board-container">
+                <canvas id="game-board"></canvas>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-4">
+                <button id="new-game-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                    새 게임
+                </button>
+                <button id="game-back-to-menu-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                    모드 선택
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 페이지 전환 로직 ---
+        const mainSelectionDiv = document.getElementById('main-selection');
+        const pensionContainer = document.getElementById('pension-container');
+        const gameAppContainer = document.getElementById('game-app-container');
+
+        document.getElementById('select-pension').addEventListener('click', () => {
+            mainSelectionDiv.classList.add('hidden');
+            pensionContainer.classList.remove('hidden');
+        });
+
+        document.getElementById('select-game').addEventListener('click', () => {
+            mainSelectionDiv.classList.add('hidden');
+            gameAppContainer.classList.remove('hidden');
+            gameApp.resizeCanvas(); // 게임 선택 시 캔버스 크기 재조정
+        });
+
+        function showMainSelection() {
+            pensionContainer.classList.add('hidden');
+            gameAppContainer.classList.add('hidden');
+            mainSelectionDiv.classList.remove('hidden');
+        }
+
+        // --- 기초연금 계산기 스크립트 ---
+        const pensionApp = (() => {
+            const CONFIG = {
+                year: 2025,
+                incomeThreshold: { single: 2280000, couple: 3648000 },
+                basicAsset: { big: 135000000, mid: 85000000, rural: 72500000 },
+                assetLimit: 209000000,
+                benefit: { single: 334965, couplePer: 267972 },
+            };
+            const SENIOR_BENEFITS = [
+                { title: "전국 공통 혜택", list: ["건강보험 본인부담 경감(의료비 30~60% 감면)", "국민건강검진 2년마다 무료", "KTX·고속버스 등 교통 요금 30% 할인", "국립공원·고궁·국립박물관 입장료 면제", "문화누리카드: 연 11만원 문화·여행·스포츠 지원", "치매 조기검진 및 예방 프로그램 무료"] },
+                { title: "경기도", list: ["NH농협 ‘경기도형 어르신 교통카드’ → 수도권 전철 무료", "경기관광·문화시설 입장료 50% 할인", "전기·가스·수도 요금 경감(기초연금 수급자 대상)"] },
+                { title: "서울시", list: ["서울시 어르신 교통카드 → 지하철·시내버스 무료", "서울시립 문화시설 관람료 50% 할인", "치매안심센터 프로그램 무료 이용"] },
+                { title: "부산시", list: ["부산어르신 교통카드 → 도시철도·시내버스 무료", "영화의전당 등 문화시설 할인"] },
+            ];
+
+            function populateBirthSelects() {
+                const yearSel = document.getElementById("birthYear");
+                const monthSel = document.getElementById("birthMonth");
+                if (!yearSel || yearSel.options.length > 1) return; // 이미 채워졌으면 실행 안함
+                const currentYear = new Date().getFullYear();
+                for (let y = currentYear - 65; y >= currentYear - 100; y--) {
+                    const opt = document.createElement("option");
+                    opt.value = y;
+                    opt.textContent = `${y}년`;
+                    yearSel.appendChild(opt);
+                }
+                for (let m = 1; m <= 12; m++) {
+                    const opt = document.createElement("option");
+                    opt.value = m;
+                    opt.textContent = `${m.toString().padStart(2, "0")}월`;
+                    monthSel.appendChild(opt);
+                }
+            }
+
+            function numFromText(str) {
+                if (!str) return 0;
+                str = str.replace(/\s|원|,/g, "");
+                let total = 0;
+                const eok = str.match(/([0-9.]+)억/);
+                if (eok) { total += parseFloat(eok[1]) * 100000000; str = str.replace(eok[0], ""); }
+                const man = str.match(/([0-9.]+)만/);
+                if (man) { total += parseFloat(man[1]) * 10000; str = str.replace(man[0], ""); }
+                const nums = str.match(/[0-9]+/g);
+                if (nums) { total += parseInt(nums.join(""), 10); }
+                return isNaN(total) ? 0 : total;
+            }
+
+            function formatKRW(n) { return n.toLocaleString("ko-KR") + "원"; }
+            function calcAge(byear, bmonth) {
+                const today = new Date();
+                let age = today.getFullYear() - byear;
+                if (bmonth > today.getMonth() + 1 || (bmonth === today.getMonth() + 1 && new Date().getDate() < 1)) age--;
+                return age;
+            }
+
+            function buildApplyInfo() { return `\n\u25B6 신청 방법\n\n1) 가까운 동(면) 주민센터 방문\n   - 신분증, 통장사본, 배우자 신분증(부부가구 시)\n2) 온라인 '복지로(bokjiro.go.kr)' 홈페이지에서도 가능`; }
+            function buildBenefitsHtml() {
+                let html = "<h3>65세 이상 주요 혜택</h3>";
+                SENIOR_BENEFITS.forEach((cat) => {
+                    html += `<strong>• ${cat.title}</strong><ul>`;
+                    cat.list.forEach((li) => (html += `<li>${li}</li>`));
+                    html += "</ul>";
+                });
+                return html;
+            }
+
+            function init() {
+                populateBirthSelects();
+                document.getElementById("pensionForm").addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    const byear = parseInt(document.getElementById("birthYear").value, 10);
+                    const bmonth = parseInt(document.getElementById("birthMonth").value, 10);
+                    const household = document.getElementById("household").value;
+                    const areaRadio = document.querySelector("input[name='area']:checked");
+                    if (!areaRadio) {
+                        alert("거주 지역을 선택해주세요.");
+                        return;
+                    }
+                    const area = areaRadio.value;
+                    const income = numFromText(document.getElementById("income").value);
+                    const assetsTotal = numFromText(document.getElementById("homeValue").value) + numFromText(document.getElementById("deposit").value) + numFromText(document.getElementById("savings").value) + numFromText(document.getElementById("stocks").value) + numFromText(document.getElementById("otherAssets").value);
+                    const age = calcAge(byear, bmonth);
+                    const incomeLimit = CONFIG.incomeThreshold[household];
+                    const incomeEligible = income <= incomeLimit;
+                    const netAsset = Math.max(0, assetsTotal - CONFIG.basicAsset[area]);
+                    const assetEligible = netAsset <= CONFIG.assetLimit;
+                    const ageEligible = age >= 65;
+                    let msg = "";
+                    if (ageEligible && incomeEligible && assetEligible) {
+                        const benefitAmt = household === "single" ? CONFIG.benefit.single : CONFIG.benefit.couplePer;
+                        msg += `✅ 기초연금 수급 가능성이 높습니다!\n\n예상 월 지급액: ${formatKRW(benefitAmt)}`;
+                    } else {
+                        msg += "❌ 현재 기준으로는 수급 요건을 충족하지 못합니다.";
+                        if (!ageEligible) msg += `\n - 나이 요건: 만 65세까지 ${65 - age}년 남음`;
+                        if (!incomeEligible) msg += `\n - 월 소득이 기준보다 ${formatKRW(income - incomeLimit)} 초과`;
+                        if (!assetEligible) msg += `\n - 순재산이 기준보다 ${formatKRW(netAsset - CONFIG.assetLimit)} 초과`;
+                    }
+                    document.getElementById("result").textContent = msg;
+                    const applyDiv = document.getElementById("applyInfo");
+                    applyDiv.style.display = "block";
+                    applyDiv.innerHTML = `<h3>신청 안내</h3><pre style="white-space:pre-line; font-family: 'Noto Sans KR', sans-serif;">${buildApplyInfo()}</pre>`;
+                    const benefitBox = document.getElementById("benefitBox");
+                    benefitBox.innerHTML = buildBenefitsHtml();
+                    benefitBox.style.display = "block";
+                });
+            }
+            return { init };
+        })();
+        
+        // --- 오목 게임 스크립트 ---
+        const gameApp = (() => {
+            const gameModeSelectionDiv = document.getElementById('game-mode-selection');
+            const gameContainerDiv = document.getElementById('game-container');
+            const aiModeBtn = document.getElementById('ai-mode-btn');
+            const pvpModeBtn = document.getElementById('pvp-mode-btn');
+            const gameTitle = document.getElementById('game-title');
+            const canvas = document.getElementById('game-board');
+            const ctx = canvas.getContext('2d');
+            const statusText = document.getElementById('status-text');
+            const newGameBtn = document.getElementById('new-game-btn');
+            const gameBackToMenuBtn = document.getElementById('game-back-to-menu-btn');
+            const statusBox = document.getElementById('status-box');
+            const BOARD_SIZE = 15;
+            let cellSize, margin;
+            let board = [], currentPlayer, gameOver, isAIThinking, lastMove, gameMode = null;
+            const BASE_DEPTH = 2, CRITICAL_DEPTH = 4;
+
+            function startGame(mode) {
+                gameMode = mode;
+                gameModeSelectionDiv.classList.add('hidden');
+                gameContainerDiv.classList.remove('hidden');
+                gameTitle.textContent = mode === 'ai' ? 'AI 대결' : '1 vs 1 대결';
+                resizeCanvas();
+                initGame();
+            }
+
+            function backToGameMenu() {
+                gameContainerDiv.classList.add('hidden');
+                gameModeSelectionDiv.classList.remove('hidden');
+                gameMode = null;
+            }
+
+            function initGame() {
+                board = Array(BOARD_SIZE).fill(0).map(() => Array(BOARD_SIZE).fill(0));
+                currentPlayer = 1;
+                gameOver = false;
+                isAIThinking = false;
+                lastMove = null;
+                updateStatus('흑돌 차례입니다.');
+                drawBoard();
+            }
+
+            function resizeCanvas() {
+                const container = canvas.parentElement;
+                const size = Math.min(container.clientWidth, container.clientHeight);
+                canvas.width = size;
+                canvas.height = size;
+                cellSize = canvas.width / (BOARD_SIZE + 1);
+                margin = cellSize;
+                if (gameMode) drawBoard();
+            }
+
+            function drawBoard() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#e3c16f';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = '#5b4b3a';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < BOARD_SIZE; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(margin, margin + i * cellSize);
+                    ctx.lineTo(canvas.width - margin, margin + i * cellSize);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(margin + i * cellSize, margin);
+                    ctx.lineTo(margin + i * cellSize, canvas.height - margin);
+                    ctx.stroke();
+                }
+                const starPoints = [{x: 3, y: 3}, {x: 11, y: 3}, {x: 3, y: 11}, {x: 11, y: 11}, {x: 7, y: 7}];
+                ctx.fillStyle = '#5b4b3a';
+                starPoints.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(margin + p.x * cellSize, margin + p.y * cellSize, cellSize / 8, 0, 2 * Math.PI);
+                    ctx.fill();
+                });
+                for (let y = 0; y < BOARD_SIZE; y++) {
+                    for (let x = 0; x < BOARD_SIZE; x++) {
+                        if (board[y][x] !== 0) drawStone(x, y, board[y][x]);
+                    }
+                }
+                if (lastMove) {
+                    ctx.strokeStyle = '#f03e3e';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(margin + lastMove.x * cellSize, margin + lastMove.y * cellSize, cellSize * 0.2, 0, 2 * Math.PI);
+                    ctx.stroke();
+                }
+            }
+
+            function drawStone(x, y, player) {
+                const stoneX = margin + x * cellSize, stoneY = margin + y * cellSize;
+                const radius = cellSize / 2 * 0.9;
+                const gradient = ctx.createRadialGradient(stoneX - radius * 0.3, stoneY - radius * 0.3, radius * 0.1, stoneX, stoneY, radius);
+                if (player === 1) { gradient.addColorStop(0, '#666'); gradient.addColorStop(1, '#111'); } 
+                else { gradient.addColorStop(0, '#fff'); gradient.addColorStop(1, '#ccc'); }
+                ctx.beginPath();
+                ctx.arc(stoneX, stoneY, radius, 0, 2 * Math.PI);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+
+            function handleCanvasClick(event) {
+                if (gameOver || isAIThinking || (gameMode === 'ai' && currentPlayer === 2)) return;
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left, y = event.clientY - rect.top;
+                const gridX = Math.round((x - margin) / cellSize), gridY = Math.round((y - margin) / cellSize);
+                if (gridX >= 0 && gridX < BOARD_SIZE && gridY >= 0 && gridY < BOARD_SIZE && board[gridY][gridX] === 0) {
+                    placeStone(gridX, gridY, currentPlayer);
+                }
+            }
+
+            function placeStone(x, y, player) {
+                board[y][x] = player;
+                lastMove = {x, y};
+                drawBoard();
+                if (checkWin(x, y, player)) {
+                    gameOver = true;
+                    let winner = (gameMode === 'ai') ? (player === 1 ? '당신' : 'AI') : (player === 1 ? '흑돌' : '백돌');
+                    updateStatus(`${winner}의 승리입니다!`, true);
+                    return;
+                }
+                if (board.every(row => row.every(cell => cell !== 0))) {
+                    gameOver = true;
+                    updateStatus('무승부입니다!', true);
+                    return;
+                }
+                currentPlayer = (player === 1) ? 2 : 1;
+                if (!gameOver) {
+                    if (gameMode === 'ai' && currentPlayer === 2) {
+                        triggerAITurn();
+                    } else {
+                        updateStatus(`${currentPlayer === 1 ? '흑돌' : '백돌'} 차례입니다.`);
+                    }
+                }
+            }
+
+            function checkWin(x, y, player) {
+                const dirs = [{dx: 1, dy: 0}, {dx: 0, dy: 1}, {dx: 1, dy: 1}, {dx: 1, dy: -1}];
+                for (const {dx, dy} of dirs) {
+                    let count = 1;
+                    for (let i = 1; i < 5; i++) { if (board[y + i * dy]?.[x + i * dx] === player) count++; else break; }
+                    for (let i = 1; i < 5; i++) { if (board[y - i * dy]?.[x - i * dx] === player) count++; else break; }
+                    if (count >= 5) return true;
+                }
+                return false;
+            }
+
+            function updateStatus(text, isFinal = false) {
+                statusText.textContent = text;
+                statusBox.className = 'status-box text-center p-3 rounded-lg shadow-md mb-4'; // Reset classes
+                if (isFinal) statusBox.classList.add('bg-green-200');
+                else if (text.includes('AI')) statusBox.classList.add('bg-yellow-200');
+                else statusBox.classList.add('bg-white');
+            }
+
+            function triggerAITurn() {
+                isAIThinking = true;
+                updateStatus('AI가 생각 중입니다...');
+                setTimeout(() => {
+                    const bestMove = findBestMove();
+                    if (bestMove) placeStone(bestMove.x, bestMove.y, 2);
+                    isAIThinking = false;
+                }, 100);
+            }
+
+            function findBestMove() {
+                let bestScore = -Infinity, move = null;
+                const possibleMoves = getPossibleMoves(board);
+                for (const {x, y} of possibleMoves) {
+                    board[y][x] = 2; if (checkWin(x, y, 2)) { board[y][x] = 0; return {x, y}; } board[y][x] = 0;
+                    board[y][x] = 1; if (checkWin(x, y, 1)) { board[y][x] = 0; return {x, y}; } board[y][x] = 0;
+                }
+                let depth = isCriticalSituation(board) ? CRITICAL_DEPTH : BASE_DEPTH;
+                for (const {x, y} of possibleMoves) {
+                    board[y][x] = 2;
+                    const score = minimax(board, depth - 1, -Infinity, Infinity, false);
+                    board[y][x] = 0;
+                    if (score > bestScore) { bestScore = score; move = {x, y}; }
+                }
+                return move || possibleMoves[0];
+            }
+
+            function minimax(currentBoard, depth, alpha, beta, isMaximizing) {
+                if (depth === 0) return evaluateBoard(currentBoard);
+                const possibleMoves = getPossibleMoves(currentBoard);
+                if (possibleMoves.length === 0) return evaluateBoard(currentBoard);
+
+                if (isMaximizing) {
+                    let maxEval = -Infinity;
+                    for (const {x, y} of possibleMoves) {
+                        currentBoard[y][x] = 2;
+                        if (checkWin(x, y, 2)) { currentBoard[y][x] = 0; return 100000 + depth; }
+                        maxEval = Math.max(maxEval, minimax(currentBoard, depth - 1, alpha, beta, false));
+                        currentBoard[y][x] = 0;
+                        alpha = Math.max(alpha, maxEval);
+                        if (beta <= alpha) break;
+                    }
+                    return maxEval;
+                } else {
+                    let minEval = Infinity;
+                    for (const {x, y} of possibleMoves) {
+                        currentBoard[y][x] = 1;
+                        if (checkWin(x, y, 1)) { currentBoard[y][x] = 0; return -100000 - depth; }
+                        minEval = Math.min(minEval, minimax(currentBoard, depth - 1, alpha, beta, true));
+                        currentBoard[y][x] = 0;
+                        beta = Math.min(beta, minEval);
+                        if (beta <= alpha) break;
+                    }
+                    return minEval;
+                }
+            }
+            
+            function getPossibleMoves(currentBoard) {
+                const moves = new Set();
+                if (currentBoard.every(row => row.every(cell => cell === 0))) return [{x: 7, y: 7}];
+                for (let y = 0; y < BOARD_SIZE; y++) {
+                    for (let x = 0; x < BOARD_SIZE; x++) {
+                        if (currentBoard[y][x] === 0) {
+                            for (let dy = -1; dy <= 1; dy++) {
+                                for (let dx = -1; dx <= 1; dx++) {
+                                    if (dx === 0 && dy === 0) continue;
+                                    if (currentBoard[y + dy]?.[x + dx] > 0) {
+                                        moves.add(JSON.stringify({x, y}));
+                                        break; // Inner loop
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return Array.from(moves).map(m => JSON.parse(m));
+            }
+
+            function isCriticalSituation(currentBoard) {
+                for (let y = 0; y < BOARD_SIZE; y++) {
+                    for (let x = 0; x < BOARD_SIZE; x++) {
+                        if (currentBoard[y][x] === 0) {
+                            currentBoard[y][x] = 2; if (checkWin(x, y, 2)) { currentBoard[y][x] = 0; return true; }
+                            currentBoard[y][x] = 1; if (checkWin(x, y, 1)) { currentBoard[y][x] = 0; return true; }
+                            currentBoard[y][x] = 0;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            function evaluateBoard(currentBoard) {
+                let score = 0;
+                const lines = [];
+                for (let i = 0; i < BOARD_SIZE; i++) {
+                    lines.push(currentBoard[i]); // Horizontal
+                    lines.push(currentBoard.map(row => row[i])); // Vertical
+                }
+                for (let i = 0; i < 2 * BOARD_SIZE - 1; i++) {
+                    const diag1 = [], diag2 = [];
+                    for (let j = 0; j < BOARD_SIZE; j++) {
+                        if (i - j >= 0 && i - j < BOARD_SIZE) diag1.push(currentBoard[j][i - j]);
+                        if (i - (BOARD_SIZE - 1 - j) >= 0 && i - (BOARD_SIZE - 1 - j) < BOARD_SIZE) diag2.push(currentBoard[j][i - (BOARD_SIZE - 1 - j)]);
+                    }
+                    if (diag1.length >= 5) lines.push(diag1);
+                    if (diag2.length >= 5) lines.push(diag2);
+                }
+                lines.forEach(line => score += evaluateLine(line));
+                return score;
+            }
+
+            function evaluateLine(line) {
+                let score = 0;
+                const patterns = {
+                    '22222': 100000, '022220': 50000, '122220': 400, '022221': 400, '02220': 2000, '022020': 1800, '12220': 100, '02221': 100, '00220': 50, '02020': 50,
+                    '11111': -100000, '011110': -80000, '211110': -10000, '011112': -10000, '01110': -5000, '011010': -4500, '21110': -500, '01112': -500, '00110': -150, '01010': -150,
+                };
+                const lineStr = line.join('');
+                for (const p in patterns) { if (lineStr.includes(p)) score += patterns[p]; }
+                return score;
+            }
+
+            function init() {
+                window.addEventListener('resize', resizeCanvas);
+                canvas.addEventListener('click', handleCanvasClick);
+                newGameBtn.addEventListener('click', initGame);
+                gameBackToMenuBtn.addEventListener('click', backToGameMenu);
+                aiModeBtn.addEventListener('click', () => startGame('ai'));
+                pvpModeBtn.addEventListener('click', () => startGame('pvp'));
+            }
+            return { init, resizeCanvas };
+        })();
+        
+        // --- 앱 초기화 ---
+        document.addEventListener('DOMContentLoaded', () => {
+            pensionApp.init();
+            gameApp.init();
+        });
+    </script>
+</body>
+</html>
