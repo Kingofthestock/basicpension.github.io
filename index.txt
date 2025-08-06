@@ -5,126 +5,177 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>기초연금 확인 및 추억의 게임</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* 기본 스타일 */
+        /* 기본 스타일 - 가독성 개선 */
         body {
             font-family: 'Noto Sans KR', sans-serif;
             touch-action: manipulation;
+            -webkit-font-smoothing: antialiased;
         }
         .hidden {
             display: none;
         }
 
-        /* --- 기초연금 계산기 스타일 --- */
+        /* --- 기초연금 계산기 스타일 (가독성 강화) --- */
         #pension-container {
-            --primary-color: #04345c;
-            --secondary-color: #0a6fb7;
-            --bg-color: #f0f4f8;
+            --primary-color: #1e40af;
+            --secondary-color: #3b82f6;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --radius: 1rem;
-            font-size: 18px; /* 가독성 조정 */
+            --radius: 1.2rem;
+            --text-color: #1e293b;
+            font-size: 20px; /* 기본 폰트 크기 증가 */
             background-color: var(--bg-color);
-            color: #111;
-            line-height: 1.6;
+            color: var(--text-color);
+            line-height: 1.7;
             padding: 1rem 0;
         }
         #pension-container header {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: #fff;
-            padding: 1rem 1.5rem;
+            padding: 1.5rem 2rem;
             text-align: center;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         #pension-container header h1 {
             margin: 0;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
+            font-weight: 700;
         }
         #pension-container main {
-            max-width: 680px;
-            margin: 1.5rem auto;
-            padding: 1.5rem;
+            max-width: 720px;
+            margin: 2rem auto;
+            padding: 2rem;
             background: var(--card-bg);
             border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
         }
         #pension-container fieldset {
             border: none;
-            margin-bottom: 1.5rem;
-            padding: 0;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f1f5f9;
+            border-radius: 0.8rem;
         }
         #pension-container legend {
             font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
             color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
         #pension-container label {
             display: block;
-            margin: 0.6rem 0 0.3rem;
+            margin: 1rem 0 0.5rem;
+            font-weight: 500;
+            color: #475569;
         }
         #pension-container input,
         #pension-container select {
             width: 100%;
-            padding: 0.6rem 0.8rem;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 0.5rem;
+            padding: 0.9rem 1.2rem;
+            font-size: 1.1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.6rem;
+            transition: all 0.3s;
+            background: white;
+        }
+        #pension-container input:focus,
+        #pension-container select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         #pension-container input[type="radio"] {
             width: auto;
-            margin-right: 0.4rem;
+            margin-right: 0.5rem;
+            transform: scale(1.3);
         }
         #pension-container .radio-group label {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
-            margin: 0.4rem 0;
+            gap: 0.5rem;
+            margin: 0.8rem 0;
+            padding: 0.8rem;
+            background: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #pension-container .radio-group label:hover {
+            background: #f8fafc;
         }
         #pension-container .radio-group small {
-            font-size: 0.9rem;
-            color: #555;
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-left: 0.5rem;
+        }
+        #pension-container button[type="submit"] {
+            font-size: 1.2rem;
+            padding: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
         #pension-container #result {
-            margin-top: 1.5rem;
-            font-size: 1.1rem;
-            font-weight: 700;
+            margin-top: 2rem;
+            font-size: 1.15rem;
+            font-weight: 600;
             white-space: pre-line;
-            padding: 1rem;
-            background-color: #f9f9f9;
-            border-radius: 0.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 0.8rem;
+            border-left: 4px solid var(--secondary-color);
+            line-height: 1.8;
+        }
+        #pension-container .result-success {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important;
+            border-left-color: #22c55e !important;
+        }
+        #pension-container .result-fail {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2) !important;
+            border-left-color: #ef4444 !important;
         }
         #pension-container .apply,
         #pension-container .benefits {
-            margin-top: 1rem;
-            border-top: 1px dashed #bbb;
-            padding-top: 1rem;
+            margin-top: 1.5rem;
+            border-top: 2px dashed #cbd5e1;
+            padding-top: 1.5rem;
         }
         #pension-container .apply h3,
         #pension-container .benefits h3 {
-            margin: 0 0 0.5rem;
-            font-size: 1.1rem;
+            margin: 0 0 1rem;
+            font-size: 1.25rem;
             color: var(--primary-color);
+            font-weight: 600;
         }
         #pension-container .apply ul,
         #pension-container .benefits ul {
-            padding-left: 1.2rem;
-            margin: 0;
+            padding-left: 1.5rem;
+            margin: 0.5rem 0;
         }
         #pension-container .apply li,
         #pension-container .benefits li {
-            margin-bottom: 0.4rem;
-            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
+            line-height: 1.6;
         }
         #pension-container .disclaimer {
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #555;
+            margin-top: 2rem;
+            padding: 1rem;
+            font-size: 0.95rem;
+            color: #64748b;
+            background: #fef3c7;
+            border-radius: 0.6rem;
+            border: 1px solid #fbbf24;
         }
         
         /* --- 오목 게임 스타일 --- */
         #game-app-container {
-            background-color: #f0f4f8;
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
             min-height: 100vh;
         }
         .board-container {
@@ -136,31 +187,66 @@
         }
         #game-board {
             background-color: #e3c16f;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             cursor: pointer;
             width: 100%;
             height: 100%;
         }
         .status-box {
             transition: all 0.3s ease;
+            font-size: 1.1rem;
         }
         
-        /* 공용 버튼 */
+        /* 공용 버튼 (가독성 개선) */
         .back-button {
             position: fixed;
             top: 20px;
             left: 20px;
-            background-color: #4a5568;
+            background-color: #475569;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border-radius: 9999px;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 1.1rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             z-index: 100;
+            transition: all 0.3s;
         }
         .back-button:hover {
-            background-color: #2d3748;
+            background-color: #334155;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* 메인 선택 버튼 스타일 개선 */
+        .main-button {
+            font-size: 1.3rem !important;
+            padding: 1.5rem 2rem !important;
+            border-radius: 1rem !important;
+            transition: all 0.3s !important;
+            font-weight: 600 !important;
+        }
+        .main-button:hover {
+            transform: translateY(-3px) scale(1.02) !important;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+        }
+        
+        /* 모바일 반응형 개선 */
+        @media (max-width: 640px) {
+            #pension-container {
+                font-size: 18px;
+            }
+            #pension-container main {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            #pension-container fieldset {
+                padding: 1rem;
+            }
+            .main-button {
+                font-size: 1.1rem !important;
+            }
         }
     </style>
 </head>
@@ -168,13 +254,13 @@
 
     <!-- 메인 선택 화면 -->
     <div id="main-selection" class="flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-12 text-center">무엇을 하시겠어요?</h1>
-        <div class="w-full max-w-md mx-auto space-y-6">
-            <button id="select-pension" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 text-xl">
-                2025년 기초연금 자격 확인
+        <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-16 text-center">무엇을 하시겠어요?</h1>
+        <div class="w-full max-w-lg mx-auto space-y-8">
+            <button id="select-pension" class="main-button w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-xl">
+                💰 2025년 기초연금 자격 확인
             </button>
-            <button id="select-game" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-5 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 text-xl">
-                추억의 플래시 게임 (오목)
+            <button id="select-game" class="main-button w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-xl">
+                🎮 추억의 플래시 게임 (오목)
             </button>
         </div>
     </div>
@@ -183,54 +269,60 @@
     <div id="pension-container" class="hidden">
         <button class="back-button" onclick="showMainSelection()">‹ 뒤로</button>
         <header>
-            <h1>2025 기초연금 자격 빠른 확인</h1>
+            <h1>2025 기초연금 자격 빠른 확인</h1>
         </header>
         <main>
             <form id="pensionForm">
                 <fieldset>
-                    <legend>1. 기본 정보</legend>
+                    <legend>📋 1. 기본 정보</legend>
                     <label for="birthYear">출생 연도</label>
                     <select id="birthYear" required></select>
                     <label for="birthMonth">출생 월</label>
                     <select id="birthMonth" required></select>
                     <label for="household">가구 유형</label>
                     <select id="household" required>
-                        <option value="single">단독가구</option>
-                        <option value="couple">부부가구</option>
+                        <option value="single">단독가구 (1인)</option>
+                        <option value="couple">부부가구 (2인)</option>
                     </select>
                     <label>거주 지역</label>
                     <div class="radio-group" id="areaOptions">
-                        <label><input type="radio" name="area" value="big" required /> 대도시 <small>(서울·부산 등 광역시 구)</small></label>
-                        <label><input type="radio" name="area" value="mid" /> 중소도시 <small>(인구 50만 미만 시)</small></label>
-                        <label><input type="radio" name="area" value="rural" /> 농어촌 <small>(읍·면 지역)</small></label>
+                        <label><input type="radio" name="area" value="big" required /> 대도시 <small>(특별시·광역시)</small></label>
+                        <label><input type="radio" name="area" value="mid" /> 중소도시 <small>(일반 시 지역)</small></label>
+                        <label><input type="radio" name="area" value="rural" /> 농어촌 <small>(군 지역)</small></label>
                     </div>
                 </fieldset>
                 <fieldset>
-                    <legend>2. 월 소득</legend>
-                    <label for="income">월 평균 소득 (예: 120만원)</label>
-                    <input type="text" id="income" placeholder="1,200,000원" required />
+                    <legend>💵 2. 월 소득</legend>
+                    <label for="income">본인 월소득 (근로·사업·연금 등)</label>
+                    <input type="text" id="income" placeholder="예: 120만원 또는 1,200,000원" required />
+                    <label for="spouseIncome">배우자 월소득 (부부가구만)</label>
+                    <input type="text" id="spouseIncome" placeholder="예: 80만원 또는 800,000원" />
                 </fieldset>
                 <fieldset>
-                    <legend>3. 보유 재산</legend>
-                    <label for="homeValue">주택 시가</label>
-                    <input type="text" id="homeValue" placeholder="1억 5,000만 원" />
-                    <label for="deposit">전세·보증금</label>
-                    <input type="text" id="deposit" placeholder="5000만 원" />
-                    <label for="savings">예금·적금</label>
-                    <input type="text" id="savings" placeholder="3000만 원" />
-                    <label for="stocks">주식·펀드</label>
-                    <input type="text" id="stocks" placeholder="1000만 원" />
-                    <label for="otherAssets">기타 자산 (선택)</label>
-                    <input type="text" id="otherAssets" placeholder="0" />
+                    <legend>🏠 3. 보유 재산</legend>
+                    <label for="homeValue">주택/부동산 시가총액</label>
+                    <input type="text" id="homeValue" placeholder="예: 2억원 또는 200,000,000원" />
+                    <label for="deposit">전·월세 보증금</label>
+                    <input type="text" id="deposit" placeholder="예: 5000만원" />
+                    <label for="savings">예금·적금 총액</label>
+                    <input type="text" id="savings" placeholder="예: 3000만원" />
+                    <label for="stocks">주식·펀드·채권 등</label>
+                    <input type="text" id="stocks" placeholder="예: 1000만원" />
+                    <label for="car">자동차 가액</label>
+                    <input type="text" id="car" placeholder="예: 2000만원" />
+                    <label for="debt">부채 (대출금 등)</label>
+                    <input type="text" id="debt" placeholder="예: 5000만원" />
                 </fieldset>
-                <button type="submit" class="w-full py-3 text-xl bg-blue-600 text-white rounded-lg hover:bg-blue-700">자격 확인하기</button>
+                <button type="submit" class="w-full py-4 text-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 shadow-lg transition-all">
+                    자격 확인하기
+                </button>
             </form>
             <div id="result"></div>
             <div id="applyInfo" class="apply" style="display: none;"></div>
             <div id="benefitBox" class="benefits" style="display: none;"></div>
             <p class="disclaimer">
-                ※ 본 결과는 2025년 기준 기초연금 선정기준을 간단히 적용한 예비 판정입니다.
-                최종 지급 여부는 국민연금공단 심사 결과에 따릅니다.
+                ⚠️ <strong>주의사항:</strong> 본 계산 결과는 2025년 기준 기초연금 선정기준을 간략히 적용한 예상 결과입니다.
+                실제 수급 여부와 금액은 국민연금공단의 정밀 심사를 통해 결정되므로 차이가 있을 수 있습니다.
             </p>
         </main>
     </div>
@@ -239,30 +331,30 @@
     <div id="game-app-container" class="hidden">
         <button class="back-button" onclick="showMainSelection()">‹ 뒤로</button>
         <div id="game-mode-selection" class="w-full max-w-md mx-auto text-center flex flex-col justify-center min-h-screen">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-8">오목 게임</h1>
-            <div class="space-y-4">
-                <button id="ai-mode-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 text-xl">
-                    AI 대전
+            <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-12">🎯 오목 게임</h1>
+            <div class="space-y-6">
+                <button id="ai-mode-btn" class="main-button w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-xl">
+                    🤖 AI 대전
                 </button>
-                <button id="pvp-mode-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 text-xl">
-                    1 vs 1 대전
+                <button id="pvp-mode-btn" class="main-button w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-xl">
+                    👥 1 vs 1 대전
                 </button>
             </div>
         </div>
         <div id="game-container" class="w-full max-w-2xl mx-auto hidden flex flex-col justify-center min-h-screen p-4">
-            <h1 id="game-title" class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4"></h1>
-            <div id="status-box" class="status-box text-center bg-white p-3 rounded-lg shadow-md mb-4">
-                <p id="status-text" class="text-lg font-semibold text-gray-700">게임을 시작하세요.</p>
+            <h1 id="game-title" class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-6"></h1>
+            <div id="status-box" class="status-box text-center bg-white p-4 rounded-xl shadow-lg mb-6">
+                <p id="status-text" class="text-xl font-semibold text-gray-700">게임을 시작하세요.</p>
             </div>
             <div class="board-container">
                 <canvas id="game-board"></canvas>
             </div>
-            <div class="mt-4 grid grid-cols-2 gap-4">
-                <button id="new-game-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                    새 게임
+            <div class="mt-6 grid grid-cols-2 gap-4">
+                <button id="new-game-btn" class="bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all text-lg">
+                    🔄 새 게임
                 </button>
-                <button id="game-back-to-menu-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                    모드 선택
+                <button id="game-back-to-menu-btn" class="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all text-lg">
+                    📋 모드 선택
                 </button>
             </div>
         </div>
@@ -282,7 +374,7 @@
         document.getElementById('select-game').addEventListener('click', () => {
             mainSelectionDiv.classList.add('hidden');
             gameAppContainer.classList.remove('hidden');
-            gameApp.resizeCanvas(); // 게임 선택 시 캔버스 크기 재조정
+            gameApp.resizeCanvas();
         });
 
         function showMainSelection() {
@@ -291,26 +383,70 @@
             mainSelectionDiv.classList.remove('hidden');
         }
 
-        // --- 기초연금 계산기 스크립트 ---
+        // --- 기초연금 계산기 스크립트 (수정된 계산 로직) ---
         const pensionApp = (() => {
             const CONFIG = {
                 year: 2025,
-                incomeThreshold: { single: 2280000, couple: 3648000 },
-                basicAsset: { big: 135000000, mid: 85000000, rural: 72500000 },
-                assetLimit: 209000000,
-                benefit: { single: 334965, couplePer: 267972 },
+                // 2025년 기초연금 선정기준액 (소득인정액 기준)
+                incomeThreshold: { 
+                    single: 2280000,  // 단독가구 228만원
+                    couple: 3648000   // 부부가구 364.8만원
+                },
+                // 지역별 기본재산 공제액
+                basicAsset: { 
+                    big: 135000000,   // 대도시 1.35억
+                    mid: 85000000,    // 중소도시 8,500만원
+                    rural: 72500000   // 농어촌 7,250만원
+                },
+                // 금융재산 공제액
+                financialDeduction: {
+                    single: 20000000,  // 단독 2,000만원
+                    couple: 40000000   // 부부 4,000만원
+                },
+                // 2025년 기초연금 최대 지급액
+                benefit: { 
+                    single: 334810,    // 단독가구 최대
+                    couplePer: 267848  // 부부 1인당 최대 (20% 감액)
+                },
+                // 재산의 소득환산율
+                assetConversionRate: 0.04 / 12,  // 연 4% ÷ 12개월
             };
+
             const SENIOR_BENEFITS = [
-                { title: "전국 공통 혜택", list: ["건강보험 본인부담 경감(의료비 30~60% 감면)", "국민건강검진 2년마다 무료", "KTX·고속버스 등 교통 요금 30% 할인", "국립공원·고궁·국립박물관 입장료 면제", "문화누리카드: 연 11만원 문화·여행·스포츠 지원", "치매 조기검진 및 예방 프로그램 무료"] },
-                { title: "경기도", list: ["NH농협 ‘경기도형 어르신 교통카드’ → 수도권 전철 무료", "경기관광·문화시설 입장료 50% 할인", "전기·가스·수도 요금 경감(기초연금 수급자 대상)"] },
-                { title: "서울시", list: ["서울시 어르신 교통카드 → 지하철·시내버스 무료", "서울시립 문화시설 관람료 50% 할인", "치매안심센터 프로그램 무료 이용"] },
-                { title: "부산시", list: ["부산어르신 교통카드 → 도시철도·시내버스 무료", "영화의전당 등 문화시설 할인"] },
+                { 
+                    title: "📍 전국 공통 혜택", 
+                    list: [
+                        "의료비 본인부담금 감면 (30~60%)",
+                        "국민건강검진 2년마다 무료",
+                        "KTX·SRT 30% 할인 (주중)",
+                        "국립공원·고궁·박물관 무료 입장",
+                        "문화누리카드 연 13만원 지원",
+                        "치매 조기검진 무료"
+                    ] 
+                },
+                { 
+                    title: "🏙️ 서울특별시", 
+                    list: [
+                        "어르신 교통카드로 지하철·버스 무료",
+                        "서울시립 문화시설 50% 할인",
+                        "경로당 무료 이용"
+                    ] 
+                },
+                { 
+                    title: "🌆 경기도", 
+                    list: [
+                        "경기도 어르신 교통카드 지원",
+                        "도립 문화·체육시설 할인",
+                        "독감 예방접종 무료"
+                    ] 
+                },
             ];
 
             function populateBirthSelects() {
                 const yearSel = document.getElementById("birthYear");
                 const monthSel = document.getElementById("birthMonth");
-                if (!yearSel || yearSel.options.length > 1) return; // 이미 채워졌으면 실행 안함
+                if (!yearSel || yearSel.options.length > 1) return;
+                
                 const currentYear = new Date().getFullYear();
                 for (let y = currentYear - 65; y >= currentYear - 100; y--) {
                     const opt = document.createElement("option");
@@ -321,8 +457,24 @@
                 for (let m = 1; m <= 12; m++) {
                     const opt = document.createElement("option");
                     opt.value = m;
-                    opt.textContent = `${m.toString().padStart(2, "0")}월`;
+                    opt.textContent = `${m}월`;
                     monthSel.appendChild(opt);
+                }
+            }
+
+            // 가구 유형 변경 시 배우자 소득 필드 표시/숨김
+            function toggleSpouseIncome() {
+                const household = document.getElementById("household").value;
+                const spouseIncomeField = document.getElementById("spouseIncome");
+                const spouseLabel = spouseIncomeField.previousElementSibling;
+                
+                if (household === "couple") {
+                    spouseIncomeField.style.display = "block";
+                    spouseLabel.style.display = "block";
+                } else {
+                    spouseIncomeField.style.display = "none";
+                    spouseLabel.style.display = "none";
+                    spouseIncomeField.value = "";
                 }
             }
 
@@ -331,71 +483,185 @@
                 str = str.replace(/\s|원|,/g, "");
                 let total = 0;
                 const eok = str.match(/([0-9.]+)억/);
-                if (eok) { total += parseFloat(eok[1]) * 100000000; str = str.replace(eok[0], ""); }
+                if (eok) { 
+                    total += parseFloat(eok[1]) * 100000000; 
+                    str = str.replace(eok[0], ""); 
+                }
                 const man = str.match(/([0-9.]+)만/);
-                if (man) { total += parseFloat(man[1]) * 10000; str = str.replace(man[0], ""); }
+                if (man) { 
+                    total += parseFloat(man[1]) * 10000; 
+                    str = str.replace(man[0], ""); 
+                }
                 const nums = str.match(/[0-9]+/g);
-                if (nums) { total += parseInt(nums.join(""), 10); }
+                if (nums) { 
+                    total += parseInt(nums.join(""), 10); 
+                }
                 return isNaN(total) ? 0 : total;
             }
 
-            function formatKRW(n) { return n.toLocaleString("ko-KR") + "원"; }
+            function formatKRW(n) { 
+                return n.toLocaleString("ko-KR") + "원"; 
+            }
+            
             function calcAge(byear, bmonth) {
                 const today = new Date();
                 let age = today.getFullYear() - byear;
-                if (bmonth > today.getMonth() + 1 || (bmonth === today.getMonth() + 1 && new Date().getDate() < 1)) age--;
+                if (bmonth > today.getMonth() + 1) age--;
                 return age;
             }
 
-            function buildApplyInfo() { return `\n\u25B6 신청 방법\n\n1) 가까운 동(면) 주민센터 방문\n   - 신분증, 통장사본, 배우자 신분증(부부가구 시)\n2) 온라인 '복지로(bokjiro.go.kr)' 홈페이지에서도 가능`; }
+            // 소득인정액 계산 (수정된 로직)
+            function calculateIncomeRecognition(income, spouseIncome, assets, debt, household, area) {
+                // 1. 월 소득 계산
+                const totalMonthlyIncome = income + spouseIncome;
+                
+                // 2. 일반재산 계산 (부동산 + 전월세보증금 + 자동차 - 부채)
+                const generalAssets = assets.home + assets.deposit + assets.car - debt;
+                
+                // 3. 금융재산 계산
+                const financialAssets = assets.savings + assets.stocks;
+                
+                // 4. 기본재산 공제
+                const basicDeduction = CONFIG.basicAsset[area];
+                const netGeneralAssets = Math.max(0, generalAssets - basicDeduction);
+                
+                // 5. 금융재산 공제
+                const financialDeduction = CONFIG.financialDeduction[household];
+                const netFinancialAssets = Math.max(0, financialAssets - financialDeduction);
+                
+                // 6. 재산의 소득환산액 계산
+                const assetIncome = (netGeneralAssets + netFinancialAssets) * CONFIG.assetConversionRate;
+                
+                // 7. 소득인정액 = 월소득 + 재산의 소득환산액
+                const incomeRecognition = totalMonthlyIncome + assetIncome;
+                
+                return {
+                    monthlyIncome: totalMonthlyIncome,
+                    assetIncome: assetIncome,
+                    total: incomeRecognition,
+                    netAssets: netGeneralAssets + netFinancialAssets
+                };
+            }
+
+            function buildApplyInfo() { 
+                return `
+<h3>📝 신청 방법</h3>
+<ul>
+    <li><strong>방문 신청:</strong> 주소지 읍·면·동 주민센터</li>
+    <li><strong>온라인 신청:</strong> 복지로(www.bokjiro.go.kr)</li>
+    <li><strong>대리 신청:</strong> 배우자, 자녀, 형제자매 등 가능</li>
+</ul>
+<h4 style="margin-top: 1rem;">📋 필요 서류</h4>
+<ul>
+    <li>신분증</li>
+    <li>통장 사본</li>
+    <li>배우자 신분증 (부부가구)</li>
+    <li>기타 소득·재산 증빙서류 (필요시)</li>
+</ul>`; 
+            }
+            
             function buildBenefitsHtml() {
-                let html = "<h3>65세 이상 주요 혜택</h3>";
+                let html = "<h3>🎁 65세 이상 주요 혜택</h3>";
                 SENIOR_BENEFITS.forEach((cat) => {
-                    html += `<strong>• ${cat.title}</strong><ul>`;
+                    html += `<div style="margin-top: 1rem;"><strong>${cat.title}</strong><ul>`;
                     cat.list.forEach((li) => (html += `<li>${li}</li>`));
-                    html += "</ul>";
+                    html += "</ul></div>";
                 });
                 return html;
             }
 
             function init() {
                 populateBirthSelects();
+                
+                // 가구 유형 변경 이벤트
+                document.getElementById("household").addEventListener("change", toggleSpouseIncome);
+                toggleSpouseIncome(); // 초기 설정
+                
                 document.getElementById("pensionForm").addEventListener("submit", function (e) {
                     e.preventDefault();
+                    
                     const byear = parseInt(document.getElementById("birthYear").value, 10);
                     const bmonth = parseInt(document.getElementById("birthMonth").value, 10);
                     const household = document.getElementById("household").value;
                     const areaRadio = document.querySelector("input[name='area']:checked");
+                    
                     if (!areaRadio) {
                         alert("거주 지역을 선택해주세요.");
                         return;
                     }
+                    
                     const area = areaRadio.value;
                     const income = numFromText(document.getElementById("income").value);
-                    const assetsTotal = numFromText(document.getElementById("homeValue").value) + numFromText(document.getElementById("deposit").value) + numFromText(document.getElementById("savings").value) + numFromText(document.getElementById("stocks").value) + numFromText(document.getElementById("otherAssets").value);
+                    const spouseIncome = numFromText(document.getElementById("spouseIncome").value);
+                    const debt = numFromText(document.getElementById("debt").value);
+                    
+                    const assets = {
+                        home: numFromText(document.getElementById("homeValue").value),
+                        deposit: numFromText(document.getElementById("deposit").value),
+                        savings: numFromText(document.getElementById("savings").value),
+                        stocks: numFromText(document.getElementById("stocks").value),
+                        car: numFromText(document.getElementById("car").value)
+                    };
+                    
                     const age = calcAge(byear, bmonth);
+                    const incomeCalc = calculateIncomeRecognition(income, spouseIncome, assets, debt, household, area);
                     const incomeLimit = CONFIG.incomeThreshold[household];
-                    const incomeEligible = income <= incomeLimit;
-                    const netAsset = Math.max(0, assetsTotal - CONFIG.basicAsset[area]);
-                    const assetEligible = netAsset <= CONFIG.assetLimit;
+                    const incomeEligible = incomeCalc.total <= incomeLimit;
                     const ageEligible = age >= 65;
+                    
                     let msg = "";
-                    if (ageEligible && incomeEligible && assetEligible) {
+                    const resultDiv = document.getElementById("result");
+                    
+                    if (ageEligible && incomeEligible) {
                         const benefitAmt = household === "single" ? CONFIG.benefit.single : CONFIG.benefit.couplePer;
-                        msg += `✅ 기초연금 수급 가능성이 높습니다!\n\n예상 월 지급액: ${formatKRW(benefitAmt)}`;
+                        msg += `✅ <strong>기초연금 수급 가능성이 높습니다!</strong>\n\n`;
+                        msg += `💰 예상 월 지급액: <strong>${formatKRW(benefitAmt)}</strong>\n`;
+                        if (household === "couple") {
+                            msg += `   (부부 합계: ${formatKRW(benefitAmt * 2)})\n`;
+                        }
+                        msg += `\n📊 소득인정액 분석:\n`;
+                        msg += `• 월 소득: ${formatKRW(incomeCalc.monthlyIncome)}\n`;
+                        msg += `• 재산의 소득환산액: ${formatKRW(Math.round(incomeCalc.assetIncome))}\n`;
+                        msg += `• 소득인정액: ${formatKRW(Math.round(incomeCalc.total))}\n`;
+                        msg += `• 선정기준액: ${formatKRW(incomeLimit)}`;
+                        
+                        resultDiv.className = "result-success";
                     } else {
-                        msg += "❌ 현재 기준으로는 수급 요건을 충족하지 못합니다.";
-                        if (!ageEligible) msg += `\n - 나이 요건: 만 65세까지 ${65 - age}년 남음`;
-                        if (!incomeEligible) msg += `\n - 월 소득이 기준보다 ${formatKRW(income - incomeLimit)} 초과`;
-                        if (!assetEligible) msg += `\n - 순재산이 기준보다 ${formatKRW(netAsset - CONFIG.assetLimit)} 초과`;
+                        msg += `❌ <strong>현재 기준으로는 수급 요건을 충족하지 못합니다.</strong>\n\n`;
+                        msg += `📊 미충족 사유:\n`;
+                        
+                        if (!ageEligible) {
+                            msg += `• 연령 조건: 만 65세 이상 (현재 ${age}세, ${65 - age}년 후 신청 가능)\n`;
+                        }
+                        if (!incomeEligible) {
+                            msg += `• 소득인정액 초과:\n`;
+                            msg += `  - 귀하의 소득인정액: ${formatKRW(Math.round(incomeCalc.total))}\n`;
+                            msg += `  - 선정기준액: ${formatKRW(incomeLimit)}\n`;
+                            msg += `  - 초과금액: ${formatKRW(Math.round(incomeCalc.total - incomeLimit))}\n`;
+                        }
+                        
+                        if (!ageEligible) {
+                            msg += `\n💡 <strong>Tip:</strong> 만 65세가 되는 생일이 속한 달의 1개월 전부터 신청 가능합니다.`;
+                        } else {
+                            msg += `\n💡 <strong>Tip:</strong> 재산 처분이나 소득 감소 시 재신청이 가능합니다.`;
+                        }
+                        
+                        resultDiv.className = "result-fail";
                     }
-                    document.getElementById("result").textContent = msg;
+                    
+                    resultDiv.innerHTML = msg.replace(/\n/g, '<br>');
+                    resultDiv.style.display = "block";
+                    
                     const applyDiv = document.getElementById("applyInfo");
                     applyDiv.style.display = "block";
-                    applyDiv.innerHTML = `<h3>신청 안내</h3><pre style="white-space:pre-line; font-family: 'Noto Sans KR', sans-serif;">${buildApplyInfo()}</pre>`;
+                    applyDiv.innerHTML = buildApplyInfo();
+                    
                     const benefitBox = document.getElementById("benefitBox");
                     benefitBox.innerHTML = buildBenefitsHtml();
                     benefitBox.style.display = "block";
+                    
+                    // 결과 위치로 스크롤
+                    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 });
             }
             return { init };
@@ -423,7 +689,7 @@
                 gameMode = mode;
                 gameModeSelectionDiv.classList.add('hidden');
                 gameContainerDiv.classList.remove('hidden');
-                gameTitle.textContent = mode === 'ai' ? 'AI 대결' : '1 vs 1 대결';
+                gameTitle.textContent = mode === 'ai' ? '🤖 AI 대결' : '👥 1 vs 1 대결';
                 resizeCanvas();
                 initGame();
             }
@@ -440,7 +706,7 @@
                 gameOver = false;
                 isAIThinking = false;
                 lastMove = null;
-                updateStatus('흑돌 차례입니다.');
+                updateStatus('⚫ 흑돌 차례입니다.');
                 drawBoard();
             }
 
@@ -456,10 +722,17 @@
 
             function drawBoard() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#e3c16f';
+                
+                // 보드 배경 그라데이션
+                const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                gradient.addColorStop(0, '#f4d58d');
+                gradient.addColorStop(1, '#d4a574');
+                ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // 격자선
                 ctx.strokeStyle = '#5b4b3a';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 1.5;
                 for (let i = 0; i < BOARD_SIZE; i++) {
                     ctx.beginPath();
                     ctx.moveTo(margin, margin + i * cellSize);
@@ -470,44 +743,84 @@
                     ctx.lineTo(margin + i * cellSize, canvas.height - margin);
                     ctx.stroke();
                 }
+                
+                // 화점
                 const starPoints = [{x: 3, y: 3}, {x: 11, y: 3}, {x: 3, y: 11}, {x: 11, y: 11}, {x: 7, y: 7}];
                 ctx.fillStyle = '#5b4b3a';
                 starPoints.forEach(p => {
                     ctx.beginPath();
-                    ctx.arc(margin + p.x * cellSize, margin + p.y * cellSize, cellSize / 8, 0, 2 * Math.PI);
+                    ctx.arc(margin + p.x * cellSize, margin + p.y * cellSize, cellSize / 6, 0, 2 * Math.PI);
                     ctx.fill();
                 });
+                
+                // 돌 그리기
                 for (let y = 0; y < BOARD_SIZE; y++) {
                     for (let x = 0; x < BOARD_SIZE; x++) {
                         if (board[y][x] !== 0) drawStone(x, y, board[y][x]);
                     }
                 }
+                
+                // 마지막 수 표시
                 if (lastMove) {
-                    ctx.strokeStyle = '#f03e3e';
-                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#ff4444';
+                    ctx.lineWidth = 3;
                     ctx.beginPath();
-                    ctx.arc(margin + lastMove.x * cellSize, margin + lastMove.y * cellSize, cellSize * 0.2, 0, 2 * Math.PI);
+                    ctx.arc(margin + lastMove.x * cellSize, margin + lastMove.y * cellSize, cellSize * 0.25, 0, 2 * Math.PI);
                     ctx.stroke();
                 }
             }
 
             function drawStone(x, y, player) {
-                const stoneX = margin + x * cellSize, stoneY = margin + y * cellSize;
-                const radius = cellSize / 2 * 0.9;
-                const gradient = ctx.createRadialGradient(stoneX - radius * 0.3, stoneY - radius * 0.3, radius * 0.1, stoneX, stoneY, radius);
-                if (player === 1) { gradient.addColorStop(0, '#666'); gradient.addColorStop(1, '#111'); } 
-                else { gradient.addColorStop(0, '#fff'); gradient.addColorStop(1, '#ccc'); }
+                const stoneX = margin + x * cellSize;
+                const stoneY = margin + y * cellSize;
+                const radius = cellSize / 2 * 0.85;
+                
+                // 그림자
+                ctx.beginPath();
+                ctx.arc(stoneX + 2, stoneY + 2, radius, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.fill();
+                
+                // 돌 그라데이션
+                const gradient = ctx.createRadialGradient(
+                    stoneX - radius * 0.3, 
+                    stoneY - radius * 0.3, 
+                    radius * 0.1, 
+                    stoneX, 
+                    stoneY, 
+                    radius
+                );
+                
+                if (player === 1) {
+                    gradient.addColorStop(0, '#555');
+                    gradient.addColorStop(0.5, '#222');
+                    gradient.addColorStop(1, '#000');
+                } else {
+                    gradient.addColorStop(0, '#ffffff');
+                    gradient.addColorStop(0.5, '#f0f0f0');
+                    gradient.addColorStop(1, '#d0d0d0');
+                }
+                
                 ctx.beginPath();
                 ctx.arc(stoneX, stoneY, radius, 0, 2 * Math.PI);
                 ctx.fillStyle = gradient;
                 ctx.fill();
+                
+                // 테두리
+                ctx.strokeStyle = player === 1 ? '#000' : '#999';
+                ctx.lineWidth = 1;
+                ctx.stroke();
             }
 
             function handleCanvasClick(event) {
                 if (gameOver || isAIThinking || (gameMode === 'ai' && currentPlayer === 2)) return;
+                
                 const rect = canvas.getBoundingClientRect();
-                const x = event.clientX - rect.left, y = event.clientY - rect.top;
-                const gridX = Math.round((x - margin) / cellSize), gridY = Math.round((y - margin) / cellSize);
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                const gridX = Math.round((x - margin) / cellSize);
+                const gridY = Math.round((y - margin) / cellSize);
+                
                 if (gridX >= 0 && gridX < BOARD_SIZE && gridY >= 0 && gridY < BOARD_SIZE && board[gridY][gridX] === 0) {
                     placeStone(gridX, gridY, currentPlayer);
                 }
@@ -517,33 +830,49 @@
                 board[y][x] = player;
                 lastMove = {x, y};
                 drawBoard();
+                
                 if (checkWin(x, y, player)) {
                     gameOver = true;
-                    let winner = (gameMode === 'ai') ? (player === 1 ? '당신' : 'AI') : (player === 1 ? '흑돌' : '백돌');
+                    let winner = (gameMode === 'ai') 
+                        ? (player === 1 ? '🎉 당신' : '🤖 AI') 
+                        : (player === 1 ? '⚫ 흑돌' : '⚪ 백돌');
                     updateStatus(`${winner}의 승리입니다!`, true);
                     return;
                 }
+                
                 if (board.every(row => row.every(cell => cell !== 0))) {
                     gameOver = true;
-                    updateStatus('무승부입니다!', true);
+                    updateStatus('🤝 무승부입니다!', true);
                     return;
                 }
+                
                 currentPlayer = (player === 1) ? 2 : 1;
+                
                 if (!gameOver) {
                     if (gameMode === 'ai' && currentPlayer === 2) {
                         triggerAITurn();
                     } else {
-                        updateStatus(`${currentPlayer === 1 ? '흑돌' : '백돌'} 차례입니다.`);
+                        updateStatus(`${currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌'} 차례입니다.`);
                     }
                 }
             }
 
             function checkWin(x, y, player) {
                 const dirs = [{dx: 1, dy: 0}, {dx: 0, dy: 1}, {dx: 1, dy: 1}, {dx: 1, dy: -1}];
+                
                 for (const {dx, dy} of dirs) {
                     let count = 1;
-                    for (let i = 1; i < 5; i++) { if (board[y + i * dy]?.[x + i * dx] === player) count++; else break; }
-                    for (let i = 1; i < 5; i++) { if (board[y - i * dy]?.[x - i * dx] === player) count++; else break; }
+                    
+                    for (let i = 1; i < 5; i++) {
+                        if (board[y + i * dy]?.[x + i * dx] === player) count++;
+                        else break;
+                    }
+                    
+                    for (let i = 1; i < 5; i++) {
+                        if (board[y - i * dy]?.[x - i * dx] === player) count++;
+                        else break;
+                    }
+                    
                     if (count >= 5) return true;
                 }
                 return false;
@@ -551,35 +880,58 @@
 
             function updateStatus(text, isFinal = false) {
                 statusText.textContent = text;
-                statusBox.className = 'status-box text-center p-3 rounded-lg shadow-md mb-4'; // Reset classes
-                if (isFinal) statusBox.classList.add('bg-green-200');
-                else if (text.includes('AI')) statusBox.classList.add('bg-yellow-200');
-                else statusBox.classList.add('bg-white');
+                statusBox.className = 'status-box text-center p-4 rounded-xl shadow-lg mb-6';
+                
+                if (isFinal) {
+                    statusBox.classList.add('bg-gradient-to-r', 'from-green-100', 'to-green-200', 'border-2', 'border-green-400');
+                } else if (text.includes('AI')) {
+                    statusBox.classList.add('bg-gradient-to-r', 'from-yellow-100', 'to-yellow-200');
+                } else {
+                    statusBox.classList.add('bg-white');
+                }
             }
 
             function triggerAITurn() {
                 isAIThinking = true;
-                updateStatus('AI가 생각 중입니다...');
+                updateStatus('🤔 AI가 생각 중입니다...');
                 setTimeout(() => {
                     const bestMove = findBestMove();
                     if (bestMove) placeStone(bestMove.x, bestMove.y, 2);
                     isAIThinking = false;
-                }, 100);
+                }, 300);
             }
 
+            // AI 로직 (기존과 동일)
             function findBestMove() {
                 let bestScore = -Infinity, move = null;
                 const possibleMoves = getPossibleMoves(board);
+                
                 for (const {x, y} of possibleMoves) {
-                    board[y][x] = 2; if (checkWin(x, y, 2)) { board[y][x] = 0; return {x, y}; } board[y][x] = 0;
-                    board[y][x] = 1; if (checkWin(x, y, 1)) { board[y][x] = 0; return {x, y}; } board[y][x] = 0;
+                    board[y][x] = 2; 
+                    if (checkWin(x, y, 2)) { 
+                        board[y][x] = 0; 
+                        return {x, y}; 
+                    } 
+                    board[y][x] = 0;
+                    
+                    board[y][x] = 1; 
+                    if (checkWin(x, y, 1)) { 
+                        board[y][x] = 0; 
+                        return {x, y}; 
+                    } 
+                    board[y][x] = 0;
                 }
+                
                 let depth = isCriticalSituation(board) ? CRITICAL_DEPTH : BASE_DEPTH;
+                
                 for (const {x, y} of possibleMoves) {
                     board[y][x] = 2;
                     const score = minimax(board, depth - 1, -Infinity, Infinity, false);
                     board[y][x] = 0;
-                    if (score > bestScore) { bestScore = score; move = {x, y}; }
+                    if (score > bestScore) { 
+                        bestScore = score; 
+                        move = {x, y}; 
+                    }
                 }
                 return move || possibleMoves[0];
             }
@@ -593,7 +945,10 @@
                     let maxEval = -Infinity;
                     for (const {x, y} of possibleMoves) {
                         currentBoard[y][x] = 2;
-                        if (checkWin(x, y, 2)) { currentBoard[y][x] = 0; return 100000 + depth; }
+                        if (checkWin(x, y, 2)) { 
+                            currentBoard[y][x] = 0; 
+                            return 100000 + depth; 
+                        }
                         maxEval = Math.max(maxEval, minimax(currentBoard, depth - 1, alpha, beta, false));
                         currentBoard[y][x] = 0;
                         alpha = Math.max(alpha, maxEval);
@@ -604,7 +959,10 @@
                     let minEval = Infinity;
                     for (const {x, y} of possibleMoves) {
                         currentBoard[y][x] = 1;
-                        if (checkWin(x, y, 1)) { currentBoard[y][x] = 0; return -100000 - depth; }
+                        if (checkWin(x, y, 1)) { 
+                            currentBoard[y][x] = 0; 
+                            return -100000 - depth; 
+                        }
                         minEval = Math.min(minEval, minimax(currentBoard, depth - 1, alpha, beta, true));
                         currentBoard[y][x] = 0;
                         beta = Math.min(beta, minEval);
@@ -617,6 +975,7 @@
             function getPossibleMoves(currentBoard) {
                 const moves = new Set();
                 if (currentBoard.every(row => row.every(cell => cell === 0))) return [{x: 7, y: 7}];
+                
                 for (let y = 0; y < BOARD_SIZE; y++) {
                     for (let x = 0; x < BOARD_SIZE; x++) {
                         if (currentBoard[y][x] === 0) {
@@ -625,7 +984,7 @@
                                     if (dx === 0 && dy === 0) continue;
                                     if (currentBoard[y + dy]?.[x + dx] > 0) {
                                         moves.add(JSON.stringify({x, y}));
-                                        break; // Inner loop
+                                        break;
                                     }
                                 }
                             }
@@ -639,8 +998,16 @@
                 for (let y = 0; y < BOARD_SIZE; y++) {
                     for (let x = 0; x < BOARD_SIZE; x++) {
                         if (currentBoard[y][x] === 0) {
-                            currentBoard[y][x] = 2; if (checkWin(x, y, 2)) { currentBoard[y][x] = 0; return true; }
-                            currentBoard[y][x] = 1; if (checkWin(x, y, 1)) { currentBoard[y][x] = 0; return true; }
+                            currentBoard[y][x] = 2; 
+                            if (checkWin(x, y, 2)) { 
+                                currentBoard[y][x] = 0; 
+                                return true; 
+                            }
+                            currentBoard[y][x] = 1; 
+                            if (checkWin(x, y, 1)) { 
+                                currentBoard[y][x] = 0; 
+                                return true; 
+                            }
                             currentBoard[y][x] = 0;
                         }
                     }
@@ -651,10 +1018,12 @@
             function evaluateBoard(currentBoard) {
                 let score = 0;
                 const lines = [];
+                
                 for (let i = 0; i < BOARD_SIZE; i++) {
-                    lines.push(currentBoard[i]); // Horizontal
-                    lines.push(currentBoard.map(row => row[i])); // Vertical
+                    lines.push(currentBoard[i]);
+                    lines.push(currentBoard.map(row => row[i]));
                 }
+                
                 for (let i = 0; i < 2 * BOARD_SIZE - 1; i++) {
                     const diag1 = [], diag2 = [];
                     for (let j = 0; j < BOARD_SIZE; j++) {
@@ -664,6 +1033,7 @@
                     if (diag1.length >= 5) lines.push(diag1);
                     if (diag2.length >= 5) lines.push(diag2);
                 }
+                
                 lines.forEach(line => score += evaluateLine(line));
                 return score;
             }
@@ -671,11 +1041,15 @@
             function evaluateLine(line) {
                 let score = 0;
                 const patterns = {
-                    '22222': 100000, '022220': 50000, '122220': 400, '022221': 400, '02220': 2000, '022020': 1800, '12220': 100, '02221': 100, '00220': 50, '02020': 50,
-                    '11111': -100000, '011110': -80000, '211110': -10000, '011112': -10000, '01110': -5000, '011010': -4500, '21110': -500, '01112': -500, '00110': -150, '01010': -150,
+                    '22222': 100000, '022220': 50000, '122220': 400, '022221': 400, '02220': 2000, 
+                    '022020': 1800, '12220': 100, '02221': 100, '00220': 50, '02020': 50,
+                    '11111': -100000, '011110': -80000, '211110': -10000, '011112': -10000, '01110': -5000, 
+                    '011010': -4500, '21110': -500, '01112': -500, '00110': -150, '01010': -150,
                 };
                 const lineStr = line.join('');
-                for (const p in patterns) { if (lineStr.includes(p)) score += patterns[p]; }
+                for (const p in patterns) { 
+                    if (lineStr.includes(p)) score += patterns[p]; 
+                }
                 return score;
             }
 
@@ -687,6 +1061,7 @@
                 aiModeBtn.addEventListener('click', () => startGame('ai'));
                 pvpModeBtn.addEventListener('click', () => startGame('pvp'));
             }
+            
             return { init, resizeCanvas };
         })();
         
