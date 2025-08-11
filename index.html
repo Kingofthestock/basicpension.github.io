@@ -1,1080 +1,1937 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2025 기초연금 확인 · 추억의 게임</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        /* 기본 스타일 */
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            touch-action: manipulation;
-        }
-        .hidden { display: none; }
-        
-        /* 플로팅 게임 버튼 */
-        .game-float-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            color: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 100;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .game-float-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        }
-        
-        /* 상단 네비게이션 */
-        .top-nav {
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        
-        /* 탭 버튼 스타일 */
-        .tab-btn {
-            padding: 0.5rem 1.25rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .tab-active {
-            background: #3b82f6;
-            color: white;
-        }
-        .tab-inactive {
-            background: #f3f4f6;
-            color: #6b7280;
-        }
-        .tab-inactive:hover {
-            background: #e5e7eb;
-        }
-        
-        /* 기초연금 스타일 */
-        #pension-container {
-            --primary: #1e40af;
-            --secondary: #3b82f6;
-            background-color: #f8fafc;
-            min-height: 100vh;
-            padding-bottom: 100px;
-        }
-        
-        #pension-container header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        
-        #pension-container main {
-            max-width: 720px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        }
-        
-        #pension-container fieldset {
-            border: none;
-            margin-bottom: 1.5rem;
-            padding: 1.25rem;
-            background: #f1f5f9;
-            border-radius: 0.75rem;
-        }
-        
-        #pension-container legend {
-            font-weight: 700;
-            font-size: 1.15rem;
-            color: var(--primary);
-            background: white;
-            padding: 0.4rem 1rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 1rem;
-        }
-        
-        #pension-container label {
-            display: block;
-            margin: 0.75rem 0 0.4rem;
-            font-weight: 500;
-            color: #475569;
-        }
-        
-        #pension-container input,
-        #pension-container select {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-        
-        #pension-container input:focus,
-        #pension-container select:focus {
-            outline: none;
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
-        }
-        
-        #pension-container input[type="radio"] {
-            width: auto;
-            margin-right: 0.5rem;
-            transform: scale(1.2);
-        }
-        
-        #pension-container .radio-group label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem;
-            background: white;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            margin: 0.5rem 0;
-        }
-        
-        #pension-container .radio-group label:hover {
-            background: #f8fafc;
-        }
-        
-        #pension-container #result {
-            margin-top: 1.5rem;
-            padding: 1.25rem;
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            border-left: 4px solid var(--secondary);
-            border-radius: 0.75rem;
-            font-weight: 600;
-            line-height: 1.8;
-        }
-        
-        .result-success {
-            background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important;
-            border-left-color: #22c55e !important;
-        }
-        
-        .result-fail {
-            background: linear-gradient(135deg, #fef2f2, #fee2e2) !important;
-            border-left-color: #ef4444 !important;
-        }
-        
-        /* 게임 허브 스타일 */
-        .game-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .game-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .game-card.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .game-card.disabled::after {
-            content: '준비중';
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            font-weight: bold;
-            font-size: 1.25rem;
-        }
-        
-        /* 오목 게임 스타일 */
-        .board-container {
-            position: relative;
-            width: 95vw;
-            max-width: 600px;
-            margin: auto;
-            aspect-ratio: 1 / 1;
-        }
-        
-        #game-board {
-            background-color: #e3c16f;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-        }
-        
-        /* 반응형 */
-        @media (max-width: 640px) {
-            #pension-container main {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-            .game-float-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-                bottom: 20px;
-                right: 20px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2025 기초연금 확인 · 추억의 게임</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Noto Sans KR', sans-serif; 
+      -webkit-font-smoothing: antialiased; 
+      touch-action: manipulation; 
+    }
+    .hidden { display: none !important; }
+
+    /* Floating button */
+    .game-float-btn { 
+      position: fixed; 
+      bottom: 30px; 
+      right: 30px; 
+      width: 60px; 
+      height: 60px; 
+      background: linear-gradient(135deg, #10b981, #059669); 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 28px; 
+      color: #fff; 
+      box-shadow: 0 4px 12px rgba(0,0,0,.15); 
+      z-index: 100; 
+      transition: all .3s; 
+      cursor: pointer; 
+      animation: pulse 2s infinite; 
+    }
+    
+    @keyframes pulse { 
+      0%, 100% { transform: scale(1); } 
+      50% { transform: scale(1.05); } 
+    }
+    
+    .game-float-btn:hover { 
+      transform: scale(1.1); 
+      box-shadow: 0 6px 20px rgba(0,0,0,.2); 
+    }
+
+    /* Top nav */
+    .top-nav { 
+      background: #fff; 
+      border-bottom: 1px solid #e5e7eb; 
+      position: sticky; 
+      top: 0; 
+      z-index: 50; 
+      box-shadow: 0 1px 3px rgba(0,0,0,.05); 
+    }
+    
+    .tab-btn { 
+      padding: .5rem 1.25rem; 
+      border-radius: 9999px; 
+      font-weight: 700; 
+      transition: all .2s; 
+    }
+    
+    .tab-active { 
+      background: #3b82f6; 
+      color: #fff; 
+    }
+    
+    .tab-inactive { 
+      background: #f3f4f6; 
+      color: #6b7280; 
+    }
+    
+    .tab-inactive:hover { 
+      background: #e5e7eb; 
+    }
+
+    /* Game card */
+    .game-card { 
+      background: #fff; 
+      border-radius: 1rem; 
+      padding: 1.5rem; 
+      box-shadow: 0 4px 6px rgba(0,0,0,.05); 
+      transition: all .25s; 
+      cursor: pointer; 
+      position: relative; 
+      overflow: hidden; 
+    }
+    
+    .game-card:hover { 
+      transform: translateY(-4px); 
+      box-shadow: 0 10px 20px rgba(0,0,0,.1); 
+    }
+
+    /* Omok board */
+    .board-container { 
+      position: relative; 
+      width: 95vw; 
+      max-width: 600px; 
+      margin: auto; 
+      aspect-ratio: 1 / 1; 
+    }
+    
+    #game-board { 
+      background: #e3c16f; 
+      border-radius: 12px; 
+      box-shadow: 0 8px 20px rgba(0,0,0,.15); 
+      cursor: pointer; 
+      width: 100%; 
+      height: 100%; 
+    }
+
+    /* 2048 grid */
+    .g2048-grid { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: .6rem; 
+      background: #bbada0; 
+      padding: .6rem; 
+      border-radius: .75rem; 
+    }
+    
+    .g2048-cell { 
+      background: #cdc1b4; 
+      border-radius: .5rem; 
+      height: 72px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-weight: 900; 
+      font-size: 1.4rem; 
+      transition: all 0.15s ease-in-out; 
+    }
+    
+    .tile-0 { background: #cdc1b4; color: transparent; }
+    .tile-2 { background: #eee4da; color: #776e65; }
+    .tile-4 { background: #ede0c8; color: #776e65; }
+    .tile-8 { background: #f2b179; color: #f9f6f2; }
+    .tile-16 { background: #f59563; color: #f9f6f2; }
+    .tile-32 { background: #f67c5f; color: #f9f6f2; }
+    .tile-64 { background: #f65e3b; color: #f9f6f2; }
+    .tile-128 { background: #edcf72; color: #f9f6f2; font-size: 1.2rem; }
+    .tile-256 { background: #edcc61; color: #f9f6f2; font-size: 1.2rem; }
+    .tile-512 { background: #edc850; color: #f9f6f2; font-size: 1.2rem; }
+    .tile-1024 { background: #edc53f; color: #f9f6f2; font-size: 1rem; }
+    .tile-2048 { background: #edc22e; color: #f9f6f2; font-size: 1rem; }
+
+    /* Pension specific styles */
+    #pension-container { 
+      --primary: #1e40af; 
+      --secondary: #3b82f6; 
+      background: #f8fafc; 
+      min-height: 100vh; 
+      padding-bottom: 100px; 
+    }
+    
+    #pension-container header { 
+      background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+      color: #fff; 
+      padding: 2rem; 
+      text-align: center; 
+    }
+    
+    #pension-container main { 
+      max-width: 720px; 
+      margin: 2rem auto; 
+      padding: 2rem; 
+      background: #fff; 
+      border-radius: 1rem; 
+      box-shadow: 0 10px 25px rgba(0,0,0,.08); 
+    }
+    
+    #pension-container fieldset { 
+      border: none; 
+      margin-bottom: 1.5rem; 
+      padding: 1.25rem; 
+      background: #f1f5f9; 
+      border-radius: .75rem; 
+    }
+    
+    #pension-container legend { 
+      font-weight: 700; 
+      font-size: 1.15rem; 
+      color: var(--primary); 
+      background: #fff; 
+      padding: .4rem 1rem; 
+      border-radius: .5rem; 
+      box-shadow: 0 2px 4px rgba(0,0,0,.05); 
+      margin-bottom: 1rem; 
+    }
+    
+    #pension-container label { 
+      display: block; 
+      margin: .75rem 0 .4rem; 
+      font-weight: 500; 
+      color: #475569; 
+    }
+    
+    #pension-container input, 
+    #pension-container select { 
+      width: 100%; 
+      padding: .75rem 1rem; 
+      border: 2px solid #e2e8f0; 
+      border-radius: .5rem; 
+      font-size: 1rem; 
+      transition: all .2s; 
+    }
+    
+    #pension-container input:focus, 
+    #pension-container select:focus { 
+      outline: none; 
+      border-color: var(--secondary); 
+      box-shadow: 0 0 0 3px rgba(59,130,246,.1); 
+    }
+    
+    #pension-container input[type="radio"] { 
+      width: auto; 
+      margin-right: .5rem; 
+      transform: scale(1.2); 
+    }
+    
+    #pension-container .radio-group label { 
+      display: flex; 
+      align-items: center; 
+      gap: .5rem; 
+      padding: .6rem; 
+      background: #fff; 
+      border-radius: .5rem; 
+      cursor: pointer; 
+      margin: .5rem 0; 
+    }
+    
+    #pension-container .radio-group label:hover { 
+      background: #f8fafc; 
+    }
+    
+    .result-success { 
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important; 
+      border-left: 4px solid #22c55e !important; 
+      padding: 1.25rem;
+      border-radius: .75rem;
+      margin-top: 1.5rem;
+    }
+    
+    .result-fail { 
+      background: linear-gradient(135deg, #fef2f2, #fee2e2) !important; 
+      border-left: 4px solid #ef4444 !important; 
+      padding: 1.25rem;
+      border-radius: .75rem;
+      margin-top: 1.5rem;
+    }
+  </style>
 </head>
 <body class="bg-gray-50">
-    
-    <!-- 상단 네비게이션 (숨김 상태로 시작) -->
-    <nav id="top-nav" class="top-nav hidden">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <h1 class="text-lg font-bold text-gray-800">2025 기초연금 & 게임</h1>
-            <div class="flex gap-2">
-                <button id="tab-pension" class="tab-btn tab-active">기초연금</button>
-                <button id="tab-games" class="tab-btn tab-inactive">게임 허브</button>
-            </div>
-        </div>
-    </nav>
-    
-    <!-- 플로팅 게임 버튼 (기초연금 화면에서만 표시) -->
-    <button id="floating-game-btn" class="game-float-btn" title="게임 하러가기">
-        🎮
-    </button>
-    
-    <!-- 1. 기초연금 계산기 (기본 화면) -->
-    <section id="pension-container">
-        <header>
-            <h1 class="text-3xl font-bold mb-2">2025 기초연금 자격 확인</h1>
-            <p class="text-blue-100">만 65세 이상 어르신 대상 · 간편 계산기</p>
-        </header>
+  <!-- Top nav -->
+  <nav id="top-nav" class="top-nav hidden">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <h1 class="text-lg font-bold text-gray-800">2025 기초연금 & 게임</h1>
+      <div class="flex gap-2">
+        <button id="tab-pension" class="tab-btn tab-active">기초연금</button>
+        <button id="tab-games" class="tab-btn tab-inactive">게임 허브</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Floating button -->
+  <button id="floating-game-btn" class="game-float-btn" title="게임 하러가기">🎮</button>
+
+  <!-- 1) Pension calculator -->
+  <section id="pension-container">
+    <header>
+      <h1 class="text-3xl font-bold mb-2">2025 기초연금 자격 확인</h1>
+      <p class="text-blue-100">만 65세 이상 어르신 대상 · 간편 계산기</p>
+    </header>
+    <main>
+      <form id="pensionForm">
+        <fieldset>
+          <legend>📋 기본 정보</legend>
+          <label for="birthYear">출생 연도</label>
+          <select id="birthYear" required></select>
+          
+          <label for="birthMonth">출생 월</label>
+          <select id="birthMonth" required></select>
+          
+          <label for="household">가구 유형</label>
+          <select id="household" required>
+            <option value="single">단독가구 (1인)</option>
+            <option value="couple">부부가구 (2인)</option>
+          </select>
+          
+          <label>거주 지역</label>
+          <div class="radio-group">
+            <label><input type="radio" name="area" value="big" required> 대도시 <small class="text-gray-500">(특별시·광역시)</small></label>
+            <label><input type="radio" name="area" value="mid"> 중소도시 <small class="text-gray-500">(일반 시 지역)</small></label>
+            <label><input type="radio" name="area" value="rural"> 농어촌 <small class="text-gray-500">(군 지역)</small></label>
+          </div>
+        </fieldset>
         
-        <main>
-            <form id="pensionForm">
-                <fieldset>
-                    <legend>📋 기본 정보</legend>
-                    <label for="birthYear">출생 연도</label>
-                    <select id="birthYear" required></select>
-                    
-                    <label for="birthMonth">출생 월</label>
-                    <select id="birthMonth" required></select>
-                    
-                    <label for="household">가구 유형</label>
-                    <select id="household" required>
-                        <option value="single">단독가구 (1인)</option>
-                        <option value="couple">부부가구 (2인)</option>
-                    </select>
-                    
-                    <label>거주 지역</label>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="area" value="big" required>
-                            대도시 <small class="text-gray-500">(특별시·광역시)</small>
-                        </label>
-                        <label>
-                            <input type="radio" name="area" value="mid">
-                            중소도시 <small class="text-gray-500">(일반 시 지역)</small>
-                        </label>
-                        <label>
-                            <input type="radio" name="area" value="rural">
-                            농어촌 <small class="text-gray-500">(군 지역)</small>
-                        </label>
-                    </div>
-                </fieldset>
-                
-                <fieldset>
-                    <legend>💵 월 소득</legend>
-                    <label for="income">본인 월소득 (근로·사업·연금 등)</label>
-                    <input type="text" id="income" placeholder="예: 120만원" required>
-                    
-                    <label for="spouseIncome">배우자 월소득 (부부가구만)</label>
-                    <input type="text" id="spouseIncome" placeholder="예: 80만원">
-                </fieldset>
-                
-                <fieldset>
-                    <legend>🏠 보유 재산</legend>
-                    <label for="homeValue">주택/부동산 시가총액</label>
-                    <input type="text" id="homeValue" placeholder="예: 2억원">
-                    
-                    <label for="deposit">전·월세 보증금</label>
-                    <input type="text" id="deposit" placeholder="예: 5000만원">
-                    
-                    <label for="savings">예금·적금 총액</label>
-                    <input type="text" id="savings" placeholder="예: 3000만원">
-                    
-                    <label for="stocks">주식·펀드·채권 등</label>
-                    <input type="text" id="stocks" placeholder="예: 1000만원">
-                    
-                    <label for="car">자동차 가액</label>
-                    <input type="text" id="car" placeholder="예: 2000만원">
-                    
-                    <label for="debt">부채 (대출금 등)</label>
-                    <input type="text" id="debt" placeholder="예: 5000만원">
-                </fieldset>
-                
-                <button type="submit" class="w-full py-3 text-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 shadow-lg font-semibold">
-                    자격 확인하기
-                </button>
-            </form>
-            
-            <div id="result" style="display: none;"></div>
-            <div id="applyInfo" style="display: none;"></div>
-            <div id="benefitBox" style="display: none;"></div>
-            
-            <div class="mt-6 p-4 bg-amber-50 border border-amber-300 rounded-lg">
-                <p class="text-sm text-amber-800">
-                    ⚠️ <strong>주의:</strong> 본 계산 결과는 2025년 기준 예상치입니다. 
-                    실제 수급 여부는 국민연금공단 심사로 최종 결정됩니다.
-                </p>
-            </div>
-        </main>
-    </section>
-    
-    <!-- 2. 게임 허브 -->
-    <section id="game-hub" class="hidden min-h-screen py-8">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="mb-8 text-center">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">🎮 추억의 플래시 게임</h1>
-                <p class="text-gray-600">클래식 게임을 즐겨보세요</p>
-            </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div id="omok-card" class="game-card">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-gray-800 to-black rounded-full"></div>
-                        <div>
-                            <h3 class="text-xl font-bold">오목</h3>
-                            <p class="text-sm text-gray-600">AI 대전 · 2인 대전</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500">클래식 보드게임을 온라인으로!</p>
-                </div>
-                
-                <div class="game-card disabled">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full"></div>
-                        <div>
-                            <h3 class="text-xl font-bold">벽돌깨기</h3>
-                            <p class="text-sm text-gray-600">아케이드 게임</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500">공을 튕겨 벽돌을 깨뜨리세요</p>
-                </div>
-                
-                <div class="game-card disabled">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-gray-500 to-gray-600 rounded-full"></div>
-                        <div>
-                            <h3 class="text-xl font-bold">지뢰찾기</h3>
-                            <p class="text-sm text-gray-600">퍼즐 게임</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500">논리적 사고로 지뢰를 찾아내세요</p>
-                </div>
-                
-                <div class="game-card disabled">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full"></div>
-                        <div>
-                            <h3 class="text-xl font-bold">테트리스</h3>
-                            <p class="text-sm text-gray-600">퍼즐 게임</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500">블록을 쌓아 라인을 완성하세요</p>
-                </div>
-                
-                <div class="game-card disabled">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full"></div>
-                        <div>
-                            <h3 class="text-xl font-bold">스네이크</h3>
-                            <p class="text-sm text-gray-600">아케이드 게임</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500">뱀을 조종해 먹이를 먹으세요</p>
-                </div>
-                
-                <div class="game-card disabled">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full"></div>
-                        <div>
-                            <h3 class="text-xl font-bold">2048</h3>
-                            <p class="text-sm text-gray-600">숫자 퍼즐</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500">숫자를 합쳐 2048을 만드세요</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- 3. 오목 게임 -->
-    <section id="omok-game" class="hidden min-h-screen bg-gradient-to-br from-purple-100 to-purple-200">
-        <div class="max-w-2xl mx-auto px-4 py-8">
-            <button id="back-to-hub" class="mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">
-                ← 게임 목록
-            </button>
-            
-            <!-- 모드 선택 -->
-            <div id="game-mode-selection" class="text-center py-12">
-                <h2 class="text-3xl font-bold mb-8">오목 게임</h2>
-                <div class="space-y-4 max-w-sm mx-auto">
-                    <button id="ai-mode-btn" class="w-full py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold text-lg">
-                        🤖 AI 대전
-                    </button>
-                    <button id="pvp-mode-btn" class="w-full py-4 bg-green-600 text-white rounded-xl hover:bg-green-700 font-semibold text-lg">
-                        👥 2인 대전
-                    </button>
-                </div>
-            </div>
-            
-            <!-- 게임 플레이 -->
-            <div id="game-container" class="hidden">
-                <h2 id="game-title" class="text-2xl font-bold text-center mb-4"></h2>
-                <div id="status-box" class="bg-white p-4 rounded-xl shadow mb-6 text-center">
-                    <p id="status-text" class="text-lg font-semibold">게임을 시작하세요</p>
-                </div>
-                
-                <div class="board-container">
-                    <canvas id="game-board"></canvas>
-                </div>
-                
-                <div class="mt-6 grid grid-cols-2 gap-4">
-                    <button id="new-game-btn" class="py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-semibold">
-                        🔄 새 게임
-                    </button>
-                    <button id="game-back-btn" class="py-3 bg-gray-600 text-white rounded-xl hover:bg-gray-700 font-semibold">
-                        📋 모드 선택
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <script>
-        // ==================== 네비게이션 관리 ====================
-        const sections = {
-            pension: document.getElementById('pension-container'),
-            hub: document.getElementById('game-hub'),
-            omok: document.getElementById('omok-game')
-        };
+        <fieldset>
+          <legend>💵 월 소득</legend>
+          <label for="income">본인 월소득 (근로·사업·연금 등)</label>
+          <input type="text" id="income" placeholder="예: 120만원" required>
+          
+          <label for="spouseIncome">배우자 월소득 (부부가구만)</label>
+          <input type="text" id="spouseIncome" placeholder="예: 80만원">
+        </fieldset>
         
-        const topNav = document.getElementById('top-nav');
-        const floatingBtn = document.getElementById('floating-game-btn');
-        const tabPension = document.getElementById('tab-pension');
-        const tabGames = document.getElementById('tab-games');
+        <fieldset>
+          <legend>🏠 보유 재산</legend>
+          <label for="homeValue">주택/부동산 시가총액</label>
+          <input type="text" id="homeValue" placeholder="예: 2억원">
+          
+          <label for="deposit">전·월세 보증금</label>
+          <input type="text" id="deposit" placeholder="예: 5000만원">
+          
+          <label for="savings">예금·적금 총액</label>
+          <input type="text" id="savings" placeholder="예: 3000만원">
+          
+          <label for="stocks">주식·펀드·채권 등</label>
+          <input type="text" id="stocks" placeholder="예: 1000만원">
+          
+          <label for="car">자동차 가액</label>
+          <input type="text" id="car" placeholder="예: 2000만원">
+          
+          <label for="debt">부채 (대출금 등)</label>
+          <input type="text" id="debt" placeholder="예: 5000만원">
+        </fieldset>
         
-        function showSection(sectionName) {
-            // 모든 섹션 숨기기
-            Object.values(sections).forEach(section => section.classList.add('hidden'));
-            
-            // 선택된 섹션 표시
-            sections[sectionName].classList.remove('hidden');
-            
-            // 네비게이션 상태 업데이트
-            if (sectionName === 'pension') {
-                topNav.classList.add('hidden');
-                floatingBtn.classList.remove('hidden');
-                tabPension.classList.add('tab-active');
-                tabPension.classList.remove('tab-inactive');
-                tabGames.classList.add('tab-inactive');
-                tabGames.classList.remove('tab-active');
-            } else {
-                topNav.classList.remove('hidden');
-                floatingBtn.classList.add('hidden');
-                
-                if (sectionName === 'hub' || sectionName === 'omok') {
-                    tabGames.classList.add('tab-active');
-                    tabGames.classList.remove('tab-inactive');
-                    tabPension.classList.add('tab-inactive');
-                    tabPension.classList.remove('tab-active');
-                }
-            }
-            
-            // 오목 게임 리사이즈
-            if (sectionName === 'omok') {
-                gameApp.resizeCanvas();
-            }
+        <button type="submit" class="w-full py-3 text-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 shadow-lg font-semibold">
+          자격 확인하기
+        </button>
+      </form>
+      
+      <div id="result" style="display:none;"></div>
+      <div id="applyInfo" style="display:none;"></div>
+      <div id="benefitBox" style="display:none;"></div>
+      
+      <div class="mt-6 p-4 bg-amber-50 border border-amber-300 rounded-lg">
+        <p class="text-sm text-amber-800">⚠️ <strong>주의:</strong> 본 계산 결과는 2025년 기준 예상치입니다. 실제 수급 여부는 국민연금공단 심사로 최종 결정됩니다.</p>
+      </div>
+    </main>
+  </section>
+
+  <!-- 2) Game hub -->
+  <section id="game-hub" class="hidden min-h-screen py-8">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="mb-8 text-center">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">🎮 추억의 플래시 게임</h1>
+        <p class="text-gray-600">클래식 게임을 즐겨보세요</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div data-game="omok" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-gray-800 to-black rounded-full flex items-center justify-center text-white text-xl">⚫</div>
+            <div>
+              <h3 class="text-xl font-bold">오목</h3>
+              <p class="text-sm text-gray-600">AI 대전 · 2인 대전</p>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500">클래식 보드게임을 온라인으로</p>
+        </div>
+
+        <div data-game="g2048" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-lg">2048</div>
+            <div>
+              <h3 class="text-xl font-bold">2048</h3>
+              <p class="text-sm text-gray-600">숫자 퍼즐</p>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500">슬라이드로 타일을 합쳐 2048 만들기</p>
+        </div>
+
+        <div data-game="snake" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white text-xl">🐍</div>
+            <div>
+              <h3 class="text-xl font-bold">스네이크</h3>
+              <p class="text-sm text-gray-600">아케이드</p>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500">추억의 뱀 게임</p>
+        </div>
+
+        <div data-game="breakout" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white text-xl">🧱</div>
+            <div>
+              <h3 class="text-xl font-bold">벽돌깨기</h3>
+              <p class="text-sm text-gray-600">아케이드</p>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500">공을 튕겨 벽돌을 모두 깨뜨리세요</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3) Omok Game -->
+  <section id="omok-game" class="hidden min-h-screen bg-gradient-to-br from-purple-100 to-purple-200">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <div id="game-mode-selection" class="text-center py-12">
+        <h2 class="text-3xl font-bold mb-8">오목 게임</h2>
+        <div class="space-y-4 max-w-sm mx-auto">
+          <button id="ai-mode-btn" class="w-full py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold text-lg">🤖 AI 대전</button>
+          <button id="pvp-mode-btn" class="w-full py-4 bg-green-600 text-white rounded-xl hover:bg-green-700 font-semibold text-lg">👥 2인 대전</button>
+        </div>
+      </div>
+      <div id="game-container" class="hidden">
+        <h2 id="game-title" class="text-2xl font-bold text-center mb-4"></h2>
+        <div id="status-box" class="bg-white p-4 rounded-xl shadow mb-6 text-center">
+          <p id="status-text" class="text-lg font-semibold">게임을 시작하세요</p>
+        </div>
+        <div class="board-container">
+          <canvas id="game-board"></canvas>
+        </div>
+        <div class="mt-6 grid grid-cols-2 gap-4">
+          <button id="new-game-btn" class="py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-semibold">🔄 새 게임</button>
+          <button id="game-back-btn" class="py-3 bg-gray-600 text-white rounded-xl hover:bg-gray-700 font-semibold">📋 모드 선택</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4) 2048 Game -->
+  <section id="game-2048" class="hidden min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
+    <div class="max-w-xl mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-bold">2048</h2>
+          <div class="flex items-center gap-3">
+            <div class="px-3 py-2 bg-gray-100 rounded text-sm">점수 <span id="g2048-score" class="font-bold">0</span></div>
+            <button id="g2048-new" class="px-3 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">새 게임</button>
+          </div>
+        </div>
+        <div id="g2048-grid" class="g2048-grid select-none"></div>
+        <p class="text-sm text-gray-600 mt-3">키보드 방향키로 조작</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5) Snake Game -->
+  <section id="game-snake" class="hidden min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
+    <div class="max-w-xl mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-bold">스네이크</h2>
+          <div class="flex items-center gap-3">
+            <div class="px-3 py-2 bg-gray-100 rounded text-sm">점수 <span id="snake-score" class="font-bold">0</span></div>
+            <button id="snake-new" class="px-3 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700">새 게임</button>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <canvas id="snake-canvas" width="420" height="420" style="background: #0f172a; border-radius: 12px;"></canvas>
+        </div>
+        <p class="text-sm text-gray-600 mt-3">방향키로 조작</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6) Breakout Game -->
+  <section id="game-breakout" class="hidden min-h-screen bg-gradient-to-br from-pink-100 to-purple-200">
+    <div class="max-w-xl mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-bold">벽돌깨기</h2>
+          <div class="flex items-center gap-3">
+            <div class="px-3 py-2 bg-gray-100 rounded text-sm">점수 <span id="breakout-score" class="font-bold">0</span></div>
+            <div class="px-3 py-2 bg-gray-100 rounded text-sm">생명 <span id="breakout-lives" class="font-bold">3</span></div>
+            <button id="breakout-new" class="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">새 게임</button>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <canvas id="breakout-canvas" width="480" height="320" style="background: linear-gradient(to bottom, #1e293b, #334155); border-radius: 12px;"></canvas>
+        </div>
+        <p class="text-sm text-gray-600 mt-3">마우스나 터치로 패들 조작</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // ========= Global Variables =========
+    let activeGame = null;
+    let currentSection = 'pension';
+
+    // ========= Navigation System =========
+    function showSection(sectionName) {
+      console.log('Showing section:', sectionName);
+      
+      // Hide all sections
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.add('hidden');
+      });
+      
+      // Show target section
+      const targetSection = document.getElementById(sectionName);
+      if (targetSection) {
+        targetSection.classList.remove('hidden');
+        currentSection = sectionName;
+      }
+      
+      // Update navigation UI
+      const topNav = document.getElementById('top-nav');
+      const floatingBtn = document.getElementById('floating-game-btn');
+      const tabPension = document.getElementById('tab-pension');
+      const tabGames = document.getElementById('tab-games');
+      
+      if (sectionName === 'pension-container') {
+        topNav.classList.add('hidden');
+        floatingBtn.classList.remove('hidden');
+        tabPension.classList.add('tab-active');
+        tabPension.classList.remove('tab-inactive');
+        tabGames.classList.add('tab-inactive');
+        tabGames.classList.remove('tab-active');
+      } else {
+        topNav.classList.remove('hidden');
+        floatingBtn.classList.add('hidden');
+        tabGames.classList.add('tab-active');
+        tabGames.classList.remove('tab-inactive');
+        tabPension.classList.add('tab-inactive');
+        tabPension.classList.remove('tab-active');
+      }
+      
+      // Set active game
+      if (sectionName === 'omok-game') {
+        activeGame = 'omok';
+        if (window.omokApp) omokApp.resizeCanvas();
+      } else if (sectionName === 'game-2048') {
+        activeGame = 'g2048';
+        if (window.g2048App) g2048App.draw();
+      } else if (sectionName === 'game-snake') {
+        activeGame = 'snake';
+      } else if (sectionName === 'game-breakout') {
+        activeGame = 'breakout';
+        if (window.breakoutApp) breakoutApp.init();
+      } else {
+        activeGame = null;
+      }
+    }
+
+    // ========= Pension Calculator =========
+    const pensionApp = {
+      CONFIG: {
+        year: 2025,
+        incomeThreshold: { single: 2280000, couple: 3648000 },
+        basicAsset: { big: 135000000, mid: 85000000, rural: 72500000 },
+        financialDeduction: { single: 20000000, couple: 40000000 },
+        benefit: { single: 334810, couplePer: 267848 },
+        assetConversionRate: 0.04 / 12
+      },
+      
+      init() {
+        this.populate();
+        this.bindEvents();
+      },
+      
+      populate() {
+        const yearSelect = document.getElementById('birthYear');
+        const monthSelect = document.getElementById('birthMonth');
+        const currentYear = new Date().getFullYear();
+        
+        // Populate years
+        for (let year = currentYear - 65; year >= currentYear - 100; year--) {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = `${year}년`;
+          yearSelect.appendChild(option);
         }
         
-        // 이벤트 리스너
-        floatingBtn.addEventListener('click', () => showSection('hub'));
-        tabPension.addEventListener('click', () => showSection('pension'));
-        tabGames.addEventListener('click', () => showSection('hub'));
-        document.getElementById('omok-card').addEventListener('click', () => showSection('omok'));
-        document.getElementById('back-to-hub').addEventListener('click', () => showSection('hub'));
+        // Populate months
+        for (let month = 1; month <= 12; month++) {
+          const option = document.createElement('option');
+          option.value = month;
+          option.textContent = `${month}월`;
+          monthSelect.appendChild(option);
+        }
+      },
+      
+      bindEvents() {
+        const form = document.getElementById('pensionForm');
+        const household = document.getElementById('household');
         
-        // ==================== 기초연금 계산기 ====================
-        const pensionApp = (() => {
-            const CONFIG = {
-                year: 2025,
-                incomeThreshold: { 
-                    single: 2280000,
-                    couple: 3648000
-                },
-                basicAsset: { 
-                    big: 135000000,
-                    mid: 85000000,
-                    rural: 72500000
-                },
-                financialDeduction: {
-                    single: 20000000,
-                    couple: 40000000
-                },
-                benefit: { 
-                    single: 334810,
-                    couplePer: 267848
-                },
-                assetConversionRate: 0.04 / 12
-            };
-            
-            function populateBirthSelects() {
-                const yearSel = document.getElementById('birthYear');
-                const monthSel = document.getElementById('birthMonth');
-                
-                const currentYear = new Date().getFullYear();
-                for (let y = currentYear - 65; y >= currentYear - 100; y--) {
-                    const opt = document.createElement('option');
-                    opt.value = y;
-                    opt.textContent = `${y}년`;
-                    yearSel.appendChild(opt);
-                }
-                
-                for (let m = 1; m <= 12; m++) {
-                    const opt = document.createElement('option');
-                    opt.value = m;
-                    opt.textContent = `${m}월`;
-                    monthSel.appendChild(opt);
-                }
-            }
-            
-            function toggleSpouseIncome() {
-                const household = document.getElementById('household').value;
-                const spouseField = document.getElementById('spouseIncome');
-                const spouseLabel = spouseField.previousElementSibling;
-                
-                if (household === 'couple') {
-                    spouseField.style.display = 'block';
-                    spouseLabel.style.display = 'block';
-                } else {
-                    spouseField.style.display = 'none';
-                    spouseLabel.style.display = 'none';
-                    spouseField.value = '';
-                }
-            }
-            
-            function parseAmount(str) {
-                if (!str) return 0;
-                str = str.replace(/\s|원|,/g, '');
-                let total = 0;
-                
-                const eok = str.match(/([0-9.]+)억/);
-                if (eok) {
-                    total += parseFloat(eok[1]) * 100000000;
-                    str = str.replace(eok[0], '');
-                }
-                
-                const man = str.match(/([0-9.]+)만/);
-                if (man) {
-                    total += parseFloat(man[1]) * 10000;
-                    str = str.replace(man[0], '');
-                }
-                
-                const nums = str.match(/[0-9]+/g);
-                if (nums) {
-                    total += parseInt(nums.join(''), 10);
-                }
-                
-                return isNaN(total) ? 0 : total;
-            }
-            
-            function formatKRW(n) {
-                return n.toLocaleString('ko-KR') + '원';
-            }
-            
-            function calculateAge(year, month) {
-                const today = new Date();
-                let age = today.getFullYear() - year;
-                if (month > today.getMonth() + 1) age--;
-                return age;
-            }
-            
-            function calculateIncome(data) {
-                const totalMonthlyIncome = data.income + data.spouseIncome;
-                const generalAssets = data.assets.home + data.assets.deposit + data.assets.car - data.debt;
-                const financialAssets = data.assets.savings + data.assets.stocks;
-                
-                const basicDeduction = CONFIG.basicAsset[data.area];
-                const netGeneralAssets = Math.max(0, generalAssets - basicDeduction);
-                
-                const financialDeduction = CONFIG.financialDeduction[data.household];
-                const netFinancialAssets = Math.max(0, financialAssets - financialDeduction);
-                
-                const assetIncome = (netGeneralAssets + netFinancialAssets) * CONFIG.assetConversionRate;
-                const total = totalMonthlyIncome + assetIncome;
-                
-                return {
-                    monthlyIncome: totalMonthlyIncome,
-                    assetIncome,
-                    total
-                };
-            }
-            
-            function showResult(age, incomeCalc, household) {
-                const limit = CONFIG.incomeThreshold[household];
-                const incomeOk = incomeCalc.total <= limit;
-                const ageOk = age >= 65;
-                
-                const resultDiv = document.getElementById('result');
-                const applyDiv = document.getElementById('applyInfo');
-                const benefitDiv = document.getElementById('benefitBox');
-                
-                let html = '';
-                
-                if (ageOk && incomeOk) {
-                    const benefit = household === 'single' ? CONFIG.benefit.single : CONFIG.benefit.couplePer;
-                    html = `✅ <strong>기초연금 수급 가능성이 높습니다!</strong><br><br>`;
-                    html += `💰 예상 월 지급액: <strong>${formatKRW(benefit)}</strong>`;
-                    if (household === 'couple') {
-                        html += ` (부부 합계: ${formatKRW(benefit * 2)})`;
-                    }
-                    html += `<br><br>📊 소득인정액 분석:<br>`;
-                    html += `• 월 소득: ${formatKRW(incomeCalc.monthlyIncome)}<br>`;
-                    html += `• 재산의 소득환산액: ${formatKRW(Math.round(incomeCalc.assetIncome))}<br>`;
-                    html += `• 소득인정액: ${formatKRW(Math.round(incomeCalc.total))}<br>`;
-                    html += `• 선정기준액: ${formatKRW(limit)}`;
-                    resultDiv.className = 'result-success';
-                } else {
-                    html = `❌ <strong>현재 기준으로는 수급 요건을 충족하지 못합니다.</strong><br><br>`;
-                    html += `📊 미충족 사유:<br>`;
-                    if (!ageOk) {
-                        html += `• 연령 조건: 만 65세 이상 (현재 ${age}세, ${65 - age}년 후 신청 가능)<br>`;
-                    }
-                    if (!incomeOk) {
-                        html += `• 소득인정액 초과:<br>`;
-                        html += `  - 귀하의 소득인정액: ${formatKRW(Math.round(incomeCalc.total))}<br>`;
-                        html += `  - 선정기준액: ${formatKRW(limit)}<br>`;
-                        html += `  - 초과금액: ${formatKRW(Math.round(incomeCalc.total - limit))}<br>`;
-                    }
-                    html += `<br>💡 Tip: ${!ageOk ? '만 65세가 되는 생일이 속한 달의 1개월 전부터 신청 가능합니다.' : '재산 처분이나 소득 감소 시 재신청이 가능합니다.'}`;
-                    resultDiv.className = 'result-fail';
-                }
-                
-                resultDiv.innerHTML = html;
-                resultDiv.style.display = 'block';
-                
-                // 신청 방법
-                applyDiv.innerHTML = `
-                    <h3 class="text-lg font-bold mb-2 text-blue-700">📝 신청 방법</h3>
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li><strong>방문 신청:</strong> 주소지 읍·면·동 주민센터</li>
-                        <li><strong>온라인 신청:</strong> 복지로(www.bokjiro.go.kr)</li>
-                        <li><strong>대리 신청:</strong> 배우자, 자녀, 형제자매 등 가능</li>
-                    </ul>
-                    <h4 class="mt-3 font-semibold">📋 필요 서류</h4>
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li>신분증</li>
-                        <li>통장 사본</li>
-                        <li>배우자 신분증 (부부가구)</li>
-                        <li>소득·재산 증빙서류 (필요시)</li>
-                    </ul>
-                `;
-                applyDiv.style.display = 'block';
-                
-                // 추가 혜택
-                benefitDiv.innerHTML = `
-                    <h3 class="text-lg font-bold mb-2 text-green-700">🎁 65세 이상 혜택</h3>
-                    <div class="space-y-3">
-                        <div>
-                            <strong>전국 공통:</strong>
-                            <ul class="list-disc pl-5 text-sm">
-                                <li>의료비 본인부담금 감면</li>
-                                <li>대중교통 할인</li>
-                                <li>문화시설 무료/할인</li>
-                            </ul>
-                        </div>
-                    </div>
-                `;
-                benefitDiv.style.display = 'block';
-                
-                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            
-            function init() {
-                populateBirthSelects();
-                
-                const householdSelect = document.getElementById('household');
-                householdSelect.addEventListener('change', toggleSpouseIncome);
-                toggleSpouseIncome();
-                
-                const form = document.getElementById('pensionForm');
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    
-                    const year = parseInt(document.getElementById('birthYear').value);
-                    const month = parseInt(document.getElementById('birthMonth').value);
-                    const household = document.getElementById('household').value;
-                    const area = document.querySelector('input[name="area"]:checked')?.value;
-                    
-                    if (!area) {
-                        alert('거주 지역을 선택해주세요.');
-                        return;
-                    }
-                    
-                    const data = {
-                        income: parseAmount(document.getElementById('income').value),
-                        spouseIncome: parseAmount(document.getElementById('spouseIncome').value),
-                        assets: {
-                            home: parseAmount(document.getElementById('homeValue').value),
-                            deposit: parseAmount(document.getElementById('deposit').value),
-                            savings: parseAmount(document.getElementById('savings').value),
-                            stocks: parseAmount(document.getElementById('stocks').value),
-                            car: parseAmount(document.getElementById('car').value)
-                        },
-                        debt: parseAmount(document.getElementById('debt').value),
-                        household,
-                        area
-                    };
-                    
-                    const age = calculateAge(year, month);
-                    const incomeCalc = calculateIncome(data);
-                    showResult(age, incomeCalc, household);
-                });
-            }
-            
-            return { init };
-        })();
-        
-        // ==================== 오목 게임 ====================
-        const gameApp = (() => {
-            const canvas = document.getElementById('game-board');
-            const ctx = canvas.getContext('2d');
-            const BOARD_SIZE = 15;
-            let cellSize, margin;
-            let board = [];
-            let currentPlayer = 1;
-            let gameOver = false;
-            let isAIThinking = false;
-            let lastMove = null;
-            let gameMode = null;
-            
-            const gameModeDiv = document.getElementById('game-mode-selection');
-            const gameContainerDiv = document.getElementById('game-container');
-            const gameTitle = document.getElementById('game-title');
-            const statusText = document.getElementById('status-text');
-            const statusBox = document.getElementById('status-box');
-            
-            function initGame() {
-                board = Array(BOARD_SIZE).fill(0).map(() => Array(BOARD_SIZE).fill(0));
-                currentPlayer = 1;
-                gameOver = false;
-                isAIThinking = false;
-                lastMove = null;
-                updateStatus('⚫ 흑돌 차례입니다');
-                drawBoard();
-            }
-            
-            function startGame(mode) {
-                gameMode = mode;
-                gameModeDiv.classList.add('hidden');
-                gameContainerDiv.classList.remove('hidden');
-                gameTitle.textContent = mode === 'ai' ? '🤖 AI 대전' : '👥 2인 대전';
-                resizeCanvas();
-                initGame();
-            }
-            
-            function backToMenu() {
-                gameContainerDiv.classList.add('hidden');
-                gameModeDiv.classList.remove('hidden');
-                gameMode = null;
-            }
-            
-            function resizeCanvas() {
-                const container = canvas.parentElement;
-                const size = Math.min(container.clientWidth, container.clientHeight);
-                canvas.width = size;
-                canvas.height = size;
-                cellSize = canvas.width / (BOARD_SIZE + 1);
-                margin = cellSize;
-                if (gameMode) drawBoard();
-            }
-            
-            function drawBoard() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                // 보드 배경
-                const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-                gradient.addColorStop(0, '#f4d58d');
-                gradient.addColorStop(1, '#d4a574');
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // 격자선
-                ctx.strokeStyle = '#5b4b3a';
-                ctx.lineWidth = 1.5;
-                for (let i = 0; i < BOARD_SIZE; i++) {
-                    ctx.beginPath();
-                    ctx.moveTo(margin, margin + i * cellSize);
-                    ctx.lineTo(canvas.width - margin, margin + i * cellSize);
-                    ctx.stroke();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(margin + i * cellSize, margin);
-                    ctx.lineTo(margin + i * cellSize, canvas.height - margin);
-                    ctx.stroke();
-                }
-                
-                // 화점
-                const starPoints = [
-                    {x: 3, y: 3}, {x: 11, y: 3}, {x: 3, y: 11}, 
-                    {x: 11, y: 11}, {x: 7, y: 7}
-                ];
-                ctx.fillStyle = '#5b4b3a';
-                starPoints.forEach(p => {
-                    ctx.beginPath();
-                    ctx.arc(margin + p.x * cellSize, margin + p.y * cellSize, 
-                           cellSize / 6, 0, 2 * Math.PI);
-                    ctx.fill();
-                });
-                
-                // 돌 그리기
-                for (let y = 0; y < BOARD_SIZE; y++) {
-                    for (let x = 0; x < BOARD_SIZE; x++) {
-                        if (board[y][x] !== 0) {
-                            drawStone(x, y, board[y][x]);
-                        }
-                    }
-                }
-                
-                // 마지막 수 표시
-                if (lastMove) {
-                    ctx.strokeStyle = '#ff4444';
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.arc(margin + lastMove.x * cellSize, 
-                           margin + lastMove.y * cellSize, 
-                           cellSize * 0.25, 0, 2 * Math.PI);
-                    ctx.stroke();
-                }
-            }
-            
-            function drawStone(x, y, player) {
-                const stoneX = margin + x * cellSize;
-                const stoneY = margin + y * cellSize;
-                const radius = cellSize * 0.4;
-                
-                // 그림자
-                ctx.beginPath();
-                ctx.arc(stoneX + 2, stoneY + 2, radius, 0, 2 * Math.PI);
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-                ctx.fill();
-                
-                // 돌
-                const gradient = ctx.createRadialGradient(
-                    stoneX - radius * 0.3, stoneY - radius * 0.3, radius * 0.1,
-                    stoneX, stoneY, radius
-                );
-                
-                if (player === 1) {
-                    gradient.addColorStop(0, '#555');
-                    gradient.addColorStop(0.5, '#222');
-                    gradient.addColorStop(1, '#000');
-                } else {
-                    gradient.addColorStop(0, '#fff');
-                    gradient.addColorStop(0.5, '#f0f0f0');
-                    gradient.addColorStop(1, '#d0d0d0');
-                }
-                
-                ctx.beginPath();
-                ctx.arc(stoneX, stoneY, radius, 0, 2 * Math.PI);
-                ctx.fillStyle = gradient;
-                ctx.fill();
-                
-                ctx.strokeStyle = player === 1 ? '#000' : '#999';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            }
-            
-            function handleClick(e) {
-                if (gameOver || isAIThinking) return;
-                if (gameMode === 'ai' && currentPlayer === 2) return;
-                
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const gridX = Math.round((x - margin) / cellSize);
-                const gridY = Math.round((y - margin) / cellSize);
-                
-                if (gridX >= 0 && gridX < BOARD_SIZE && 
-                    gridY >= 0 && gridY < BOARD_SIZE && 
-                    board[gridY][gridX] === 0) {
-                    placeStone(gridX, gridY);
-                }
-            }
-            
-            function placeStone(x, y) {
-                board[y][x] = currentPlayer;
-                lastMove = {x, y};
-                drawBoard();
-                
-                if (checkWin(x, y, currentPlayer)) {
-                    gameOver = true;
-                    const winner = gameMode === 'ai' 
-                        ? (currentPlayer === 1 ? '🎉 당신' : '🤖 AI')
-                        : (currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌');
-                    updateStatus(`${winner}의 승리!`, true);
-                    return;
-                }
-                
-                if (isBoardFull()) {
-                    gameOver = true;
-                    updateStatus('🤝 무승부!', true);
-                    return;
-                }
-                
-                currentPlayer = currentPlayer === 1 ? 2 : 1;
-                updateStatus(currentPlayer === 1 ? '⚫ 흑돌 차례' : '⚪ 백돌 차례');
-                
-                if (gameMode === 'ai' && currentPlayer === 2) {
-                    setTimeout(() => makeAIMove(), 500);
-                }
-            }
-            
-            function checkWin(x, y, player) {
-                const directions = [
-                    {dx: 1, dy: 0}, {dx: 0, dy: 1},
-                    {dx: 1, dy: 1}, {dx: 1, dy: -1}
-                ];
-                
-                for (const {dx, dy} of directions) {
-                    let count = 1;
-                    
-                    // 정방향
-                    for (let i = 1; i < 5; i++) {
-                        const nx = x + i * dx;
-                        const ny = y + i * dy;
-                        if (nx >= 0 && nx < BOARD_SIZE && 
-                            ny >= 0 && ny < BOARD_SIZE && 
-                            board[ny][nx] === player) {
-                            count++;
-                        } else break;
-                    }
-                    
-                    // 역방향
-                    for (let i = 1; i < 5; i++) {
-                        const nx = x - i * dx;
-                        const ny = y - i * dy;
-                        if (nx >= 0 && nx < BOARD_SIZE && 
-                            ny >= 0 && ny < BOARD_SIZE && 
-                            board[ny][nx] === player) {
-                            count++;
-                        } else break;
-                    }
-                    
-                    if (count >= 5) return true;
-                }
-                return false;
-            }
-            
-            function isBoardFull() {
-                return board.every(row => row.every(cell => cell !== 0));
-            }
-            
-            function updateStatus(text, isFinal = false) {
-                statusText.textContent = text;
-                if (isFinal) {
-                    statusBox.style.background = 'linear-gradient(135deg, #fef3c7, #fde68a)';
-                } else {
-                    statusBox.style.background = 'white';
-                }
-            }
-            
-            // 간단한 AI 로직
-            function makeAIMove() {
-                isAIThinking = true;
-                updateStatus('🤔 AI가 생각 중...');
-                
-                const moves = [];
-                for (let y = 0; y < BOARD_SIZE; y++) {
-                    for (let x = 0; x < BOARD_SIZE; x++) {
-                        if (board[y][x] === 0) {
-                            // AI 승리 체크
-                            board[y][x] = 2;
-                            if (checkWin(x, y, 2)) {
-                                board[y][x] = 0;
-                                placeStone(x, y);
-                                isAIThinking = false;
-                                return;
-                            }
-                            board[y][x] = 0;
-                            
-                            // 플레이어 승리 방어
-                            board[y][x] = 1;
-                            if (checkWin(x, y, 1)) {
-                                board[y][x] = 0;
-                                placeStone(x, y);
-                                isAIThinking = false;
-                                return;
-                            }
-                            board[y][x] = 0;
-                            
-                            moves.push({x, y});
-                        }
-                    }
-                }
-                
-                // 랜덤 위치 선택
-                if (moves.length > 0) {
-                    const move = moves[Math.floor(Math.random() * moves.length)];
-                    placeStone(move.x, move.y);
-                }
-                
-                isAIThinking = false;
-            }
-            
-            function init() {
-                // 이벤트 리스너
-                canvas.addEventListener('click', handleClick);
-                window.addEventListener('resize', resizeCanvas);
-                
-                document.getElementById('ai-mode-btn').addEventListener('click', () => startGame('ai'));
-                document.getElementById('pvp-mode-btn').addEventListener('click', () => startGame('pvp'));
-                document.getElementById('new-game-btn').addEventListener('click', initGame);
-                document.getElementById('game-back-btn').addEventListener('click', backToMenu);
-            }
-            
-            return { init, resizeCanvas };
-        })();
-        
-        // ==================== 초기화 ====================
-        document.addEventListener('DOMContentLoaded', () => {
-            pensionApp.init();
-            gameApp.init();
-            showSection('pension'); // 기초연금 화면으로 시작
+        household.addEventListener('change', () => this.toggleSpouse());
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.calculate();
         });
-    </script>
+        
+        this.toggleSpouse();
+      },
+      
+      toggleSpouse() {
+        const household = document.getElementById('household').value;
+        const spouseField = document.getElementById('spouseIncome');
+        const spouseLabel = spouseField.previousElementSibling;
+        
+        if (household === 'couple') {
+          spouseField.style.display = 'block';
+          spouseLabel.style.display = 'block';
+        } else {
+          spouseField.style.display = 'none';
+          spouseLabel.style.display = 'none';
+          spouseField.value = '';
+        }
+      },
+      
+      parseAmount(str) {
+        if (!str) return 0;
+        str = str.replace(/\s|원|,/g, '');
+        let total = 0;
+        
+        const okPattern = str.match(/([0-9.]+)억/);
+        if (okPattern) {
+          total += parseFloat(okPattern[1]) * 100000000;
+          str = str.replace(okPattern[0], '');
+        }
+        
+        const manPattern = str.match(/([0-9.]+)만/);
+        if (manPattern) {
+          total += parseFloat(manPattern[1]) * 10000;
+          str = str.replace(manPattern[0], '');
+        }
+        
+        const nums = str.match(/[0-9]+/g);
+        if (nums) {
+          total += parseInt(nums.join(''), 10);
+        }
+        
+        return isNaN(total) ? 0 : total;
+      },
+      
+      formatKRW(amount) {
+        return amount.toLocaleString('ko-KR') + '원';
+      },
+      
+      calculateAge(year, month) {
+        const today = new Date();
+        let age = today.getFullYear() - year;
+        if (month > today.getMonth() + 1) age--;
+        return age;
+      },
+      
+      calculate() {
+        const year = parseInt(document.getElementById('birthYear').value);
+        const month = parseInt(document.getElementById('birthMonth').value);
+        const household = document.getElementById('household').value;
+        const area = document.querySelector('input[name="area"]:checked')?.value;
+        
+        if (!area) {
+          alert('거주 지역을 선택해주세요.');
+          return;
+        }
+        
+        const income = this.parseAmount(document.getElementById('income').value);
+        const spouseIncome = this.parseAmount(document.getElementById('spouseIncome').value);
+        const homeValue = this.parseAmount(document.getElementById('homeValue').value);
+        const deposit = this.parseAmount(document.getElementById('deposit').value);
+        const savings = this.parseAmount(document.getElementById('savings').value);
+        const stocks = this.parseAmount(document.getElementById('stocks').value);
+        const car = this.parseAmount(document.getElementById('car').value);
+        const debt = this.parseAmount(document.getElementById('debt').value);
+        
+        const age = this.calculateAge(year, month);
+        
+        // Calculate income recognition amount
+        const totalIncome = income + spouseIncome;
+        const generalAssets = homeValue + deposit + car - debt;
+        const financialAssets = savings + stocks;
+        
+        const basicAssetAmount = this.CONFIG.basicAsset[area];
+        const netGeneralAssets = Math.max(0, generalAssets - basicAssetAmount);
+        
+        const financialDeduction = this.CONFIG.financialDeduction[household];
+        const netFinancialAssets = Math.max(0, financialAssets - financialDeduction);
+        
+        const assetIncome = (netGeneralAssets + netFinancialAssets) * this.CONFIG.assetConversionRate;
+        const totalRecognizedIncome = totalIncome + assetIncome;
+        
+        const threshold = this.CONFIG.incomeThreshold[household];
+        const eligible = age >= 65 && totalRecognizedIncome <= threshold;
+        
+        this.showResult(age, totalRecognizedIncome, threshold, household, eligible, totalIncome, assetIncome);
+      },
+      
+      showResult(age, totalIncome, threshold, household, eligible, monthlyIncome, assetIncome) {
+        const resultDiv = document.getElementById('result');
+        const applyDiv = document.getElementById('applyInfo');
+        const benefitDiv = document.getElementById('benefitBox');
+        
+        let html = '';
+        
+        if (eligible) {
+          const benefit = household === 'single' ? this.CONFIG.benefit.single : this.CONFIG.benefit.couplePer;
+          html = `
+            <div class="result-success">
+              <p>✅ <strong>기초연금 수급 가능성이 높습니다!</strong></p>
+              <p class="mt-3">💰 예상 월 지급액: <strong>${this.formatKRW(benefit)}</strong>
+              ${household === 'couple' ? ` (부부 합계: ${this.formatKRW(benefit * 2)})` : ''}</p>
+              <div class="mt-4">
+                <p class="font-semibold">📊 소득인정액 분석:</p>
+                <ul class="mt-2 space-y-1">
+                  <li>• 월 소득: ${this.formatKRW(monthlyIncome)}</li>
+                  <li>• 재산의 소득환산액: ${this.formatKRW(Math.round(assetIncome))}</li>
+                  <li>• 총 소득인정액: ${this.formatKRW(Math.round(totalIncome))}</li>
+                  <li>• 선정기준액: ${this.formatKRW(threshold)}</li>
+                </ul>
+              </div>
+            </div>
+          `;
+        } else {
+          html = `
+            <div class="result-fail">
+              <p>❌ <strong>현재 기준으로는 수급 요건을 충족하지 못합니다.</strong></p>
+              <div class="mt-4">
+                <p class="font-semibold">📊 미충족 사유:</p>
+                <ul class="mt-2 space-y-1">
+                  ${age < 65 ? `<li>• 연령 조건: 만 65세 이상 (현재 ${age}세, ${65 - age}년 후 신청 가능)</li>` : ''}
+                  ${totalIncome > threshold ? `
+                    <li>• 소득인정액 초과</li>
+                    <li class="ml-4">- 귀하의 소득인정액: ${this.formatKRW(Math.round(totalIncome))}</li>
+                    <li class="ml-4">- 선정기준액: ${this.formatKRW(threshold)}</li>
+                    <li class="ml-4">- 초과금액: ${this.formatKRW(Math.round(totalIncome - threshold))}</li>
+                  ` : ''}
+                </ul>
+              </div>
+            </div>
+          `;
+        }
+        
+        resultDiv.innerHTML = html;
+        resultDiv.style.display = 'block';
+        
+        // Show application info
+        applyDiv.innerHTML = `
+          <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+            <h3 class="text-lg font-bold mb-2 text-blue-700">📝 신청 방법</h3>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>방문 신청:</strong> 주소지 읍·면·동 주민센터</li>
+              <li><strong>온라인 신청:</strong> 복지로(www.bokjiro.go.kr)</li>
+              <li><strong>대리 신청:</strong> 배우자, 자녀, 형제자매 등 가능</li>
+            </ul>
+          </div>
+        `;
+        applyDiv.style.display = 'block';
+        
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+
+    // ========= Enhanced Omok Game with Better AI =========
+    const omokApp = {
+      canvas: null,
+      ctx: null,
+      BOARD_SIZE: 15,
+      cellSize: 0,
+      margin: 0,
+      board: [],
+      currentPlayer: 1,
+      gameOver: false,
+      gameMode: null,
+      lastMove: null,
+      isAIThinking: false,
+      BASE_DEPTH: 2,
+      CRITICAL_DEPTH: 4,
+      
+      init() {
+        this.canvas = document.getElementById('game-board');
+        this.ctx = this.canvas.getContext('2d');
+        this.bindEvents();
+      },
+      
+      bindEvents() {
+        document.getElementById('ai-mode-btn').addEventListener('click', () => this.startGame('ai'));
+        document.getElementById('pvp-mode-btn').addEventListener('click', () => this.startGame('pvp'));
+        document.getElementById('new-game-btn').addEventListener('click', () => this.initGame());
+        document.getElementById('game-back-btn').addEventListener('click', () => this.backToMenu());
+        this.canvas.addEventListener('click', (e) => this.handleClick(e));
+        window.addEventListener('resize', () => this.resizeCanvas());
+      },
+      
+      startGame(mode) {
+        this.gameMode = mode;
+        document.getElementById('game-mode-selection').classList.add('hidden');
+        document.getElementById('game-container').classList.remove('hidden');
+        document.getElementById('game-title').textContent = mode === 'ai' ? '🤖 AI 대전' : '👥 2인 대전';
+        this.resizeCanvas();
+        this.initGame();
+      },
+      
+      backToMenu() {
+        document.getElementById('game-container').classList.add('hidden');
+        document.getElementById('game-mode-selection').classList.remove('hidden');
+        this.gameMode = null;
+      },
+      
+      initGame() {
+        this.board = Array(this.BOARD_SIZE).fill(0).map(() => Array(this.BOARD_SIZE).fill(0));
+        this.currentPlayer = 1;
+        this.gameOver = false;
+        this.isAIThinking = false;
+        this.lastMove = null;
+        this.updateStatus('⚫ 흑돌 차례입니다.');
+        this.drawBoard();
+      },
+      
+      resizeCanvas() {
+        if (!this.canvas) return;
+        const container = this.canvas.parentElement;
+        const size = Math.min(container.clientWidth, container.clientHeight);
+        this.canvas.width = size;
+        this.canvas.height = size;
+        this.cellSize = this.canvas.width / (this.BOARD_SIZE + 1);
+        this.margin = this.cellSize;
+        if (this.gameMode) this.drawBoard();
+      },
+      
+      drawBoard() {
+        if (!this.ctx) return;
+        
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Background with gradient
+        const gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
+        gradient.addColorStop(0, '#f4d58d');
+        gradient.addColorStop(1, '#d4a574');
+        this.ctx.fillStyle = gradient;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Grid lines
+        this.ctx.strokeStyle = '#5b4b3a';
+        this.ctx.lineWidth = 1.5;
+        for (let i = 0; i < this.BOARD_SIZE; i++) {
+          this.ctx.beginPath();
+          this.ctx.moveTo(this.margin, this.margin + i * this.cellSize);
+          this.ctx.lineTo(this.canvas.width - this.margin, this.margin + i * this.cellSize);
+          this.ctx.stroke();
+          
+          this.ctx.beginPath();
+          this.ctx.moveTo(this.margin + i * this.cellSize, this.margin);
+          this.ctx.lineTo(this.margin + i * this.cellSize, this.canvas.height - this.margin);
+          this.ctx.stroke();
+        }
+        
+        // Star points
+        const starPoints = [{x: 3, y: 3}, {x: 11, y: 3}, {x: 3, y: 11}, {x: 11, y: 11}, {x: 7, y: 7}];
+        this.ctx.fillStyle = '#5b4b3a';
+        starPoints.forEach(p => {
+          this.ctx.beginPath();
+          this.ctx.arc(this.margin + p.x * this.cellSize, this.margin + p.y * this.cellSize, this.cellSize / 8, 0, 2 * Math.PI);
+          this.ctx.fill();
+        });
+        
+        // Draw stones
+        for (let y = 0; y < this.BOARD_SIZE; y++) {
+          for (let x = 0; x < this.BOARD_SIZE; x++) {
+            if (this.board[y][x] !== 0) {
+              this.drawStone(x, y, this.board[y][x]);
+            }
+          }
+        }
+        
+        // Highlight last move
+        if (this.lastMove) {
+          this.ctx.strokeStyle = '#ff4444';
+          this.ctx.lineWidth = 3;
+          this.ctx.beginPath();
+          this.ctx.arc(
+            this.margin + this.lastMove.x * this.cellSize,
+            this.margin + this.lastMove.y * this.cellSize,
+            this.cellSize * 0.25,
+            0,
+            2 * Math.PI
+          );
+          this.ctx.stroke();
+        }
+      },
+      
+      drawStone(x, y, player) {
+        const stoneX = this.margin + x * this.cellSize;
+        const stoneY = this.margin + y * this.cellSize;
+        const radius = this.cellSize * 0.4;
+        
+        // Shadow
+        this.ctx.beginPath();
+        this.ctx.arc(stoneX + 2, stoneY + 2, radius, 0, 2 * Math.PI);
+        this.ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        this.ctx.fill();
+        
+        // Stone with gradient
+        const gradient = this.ctx.createRadialGradient(
+          stoneX - radius * 0.3,
+          stoneY - radius * 0.3,
+          radius * 0.1,
+          stoneX,
+          stoneY,
+          radius
+        );
+        
+        if (player === 1) {
+          gradient.addColorStop(0, '#666');
+          gradient.addColorStop(0.5, '#222');
+          gradient.addColorStop(1, '#000');
+        } else {
+          gradient.addColorStop(0, '#fff');
+          gradient.addColorStop(0.5, '#f0f0f0');
+          gradient.addColorStop(1, '#d0d0d0');
+        }
+        
+        this.ctx.beginPath();
+        this.ctx.arc(stoneX, stoneY, radius, 0, 2 * Math.PI);
+        this.ctx.fillStyle = gradient;
+        this.ctx.fill();
+      },
+      
+      handleClick(event) {
+        if (this.gameOver || this.isAIThinking) return;
+        if (this.gameMode === 'ai' && this.currentPlayer === 2) return;
+        
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        
+        const gridX = Math.round((x - this.margin) / this.cellSize);
+        const gridY = Math.round((y - this.margin) / this.cellSize);
+        
+        if (gridX >= 0 && gridX < this.BOARD_SIZE && gridY >= 0 && gridY < this.BOARD_SIZE) {
+          if (this.board[gridY][gridX] === 0) {
+            this.placeStone(gridX, gridY);
+          }
+        }
+      },
+      
+      placeStone(x, y) {
+        this.board[y][x] = this.currentPlayer;
+        this.lastMove = { x, y };
+        this.drawBoard();
+        
+        if (this.checkWin(x, y, this.currentPlayer)) {
+          this.gameOver = true;
+          const winner = this.gameMode === 'ai' 
+            ? (this.currentPlayer === 1 ? '당신' : 'AI')
+            : (this.currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌');
+          this.updateStatus(`${winner}의 승리!`, true);
+          return;
+        }
+        
+        if (this.checkDraw()) {
+          this.gameOver = true;
+          this.updateStatus('무승부!', true);
+          return;
+        }
+        
+        this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
+        this.updateStatus(this.currentPlayer === 1 ? '⚫ 흑돌 차례' : '⚪ 백돌 차례');
+        
+        if (this.gameMode === 'ai' && this.currentPlayer === 2) {
+          setTimeout(() => this.aiMove(), 100);
+        }
+      },
+      
+      checkWin(x, y, player) {
+        const directions = [
+          { dx: 1, dy: 0 },   // horizontal
+          { dx: 0, dy: 1 },   // vertical
+          { dx: 1, dy: 1 },   // diagonal \
+          { dx: 1, dy: -1 }   // diagonal /
+        ];
+        
+        for (const { dx, dy } of directions) {
+          let count = 1;
+          
+          // Check forward
+          for (let i = 1; i < 5; i++) {
+            const nx = x + i * dx;
+            const ny = y + i * dy;
+            if (nx >= 0 && nx < this.BOARD_SIZE && ny >= 0 && ny < this.BOARD_SIZE) {
+              if (this.board[ny][nx] === player) count++;
+              else break;
+            }
+          }
+          
+          // Check backward
+          for (let i = 1; i < 5; i++) {
+            const nx = x - i * dx;
+            const ny = y - i * dy;
+            if (nx >= 0 && nx < this.BOARD_SIZE && ny >= 0 && ny < this.BOARD_SIZE) {
+              if (this.board[ny][nx] === player) count++;
+              else break;
+            }
+          }
+          
+          if (count >= 5) return true;
+        }
+        
+        return false;
+      },
+      
+      checkDraw() {
+        return this.board.every(row => row.every(cell => cell !== 0));
+      },
+      
+      aiMove() {
+        this.isAIThinking = true;
+        this.updateStatus('AI가 생각 중...', false, true);
+        
+        const bestMove = this.findBestMove();
+        if (bestMove) {
+          this.placeStone(bestMove.x, bestMove.y);
+        }
+        
+        this.isAIThinking = false;
+      },
+      
+      findBestMove() {
+        const possibleMoves = this.getPossibleMoves();
+        
+        // Check for immediate win
+        for (const {x, y} of possibleMoves) {
+          this.board[y][x] = 2;
+          if (this.checkWin(x, y, 2)) {
+            this.board[y][x] = 0;
+            return {x, y};
+          }
+          this.board[y][x] = 0;
+        }
+        
+        // Check for blocking opponent's win
+        for (const {x, y} of possibleMoves) {
+          this.board[y][x] = 1;
+          if (this.checkWin(x, y, 1)) {
+            this.board[y][x] = 0;
+            return {x, y};
+          }
+          this.board[y][x] = 0;
+        }
+        
+        // Use minimax for best move
+        let bestScore = -Infinity;
+        let move = null;
+        const depth = this.isCriticalSituation() ? this.CRITICAL_DEPTH : this.BASE_DEPTH;
+        
+        for (const {x, y} of possibleMoves) {
+          this.board[y][x] = 2;
+          const score = this.minimax(depth - 1, -Infinity, Infinity, false);
+          this.board[y][x] = 0;
+          
+          if (score > bestScore) {
+            bestScore = score;
+            move = {x, y};
+          }
+        }
+        
+        // If no good move found, choose center-oriented position
+        if (!move && possibleMoves.length > 0) {
+          possibleMoves.sort((a, b) => {
+            const distA = Math.abs(a.x - 7) + Math.abs(a.y - 7);
+            const distB = Math.abs(b.x - 7) + Math.abs(b.y - 7);
+            return distA - distB;
+          });
+          move = possibleMoves[0];
+        }
+        
+        return move;
+      },
+      
+      minimax(depth, alpha, beta, isMaximizingPlayer) {
+        if (depth === 0) return this.evaluateBoard();
+        
+        const possibleMoves = this.getPossibleMoves();
+        
+        if (isMaximizingPlayer) {
+          let maxEval = -Infinity;
+          for (const {x, y} of possibleMoves) {
+            this.board[y][x] = 2;
+            if (this.checkWin(x, y, 2)) {
+              this.board[y][x] = 0;
+              return 100000 + depth;
+            }
+            const eval = this.minimax(depth - 1, alpha, beta, false);
+            this.board[y][x] = 0;
+            maxEval = Math.max(maxEval, eval);
+            alpha = Math.max(alpha, eval);
+            if (beta <= alpha) break;
+          }
+          return maxEval;
+        } else {
+          let minEval = Infinity;
+          for (const {x, y} of possibleMoves) {
+            this.board[y][x] = 1;
+            if (this.checkWin(x, y, 1)) {
+              this.board[y][x] = 0;
+              return -100000 - depth;
+            }
+            const eval = this.minimax(depth - 1, alpha, beta, true);
+            this.board[y][x] = 0;
+            minEval = Math.min(minEval, eval);
+            beta = Math.min(beta, eval);
+            if (beta <= alpha) break;
+          }
+          return minEval;
+        }
+      },
+      
+      getPossibleMoves() {
+        const moves = [];
+        const hasStones = Array(this.BOARD_SIZE).fill(0).map(() => Array(this.BOARD_SIZE).fill(false));
+        
+        // If board is empty, return center
+        if (this.board.every(row => row.every(cell => cell === 0))) {
+          return [{x: 7, y: 7}];
+        }
+        
+        // Find positions adjacent to existing stones
+        for (let y = 0; y < this.BOARD_SIZE; y++) {
+          for (let x = 0; x < this.BOARD_SIZE; x++) {
+            if (this.board[y][x] === 0) {
+              for (let dy = -1; dy <= 1; dy++) {
+                for (let dx = -1; dx <= 1; dx++) {
+                  if (dx === 0 && dy === 0) continue;
+                  const ny = y + dy;
+                  const nx = x + dx;
+                  if (nx >= 0 && nx < this.BOARD_SIZE && ny >= 0 && ny < this.BOARD_SIZE && this.board[ny][nx] !== 0) {
+                    if (!hasStones[y][x]) {
+                      moves.push({x, y});
+                      hasStones[y][x] = true;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        
+        return moves;
+      },
+      
+      isCriticalSituation() {
+        // Check if any immediate threats exist
+        for (let y = 0; y < this.BOARD_SIZE; y++) {
+          for (let x = 0; x < this.BOARD_SIZE; x++) {
+            if (this.board[y][x] === 0) {
+              this.board[y][x] = 2;
+              if (this.checkWin(x, y, 2)) {
+                this.board[y][x] = 0;
+                return true;
+              }
+              this.board[y][x] = 1;
+              if (this.checkWin(x, y, 1)) {
+                this.board[y][x] = 0;
+                return true;
+              }
+              this.board[y][x] = 0;
+            }
+          }
+        }
+        return false;
+      },
+      
+      evaluateBoard() {
+        let score = 0;
+        
+        // Evaluate all lines
+        score += this.evaluateAllLines('horizontal');
+        score += this.evaluateAllLines('vertical');
+        score += this.evaluateAllLines('diagonal1');
+        score += this.evaluateAllLines('diagonal2');
+        
+        return score;
+      },
+      
+      evaluateAllLines(type) {
+        let totalScore = 0;
+        const size = this.BOARD_SIZE;
+        
+        for (let i = 0; i < (type.startsWith('diagonal') ? 2 * size - 1 : size); i++) {
+          let line = [];
+          
+          if (type === 'horizontal') {
+            line = this.board[i];
+          } else if (type === 'vertical') {
+            line = this.board.map(row => row[i]);
+          } else if (type === 'diagonal1') {
+            for (let j = 0; j < size; j++) {
+              const k = i - j;
+              if (k >= 0 && k < size) line.push(this.board[j][k]);
+            }
+          } else if (type === 'diagonal2') {
+            for (let j = 0; j < size; j++) {
+              const k = i - (size - 1 - j);
+              if (k >= 0 && k < size) line.push(this.board[j][k]);
+            }
+          }
+          
+          if (line.length >= 5) {
+            totalScore += this.evaluateLine(line);
+          }
+        }
+        
+        return totalScore;
+      },
+      
+      evaluateLine(line) {
+        let score = 0;
+        const patterns = {
+          '22222': 100000,
+          '022220': 50000,
+          '122220': 400,
+          '022221': 400,
+          '02220': 2000,
+          '022020': 1800,
+          '12220': 100,
+          '02221': 100,
+          '00220': 50,
+          '02020': 50,
+          '11111': -100000,
+          '011110': -80000,
+          '211110': -10000,
+          '011112': -10000,
+          '01110': -5000,
+          '011010': -4500,
+          '21110': -500,
+          '01112': -500,
+          '00110': -150,
+          '01010': -150
+        };
+        
+        const lineStr = line.join('');
+        for (const pattern in patterns) {
+          if (lineStr.includes(pattern)) {
+            score += patterns[pattern];
+          }
+        }
+        
+        return score;
+      },
+      
+      updateStatus(text, isFinal = false, isThinking = false) {
+        const statusText = document.getElementById('status-text');
+        const statusBox = document.getElementById('status-box');
+        statusText.textContent = text;
+        
+        if (isFinal) {
+          statusBox.style.background = 'linear-gradient(135deg, #fef3c7, #fde68a)';
+        } else if (isThinking) {
+          statusBox.style.background = 'linear-gradient(135deg, #dbeafe, #bfdbfe)';
+        } else {
+          statusBox.style.background = '#fff';
+        }
+      }
+    };
+
+    // ========= 2048 Game =========
+    const g2048App = {
+      grid: [],
+      score: 0,
+      size: 4,
+      
+      init() {
+        document.getElementById('g2048-new').addEventListener('click', () => this.newGame());
+        window.addEventListener('keydown', (e) => this.handleKey(e));
+        this.newGame();
+      },
+      
+      newGame() {
+        this.grid = Array(this.size).fill(0).map(() => Array(this.size).fill(0));
+        this.score = 0;
+        this.addRandomTile();
+        this.addRandomTile();
+        this.draw();
+      },
+      
+      addRandomTile() {
+        const emptyCells = [];
+        for (let r = 0; r < this.size; r++) {
+          for (let c = 0; c < this.size; c++) {
+            if (this.grid[r][c] === 0) {
+              emptyCells.push({ r, c });
+            }
+          }
+        }
+        
+        if (emptyCells.length > 0) {
+          const cell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+          this.grid[cell.r][cell.c] = Math.random() < 0.9 ? 2 : 4;
+        }
+      },
+      
+      move(direction) {
+        let moved = false;
+        const newGrid = this.grid.map(row => [...row]);
+        
+        if (direction === 'left') {
+          for (let r = 0; r < this.size; r++) {
+            const row = this.grid[r].filter(val => val !== 0);
+            const merged = [];
+            let i = 0;
+            
+            while (i < row.length) {
+              if (i < row.length - 1 && row[i] === row[i + 1]) {
+                merged.push(row[i] * 2);
+                this.score += row[i] * 2;
+                i += 2;
+              } else {
+                merged.push(row[i]);
+                i++;
+              }
+            }
+            
+            while (merged.length < this.size) {
+              merged.push(0);
+            }
+            
+            if (merged.some((val, idx) => val !== this.grid[r][idx])) {
+              moved = true;
+            }
+            
+            this.grid[r] = merged;
+          }
+        } else if (direction === 'right') {
+          for (let r = 0; r < this.size; r++) {
+            const row = this.grid[r].filter(val => val !== 0);
+            const merged = [];
+            let i = row.length - 1;
+            
+            while (i >= 0) {
+              if (i > 0 && row[i] === row[i - 1]) {
+                merged.unshift(row[i] * 2);
+                this.score += row[i] * 2;
+                i -= 2;
+              } else {
+                merged.unshift(row[i]);
+                i--;
+              }
+            }
+            
+            while (merged.length < this.size) {
+              merged.unshift(0);
+            }
+            
+            if (merged.some((val, idx) => val !== this.grid[r][idx])) {
+              moved = true;
+            }
+            
+            this.grid[r] = merged;
+          }
+        } else if (direction === 'up') {
+          for (let c = 0; c < this.size; c++) {
+            const column = [];
+            for (let r = 0; r < this.size; r++) {
+              if (this.grid[r][c] !== 0) {
+                column.push(this.grid[r][c]);
+              }
+            }
+            
+            const merged = [];
+            let i = 0;
+            
+            while (i < column.length) {
+              if (i < column.length - 1 && column[i] === column[i + 1]) {
+                merged.push(column[i] * 2);
+                this.score += column[i] * 2;
+                i += 2;
+              } else {
+                merged.push(column[i]);
+                i++;
+              }
+            }
+            
+            while (merged.length < this.size) {
+              merged.push(0);
+            }
+            
+            for (let r = 0; r < this.size; r++) {
+              if (this.grid[r][c] !== merged[r]) {
+                moved = true;
+              }
+              this.grid[r][c] = merged[r];
+            }
+          }
+        } else if (direction === 'down') {
+          for (let c = 0; c < this.size; c++) {
+            const column = [];
+            for (let r = 0; r < this.size; r++) {
+              if (this.grid[r][c] !== 0) {
+                column.push(this.grid[r][c]);
+              }
+            }
+            
+            const merged = [];
+            let i = column.length - 1;
+            
+            while (i >= 0) {
+              if (i > 0 && column[i] === column[i - 1]) {
+                merged.unshift(column[i] * 2);
+                this.score += column[i] * 2;
+                i -= 2;
+              } else {
+                merged.unshift(column[i]);
+                i--;
+              }
+            }
+            
+            while (merged.length < this.size) {
+              merged.unshift(0);
+            }
+            
+            for (let r = 0; r < this.size; r++) {
+              if (this.grid[r][c] !== merged[r]) {
+                moved = true;
+              }
+              this.grid[r][c] = merged[r];
+            }
+          }
+        }
+        
+        if (moved) {
+          this.addRandomTile();
+          this.draw();
+          
+          if (this.isGameOver()) {
+            setTimeout(() => alert(`게임 종료! 점수: ${this.score}`), 100);
+          }
+        }
+      },
+      
+      isGameOver() {
+        // Check for empty cells
+        for (let r = 0; r < this.size; r++) {
+          for (let c = 0; c < this.size; c++) {
+            if (this.grid[r][c] === 0) return false;
+          }
+        }
+        
+        // Check for possible merges
+        for (let r = 0; r < this.size; r++) {
+          for (let c = 0; c < this.size; c++) {
+            const current = this.grid[r][c];
+            if (c < this.size - 1 && current === this.grid[r][c + 1]) return false;
+            if (r < this.size - 1 && current === this.grid[r + 1][c]) return false;
+          }
+        }
+        
+        return true;
+      },
+      
+      handleKey(e) {
+        if (activeGame !== 'g2048') return;
+        
+        switch (e.key) {
+          case 'ArrowLeft':
+            e.preventDefault();
+            this.move('left');
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            this.move('right');
+            break;
+          case 'ArrowUp':
+            e.preventDefault();
+            this.move('up');
+            break;
+          case 'ArrowDown':
+            e.preventDefault();
+            this.move('down');
+            break;
+        }
+      },
+      
+      draw() {
+        const gridEl = document.getElementById('g2048-grid');
+        const scoreEl = document.getElementById('g2048-score');
+        
+        scoreEl.textContent = this.score;
+        gridEl.innerHTML = '';
+        
+        for (let r = 0; r < this.size; r++) {
+          for (let c = 0; c < this.size; c++) {
+            const cell = document.createElement('div');
+            const value = this.grid[r][c];
+            cell.className = `g2048-cell tile-${value}`;
+            cell.textContent = value || '';
+            gridEl.appendChild(cell);
+          }
+        }
+      }
+    };
+
+    // ========= Snake Game =========
+    const snakeApp = {
+      canvas: null,
+      ctx: null,
+      gridSize: 21,
+      cellSize: 20,
+      snake: [],
+      direction: { x: 1, y: 0 },
+      food: null,
+      score: 0,
+      gameLoop: null,
+      
+      init() {
+        this.canvas = document.getElementById('snake-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.cellSize = this.canvas.width / this.gridSize;
+        
+        document.getElementById('snake-new').addEventListener('click', () => this.newGame());
+        window.addEventListener('keydown', (e) => this.handleKey(e));
+        
+        this.newGame();
+      },
+      
+      newGame() {
+        this.snake = [{ x: 10, y: 10 }];
+        this.direction = { x: 1, y: 0 };
+        this.score = 0;
+        this.spawnFood();
+        
+        if (this.gameLoop) clearInterval(this.gameLoop);
+        this.gameLoop = setInterval(() => this.update(), 100);
+        
+        this.draw();
+      },
+      
+      spawnFood() {
+        do {
+          this.food = {
+            x: Math.floor(Math.random() * this.gridSize),
+            y: Math.floor(Math.random() * this.gridSize)
+          };
+        } while (this.snake.some(segment => segment.x === this.food.x && segment.y === this.food.y));
+      },
+      
+      update() {
+        if (activeGame !== 'snake') return;
+        
+        const head = { ...this.snake[0] };
+        head.x += this.direction.x;
+        head.y += this.direction.y;
+        
+        // Wrap around edges
+        head.x = (head.x + this.gridSize) % this.gridSize;
+        head.y = (head.y + this.gridSize) % this.gridSize;
+        
+        // Check self collision
+        if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+          this.gameOver();
+          return;
+        }
+        
+        this.snake.unshift(head);
+        
+        // Check food collision
+        if (head.x === this.food.x && head.y === this.food.y) {
+          this.score += 10;
+          this.spawnFood();
+        } else {
+          this.snake.pop();
+        }
+        
+        this.draw();
+      },
+      
+      gameOver() {
+        clearInterval(this.gameLoop);
+        alert(`게임 종료! 점수: ${this.score}`);
+      },
+      
+      handleKey(e) {
+        if (activeGame !== 'snake') return;
+        
+        switch (e.key) {
+          case 'ArrowLeft':
+            if (this.direction.x === 0) {
+              this.direction = { x: -1, y: 0 };
+            }
+            break;
+          case 'ArrowRight':
+            if (this.direction.x === 0) {
+              this.direction = { x: 1, y: 0 };
+            }
+            break;
+          case 'ArrowUp':
+            if (this.direction.y === 0) {
+              this.direction = { x: 0, y: -1 };
+            }
+            break;
+          case 'ArrowDown':
+            if (this.direction.y === 0) {
+              this.direction = { x: 0, y: 1 };
+            }
+            break;
+        }
+      },
+      
+      draw() {
+        // Clear canvas
+        this.ctx.fillStyle = '#0f172a';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Draw grid
+        this.ctx.strokeStyle = '#1a2332';
+        this.ctx.lineWidth = 1;
+        for (let i = 0; i <= this.gridSize; i++) {
+          this.ctx.beginPath();
+          this.ctx.moveTo(i * this.cellSize, 0);
+          this.ctx.lineTo(i * this.cellSize, this.canvas.height);
+          this.ctx.stroke();
+          
+          this.ctx.beginPath();
+          this.ctx.moveTo(0, i * this.cellSize);
+          this.ctx.lineTo(this.canvas.width, i * this.cellSize);
+          this.ctx.stroke();
+        }
+        
+        // Draw food
+        this.ctx.fillStyle = '#f59e0b';
+        this.ctx.fillRect(
+          this.food.x * this.cellSize + 2,
+          this.food.y * this.cellSize + 2,
+          this.cellSize - 4,
+          this.cellSize - 4
+        );
+        
+        // Draw snake
+        this.ctx.fillStyle = '#10b981';
+        this.snake.forEach((segment, index) => {
+          if (index === 0) {
+            this.ctx.fillStyle = '#22c55e';
+          } else {
+            this.ctx.fillStyle = '#10b981';
+          }
+          this.ctx.fillRect(
+            segment.x * this.cellSize + 2,
+            segment.y * this.cellSize + 2,
+            this.cellSize - 4,
+            this.cellSize - 4
+          );
+        });
+        
+        // Update score display
+        document.getElementById('snake-score').textContent = this.score;
+      }
+    };
+
+    // ========= Breakout Game =========
+    const breakoutApp = {
+      canvas: null,
+      ctx: null,
+      ballRadius: 10,
+      paddleHeight: 10,
+      paddleWidth: 75,
+      brickRowCount: 5,
+      brickColumnCount: 8,
+      brickWidth: 50,
+      brickHeight: 20,
+      brickPadding: 10,
+      brickOffsetTop: 30,
+      brickOffsetLeft: 30,
+      x: 0,
+      y: 0,
+      dx: 2,
+      dy: -2,
+      paddleX: 0,
+      score: 0,
+      lives: 3,
+      bricks: [],
+      gameLoop: null,
+      rightPressed: false,
+      leftPressed: false,
+      
+      init() {
+        this.canvas = document.getElementById('breakout-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        document.getElementById('breakout-new').addEventListener('click', () => this.newGame());
+        
+        // Mouse control
+        this.canvas.addEventListener('mousemove', (e) => this.handleMouse(e));
+        
+        // Touch control
+        this.canvas.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          const touch = e.touches[0];
+          const rect = this.canvas.getBoundingClientRect();
+          const relativeX = touch.clientX - rect.left;
+          if (relativeX > 0 && relativeX < this.canvas.width) {
+            this.paddleX = relativeX - this.paddleWidth / 2;
+          }
+        });
+        
+        // Keyboard control
+        document.addEventListener('keydown', (e) => this.keyDownHandler(e));
+        document.addEventListener('keyup', (e) => this.keyUpHandler(e));
+        
+        this.newGame();
+      },
+      
+      newGame() {
+        this.x = this.canvas.width / 2;
+        this.y = this.canvas.height - 30;
+        this.dx = 3;
+        this.dy = -3;
+        this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
+        this.score = 0;
+        this.lives = 3;
+        
+        // Initialize bricks
+        this.bricks = [];
+        for (let c = 0; c < this.brickColumnCount; c++) {
+          this.bricks[c] = [];
+          for (let r = 0; r < this.brickRowCount; r++) {
+            const color = `hsl(${(r * 60) % 360}, 70%, 50%)`;
+            this.bricks[c][r] = { x: 0, y: 0, status: 1, color: color };
+          }
+        }
+        
+        if (this.gameLoop) cancelAnimationFrame(this.gameLoop);
+        this.draw();
+      },
+      
+      handleMouse(e) {
+        if (activeGame !== 'breakout') return;
+        const relativeX = e.clientX - this.canvas.offsetLeft;
+        if (relativeX > 0 && relativeX < this.canvas.width) {
+          this.paddleX = relativeX - this.paddleWidth / 2;
+        }
+      },
+      
+      keyDownHandler(e) {
+        if (activeGame !== 'breakout') return;
+        if (e.key === 'Right' || e.key === 'ArrowRight') {
+          this.rightPressed = true;
+        } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+          this.leftPressed = true;
+        }
+      },
+      
+      keyUpHandler(e) {
+        if (activeGame !== 'breakout') return;
+        if (e.key === 'Right' || e.key === 'ArrowRight') {
+          this.rightPressed = false;
+        } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+          this.leftPressed = false;
+        }
+      },
+      
+      collisionDetection() {
+        for (let c = 0; c < this.brickColumnCount; c++) {
+          for (let r = 0; r < this.brickRowCount; r++) {
+            const b = this.bricks[c][r];
+            if (b.status === 1) {
+              if (this.x > b.x && this.x < b.x + this.brickWidth && 
+                  this.y > b.y && this.y < b.y + this.brickHeight) {
+                this.dy = -this.dy;
+                b.status = 0;
+                this.score++;
+                
+                // Check for win
+                if (this.score === this.brickRowCount * this.brickColumnCount) {
+                  alert('축하합니다! 모든 벽돌을 깨뜨렸습니다!');
+                  this.newGame();
+                }
+              }
+            }
+          }
+        }
+      },
+      
+      drawBall() {
+        const gradient = this.ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.ballRadius);
+        gradient.addColorStop(0, '#fff');
+        gradient.addColorStop(1, '#f472b6');
+        
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.ballRadius, 0, Math.PI * 2);
+        this.ctx.fillStyle = gradient;
+        this.ctx.fill();
+        this.ctx.closePath();
+      },
+      
+      drawPaddle() {
+        const gradient = this.ctx.createLinearGradient(this.paddleX, 0, this.paddleX + this.paddleWidth, 0);
+        gradient.addColorStop(0, '#8b5cf6');
+        gradient.addColorStop(1, '#ec4899');
+        
+        this.ctx.beginPath();
+        this.ctx.rect(this.paddleX, this.canvas.height - this.paddleHeight, this.paddleWidth, this.paddleHeight);
+        this.ctx.fillStyle = gradient;
+        this.ctx.fill();
+        this.ctx.closePath();
+      },
+      
+      drawBricks() {
+        for (let c = 0; c < this.brickColumnCount; c++) {
+          for (let r = 0; r < this.brickRowCount; r++) {
+            if (this.bricks[c][r].status === 1) {
+              const brickX = (c * (this.brickWidth + this.brickPadding)) + this.brickOffsetLeft;
+              const brickY = (r * (this.brickHeight + this.brickPadding)) + this.brickOffsetTop;
+              this.bricks[c][r].x = brickX;
+              this.bricks[c][r].y = brickY;
+              
+              this.ctx.beginPath();
+              this.ctx.rect(brickX, brickY, this.brickWidth, this.brickHeight);
+              this.ctx.fillStyle = this.bricks[c][r].color;
+              this.ctx.fill();
+              this.ctx.closePath();
+            }
+          }
+        }
+      },
+      
+      draw() {
+        if (activeGame !== 'breakout') {
+          cancelAnimationFrame(this.gameLoop);
+          return;
+        }
+        
+        // Clear canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Draw background gradient
+        const bgGradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+        bgGradient.addColorStop(0, '#1e293b');
+        bgGradient.addColorStop(1, '#334155');
+        this.ctx.fillStyle = bgGradient;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.drawBricks();
+        this.drawBall();
+        this.drawPaddle();
+        this.collisionDetection();
+        
+        // Ball movement
+        if (this.x + this.dx > this.canvas.width - this.ballRadius || this.x + this.dx < this.ballRadius) {
+          this.dx = -this.dx;
+        }
+        if (this.y + this.dy < this.ballRadius) {
+          this.dy = -this.dy;
+        } else if (this.y + this.dy > this.canvas.height - this.ballRadius) {
+          if (this.x > this.paddleX && this.x < this.paddleX + this.paddleWidth) {
+            this.dy = -this.dy;
+            // Add some variation to bounce angle based on where ball hits paddle
+            const hitPos = (this.x - this.paddleX) / this.paddleWidth;
+            this.dx = 8 * (hitPos - 0.5);
+          } else {
+            this.lives--;
+            if (!this.lives) {
+              alert(`게임 종료! 최종 점수: ${this.score}`);
+              this.newGame();
+              return;
+            } else {
+              this.x = this.canvas.width / 2;
+              this.y = this.canvas.height - 30;
+              this.dx = 3;
+              this.dy = -3;
+              this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
+            }
+          }
+        }
+        
+        // Paddle movement
+        if (this.rightPressed && this.paddleX < this.canvas.width - this.paddleWidth) {
+          this.paddleX += 7;
+        } else if (this.leftPressed && this.paddleX > 0) {
+          this.paddleX -= 7;
+        }
+        
+        this.x += this.dx;
+        this.y += this.dy;
+        
+        // Update score and lives display
+        document.getElementById('breakout-score').textContent = this.score;
+        document.getElementById('breakout-lives').textContent = this.lives;
+        
+        this.gameLoop = requestAnimationFrame(() => this.draw());
+      }
+    };
+
+    // ========= Initialize Everything =========
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Initializing application...');
+      
+      // Initialize navigation
+      document.getElementById('floating-game-btn').addEventListener('click', () => {
+        showSection('game-hub');
+      });
+      
+      document.getElementById('tab-pension').addEventListener('click', () => {
+        showSection('pension-container');
+      });
+      
+      document.getElementById('tab-games').addEventListener('click', () => {
+        showSection('game-hub');
+      });
+      
+      // Back buttons
+      document.querySelectorAll('.back-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          showSection('game-hub');
+        });
+      });
+      
+      // Game cards
+      document.querySelectorAll('[data-game]').forEach(card => {
+        card.addEventListener('click', () => {
+          const game = card.dataset.game;
+          if (game === 'omok') {
+            showSection('omok-game');
+          } else if (game === 'g2048') {
+            showSection('game-2048');
+          } else if (game === 'snake') {
+            showSection('game-snake');
+          } else if (game === 'breakout') {
+            showSection('game-breakout');
+          }
+        });
+      });
+      
+      // Initialize apps
+      pensionApp.init();
+      omokApp.init();
+      g2048App.init();
+      snakeApp.init();
+      breakoutApp.init();
+      
+      // Show initial section
+      showSection('pension-container');
+      
+      console.log('Application initialized successfully!');
+    });
+  </script>
 </body>
 </html>
