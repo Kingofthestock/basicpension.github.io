@@ -1,11 +1,52 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2025 기초연금 확인 · 추억의 게임</title>
+  <title>2026 기초연금 자격 계산기 | 1분 모의계산 + 게임 허브</title>
+  <meta name="description" content="2026년 기초연금 선정기준액을 반영한 자격 확인 계산기. 단독가구/부부가구 소득인정액을 1분 안에 확인하고 신청 방법까지 바로 확인하세요.">
+  <meta name="keywords" content="2026 기초연금, 기초연금 계산기, 기초연금 수급자격, 소득인정액, 단독가구, 부부가구, 복지로 신청">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="2026 기초연금 자격 계산기">
+  <meta property="og:description" content="2026년 기준으로 기초연금 수급 가능성을 빠르게 확인해보세요.">
+  <meta name="twitter:card" content="summary">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "2026년 기초연금 선정기준액은 얼마인가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "2026년 선정기준액은 단독가구 월 247만 원, 부부가구 월 395만2천 원입니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "신청은 어디에서 하나요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "주소지 읍면동 주민센터 또는 복지로(www.bokjiro.go.kr)에서 신청할 수 있습니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "이 계산 결과가 최종 결과인가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "아닙니다. 본 페이지는 모의 계산이며, 실제 수급 여부는 국민연금공단 심사를 통해 최종 결정됩니다."
+          }
+        }
+      ]
+    }
+  </script>
   <style>
     body { 
       font-family: 'Noto Sans KR', sans-serif; 
@@ -228,6 +269,76 @@
     #pension-container .radio-group label:hover { 
       background: #f8fafc; 
     }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: .75rem;
+      margin-bottom: 1rem;
+    }
+
+    .kpi-card {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 1px solid #bfdbfe;
+      border-radius: .75rem;
+      padding: .9rem 1rem;
+    }
+
+    .kpi-card .label {
+      display: block;
+      font-size: .8rem;
+      color: #334155;
+      margin-bottom: .25rem;
+    }
+
+    .kpi-card .value {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #1e3a8a;
+    }
+
+    .quick-btn {
+      padding: .65rem 1rem;
+      border-radius: .6rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+
+    .quick-btn.primary {
+      background: #1d4ed8;
+      color: #fff;
+    }
+
+    .quick-btn.primary:hover { background: #1e40af; }
+
+    .quick-btn.ghost {
+      background: #fff;
+      color: #1d4ed8;
+      border-color: #93c5fd;
+    }
+
+    .quick-btn.ghost:hover { background: #eff6ff; }
+
+    .faq-item {
+      border: 1px solid #e2e8f0;
+      border-radius: .75rem;
+      background: #fff;
+      padding: .85rem 1rem;
+      margin-top: .6rem;
+    }
+
+    .faq-item summary {
+      font-weight: 700;
+      color: #0f172a;
+      cursor: pointer;
+    }
+
+    .share-feedback {
+      min-height: 1.2rem;
+      font-size: .85rem;
+      color: #1e40af;
+      margin-top: .4rem;
+    }
     
     .result-success { 
       background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important; 
@@ -249,7 +360,7 @@
 <body class="bg-gray-50">
   <nav id="top-nav" class="top-nav hidden">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <h1 class="text-lg font-bold text-gray-800">2025 기초연금 & 게임</h1>
+      <h1 class="text-lg font-bold text-gray-800">2026 기초연금 & 게임</h1>
       <div class="flex gap-2">
         <button id="tab-pension" class="tab-btn tab-active">기초연금</button>
         <button id="tab-games" class="tab-btn tab-inactive">게임 허브</button>
@@ -261,10 +372,33 @@
 
   <section id="pension-container">
     <header>
-      <h1 class="text-3xl font-bold mb-2">2025 기초연금 자격 확인</h1>
-      <p class="text-blue-100">만 65세 이상 어르신 대상 · 간편 계산기</p>
+      <h1 class="text-3xl font-bold mb-2">2026 기초연금 자격 확인</h1>
+      <p class="text-blue-100">만 65세 이상 어르신 대상 · 1분 모의 계산</p>
     </header>
     <main>
+      <section class="mb-6 p-4 rounded-xl border border-blue-200 bg-blue-50">
+        <h2 class="text-lg font-bold text-slate-800 mb-3">2026 핵심 기준 한눈에 보기</h2>
+        <div class="kpi-grid">
+          <article class="kpi-card">
+            <span class="label">단독가구 선정기준액</span>
+            <strong class="value">월 2,470,000원</strong>
+          </article>
+          <article class="kpi-card">
+            <span class="label">부부가구 선정기준액</span>
+            <strong class="value">월 3,952,000원</strong>
+          </article>
+          <article class="kpi-card">
+            <span class="label">최대 기준연금액</span>
+            <strong class="value">월 349,700원</strong>
+          </article>
+        </div>
+        <div class="flex flex-wrap gap-2 items-center">
+          <button id="jump-to-calc" type="button" class="quick-btn primary">1분 계산 시작</button>
+          <button id="share-page-btn" type="button" class="quick-btn ghost">페이지 공유하기</button>
+        </div>
+        <p id="share-feedback" class="share-feedback"></p>
+      </section>
+
       <form id="pensionForm">
         <fieldset>
           <legend>📋 기본 정보</legend>
@@ -290,11 +424,19 @@
         
         <fieldset>
           <legend>💵 월 소득</legend>
-          <label for="income">본인 월소득 (근로·사업·연금 등)</label>
+          <label for="income">본인 근로소득 (월)</label>
           <input type="text" id="income" placeholder="예: 120만원" required>
+
+          <label for="otherIncome">본인 기타소득 (사업·연금·이자 등 월)</label>
+          <input type="text" id="otherIncome" placeholder="예: 30만원">
+
+          <p class="text-xs text-slate-500 mt-2">근로소득은 2026년 기준 기본공제(116만원) + 추가공제 30%가 반영됩니다.</p>
           
-          <label for="spouseIncome">배우자 월소득 (부부가구만)</label>
+          <label for="spouseIncome">배우자 근로소득 (부부가구만)</label>
           <input type="text" id="spouseIncome" placeholder="예: 80만원">
+
+          <label for="spouseOtherIncome">배우자 기타소득 (부부가구만)</label>
+          <input type="text" id="spouseOtherIncome" placeholder="예: 20만원">
         </fieldset>
         
         <fieldset>
@@ -327,8 +469,29 @@
       <div id="applyInfo" style="display:none;"></div>
       
       <div class="mt-6 p-4 bg-amber-50 border border-amber-300 rounded-lg">
-        <p class="text-sm text-amber-800">⚠️ <strong>주의:</strong> 본 계산 결과는 2025년 기준 예상치입니다. 실제 수급 여부는 국민연금공단 심사로 최종 결정됩니다.</p>
+        <p class="text-sm text-amber-800">⚠️ <strong>주의:</strong> 본 계산 결과는 2026년 1월 발표 기준의 모의 계산입니다. 실제 수급 여부는 국민연금공단 심사로 최종 결정됩니다.</p>
+        <p class="text-xs text-amber-700 mt-2">
+          출처:
+          <a class="underline" href="https://www.basicpension.mohw.go.kr/NXTCESY0000L.web?cmid=S2W010100000" target="_blank" rel="noopener">기초연금 누리집 공지</a>,
+          <a class="underline" href="https://www.mohw.go.kr/gallery.es?mid=a10703010100&bid=0001&b_list=9&act=view&list_no=148094&nPage=1&vlist_no_npage=26&keyField=&keyWord=&orderby=" target="_blank" rel="noopener">보건복지부 발표</a>
+        </p>
       </div>
+
+      <section class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+        <h2 class="text-lg font-bold text-slate-800">자주 묻는 질문 (FAQ)</h2>
+        <details class="faq-item">
+          <summary>Q. 65세가 되는 달부터 바로 신청 가능한가요?</summary>
+          <p class="text-sm text-slate-600 mt-2">신청 가능 시점은 생일, 거주지, 행정 처리 일정에 따라 달라질 수 있습니다. 주민센터 또는 국민연금공단에 사전 확인하세요.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Q. 부부가구는 왜 1인당 지급액이 줄어드나요?</summary>
+          <p class="text-sm text-slate-600 mt-2">부부가 모두 수급 대상이면 부부감액 규정이 적용됩니다. 2026년 기준 최대 지급액은 1인당 279,760원(최대 기준연금액의 80%)입니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Q. 온라인 신청은 어디서 하나요?</summary>
+          <p class="text-sm text-slate-600 mt-2">복지로(<a class="underline" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">www.bokjiro.go.kr</a>)에서 신청하거나, 주소지 읍·면·동 주민센터 방문 신청이 가능합니다.</p>
+        </details>
+      </section>
     </main>
   </section>
 
@@ -586,11 +749,13 @@
 
     const pensionApp = {
       CONFIG: {
-        year: 2025,
-        incomeThreshold: { single: 2280000, couple: 3648000 },
+        year: 2026,
+        incomeThreshold: { single: 2470000, couple: 3952000 },
         basicAsset: { big: 135000000, mid: 85000000, rural: 72500000 },
         financialDeduction: { single: 20000000, couple: 40000000 },
-        benefit: { single: 334810, couplePer: 267848 },
+        benefit: { single: 349700, couplePer: 279760 },
+        workIncomeDeduction: 1160000,
+        workIncomeAdditionalDeductionRate: 0.3,
         assetConversionRate: 0.04 / 12
       },
       
@@ -636,16 +801,22 @@
       
       toggleSpouse() {
         const household = document.getElementById('household').value;
-        const spouseField = document.getElementById('spouseIncome');
-        const spouseLabel = spouseField.previousElementSibling;
+        const spouseIncomeField = document.getElementById('spouseIncome');
+        const spouseOtherIncomeField = document.getElementById('spouseOtherIncome');
+        const spouseIncomeLabel = document.querySelector('label[for="spouseIncome"]');
+        const spouseOtherIncomeLabel = document.querySelector('label[for="spouseOtherIncome"]');
+        const spouseTargets = [spouseIncomeField, spouseOtherIncomeField, spouseIncomeLabel, spouseOtherIncomeLabel];
         
         if (household === 'couple') {
-          spouseField.style.display = 'block';
-          spouseLabel.style.display = 'block';
+          spouseTargets.forEach((el) => {
+            if (el) el.style.display = 'block';
+          });
         } else {
-          spouseField.style.display = 'none';
-          spouseLabel.style.display = 'none';
-          spouseField.value = '';
+          spouseTargets.forEach((el) => {
+            if (el) el.style.display = 'none';
+          });
+          if (spouseIncomeField) spouseIncomeField.value = '';
+          if (spouseOtherIncomeField) spouseOtherIncomeField.value = '';
         }
       },
       
@@ -684,6 +855,12 @@
         if (month > today.getMonth() + 1) age--;
         return age;
       },
+
+      applyWorkIncomeDeduction(workIncome) {
+        const afterBaseDeduction = Math.max(0, workIncome - this.CONFIG.workIncomeDeduction);
+        const recognized = afterBaseDeduction * (1 - this.CONFIG.workIncomeAdditionalDeductionRate);
+        return Math.round(recognized);
+      },
       
       calculate() {
         const year = parseInt(document.getElementById('birthYear').value);
@@ -697,7 +874,9 @@
         }
         
         const income = this.parseAmount(document.getElementById('income').value);
+        const otherIncome = this.parseAmount(document.getElementById('otherIncome').value);
         const spouseIncome = this.parseAmount(document.getElementById('spouseIncome').value);
+        const spouseOtherIncome = this.parseAmount(document.getElementById('spouseOtherIncome').value);
         const homeValue = this.parseAmount(document.getElementById('homeValue').value);
         const deposit = this.parseAmount(document.getElementById('deposit').value);
         const savings = this.parseAmount(document.getElementById('savings').value);
@@ -707,7 +886,11 @@
         
         const age = this.calculateAge(year, month);
         
-        const totalIncome = income + spouseIncome;
+        const recognizedWorkIncome = this.applyWorkIncomeDeduction(income) + this.applyWorkIncomeDeduction(spouseIncome);
+        const recognizedOtherIncome = otherIncome + spouseOtherIncome;
+        const grossIncome = income + otherIncome + spouseIncome + spouseOtherIncome;
+        const recognizedIncomeOnly = recognizedWorkIncome + recognizedOtherIncome;
+
         const generalAssets = homeValue + deposit + car - debt;
         const financialAssets = savings + stocks;
         
@@ -718,15 +901,22 @@
         const netFinancialAssets = Math.max(0, financialAssets - financialDeduction);
         
         const assetIncome = (netGeneralAssets + netFinancialAssets) * this.CONFIG.assetConversionRate;
-        const totalRecognizedIncome = totalIncome + assetIncome;
+        const totalRecognizedIncome = recognizedIncomeOnly + assetIncome;
         
         const threshold = this.CONFIG.incomeThreshold[household];
         const eligible = age >= 65 && totalRecognizedIncome <= threshold;
         
-        this.showResult(age, totalRecognizedIncome, threshold, household, eligible, totalIncome, assetIncome);
+        this.showResult(
+          age,
+          totalRecognizedIncome,
+          threshold,
+          household,
+          eligible,
+          { grossIncome, recognizedWorkIncome, recognizedOtherIncome, assetIncome }
+        );
       },
       
-      showResult(age, totalIncome, threshold, household, eligible, monthlyIncome, assetIncome) {
+      showResult(age, totalIncome, threshold, household, eligible, incomeBreakdown) {
         const resultDiv = document.getElementById('result');
         const applyDiv = document.getElementById('applyInfo');
         
@@ -736,14 +926,16 @@
           const benefit = household === 'single' ? this.CONFIG.benefit.single : this.CONFIG.benefit.couplePer;
           html = `
             <div class="result-success">
-              <p>✅ <strong>기초연금 수급 가능성이 높습니다!</strong></p>
+              <p>✅ <strong>${this.CONFIG.year}년 기준 기초연금 수급 가능성이 높습니다!</strong></p>
               <p class="mt-3">💰 예상 월 지급액: <strong>${this.formatKRW(benefit)}</strong>
               ${household === 'couple' ? ` (부부 합계: ${this.formatKRW(benefit * 2)})` : ''}</p>
               <div class="mt-4">
                 <p class="font-semibold">📊 소득인정액 분석:</p>
                 <ul class="mt-2 space-y-1">
-                  <li>• 월 소득: ${this.formatKRW(monthlyIncome)}</li>
-                  <li>• 재산의 소득환산액: ${this.formatKRW(Math.round(assetIncome))}</li>
+                  <li>• 입력 월소득 합계: ${this.formatKRW(incomeBreakdown.grossIncome)}</li>
+                  <li>• 근로소득 인정액(공제 반영): ${this.formatKRW(incomeBreakdown.recognizedWorkIncome)}</li>
+                  <li>• 기타소득 인정액: ${this.formatKRW(incomeBreakdown.recognizedOtherIncome)}</li>
+                  <li>• 재산의 소득환산액: ${this.formatKRW(Math.round(incomeBreakdown.assetIncome))}</li>
                   <li>• 총 소득인정액: ${this.formatKRW(Math.round(totalIncome))}</li>
                   <li>• 선정기준액: ${this.formatKRW(threshold)}</li>
                 </ul>
@@ -777,15 +969,59 @@
           <div class="mt-6 p-4 bg-blue-50 rounded-lg">
             <h3 class="text-lg font-bold mb-2 text-blue-700">📝 신청 방법</h3>
             <ul class="list-disc pl-5 space-y-1">
-              <li><strong>방문 신청:</strong> 주소지 읍·면·동 주민센터</li>
-              <li><strong>온라인 신청:</strong> 복지로(www.bokjiro.go.kr)</li>
+              <li><strong>방문 신청:</strong> 주소지 읍·면·동 주민센터 또는 국민연금공단 지사</li>
+              <li><strong>온라인 신청:</strong> <a class="underline" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">복지로(www.bokjiro.go.kr)</a></li>
               <li><strong>대리 신청:</strong> 배우자, 자녀, 형제자매 등 가능</li>
             </ul>
+            <p class="text-xs text-slate-600 mt-3">
+              기준 출처:
+              <a class="underline" href="https://www.basicpension.mohw.go.kr/NXTCESY0000L.web?cmid=S2W010100000" target="_blank" rel="noopener">기초연금 누리집</a>
+            </p>
           </div>
         `;
         applyDiv.style.display = 'block';
         
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      },
+
+      scrollToCalculator() {
+        const form = document.getElementById('pensionForm');
+        if (form) {
+          form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      },
+
+      showShareFeedback(message, isError = false) {
+        const feedback = document.getElementById('share-feedback');
+        if (!feedback) return;
+        feedback.textContent = message;
+        feedback.style.color = isError ? '#b91c1c' : '#1e40af';
+      },
+
+      async sharePage() {
+        const shareData = {
+          title: `${this.CONFIG.year} 기초연금 자격 계산기`,
+          text: `${this.CONFIG.year}년 기준 기초연금 수급 가능성을 1분 계산으로 확인해보세요.`,
+          url: window.location.href
+        };
+
+        try {
+          if (navigator.share) {
+            await navigator.share(shareData);
+            this.showShareFeedback('공유가 완료되었습니다.');
+            return;
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(`${shareData.title}\n${shareData.url}`);
+            this.showShareFeedback('링크가 복사되었습니다.');
+            return;
+          }
+
+          this.showShareFeedback('이 브라우저에서는 자동 공유를 지원하지 않습니다.', true);
+        } catch (error) {
+          this.showShareFeedback('공유가 취소되었거나 실패했습니다.', true);
+        }
       }
     };
 
@@ -1530,12 +1766,15 @@
         const head = { ...this.snake[0] };
         head.x += this.direction.x;
         head.y += this.direction.y;
-        
-        head.x = (head.x + this.gridSize) % this.gridSize;
-        head.y = (head.y + this.gridSize) % this.gridSize;
+
+        // 벽 충돌 시 즉시 게임 오버
+        if (head.x < 0 || head.x >= this.gridSize || head.y < 0 || head.y >= this.gridSize) {
+          this.gameOver('벽에 부딪혔습니다.');
+          return;
+        }
         
         if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
-          this.gameOver();
+          this.gameOver('자기 몸에 부딪혔습니다.');
           return;
         }
         
@@ -1551,13 +1790,18 @@
         this.draw();
       },
       
-      gameOver() {
+      gameOver(reason = '') {
         clearInterval(this.gameLoop);
-        alert('게임 종료! 점수: ' + this.score);
+        const message = reason ? `${reason}\n게임 종료! 점수: ${this.score}` : `게임 종료! 점수: ${this.score}`;
+        alert(message);
       },
       
       handleKey(e) {
         if (activeGame !== 'snake') return;
+
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          e.preventDefault();
+        }
         
         switch (e.key) {
           case 'ArrowLeft':
@@ -2277,6 +2521,16 @@
       document.getElementById('tab-games').addEventListener('click', () => {
         showSection('game-hub');
       });
+
+      const jumpCalcBtn = document.getElementById('jump-to-calc');
+      if (jumpCalcBtn) {
+        jumpCalcBtn.addEventListener('click', () => pensionApp.scrollToCalculator());
+      }
+
+      const shareBtn = document.getElementById('share-page-btn');
+      if (shareBtn) {
+        shareBtn.addEventListener('click', () => pensionApp.sharePage());
+      }
       
       document.querySelectorAll('.back-btn').forEach(btn => {
         btn.addEventListener('click', () => {
