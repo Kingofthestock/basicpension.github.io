@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -14,7 +13,17 @@
   <meta property="og:description" content="2026년 기준으로 기초연금 수급 가능성을 빠르게 확인해보세요.">
   <meta name="twitter:card" content="summary">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Noto Sans KR', 'sans-serif'] },
+          fontSize: { 'base': '1.05rem' }
+        }
+      }
+    }
+  </script>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -23,344 +32,148 @@
         {
           "@type": "Question",
           "name": "2026년 기초연금 선정기준액은 얼마인가요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "2026년 선정기준액은 단독가구 월 247만 원, 부부가구 월 395만2천 원입니다."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "2026년 선정기준액은 단독가구 월 247만 원, 부부가구 월 395만2천 원입니다." }
         },
         {
           "@type": "Question",
           "name": "신청은 어디에서 하나요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "주소지 읍면동 주민센터 또는 복지로(www.bokjiro.go.kr)에서 신청할 수 있습니다."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "주소지 읍면동 주민센터 또는 복지로(www.bokjiro.go.kr)에서 신청할 수 있습니다." }
         },
         {
           "@type": "Question",
           "name": "이 계산 결과가 최종 결과인가요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "아닙니다. 본 페이지는 모의 계산이며, 실제 수급 여부는 국민연금공단 심사를 통해 최종 결정됩니다."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "아닙니다. 본 페이지는 모의 계산이며, 실제 수급 여부는 국민연금공단 심사를 통해 최종 결정됩니다." }
         }
       ]
     }
   </script>
   <style>
-    body { 
-      font-family: 'Noto Sans KR', sans-serif; 
-      -webkit-font-smoothing: antialiased; 
-      touch-action: manipulation; 
-    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; touch-action: manipulation; }
     .hidden { display: none !important; }
 
-    .game-float-btn { 
-      position: fixed; 
-      bottom: 30px; 
-      right: 30px; 
-      width: 60px; 
-      height: 60px; 
-      background: linear-gradient(135deg, #10b981, #059669); 
-      border-radius: 50%; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      font-size: 28px; 
-      color: #fff; 
-      box-shadow: 0 4px 12px rgba(0,0,0,.15); 
-      z-index: 100; 
-      transition: all .3s; 
-      cursor: pointer; 
-      animation: pulse 2s infinite; 
-    }
-    
-    @keyframes pulse { 
-      0%, 100% { transform: scale(1); } 
-      50% { transform: scale(1.05); } 
-    }
-    
-    .game-float-btn:hover { 
-      transform: scale(1.1); 
-      box-shadow: 0 6px 20px rgba(0,0,0,.2); 
-    }
+    /* ===== Navigation ===== */
+    .top-nav { background: rgba(255,255,255,.85); backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 50; }
+    .tab-btn { padding: .55rem 1.3rem; border-radius: 9999px; font-weight: 700; font-size: .95rem; transition: all .2s; cursor: pointer; border: none; }
+    .tab-active { background: linear-gradient(135deg,#2563eb,#0ea5e9); color: #fff; box-shadow: 0 2px 8px rgba(37,99,235,.3); }
+    .tab-inactive { background: #f1f5f9; color: #64748b; }
+    .tab-inactive:hover { background: #e2e8f0; }
 
-    .top-nav { 
-      background: #fff; 
-      border-bottom: 1px solid #e5e7eb; 
-      position: sticky; 
-      top: 0; 
-      z-index: 50; 
-      box-shadow: 0 1px 3px rgba(0,0,0,.05); 
-    }
-    
-    .tab-btn { 
-      padding: .5rem 1.25rem; 
-      border-radius: 9999px; 
-      font-weight: 700; 
-      transition: all .2s; 
-    }
-    
-    .tab-active { 
-      background: #3b82f6; 
-      color: #fff; 
-    }
-    
-    .tab-inactive { 
-      background: #f3f4f6; 
-      color: #6b7280; 
-    }
-    
-    .tab-inactive:hover { 
-      background: #e5e7eb; 
-    }
+    /* ===== Floating Game Button ===== */
+    .game-float-btn { position: fixed; bottom: 28px; right: 28px; width: 64px; height: 64px; background: linear-gradient(135deg,#10b981,#059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #fff; box-shadow: 0 4px 16px rgba(16,185,129,.35); z-index: 100; transition: all .3s; cursor: pointer; border: none; animation: floatPulse 2.5s infinite; }
+    .game-float-btn:hover { transform: scale(1.12); box-shadow: 0 6px 24px rgba(16,185,129,.45); }
+    @keyframes floatPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
 
-    .game-card { 
-      background: #fff; 
-      border-radius: 1rem; 
-      padding: 1.5rem; 
-      box-shadow: 0 4px 6px rgba(0,0,0,.05); 
-      transition: all .25s; 
-      cursor: pointer; 
-      position: relative; 
-      overflow: hidden; 
-    }
-    
-    .game-card:hover { 
-      transform: translateY(-4px); 
-      box-shadow: 0 10px 20px rgba(0,0,0,.1); 
-    }
+    /* ===== Pension Container ===== */
+    #pension-container { --primary: #1e40af; --accent: #2563eb; --warm: #f97316; background: linear-gradient(180deg,#f0f4ff 0%,#fafbff 40%,#f8fafc 100%); min-height: 100vh; padding-bottom: 100px; }
+    #pension-container header { background: linear-gradient(135deg,#1e3a8a 0%,#2563eb 50%,#0ea5e9 100%); color: #fff; padding: 2.5rem 1.5rem 3rem; text-align: center; position: relative; overflow: hidden; }
+    #pension-container header::after { content:''; position:absolute; bottom:-1px; left:0; right:0; height:40px; background:#f0f4ff; border-radius:50% 50% 0 0/100% 100% 0 0; }
+    #pension-container main { max-width: 720px; margin: -1rem auto 0; padding: 0 1rem; position: relative; z-index: 1; }
 
-    .board-container { 
-      position: relative; 
-      width: 95vw; 
-      max-width: 600px; 
-      margin: auto; 
-      aspect-ratio: 1 / 1; 
-    }
-    
-    #game-board { 
-      background: #e3c16f; 
-      border-radius: 12px; 
-      box-shadow: 0 8px 20px rgba(0,0,0,.15); 
-      cursor: pointer; 
-      width: 100%; 
-      height: 100%; 
-    }
+    /* ===== Selection Cards ===== */
+    .sel-card { display: flex; flex-direction: column; align-items: center; gap: .4rem; padding: 1.2rem .8rem; background: #fff; border: 2.5px solid #e2e8f0; border-radius: 1rem; cursor: pointer; transition: all .2s; text-align: center; -webkit-tap-highlight-color: transparent; }
+    .sel-card:hover { border-color: #93c5fd; background: #f8faff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,.08); }
+    .sel-card.selected { border-color: #2563eb; background: linear-gradient(135deg,#eff6ff,#dbeafe); box-shadow: 0 4px 16px rgba(37,99,235,.15); }
+    .sel-card.selected::after { content:'✓'; position:absolute; top:8px; right:10px; background:#2563eb; color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:900; }
+    .sel-card { position: relative; }
 
-    .g2048-grid { 
-      display: grid; 
-      grid-template-columns: repeat(4, 1fr); 
-      gap: .6rem; 
-      background: #bbada0; 
-      padding: .6rem; 
-      border-radius: .75rem; 
-    }
-    
-    .g2048-cell { 
-      background: #cdc1b4; 
-      border-radius: .5rem; 
-      height: 72px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      font-weight: 900; 
-      font-size: 1.4rem; 
-      transition: all 0.15s ease-in-out; 
-    }
-    
-    .tile-0 { background: #cdc1b4; color: transparent; }
-    .tile-2 { background: #eee4da; color: #776e65; }
-    .tile-4 { background: #ede0c8; color: #776e65; }
-    .tile-8 { background: #f2b179; color: #f9f6f2; }
-    .tile-16 { background: #f59563; color: #f9f6f2; }
-    .tile-32 { background: #f67c5f; color: #f9f6f2; }
-    .tile-64 { background: #f65e3b; color: #f9f6f2; }
-    .tile-128 { background: #edcf72; color: #f9f6f2; font-size: 1.2rem; }
-    .tile-256 { background: #edcc61; color: #f9f6f2; font-size: 1.2rem; }
-    .tile-512 { background: #edc850; color: #f9f6f2; font-size: 1.2rem; }
-    .tile-1024 { background: #edc53f; color: #f9f6f2; font-size: 1rem; }
-    .tile-2048 { background: #edc22e; color: #f9f6f2; font-size: 1rem; }
+    /* ===== Zero / Skip Buttons ===== */
+    .zero-btn { flex-shrink: 0; padding: .7rem 1rem; background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; border-radius: .6rem; font-weight: 600; font-size: .9rem; cursor: pointer; transition: all .15s; white-space: nowrap; }
+    .zero-btn:hover { background: #e2e8f0; border-color: #94a3b8; }
+    .zero-btn:active { transform: scale(.97); }
 
-    #pension-container { 
-      --primary: #1e40af; 
-      --secondary: #3b82f6; 
-      background: #f8fafc; 
-      min-height: 100vh; 
-      padding-bottom: 100px; 
-    }
-    
-    #pension-container header { 
-      background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-      color: #fff; 
-      padding: 2rem; 
-      text-align: center; 
-    }
-    
-    #pension-container main { 
-      max-width: 720px; 
-      margin: 2rem auto; 
-      padding: 2rem; 
-      background: #fff; 
-      border-radius: 1rem; 
-      box-shadow: 0 10px 25px rgba(0,0,0,.08); 
-    }
-    
-    #pension-container fieldset { 
-      border: none; 
-      margin-bottom: 1.5rem; 
-      padding: 1.25rem; 
-      background: #f1f5f9; 
-      border-radius: .75rem; 
-    }
-    
-    #pension-container legend { 
-      font-weight: 700; 
-      font-size: 1.15rem; 
-      color: var(--primary); 
-      background: #fff; 
-      padding: .4rem 1rem; 
-      border-radius: .5rem; 
-      box-shadow: 0 2px 4px rgba(0,0,0,.05); 
-      margin-bottom: 1rem; 
-    }
-    
-    #pension-container label { 
-      display: block; 
-      margin: .75rem 0 .4rem; 
-      font-weight: 500; 
-      color: #475569; 
-    }
-    
-    #pension-container input, 
-    #pension-container select { 
-      width: 100%; 
-      padding: .75rem 1rem; 
-      border: 2px solid #e2e8f0; 
-      border-radius: .5rem; 
-      font-size: 1rem; 
-      transition: all .2s; 
-    }
-    
-    #pension-container input:focus, 
-    #pension-container select:focus { 
-      outline: none; 
-      border-color: var(--secondary); 
-      box-shadow: 0 0 0 3px rgba(59,130,246,.1); 
-    }
-    
-    #pension-container input[type="radio"] { 
-      width: auto; 
-      margin-right: .5rem; 
-      transform: scale(1.2); 
-    }
-    
-    #pension-container .radio-group label { 
-      display: flex; 
-      align-items: center; 
-      gap: .5rem; 
-      padding: .6rem; 
-      background: #fff; 
-      border-radius: .5rem; 
-      cursor: pointer; 
-      margin: .5rem 0; 
-    }
-    
-    #pension-container .radio-group label:hover { 
-      background: #f8fafc; 
-    }
+    /* ===== Amount Preview ===== */
+    .amount-preview { font-size: .85rem; color: #2563eb; font-weight: 500; min-height: 1.3rem; margin-top: .3rem; padding-left: .2rem; }
 
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: .75rem;
-      margin-bottom: 1rem;
-    }
+    /* ===== Wizard ===== */
+    .wizard-shell { background: #fff; border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 8px 30px rgba(15,23,42,.06); border: 1px solid #e2e8f0; }
+    .wizard-progress-track { width: 100%; height: 10px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin-bottom: 1rem; }
+    .wizard-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg,#2563eb,#0ea5e9); border-radius: 999px; transition: width .35s ease; }
+    .wizard-step-meta { font-size: .9rem; color: #475569; margin-bottom: .5rem; font-weight: 600; }
+    .wizard-question-title { margin: 0 0 .25rem; font-size: 1.3rem; font-weight: 800; color: #0f172a; line-height: 1.4; }
+    .wizard-question-desc { margin: 0 0 .5rem; font-size: 1rem; color: #64748b; line-height: 1.5; }
 
-    .kpi-card {
-      background: linear-gradient(135deg, #eff6ff, #dbeafe);
-      border: 1px solid #bfdbfe;
-      border-radius: .75rem;
-      padding: .9rem 1rem;
-    }
+    .wizard-step { display: none; margin-top: 1rem; padding: 1.2rem; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 1rem; }
+    .wizard-step.active { display: block; animation: fadeSlideIn .3s ease; }
+    @keyframes fadeSlideIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-    .kpi-card .label {
-      display: block;
-      font-size: .8rem;
-      color: #334155;
-      margin-bottom: .25rem;
-    }
+    .wizard-step label { display: block; margin: .6rem 0 .35rem; font-weight: 600; color: #334155; font-size: 1rem; }
+    .wizard-step input[type="text"], .wizard-step select { width: 100%; padding: .85rem 1rem; border: 2px solid #e2e8f0; border-radius: .65rem; font-size: 1.1rem; font-family: inherit; transition: all .2s; background: #fff; }
+    .wizard-step input[type="text"]:focus, .wizard-step select:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
 
-    .kpi-card .value {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #1e3a8a;
-    }
+    .wizard-actions { margin-top: 1.2rem; display: flex; gap: .6rem; flex-wrap: wrap; }
+    .wizard-btn { min-width: 110px; padding: .8rem 1.2rem; border-radius: .7rem; font-weight: 700; font-size: 1.05rem; border: none; cursor: pointer; transition: all .15s; font-family: inherit; }
+    .wizard-btn:active { transform: scale(.97); }
+    .wizard-btn.prev { background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; }
+    .wizard-btn.prev:hover { background: #e2e8f0; }
+    .wizard-btn.next, .wizard-btn.submit { background: linear-gradient(135deg,#2563eb,#1d4ed8); color: #fff; box-shadow: 0 2px 8px rgba(37,99,235,.25); }
+    .wizard-btn.next:hover, .wizard-btn.submit:hover { box-shadow: 0 4px 16px rgba(37,99,235,.35); }
+    .wizard-btn.reset { background: #fff; color: #64748b; border: 1.5px solid #cbd5e1; }
+    .wizard-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
 
-    .quick-btn {
-      padding: .65rem 1rem;
-      border-radius: .6rem;
-      font-weight: 700;
-      border: 1px solid transparent;
-    }
+    /* ===== KPI Cards ===== */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: .75rem; margin-bottom: 1rem; }
+    .kpi-card { background: #fff; border: 1px solid #dbeafe; border-radius: 1rem; padding: 1rem 1.2rem; box-shadow: 0 2px 8px rgba(37,99,235,.04); transition: transform .2s; }
+    .kpi-card:hover { transform: translateY(-2px); }
+    .kpi-card .label { display: block; font-size: .82rem; color: #64748b; margin-bottom: .3rem; font-weight: 500; }
+    .kpi-card .value { font-size: 1.25rem; font-weight: 800; color: #1e3a8a; }
 
-    .quick-btn.primary {
-      background: #1d4ed8;
-      color: #fff;
-    }
-
-    .quick-btn.primary:hover { background: #1e40af; }
-
-    .quick-btn.ghost {
-      background: #fff;
-      color: #1d4ed8;
-      border-color: #93c5fd;
-    }
-
+    /* ===== Quick Buttons ===== */
+    .quick-btn { padding: .75rem 1.2rem; border-radius: .7rem; font-weight: 700; border: none; cursor: pointer; font-size: 1rem; font-family: inherit; transition: all .15s; }
+    .quick-btn:active { transform: scale(.97); }
+    .quick-btn.primary { background: linear-gradient(135deg,#f97316,#ea580c); color: #fff; box-shadow: 0 2px 10px rgba(249,115,22,.3); }
+    .quick-btn.primary:hover { box-shadow: 0 4px 16px rgba(249,115,22,.4); }
+    .quick-btn.ghost { background: #fff; color: #2563eb; border: 1.5px solid #93c5fd; }
     .quick-btn.ghost:hover { background: #eff6ff; }
 
-    .faq-item {
-      border: 1px solid #e2e8f0;
-      border-radius: .75rem;
-      background: #fff;
-      padding: .85rem 1rem;
-      margin-top: .6rem;
-    }
+    /* ===== Results ===== */
+    .result-success { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border: 2px solid #86efac; padding: 1.5rem; border-radius: 1rem; margin-top: 1.5rem; animation: fadeSlideIn .4s ease; }
+    .result-fail { background: linear-gradient(135deg,#fef2f2,#fee2e2); border: 2px solid #fca5a5; padding: 1.5rem; border-radius: 1rem; margin-top: 1.5rem; animation: fadeSlideIn .4s ease; }
+    .result-emoji { font-size: 3rem; display: block; margin-bottom: .5rem; }
+    .result-breakdown { background: rgba(255,255,255,.7); border-radius: .75rem; padding: 1rem; margin-top: 1rem; }
+    .result-breakdown li { padding: .35rem 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: .95rem; }
+    .result-breakdown li:last-child { border-bottom: none; }
 
-    .faq-item summary {
-      font-weight: 700;
-      color: #0f172a;
-      cursor: pointer;
-    }
+    /* ===== FAQ ===== */
+    .faq-item { border: 1px solid #e2e8f0; border-radius: .75rem; background: #fff; padding: .9rem 1rem; margin-top: .6rem; }
+    .faq-item summary { font-weight: 700; color: #0f172a; cursor: pointer; font-size: 1rem; }
+    .faq-item[open] summary { color: #2563eb; }
 
-    .share-feedback {
-      min-height: 1.2rem;
-      font-size: .85rem;
-      color: #1e40af;
-      margin-top: .4rem;
-    }
-    
-    .result-success { 
-      background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important; 
-      border-left: 4px solid #22c55e !important; 
-      padding: 1.25rem;
-      border-radius: .75rem;
-      margin-top: 1.5rem;
-    }
-    
-    .result-fail { 
-      background: linear-gradient(135deg, #fef2f2, #fee2e2) !important; 
-      border-left: 4px solid #ef4444 !important; 
-      padding: 1.25rem;
-      border-radius: .75rem;
-      margin-top: 1.5rem;
+    /* ===== Benefits Teaser ===== */
+    .benefit-teaser-card { background: #fff; padding: 1rem; border-radius: .85rem; border: 1px solid #d1fae5; text-align: center; transition: all .2s; }
+    .benefit-teaser-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.05); }
+
+    /* ===== Share Feedback ===== */
+    .share-feedback { min-height: 1.3rem; font-size: .85rem; color: #2563eb; margin-top: .4rem; font-weight: 500; }
+
+    /* ===== Game Hub ===== */
+    .game-card { background: #fff; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,.04); transition: all .25s; cursor: pointer; position: relative; overflow: hidden; border: 1px solid #f1f5f9; }
+    .game-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,.1); border-color: #e2e8f0; }
+
+    /* ===== Omok ===== */
+    .board-container { position: relative; width: 95vw; max-width: 600px; margin: auto; aspect-ratio: 1/1; }
+    #game-board { background: #e3c16f; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,.15); cursor: pointer; width: 100%; height: 100%; }
+
+    /* ===== 2048 ===== */
+    .g2048-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: .6rem; background: #bbada0; padding: .6rem; border-radius: .75rem; user-select: none; -webkit-user-select: none; touch-action: none; }
+    .g2048-cell { background: #cdc1b4; border-radius: .5rem; height: 72px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.4rem; transition: all .12s ease-in-out; }
+    .tile-0{background:#cdc1b4;color:transparent}.tile-2{background:#eee4da;color:#776e65}.tile-4{background:#ede0c8;color:#776e65}.tile-8{background:#f2b179;color:#f9f6f2}.tile-16{background:#f59563;color:#f9f6f2}.tile-32{background:#f67c5f;color:#f9f6f2}.tile-64{background:#f65e3b;color:#f9f6f2}.tile-128{background:#edcf72;color:#f9f6f2;font-size:1.2rem}.tile-256{background:#edcc61;color:#f9f6f2;font-size:1.2rem}.tile-512{background:#edc850;color:#f9f6f2;font-size:1.2rem}.tile-1024{background:#edc53f;color:#f9f6f2;font-size:1rem}.tile-2048{background:#edc22e;color:#f9f6f2;font-size:1rem}
+
+    /* ===== Responsive ===== */
+    @media(max-width:640px) {
+      .wizard-question-title { font-size: 1.15rem; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .g2048-cell { height: 60px; font-size: 1.1rem; }
+      .sel-card { padding: 1rem .6rem; }
     }
   </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-slate-50">
+
+  <!-- ===== Navigation ===== -->
   <nav id="top-nav" class="top-nav hidden">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <h1 class="text-lg font-bold text-gray-800">2026 기초연금 & 게임</h1>
+      <h1 class="text-lg font-bold text-slate-800">2026 복지 도우미</h1>
       <div class="flex gap-2">
         <button id="tab-pension" class="tab-btn tab-active">기초연금</button>
         <button id="tab-games" class="tab-btn tab-inactive">게임 허브</button>
@@ -368,15 +181,20 @@
     </div>
   </nav>
 
-  <button id="floating-game-btn" class="game-float-btn" title="게임 하러가기">🎮</button>
+  <!-- ===== Floating Game Button ===== -->
+  <button id="floating-game-btn" class="game-float-btn" title="게임 하러가기" aria-label="게임 허브로 이동">🎮</button>
 
+  <!-- ===== Pension Section ===== -->
   <section id="pension-container">
     <header>
-      <h1 class="text-3xl font-bold mb-2">2026 기초연금 자격 확인</h1>
-      <p class="text-blue-100">만 65세 이상 어르신 대상 · 1분 모의 계산</p>
+      <p class="text-blue-200 text-sm font-medium mb-2">2026년 기준 · 모의계산</p>
+      <h1 class="text-3xl sm:text-4xl font-black mb-3 leading-tight">기초연금,<br>받을 수 있을까요?</h1>
+      <p class="text-blue-100 text-lg">아래 질문에 답하시면<br class="sm:hidden"> <strong>1분 안에</strong> 확인할 수 있어요</p>
     </header>
+
     <main>
-      <section class="mb-6 p-4 rounded-xl border border-blue-200 bg-blue-50">
+      <!-- KPI Cards -->
+      <section class="mb-6 p-5 rounded-2xl bg-white border border-blue-100 shadow-sm -mt-4 relative z-10">
         <h2 class="text-lg font-bold text-slate-800 mb-3">2026 핵심 기준 한눈에 보기</h2>
         <div class="kpi-grid">
           <article class="kpi-card">
@@ -392,178 +210,701 @@
             <strong class="value">월 349,700원</strong>
           </article>
         </div>
-        <div class="flex flex-wrap gap-2 items-center">
-          <button id="jump-to-calc" type="button" class="quick-btn primary">1분 계산 시작</button>
-          <button id="share-page-btn" type="button" class="quick-btn ghost">페이지 공유하기</button>
+        <div class="flex flex-wrap gap-2 items-center mt-3">
+          <button id="jump-to-calc" type="button" class="quick-btn primary">1분 계산 시작하기</button>
+          <button id="share-page-btn" type="button" class="quick-btn ghost">페이지 공유</button>
         </div>
         <p id="share-feedback" class="share-feedback"></p>
       </section>
 
-      <form id="pensionForm">
-        <fieldset>
-          <legend>📋 기본 정보</legend>
-          <label for="birthYear">출생 연도</label>
-          <select id="birthYear" required></select>
-          
-          <label for="birthMonth">출생 월</label>
-          <select id="birthMonth" required></select>
-          
-          <label for="household">가구 유형</label>
-          <select id="household" required>
-            <option value="single">단독가구 (1인)</option>
-            <option value="couple">부부가구 (2인)</option>
-          </select>
-          
-          <label>거주 지역</label>
-          <div class="radio-group">
-            <label><input type="radio" name="area" value="big" required> 대도시 <small class="text-gray-500">(특별시·광역시)</small></label>
-            <label><input type="radio" name="area" value="mid"> 중소도시 <small class="text-gray-500">(일반 시 지역)</small></label>
-            <label><input type="radio" name="area" value="rural"> 농어촌 <small class="text-gray-500">(군 지역)</small></label>
+      <!-- Wizard Form -->
+      <form id="pensionForm" class="wizard-shell">
+        <div class="wizard-step-meta" id="wizard-step-text">1 / 7 단계</div>
+        <div class="wizard-progress-track">
+          <div id="wizard-progress-fill" class="wizard-progress-fill"></div>
+        </div>
+        <h3 id="wizard-question-title" class="wizard-question-title">먼저, 생년월을 알려주세요</h3>
+        <p id="wizard-question-desc" class="wizard-question-desc">만 65세 이상인지 확인하는 데 필요해요.</p>
+
+        <!-- Step: Birth -->
+        <div class="wizard-step active" data-step="birth">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="birthYear">출생 연도</label>
+              <select id="birthYear" required></select>
+            </div>
+            <div>
+              <label for="birthMonth">출생 월</label>
+              <select id="birthMonth" required></select>
+            </div>
           </div>
-        </fieldset>
-        
-        <fieldset>
-          <legend>💵 월 소득</legend>
-          <label for="income">본인 근로소득 (월)</label>
-          <input type="text" id="income" placeholder="예: 120만원" required>
+        </div>
 
-          <label for="otherIncome">본인 기타소득 (사업·연금·이자 등 월)</label>
-          <input type="text" id="otherIncome" placeholder="예: 30만원">
+        <!-- Step: Household -->
+        <div class="wizard-step" data-step="household">
+          <input type="hidden" id="household" value="single">
+          <div class="grid grid-cols-2 gap-4">
+            <button type="button" class="sel-card selected" data-field="household" data-value="single">
+              <span class="text-4xl leading-none">👤</span>
+              <span class="text-base font-bold text-slate-800">혼자 살고 있어요</span>
+              <span class="text-sm text-slate-500">단독가구 (1인)</span>
+            </button>
+            <button type="button" class="sel-card" data-field="household" data-value="couple">
+              <span class="text-4xl leading-none">👫</span>
+              <span class="text-base font-bold text-slate-800">배우자와 함께</span>
+              <span class="text-sm text-slate-500">부부가구 (2인)</span>
+            </button>
+          </div>
+        </div>
 
-          <p class="text-xs text-slate-500 mt-2">근로소득은 2026년 기준 기본공제(116만원) + 추가공제 30%가 반영됩니다.</p>
-          
-          <label for="spouseIncome">배우자 근로소득 (부부가구만)</label>
-          <input type="text" id="spouseIncome" placeholder="예: 80만원">
+        <!-- Step: Area -->
+        <div class="wizard-step" data-step="area">
+          <input type="hidden" id="area-value" value="">
+          <div class="grid grid-cols-3 gap-3">
+            <button type="button" class="sel-card" data-field="area" data-value="big">
+              <span class="text-3xl leading-none">🏙️</span>
+              <span class="font-bold text-slate-800">대도시</span>
+              <span class="text-xs text-slate-500">특별시·광역시</span>
+            </button>
+            <button type="button" class="sel-card" data-field="area" data-value="mid">
+              <span class="text-3xl leading-none">🏘️</span>
+              <span class="font-bold text-slate-800">중소도시</span>
+              <span class="text-xs text-slate-500">일반 시 지역</span>
+            </button>
+            <button type="button" class="sel-card" data-field="area" data-value="rural">
+              <span class="text-3xl leading-none">🌾</span>
+              <span class="font-bold text-slate-800">농어촌</span>
+              <span class="text-xs text-slate-500">군 지역</span>
+            </button>
+          </div>
+        </div>
 
-          <label for="spouseOtherIncome">배우자 기타소득 (부부가구만)</label>
-          <input type="text" id="spouseOtherIncome" placeholder="예: 20만원">
-        </fieldset>
-        
-        <fieldset>
-          <legend>🏠 보유 재산</legend>
-          <label for="homeValue">주택/부동산 시가총액</label>
-          <input type="text" id="homeValue" placeholder="예: 2억원">
-          
-          <label for="deposit">전·월세 보증금</label>
-          <input type="text" id="deposit" placeholder="예: 5000만원">
-          
-          <label for="savings">예금·적금 총액</label>
-          <input type="text" id="savings" placeholder="예: 3000만원">
-          
-          <label for="stocks">주식·펀드·채권 등</label>
-          <input type="text" id="stocks" placeholder="예: 1000만원">
-          
-          <label for="car">자동차 가액</label>
-          <input type="text" id="car" placeholder="예: 2000만원">
-          
-          <label for="debt">부채 (대출금 등)</label>
-          <input type="text" id="debt" placeholder="예: 5000만원">
-        </fieldset>
-        
-        <button type="submit" class="w-full py-3 text-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 shadow-lg font-semibold">
-          자격 확인하기
-        </button>
+        <!-- Step: My Income -->
+        <div class="wizard-step" data-step="income">
+          <div class="space-y-4">
+            <div>
+              <label for="income">근로소득 (월)</label>
+              <div class="flex gap-2">
+                <input type="text" id="income" placeholder="예: 120만원" inputmode="text">
+                <button type="button" class="zero-btn" data-target="income">없어요</button>
+              </div>
+              <p class="amount-preview" id="income-preview"></p>
+            </div>
+            <div>
+              <label for="otherIncome">기타소득 (사업·연금·이자 등 월)</label>
+              <div class="flex gap-2">
+                <input type="text" id="otherIncome" placeholder="예: 30만원" inputmode="text">
+                <button type="button" class="zero-btn" data-target="otherIncome">없어요</button>
+              </div>
+              <p class="amount-preview" id="otherIncome-preview"></p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-3 leading-relaxed">근로소득은 기본공제(116만원) + 추가공제 30%가 자동 반영됩니다.<br>기타소득은 그대로 반영됩니다.</p>
+        </div>
+
+        <!-- Step: Spouse Income (couple only) -->
+        <div class="wizard-step" data-step="spouseIncome">
+          <div class="space-y-4">
+            <div>
+              <label for="spouseIncome">배우자 근로소득 (월)</label>
+              <div class="flex gap-2">
+                <input type="text" id="spouseIncome" placeholder="예: 80만원" inputmode="text">
+                <button type="button" class="zero-btn" data-target="spouseIncome">없어요</button>
+              </div>
+              <p class="amount-preview" id="spouseIncome-preview"></p>
+            </div>
+            <div>
+              <label for="spouseOtherIncome">배우자 기타소득 (월)</label>
+              <div class="flex gap-2">
+                <input type="text" id="spouseOtherIncome" placeholder="예: 20만원" inputmode="text">
+                <button type="button" class="zero-btn" data-target="spouseOtherIncome">없어요</button>
+              </div>
+              <p class="amount-preview" id="spouseOtherIncome-preview"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step: Property -->
+        <div class="wizard-step" data-step="property">
+          <div class="space-y-4">
+            <div>
+              <label for="homeValue">주택/부동산 시가총액</label>
+              <div class="flex gap-2">
+                <input type="text" id="homeValue" placeholder="예: 2억원" inputmode="text">
+                <button type="button" class="zero-btn" data-target="homeValue">없어요</button>
+              </div>
+              <p class="amount-preview" id="homeValue-preview"></p>
+            </div>
+            <div>
+              <label for="deposit">전·월세 보증금</label>
+              <div class="flex gap-2">
+                <input type="text" id="deposit" placeholder="예: 5000만원" inputmode="text">
+                <button type="button" class="zero-btn" data-target="deposit">없어요</button>
+              </div>
+              <p class="amount-preview" id="deposit-preview"></p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-3">대략적인 시가로 입력해주세요. 정확하지 않아도 괜찮아요.</p>
+        </div>
+
+        <!-- Step: Financial -->
+        <div class="wizard-step" data-step="financial">
+          <div class="space-y-4">
+            <div>
+              <label for="savings">예금·적금 총액</label>
+              <div class="flex gap-2">
+                <input type="text" id="savings" placeholder="예: 3000만원" inputmode="text">
+                <button type="button" class="zero-btn" data-target="savings">없어요</button>
+              </div>
+              <p class="amount-preview" id="savings-preview"></p>
+            </div>
+            <div>
+              <label for="stocks">주식·펀드·채권 등</label>
+              <div class="flex gap-2">
+                <input type="text" id="stocks" placeholder="예: 1000만원" inputmode="text">
+                <button type="button" class="zero-btn" data-target="stocks">없어요</button>
+              </div>
+              <p class="amount-preview" id="stocks-preview"></p>
+            </div>
+            <div>
+              <label for="car">자동차 가액</label>
+              <div class="flex gap-2">
+                <input type="text" id="car" placeholder="예: 2000만원" inputmode="text">
+                <button type="button" class="zero-btn" data-target="car">없어요</button>
+              </div>
+              <p class="amount-preview" id="car-preview"></p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-3">금융재산에서 2,000만원이 자동 공제됩니다.</p>
+        </div>
+
+        <!-- Step: Debt -->
+        <div class="wizard-step" data-step="debt">
+          <div>
+            <label for="debt">부채 (대출금 등)</label>
+            <div class="flex gap-2">
+              <input type="text" id="debt" placeholder="예: 5000만원" inputmode="text">
+              <button type="button" class="zero-btn" data-target="debt">없어요</button>
+            </div>
+            <p class="amount-preview" id="debt-preview"></p>
+          </div>
+          <p class="text-xs text-slate-500 mt-3">금융기관 대출, 임대보증금 등 공적으로 확인 가능한 부채를 입력해주세요.</p>
+        </div>
+
+        <!-- Wizard Navigation -->
+        <div class="wizard-actions">
+          <button type="button" id="wizard-prev" class="wizard-btn prev" disabled>이전</button>
+          <button type="button" id="wizard-next" class="wizard-btn next">다음</button>
+          <button type="submit" id="wizard-submit" class="wizard-btn submit hidden">결과 확인하기</button>
+          <button type="button" id="wizard-reset" class="wizard-btn reset hidden">처음부터 다시</button>
+        </div>
       </form>
-      
+
+      <!-- Result -->
       <div id="result" style="display:none;"></div>
       <div id="applyInfo" style="display:none;"></div>
-      
-      <div class="mt-6 p-4 bg-amber-50 border border-amber-300 rounded-lg">
-        <p class="text-sm text-amber-800">⚠️ <strong>주의:</strong> 본 계산 결과는 2026년 1월 발표 기준의 모의 계산입니다. 실제 수급 여부는 국민연금공단 심사로 최종 결정됩니다.</p>
+
+      <!-- Warning -->
+      <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+        <p class="text-sm text-amber-800 leading-relaxed">
+          <strong>주의:</strong> 본 계산 결과는 2026년 1월 발표 기준의 <strong>모의 계산</strong>입니다.
+          실제 수급 여부는 국민연금공단 심사를 통해 최종 결정됩니다.
+        </p>
         <p class="text-xs text-amber-700 mt-2">
           출처:
           <a class="underline" href="https://www.basicpension.mohw.go.kr/NXTCESY0000L.web?cmid=S2W010100000" target="_blank" rel="noopener">기초연금 누리집 공지</a>,
-          <a class="underline" href="https://www.mohw.go.kr/gallery.es?mid=a10703010100&bid=0001&b_list=9&act=view&list_no=148094&nPage=1&vlist_no_npage=26&keyField=&keyWord=&orderby=" target="_blank" rel="noopener">보건복지부 발표</a>
+          <a class="underline" href="https://www.mohw.go.kr" target="_blank" rel="noopener">보건복지부</a>
         </p>
       </div>
 
-      <section class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
-        <h2 class="text-lg font-bold text-slate-800">자주 묻는 질문 (FAQ)</h2>
+      <!-- FAQ -->
+      <section class="mt-6 p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+        <h2 class="text-lg font-bold text-slate-800 mb-1">자주 묻는 질문</h2>
         <details class="faq-item">
           <summary>Q. 65세가 되는 달부터 바로 신청 가능한가요?</summary>
-          <p class="text-sm text-slate-600 mt-2">신청 가능 시점은 생일, 거주지, 행정 처리 일정에 따라 달라질 수 있습니다. 주민센터 또는 국민연금공단에 사전 확인하세요.</p>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">만 65세 생일이 속하는 달의 1개월 전부터 신청 가능합니다. 주민센터 또는 국민연금공단에 사전 확인하세요.</p>
         </details>
         <details class="faq-item">
           <summary>Q. 부부가구는 왜 1인당 지급액이 줄어드나요?</summary>
-          <p class="text-sm text-slate-600 mt-2">부부가 모두 수급 대상이면 부부감액 규정이 적용됩니다. 2026년 기준 최대 지급액은 1인당 279,760원(최대 기준연금액의 80%)입니다.</p>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">부부가 모두 수급 대상이면 <strong>부부감액</strong>(기준연금액의 20%)이 적용됩니다. 2026년 기준 1인당 최대 279,760원입니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Q. 소득인정액이란 무엇인가요?</summary>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+            소득인정액은 <strong>소득평가액</strong>(근로·사업·연금소득 등)과 <strong>재산의 소득환산액</strong>(부동산·금융재산 등을 월 소득으로 환산한 값)을 합한 금액입니다.
+            이 금액이 선정기준액 이하이면 기초연금을 받을 수 있습니다.
+          </p>
         </details>
         <details class="faq-item">
           <summary>Q. 온라인 신청은 어디서 하나요?</summary>
-          <p class="text-sm text-slate-600 mt-2">복지로(<a class="underline" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">www.bokjiro.go.kr</a>)에서 신청하거나, 주소지 읍·면·동 주민센터 방문 신청이 가능합니다.</p>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">복지로(<a class="underline text-blue-600" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">www.bokjiro.go.kr</a>)에서 신청하거나, 주소지 읍·면·동 주민센터 방문 신청이 가능합니다.</p>
         </details>
+        <details class="faq-item">
+          <summary>Q. 고급자동차가 있으면 불이익이 있나요?</summary>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">차량가액 4,000만원 이상 또는 배기량 3,000cc 이상의 승용차는 일반 재산보다 높은 소득환산율(월 100%)이 적용될 수 있습니다. 본 계산기에는 이 특례가 반영되지 않으므로 해당하시면 주민센터에 확인하세요.</p>
+        </details>
+      </section>
+
+      <!-- Welfare Q&A Section -->
+      <section class="mt-6 p-5 bg-white rounded-2xl border border-indigo-100 shadow-sm">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-2xl">💬</span>
+          <h2 class="text-lg font-bold text-indigo-900">복지 혜택, 이것만은 알아두세요</h2>
+        </div>
+        <p class="text-sm text-slate-500 mb-4">동사무소·주민센터에서 가장 많이 받는 질문들을 모았어요</p>
+
+        <div class="space-y-3" id="welfare-qa">
+
+          <details class="faq-item" style="border-color:#c7d2fe;">
+            <summary class="flex items-center gap-2"><span class="text-lg">💰</span> 기초연금이랑 국민연금, 둘 다 받을 수 있나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>네, 동시에 받을 수 있습니다.</strong> 다만 국민연금 수령액에 따라 기초연금이 일부 감액될 수 있어요.</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>국민연금 월 수령액이 기초연금 기준연금액(349,700원)의 <strong>150% 이하</strong>면 기초연금 전액 수령 가능</li>
+                <li>150%를 초과하면 기초연금이 단계적으로 감액되지만, <strong>최소 기준연금액의 50%</strong>(174,850원)는 보장됩니다</li>
+              </ul>
+              <p class="text-xs text-slate-500 mt-1">※ 정확한 감액 여부는 국민연금공단(1355)에서 확인하세요.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#c7d2fe;">
+            <summary class="flex items-center gap-2"><span class="text-lg">🏠</span> 집이 있으면 기초연금을 못 받나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>집이 있다고 무조건 탈락하는 것은 아닙니다.</strong></p>
+              <p>부동산은 시가에서 기본재산액(대도시 1억3,500만원, 중소도시 8,500만원, 농어촌 7,250만원)을 공제한 후 월 소득으로 환산합니다.</p>
+              <p>예를 들어 대도시에 <strong>시가 2억원 아파트</strong>가 있어도 다른 소득이 적다면 기초연금 수급이 가능할 수 있어요.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#c7d2fe;">
+            <summary class="flex items-center gap-2"><span class="text-lg">👨‍👩‍👧</span> 자녀가 돈을 잘 벌면 기초연금이 안 되나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>자녀의 소득은 기초연금 심사에 포함되지 않습니다.</strong></p>
+              <p>기초연금은 본인(및 배우자)의 소득과 재산만으로 판정합니다. 자녀가 고소득자여도 본인의 소득인정액이 기준 이하이면 받을 수 있어요.</p>
+              <p class="text-xs text-slate-500">※ 단, 기초생활수급(생계급여 등)은 부양의무자 기준이 있어 다릅니다.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#c7d2fe;">
+            <summary class="flex items-center gap-2"><span class="text-lg">🔄</span> 기초연금과 기초생활보장(생계급여)의 차이가 뭔가요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p>많이 헷갈리시는 부분이에요. 완전히 <strong>다른 제도</strong>입니다.</p>
+              <div class="bg-indigo-50 rounded-lg p-3 mt-1">
+                <table class="w-full text-xs">
+                  <thead><tr class="text-left"><th class="pb-1"></th><th class="pb-1 font-bold text-indigo-800">기초연금</th><th class="pb-1 font-bold text-indigo-800">기초생활보장(생계급여)</th></tr></thead>
+                  <tbody>
+                    <tr><td class="py-1 font-medium text-slate-600">대상</td><td class="py-1">만 65세 이상</td><td class="py-1">나이 무관, 소득 최하위</td></tr>
+                    <tr><td class="py-1 font-medium text-slate-600">기준</td><td class="py-1">소득인정액 하위 70%</td><td class="py-1">기준 중위소득 32% 이하</td></tr>
+                    <tr><td class="py-1 font-medium text-slate-600">금액</td><td class="py-1">최대 월 349,700원</td><td class="py-1">가구별 차등 지급</td></tr>
+                    <tr><td class="py-1 font-medium text-slate-600">중복</td><td class="py-1" colspan="2">두 제도 동시 수급 가능 (단, 생계급여에서 기초연금액만큼 차감)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#c7d2fe;">
+            <summary class="flex items-center gap-2"><span class="text-lg">⛽</span> 고유가 피해지원금은 누가 받을 수 있나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>2026년 고유가 피해지원금은 아직 구체적인 시행 기준이 확정 발표되지 않았습니다.</strong></p>
+              <p>과거 사례를 참고하면 다음과 같은 대상에게 지원될 가능성이 있어요:</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>화물·택시·버스 등 <strong>영업용 차량 운전자</strong></li>
+                <li>농어업인 (면세유 사용자)</li>
+                <li>취약계층 (기초생활수급자, 차상위계층 등)</li>
+              </ul>
+              <p class="text-xs text-slate-500">※ 정부 발표가 나오면 이 페이지에서 자세한 계산기를 제공할 예정이에요.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#c7d2fe;">
+            <summary class="flex items-center gap-2"><span class="text-lg">🏥</span> 의료급여랑 건강보험은 뭐가 다른가요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>의료급여</strong>는 소득이 매우 낮은 분들에게 국가가 의료비를 지원하는 제도예요.</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li><strong>1종</strong>: 근로무능력 가구 → 입원·외래 본인부담 거의 없음</li>
+                <li><strong>2종</strong>: 근로능력 가구 → 입원 10%, 외래 1,000~1,500원 부담</li>
+              </ul>
+              <p>기초생활수급자, 행려환자, 이재민, 국가유공자 등이 대상이며, 별도 신청이 필요합니다.</p>
+              <p class="text-xs text-slate-500">※ 건강보험과 의료급여는 동시 적용되지 않습니다.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#c7d2fe;">
+            <summary class="flex items-center gap-2"><span class="text-lg">🏘️</span> 주거급여는 어떤 사람이 받나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p>소득인정액이 <strong>기준 중위소득 48% 이하</strong>인 가구가 대상입니다.</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li><strong>임차가구</strong>: 지역·가구원 수에 따라 월세 보조 (서울 1인 최대 약 34만원)</li>
+                <li><strong>자가가구</strong>: 주택 노후도에 따라 수리비 지원 (최대 1,241만원)</li>
+              </ul>
+              <p>기초연금과 별도 제도이므로 <strong>동시 수급이 가능</strong>합니다.</p>
+              <p class="text-xs text-slate-500">※ 신청: 주민센터 또는 복지로(www.bokjiro.go.kr)</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#c7d2fe;">
+            <summary class="flex items-center gap-2"><span class="text-lg">📋</span> 복지 혜택을 한 번에 확인할 방법은 없나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>있습니다!</strong> 아래 방법으로 본인이 받을 수 있는 혜택을 한 번에 조회할 수 있어요.</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li><strong>복지로 "복지서비스 모의계산"</strong>: <a class="underline text-indigo-600" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">www.bokjiro.go.kr</a> → 복지서비스 → 모의계산</li>
+                <li><strong>정부24 "보조금24"</strong>: 내가 받을 수 있는 정부 보조금을 한눈에 확인</li>
+                <li><strong>주민센터 방문</strong>: "받을 수 있는 복지 혜택 전체 확인해주세요"라고 요청하시면 됩니다</li>
+                <li><strong>129 (보건복지상담센터)</strong>: 전화로 상담 가능, 365일 운영</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#c7d2fe;">
+            <summary class="flex items-center gap-2"><span class="text-lg">💸</span> 기초연금 받으면 다른 수당이 줄어드나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p>제도에 따라 다릅니다.</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li><strong>생계급여</strong>: 기초연금 수령액만큼 생계급여가 <strong>차감</strong>됩니다</li>
+                <li><strong>주거급여, 의료급여</strong>: 기초연금과 <strong>무관하게</strong> 별도 지급</li>
+                <li><strong>장애인연금</strong>: 기초급여는 기초연금과 <strong>중복 불가</strong> (택 1), 부가급여는 별도 수령 가능</li>
+                <li><strong>국민연금</strong>: 기초연금 감액 요인이 될 수 있지만 <strong>국민연금 자체가 줄지는 않음</strong></li>
+              </ul>
+              <p class="text-xs text-slate-500">※ 본인 상황에 맞는 정확한 조합은 주민센터에서 확인하시는 것이 가장 좋습니다.</p>
+            </div>
+          </details>
+
+        </div>
+      </section>
+
+      <!-- Benefits Teaser (맨 마지막) -->
+      <section class="mt-6 p-5 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200">
+        <h2 class="text-lg font-bold text-emerald-800 mb-1">다른 복지 혜택도 확인해보세요</h2>
+        <p class="text-sm text-emerald-700 mb-4">2026년 정부 지원금을 빠짐없이 받으실 수 있도록 준비 중이에요</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="benefit-teaser-card">
+            <span class="text-2xl">💰</span>
+            <h3 class="font-bold text-sm mt-1 text-slate-800">기초생활보장</h3>
+            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+          </div>
+          <div class="benefit-teaser-card">
+            <span class="text-2xl">🏥</span>
+            <h3 class="font-bold text-sm mt-1 text-slate-800">의료급여</h3>
+            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+          </div>
+          <div class="benefit-teaser-card">
+            <span class="text-2xl">🏠</span>
+            <h3 class="font-bold text-sm mt-1 text-slate-800">주거급여</h3>
+            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+          </div>
+          <div class="benefit-teaser-card">
+            <span class="text-2xl">♿</span>
+            <h3 class="font-bold text-sm mt-1 text-slate-800">장애인연금</h3>
+            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+          </div>
+          <div id="goto-fuel" class="benefit-teaser-card" style="cursor:pointer; border-color:#f97316;">
+            <span class="text-2xl">⛽</span>
+            <h3 class="font-bold text-sm mt-1 text-slate-800">고유가 피해지원금</h3>
+            <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
+          </div>
+          <div class="benefit-teaser-card">
+            <span class="text-2xl">🆘</span>
+            <h3 class="font-bold text-sm mt-1 text-slate-800">긴급복지지원</h3>
+            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+          </div>
+        </div>
       </section>
     </main>
   </section>
 
+  <!-- ===== 고유가 피해지원금 페이지 ===== -->
+  <section id="fuel-support" class="hidden" style="background:linear-gradient(180deg,#fff7ed 0%,#fffbf5 40%,#f8fafc 100%); min-height:100vh; padding-bottom:100px;">
+    <header style="background:linear-gradient(135deg,#9a3412 0%,#ea580c 50%,#f97316 100%); color:#fff; padding:2.5rem 1.5rem 3rem; text-align:center; position:relative; overflow:hidden;">
+      <p class="text-orange-200 text-sm font-medium mb-2">2026년 3차 민생지원금</p>
+      <h1 class="text-3xl sm:text-4xl font-black mb-3 leading-tight">고유가 피해지원금<br>1인당 최대 60만원</h1>
+      <p class="text-orange-100 text-lg">소득 하위 70% · 4월 27일부터 순차 지급</p>
+      <div style="content:'';position:absolute;bottom:-1px;left:0;right:0;height:40px;background:#fff7ed;border-radius:50% 50% 0 0/100% 100% 0 0;"></div>
+    </header>
+    <div style="max-width:720px; margin:-1rem auto 0; padding:0 1rem; position:relative; z-index:1;">
+
+      <!-- 핵심 요약 -->
+      <div class="p-5 rounded-2xl bg-white border border-orange-200 shadow-sm -mt-4 relative z-10 mb-6">
+        <h2 class="text-lg font-bold text-slate-800 mb-2">한눈에 보기</h2>
+        <div class="bg-orange-50 rounded-xl p-4 mb-3">
+          <p class="text-sm text-orange-900 leading-relaxed">
+            <strong>2026년 3차 민생지원금(고유가 피해지원금)</strong>은 고유가·고물가로 어려움을 겪는 국민을 위해
+            정부가 <strong>소득 하위 70%</strong>(건강보험료 기준) 약 <strong>3,577만 명</strong>에게 지급하는 직접 지원금입니다.
+            1인당 <strong>최소 10만원 ~ 최대 60만원</strong>을 카드 충전 또는 지역사랑상품권으로 받을 수 있습니다.
+          </p>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-slate-50 rounded-lg p-3">
+            <span class="text-2xl block mb-1">👥</span>
+            <span class="text-xs font-bold text-slate-700">지급 대상</span>
+            <span class="block text-sm font-black text-orange-600 mt-0.5">소득 하위 70%</span>
+          </div>
+          <div class="bg-slate-50 rounded-lg p-3">
+            <span class="text-2xl block mb-1">💰</span>
+            <span class="text-xs font-bold text-slate-700">지원 금액</span>
+            <span class="block text-sm font-black text-orange-600 mt-0.5">10~60만원</span>
+          </div>
+          <div class="bg-slate-50 rounded-lg p-3">
+            <span class="text-2xl block mb-1">📅</span>
+            <span class="text-xs font-bold text-slate-700">지급 시작</span>
+            <span class="block text-sm font-black text-orange-600 mt-0.5">4월 27일~</span>
+          </div>
+        </div>
+        <button id="fuel-back-to-pension" class="mt-4 w-full py-3 rounded-xl font-bold text-white" style="background:linear-gradient(135deg,#ea580c,#f97316); box-shadow:0 2px 10px rgba(249,115,22,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 기초연금 계산기로 돌아가기</button>
+      </div>
+
+      <!-- 지급 금액 상세 -->
+      <div class="p-5 bg-white rounded-2xl border border-orange-100 shadow-sm mb-6">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-2xl">💵</span>
+          <h2 class="text-lg font-bold text-orange-900">지급 금액 안내</h2>
+        </div>
+        <div class="bg-orange-50 rounded-xl p-4 mb-3">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left border-b border-orange-200">
+                <th class="pb-2 font-bold text-orange-800">구분</th>
+                <th class="pb-2 font-bold text-orange-800 text-right">지급액</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-700">
+              <tr class="border-b border-orange-100"><td class="py-2.5">기초생활수급자 (생계·의료)</td><td class="py-2.5 text-right font-black text-orange-700">55~60만원</td></tr>
+              <tr class="border-b border-orange-100"><td class="py-2.5">차상위계층 · 한부모가족</td><td class="py-2.5 text-right font-black text-orange-700">45~50만원</td></tr>
+              <tr class="border-b border-orange-100"><td class="py-2.5">특별지원 대상</td><td class="py-2.5 text-right font-black text-orange-700">25만원</td></tr>
+              <tr class="border-b border-orange-100"><td class="py-2.5">우대지원 대상</td><td class="py-2.5 text-right font-black text-orange-700">20만원</td></tr>
+              <tr class="border-b border-orange-100"><td class="py-2.5">일반 - 비수도권</td><td class="py-2.5 text-right font-black text-orange-700">15만원</td></tr>
+              <tr><td class="py-2.5">일반 - 수도권</td><td class="py-2.5 text-right font-black text-orange-700">10만원</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-slate-500">※ 건강보험료 기준 소득 하위 70% 이내인 분이 대상이며, 개인 단위로 지급됩니다.</p>
+      </div>
+
+      <!-- 지급 일정 -->
+      <div class="p-5 bg-white rounded-2xl border border-orange-100 shadow-sm mb-6">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-2xl">📆</span>
+          <h2 class="text-lg font-bold text-orange-900">지급 일정</h2>
+        </div>
+        <div class="space-y-3">
+          <div class="bg-orange-50 rounded-xl p-4">
+            <h3 class="font-bold text-orange-800 mb-1">1차 지급 — 4월 27일(일)</h3>
+            <p class="text-sm text-slate-700">기초생활수급자, 차상위계층, 한부모가족 등 <strong>취약계층 우선 지급</strong></p>
+          </div>
+          <div class="bg-orange-50 rounded-xl p-4">
+            <h3 class="font-bold text-orange-800 mb-1">2차 지급 — 5월 18일(월) ~ 7월 3일(금)</h3>
+            <p class="text-sm text-slate-700"><strong>일반 대상자</strong>는 출생연도 끝자리에 따라 요일제로 순차 신청</p>
+          </div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-3">
+          <h3 class="font-bold text-amber-800 text-sm mb-2">요일제 신청 안내 (출생연도 끝자리)</h3>
+          <div class="grid grid-cols-5 gap-1 text-center text-xs">
+            <div class="bg-white rounded-lg p-2"><span class="block font-bold text-amber-700">월요일</span><span class="block text-lg font-black mt-0.5">1, 6</span></div>
+            <div class="bg-white rounded-lg p-2"><span class="block font-bold text-amber-700">화요일</span><span class="block text-lg font-black mt-0.5">2, 7</span></div>
+            <div class="bg-white rounded-lg p-2"><span class="block font-bold text-amber-700">수요일</span><span class="block text-lg font-black mt-0.5">3, 8</span></div>
+            <div class="bg-white rounded-lg p-2"><span class="block font-bold text-amber-700">목요일</span><span class="block text-lg font-black mt-0.5">4, 9</span></div>
+            <div class="bg-white rounded-lg p-2"><span class="block font-bold text-amber-700">금요일</span><span class="block text-lg font-black mt-0.5">5, 0</span></div>
+          </div>
+          <p class="text-xs text-amber-700 mt-2 text-center">※ 해당 요일 이후에는 아무 날이나 신청 가능합니다</p>
+        </div>
+      </div>
+
+      <!-- Q&A -->
+      <div class="p-5 bg-white rounded-2xl border border-orange-100 shadow-sm mb-6">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-2xl">💬</span>
+          <h2 class="text-lg font-bold text-orange-900">자주 묻는 질문</h2>
+        </div>
+        <p class="text-sm text-slate-500 mb-4">고유가 피해지원금(3차 민생지원금)에 대해 가장 많이 물어보는 질문들이에요</p>
+
+        <div class="space-y-3">
+
+          <details class="faq-item" style="border-color:#fed7aa;">
+            <summary class="flex items-center gap-2"><span class="text-lg">❓</span> 고유가 피해지원금이 정확히 뭔가요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>2026년 3차 민생지원금</strong>의 공식 명칭이 '고유가 피해지원금'입니다.</p>
+              <p>국제 유가 상승과 물가 부담을 줄여주기 위해, 정부가 소득 하위 70% 국민 약 <strong>3,577만 명</strong>에게 직접 지급하는 지원금이에요.</p>
+              <p>카드 충전금 또는 지역사랑상품권 형태로 지급되며, <strong>현금 인출은 불가</strong>합니다.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#fed7aa;">
+            <summary class="flex items-center gap-2"><span class="text-lg">👥</span> 누가 받을 수 있나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>건강보험료 기준 소득 하위 70%</strong>에 해당하면 받을 수 있습니다.</p>
+              <div class="bg-orange-50 rounded-lg p-3 mt-1">
+                <ul class="space-y-2">
+                  <li class="flex gap-2"><span>✅</span><div><strong>기초생활수급자</strong> (생계·의료급여)</div></li>
+                  <li class="flex gap-2"><span>✅</span><div><strong>차상위계층 · 한부모가족</strong></div></li>
+                  <li class="flex gap-2"><span>✅</span><div><strong>건강보험료 하위 70% 이내</strong> 일반 국민</div></li>
+                </ul>
+              </div>
+              <p class="text-xs text-slate-500 mt-2">※ 본인의 건강보험료 납부액으로 대상 여부를 확인할 수 있습니다. 국민건강보험공단(1577-1000)에 문의하세요.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#fed7aa;">
+            <summary class="flex items-center gap-2"><span class="text-lg">📝</span> 어떻게 신청하나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p>3가지 방법으로 신청할 수 있습니다:</p>
+              <div class="bg-orange-50 rounded-lg p-3 mt-1">
+                <ul class="space-y-2">
+                  <li class="flex gap-2"><span>📱</span><div><strong>카드사 앱</strong><br><span class="text-xs text-slate-500">본인 명의 신용·체크카드 카드사 앱에서 신청 → 카드에 충전</span></div></li>
+                  <li class="flex gap-2"><span>🎫</span><div><strong>지역사랑상품권 앱</strong><br><span class="text-xs text-slate-500">거주지역 지역사랑상품권 앱에서 신청 → 상품권으로 지급</span></div></li>
+                  <li class="flex gap-2"><span>🏢</span><div><strong>주민센터 방문</strong><br><span class="text-xs text-slate-500">앱 사용이 어려운 분은 주민센터에서 직접 신청 가능</span></div></li>
+                </ul>
+              </div>
+              <p class="text-xs text-slate-500 mt-2">※ 신분증을 꼭 지참하세요. 대리 신청은 가족관계증명서가 필요합니다.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#fed7aa;">
+            <summary class="flex items-center gap-2"><span class="text-lg">🛒</span> 어디서 사용할 수 있나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>매출액 30억원 이하 소상공인 매장</strong>에서 사용할 수 있습니다.</p>
+              <div class="bg-orange-50 rounded-lg p-3 mt-1">
+                <p class="font-bold text-orange-800 mb-1">사용 가능한 곳</p>
+                <ul class="space-y-1">
+                  <li class="flex gap-2"><span>⭕</span> 동네 슈퍼마켓, 편의점, 식당, 카페</li>
+                  <li class="flex gap-2"><span>⭕</span> 동네 미용실, 세탁소, 약국</li>
+                  <li class="flex gap-2"><span>⭕</span> 전통시장, 소규모 가게</li>
+                </ul>
+                <p class="font-bold text-red-700 mt-3 mb-1">사용할 수 없는 곳</p>
+                <ul class="space-y-1">
+                  <li class="flex gap-2"><span>❌</span> 대형마트, 백화점, SSM(기업형 슈퍼)</li>
+                  <li class="flex gap-2"><span>❌</span> 유흥업소, 사행업종 (노래방, 도박 등)</li>
+                  <li class="flex gap-2"><span>❌</span> 온라인 쇼핑몰</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#fed7aa;">
+            <summary class="flex items-center gap-2"><span class="text-lg">⏰</span> 사용 기한이 있나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p>네, <strong>2026년 8월 31일까지</strong> 사용해야 합니다.</p>
+              <p>기한이 지나면 잔액은 자동 소멸되므로, 꼭 기한 내에 사용하세요!</p>
+              <div class="bg-red-50 border border-red-200 rounded-lg p-3 mt-1">
+                <p class="text-sm font-bold text-red-700">중요: 현금으로 인출하거나 환불받을 수 없습니다!</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#fed7aa;">
+            <summary class="flex items-center gap-2"><span class="text-lg">🔄</span> 기초연금이나 다른 혜택과 중복으로 받을 수 있나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>네, 중복 수령이 가능합니다.</strong></p>
+              <p>민생지원금은 별도의 긴급 지원이므로 기존 복지 수급에 영향을 주지 않습니다:</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li><strong>기초연금</strong>과 중복 가능</li>
+                <li><strong>기초생활수급</strong>(생계·의료급여)과 중복 가능</li>
+                <li><strong>장애인연금, 양육수당</strong> 등과 중복 가능</li>
+              </ul>
+              <p class="text-xs text-slate-500">※ 소득인정액 산정에도 포함되지 않습니다.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#fed7aa;">
+            <summary class="flex items-center gap-2"><span class="text-lg">👴</span> 앱 사용이 어려운 어르신은 어떻게 하나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p><strong>주민센터에 직접 방문</strong>하시면 됩니다.</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>신분증(주민등록증)만 가지고 가시면 돼요</li>
+                <li>직원이 신청부터 수령까지 도와드립니다</li>
+                <li>가족이 대리 신청할 경우 <strong>가족관계증명서 + 위임장</strong> 필요</li>
+              </ul>
+              <p>주민센터 운영시간: 평일 오전 9시 ~ 오후 6시</p>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#fed7aa;">
+            <summary class="flex items-center gap-2"><span class="text-lg">📞</span> 어디에 문의하면 되나요?</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <div class="bg-orange-50 rounded-lg p-3 mt-1 space-y-2">
+                <div class="flex gap-2"><span>📞</span><div><strong>민생지원금 전용 콜센터</strong>: 1533-1300</div></div>
+                <div class="flex gap-2"><span>📞</span><div><strong>건강보험공단</strong> (대상 여부 확인): 1577-1000</div></div>
+                <div class="flex gap-2"><span>📞</span><div><strong>주민센터</strong>: 거주지 주민센터 (방문 신청·문의)</div></div>
+                <div class="flex gap-2"><span>📞</span><div><strong>보건복지상담센터</strong>: 129 (복지 전반 상담)</div></div>
+                <div class="flex gap-2"><span>📞</span><div><strong>정부 대표</strong>: 110 (정부 정책 전반)</div></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" style="border-color:#fed7aa;">
+            <summary class="flex items-center gap-2"><span class="text-lg">⚠️</span> 사기 주의! 지원금 사칭 문자를 받았어요</summary>
+            <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
+              <p class="font-bold text-red-700">민생지원금을 사칭한 스미싱(문자 사기)이 매우 많습니다!</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>정부는 문자로 <strong>링크 클릭을 요구하지 않습니다</strong></li>
+                <li><strong>개인정보(주민번호, 계좌번호)를 문자로 요구하지 않습니다</strong></li>
+                <li>의심 문자를 받으면 <strong>118 (불법스팸신고센터)</strong>에 즉시 신고하세요</li>
+                <li>공식 신청은 <strong>카드사 앱, 지역사랑상품권 앱, 주민센터</strong>에서만 가능합니다</li>
+              </ul>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- 주의사항 -->
+      <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl mb-6">
+        <p class="text-sm text-amber-800 leading-relaxed">
+          <strong>안내:</strong> 이 페이지의 정보는 2026년 4월 기준 정부 발표 내용을 바탕으로 작성되었습니다.
+          세부 사항은 변경될 수 있으니, <strong>최신 정보는 민생지원금 콜센터(1533-1300)</strong>에서 확인하세요.
+        </p>
+      </div>
+
+      <button id="fuel-back-bottom" class="w-full py-3.5 rounded-xl font-bold text-white mb-8" style="background:linear-gradient(135deg,#ea580c,#f97316); box-shadow:0 2px 10px rgba(249,115,22,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 기초연금 계산기로 돌아가기</button>
+    </div>
+  </section>
+
+  <!-- ===== Game Hub ===== -->
   <section id="game-hub" class="hidden min-h-screen py-8">
     <div class="max-w-6xl mx-auto px-4">
       <div class="mb-8 text-center">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">🎮 추억의 플래시 게임</h1>
-        <p class="text-gray-600">클래식 게임을 즐겨보세요</p>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">추억의 게임 모음</h1>
+        <p class="text-gray-600">잠시 쉬어가세요</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div data-game="omok" class="game-card">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-12 h-12 bg-gradient-to-br from-gray-800 to-black rounded-full flex items-center justify-center text-white text-xl">⚫</div>
-            <div>
-              <h3 class="text-xl font-bold">오목</h3>
-              <p class="text-sm text-gray-600">AI 대전 · 2인 대전</p>
-            </div>
+            <div><h3 class="text-xl font-bold">오목</h3><p class="text-sm text-gray-600">AI 대전 · 2인 대전</p></div>
           </div>
           <p class="text-sm text-gray-500">클래식 보드게임을 온라인으로</p>
         </div>
-
         <div data-game="g2048" class="game-card">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-lg">2048</div>
-            <div>
-              <h3 class="text-xl font-bold">2048</h3>
-              <p class="text-sm text-gray-600">숫자 퍼즐</p>
-            </div>
+            <div><h3 class="text-xl font-bold">2048</h3><p class="text-sm text-gray-600">숫자 퍼즐</p></div>
           </div>
           <p class="text-sm text-gray-500">슬라이드로 타일을 합쳐 2048 만들기</p>
         </div>
-
         <div data-game="snake" class="game-card">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white text-xl">🐍</div>
-            <div>
-              <h3 class="text-xl font-bold">스네이크</h3>
-              <p class="text-sm text-gray-600">아케이드</p>
-            </div>
+            <div><h3 class="text-xl font-bold">스네이크</h3><p class="text-sm text-gray-600">아케이드</p></div>
           </div>
           <p class="text-sm text-gray-500">추억의 뱀 게임</p>
         </div>
-
         <div data-game="breakout" class="game-card">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white text-xl">🧱</div>
-            <div>
-              <h3 class="text-xl font-bold">벽돌깨기</h3>
-              <p class="text-sm text-gray-600">아케이드</p>
-            </div>
+            <div><h3 class="text-xl font-bold">벽돌깨기</h3><p class="text-sm text-gray-600">아케이드</p></div>
           </div>
           <p class="text-sm text-gray-500">공을 튕겨 벽돌을 모두 깨뜨리세요</p>
         </div>
-
         <div data-game="tetris" class="game-card">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl">🎯</div>
-            <div>
-              <h3 class="text-xl font-bold">테트리스</h3>
-              <p class="text-sm text-gray-600">퍼즐</p>
-            </div>
+            <div><h3 class="text-xl font-bold">테트리스</h3><p class="text-sm text-gray-600">퍼즐</p></div>
           </div>
           <p class="text-sm text-gray-500">블록을 쌓아 라인을 완성하세요</p>
         </div>
-
         <div data-game="flappy" class="game-card">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-white text-xl">🦅</div>
-            <div>
-              <h3 class="text-xl font-bold">플래피 버드</h3>
-              <p class="text-sm text-gray-600">아케이드</p>
-            </div>
+            <div><h3 class="text-xl font-bold">플래피 버드</h3><p class="text-sm text-gray-600">아케이드</p></div>
           </div>
           <p class="text-sm text-gray-500">파이프를 피해 날아가세요</p>
         </div>
@@ -571,9 +912,10 @@
     </div>
   </section>
 
+  <!-- ===== Omok Game ===== -->
   <section id="omok-game" class="hidden min-h-screen bg-gradient-to-br from-purple-100 to-purple-200">
     <div class="max-w-2xl mx-auto px-4 py-8">
-      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
       <div id="game-mode-selection" class="text-center py-12">
         <h2 class="text-3xl font-bold mb-8">오목 게임</h2>
         <div class="space-y-4 max-w-sm mx-auto">
@@ -586,9 +928,7 @@
         <div id="status-box" class="bg-white p-4 rounded-xl shadow mb-6 text-center">
           <p id="status-text" class="text-lg font-semibold">게임을 시작하세요</p>
         </div>
-        <div class="board-container">
-          <canvas id="game-board"></canvas>
-        </div>
+        <div class="board-container"><canvas id="game-board"></canvas></div>
         <div class="mt-6 grid grid-cols-2 gap-4">
           <button id="new-game-btn" class="py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-semibold">🔄 새 게임</button>
           <button id="game-back-btn" class="py-3 bg-gray-600 text-white rounded-xl hover:bg-gray-700 font-semibold">📋 모드 선택</button>
@@ -597,9 +937,10 @@
     </div>
   </section>
 
+  <!-- ===== 2048 Game ===== -->
   <section id="game-2048" class="hidden min-h-screen bg-gradient-to-br from-amber-50 to-amber-100">
     <div class="max-w-xl mx-auto px-4 py-8">
-      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
       <div class="bg-white rounded-2xl shadow p-5">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-2xl font-bold">2048</h2>
@@ -609,14 +950,15 @@
           </div>
         </div>
         <div id="g2048-grid" class="g2048-grid select-none"></div>
-        <p class="text-sm text-gray-600 mt-3">키보드 방향키로 조작</p>
+        <p class="text-sm text-gray-600 mt-3">방향키 또는 스와이프로 조작</p>
       </div>
     </div>
   </section>
 
+  <!-- ===== Snake Game ===== -->
   <section id="game-snake" class="hidden min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
     <div class="max-w-xl mx-auto px-4 py-8">
-      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
       <div class="bg-white rounded-2xl shadow p-5">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-2xl font-bold">스네이크</h2>
@@ -626,16 +968,17 @@
           </div>
         </div>
         <div class="flex justify-center">
-          <canvas id="snake-canvas" width="420" height="420" style="background: #0f172a; border-radius: 12px;"></canvas>
+          <canvas id="snake-canvas" width="420" height="420" style="background:#0f172a;border-radius:12px;"></canvas>
         </div>
         <p class="text-sm text-gray-600 mt-3">방향키로 조작</p>
       </div>
     </div>
   </section>
 
+  <!-- ===== Breakout Game ===== -->
   <section id="game-breakout" class="hidden min-h-screen bg-gradient-to-br from-pink-100 to-purple-200">
     <div class="max-w-xl mx-auto px-4 py-8">
-      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
       <div class="bg-white rounded-2xl shadow p-5">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-2xl font-bold">벽돌깨기</h2>
@@ -646,16 +989,17 @@
           </div>
         </div>
         <div class="flex justify-center">
-          <canvas id="breakout-canvas" width="480" height="320" style="background: linear-gradient(180deg, #0a0d12 0%, #0b0f14 40%, #0b0f14 100%); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.5);"></canvas>
+          <canvas id="breakout-canvas" width="480" height="320" style="background:linear-gradient(180deg,#0a0d12,#0b0f14);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.5);"></canvas>
         </div>
         <p class="text-sm text-gray-600 mt-3">마우스나 터치로 패들 조작</p>
       </div>
     </div>
   </section>
 
+  <!-- ===== Tetris Game ===== -->
   <section id="game-tetris" class="hidden min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100">
     <div class="max-w-xl mx-auto px-4 py-8">
-      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
       <div class="bg-white rounded-2xl shadow p-5">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-2xl font-bold">테트리스</h2>
@@ -666,7 +1010,7 @@
           </div>
         </div>
         <div class="flex justify-center gap-4">
-          <canvas id="tetris-board" width="300" height="600" style="background: #1a1a2e; border: 2px solid #444; box-shadow: 0 0 20px rgba(0,0,0,0.5);"></canvas>
+          <canvas id="tetris-board" width="300" height="600" style="background:#1a1a2e;border:2px solid #444;box-shadow:0 0 20px rgba(0,0,0,.5);"></canvas>
           <div class="bg-gray-100 p-3 rounded">
             <div class="text-sm font-bold mb-2">다음 블록</div>
             <canvas id="tetris-next" width="100" height="100"></canvas>
@@ -677,9 +1021,10 @@
     </div>
   </section>
 
+  <!-- ===== Flappy Bird Game ===== -->
   <section id="game-flappy" class="hidden min-h-screen bg-gradient-to-br from-cyan-100 to-blue-200">
     <div class="max-w-xl mx-auto px-4 py-8">
-      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">← 게임 목록</button>
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
       <div class="bg-white rounded-2xl shadow p-5">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-2xl font-bold">플래피 버드</h2>
@@ -690,165 +1035,335 @@
           </div>
         </div>
         <div class="flex justify-center">
-          <canvas id="flappy-canvas" width="480" height="640" style="background: linear-gradient(to bottom, #4EC0CA 0%, #7FD6E1 50%, #9FE6F1 100%); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);"></canvas>
+          <canvas id="flappy-canvas" width="480" height="640" style="background:linear-gradient(to bottom,#4EC0CA 0%,#7FD6E1 50%,#9FE6F1 100%);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.2);"></canvas>
         </div>
         <p class="text-sm text-gray-600 mt-3">Space 또는 클릭/터치로 점프</p>
       </div>
     </div>
   </section>
 
+  <!-- ===== JavaScript ===== -->
   <script>
     let activeGame = null;
     let currentSection = 'pension';
 
     function showSection(sectionName) {
-      document.querySelectorAll('section').forEach(section => {
-        section.classList.add('hidden');
-      });
-      
-      const targetSection = document.getElementById(sectionName);
-      if (targetSection) {
-        targetSection.classList.remove('hidden');
-        currentSection = sectionName;
-      }
-      
+      document.querySelectorAll('body > section').forEach(s => s.classList.add('hidden'));
+      const target = document.getElementById(sectionName);
+      if (target) { target.classList.remove('hidden'); currentSection = sectionName; }
+
       const topNav = document.getElementById('top-nav');
       const floatingBtn = document.getElementById('floating-game-btn');
       const tabPension = document.getElementById('tab-pension');
       const tabGames = document.getElementById('tab-games');
-      
-      if (sectionName === 'pension-container') {
+
+      if (sectionName === 'pension-container' || sectionName === 'fuel-support') {
         topNav.classList.add('hidden');
-        floatingBtn.classList.remove('hidden');
-        if (tabPension && tabGames) {
-          tabPension.classList.add('tab-active');
-          tabPension.classList.remove('tab-inactive');
-          tabGames.classList.add('tab-inactive');
-          tabGames.classList.remove('tab-active');
-        }
+        floatingBtn.classList.add('hidden');
+        if (sectionName === 'pension-container') floatingBtn.classList.remove('hidden');
+        tabPension.classList.add('tab-active'); tabPension.classList.remove('tab-inactive');
+        tabGames.classList.add('tab-inactive'); tabGames.classList.remove('tab-active');
       } else {
         topNav.classList.remove('hidden');
         floatingBtn.classList.add('hidden');
-        if (tabPension && tabGames) {
-          tabGames.classList.add('tab-active');
-          tabGames.classList.remove('tab-inactive');
-          tabPension.classList.add('tab-inactive');
-          tabPension.classList.remove('tab-active');
-        }
+        tabGames.classList.add('tab-active'); tabGames.classList.remove('tab-inactive');
+        tabPension.classList.add('tab-inactive'); tabPension.classList.remove('tab-active');
       }
-      
-      if (sectionName === 'omok-game') {
-        activeGame = 'omok';
-        if (window.omokApp) omokApp.resizeCanvas();
-      } else if (sectionName.startsWith('game-')) {
-        activeGame = sectionName.replace('game-', '');
-      } else {
-        activeGame = null;
-      }
+
+      if (sectionName === 'omok-game') { activeGame = 'omok'; if (window.omokApp) omokApp.resizeCanvas(); }
+      else if (sectionName.startsWith('game-')) { activeGame = sectionName.replace('game-', ''); }
+      else { activeGame = null; }
     }
 
+    /* ================================================
+       PENSION CALCULATOR (2026 기준 - 수정된 산정식)
+       ================================================ */
     const pensionApp = {
       CONFIG: {
         year: 2026,
         incomeThreshold: { single: 2470000, couple: 3952000 },
         basicAsset: { big: 135000000, mid: 85000000, rural: 72500000 },
-        financialDeduction: { single: 20000000, couple: 40000000 },
+        financialDeduction: 20000000,  // 가구유형 무관 2,000만원
         benefit: { single: 349700, couplePer: 279760 },
         workIncomeDeduction: 1160000,
         workIncomeAdditionalDeductionRate: 0.3,
-        assetConversionRate: 0.04 / 12
+        assetConversionRate: 0.04 / 12  // 연 4% → 월
       },
-      
+      currentStepIndex: 0,
+      steps: [],
+      STEP_META: {
+        birth:         { title: '먼저, 생년월을 알려주세요',            desc: '만 65세 이상인지 확인하는 데 필요해요.' },
+        household:     { title: '가구 유형을 선택해주세요',             desc: '혼자 사시는지, 배우자와 함께 사시는지에 따라 기준이 달라요.' },
+        area:          { title: '어디에 거주하고 계신가요?',             desc: '지역에 따라 기본재산 공제액이 달라져요.' },
+        income:        { title: '본인의 월 소득을 알려주세요',           desc: '근로소득과 기타소득을 입력해주세요. 없으면 "없어요"를 눌러주세요.' },
+        spouseIncome:  { title: '배우자분의 월 소득을 알려주세요',       desc: '배우자의 근로소득과 기타소득을 입력해주세요.' },
+        property:      { title: '부동산 정보를 알려주세요',              desc: '주택·토지 시가와 전월세 보증금을 입력해주세요.' },
+        financial:     { title: '금융재산과 자동차를 알려주세요',         desc: '예금, 주식, 자동차 가액을 입력해주세요. 없는 항목은 "없어요"를 눌러주세요.' },
+        debt:          { title: '부채(대출금)가 있으신가요?',            desc: '대출금 등 부채가 있으면 차감해서 계산해드려요.' }
+      },
+
       init() {
-        this.populate();
+        this.populateSelects();
+        this.steps = this.getStepFlow();
         this.bindEvents();
+        this.updateStepUI();
       },
-      
-      populate() {
-        const yearSelect = document.getElementById('birthYear');
-        const monthSelect = document.getElementById('birthMonth');
+
+      populateSelects() {
+        const yearSel = document.getElementById('birthYear');
+        const monthSel = document.getElementById('birthMonth');
         const currentYear = new Date().getFullYear();
-        
-        yearSelect.innerHTML = '';
-        for (let year = currentYear - 65; year >= currentYear - 100; year--) {
-          const option = document.createElement('option');
-          option.value = year;
-          option.textContent = year + '년';
-          yearSelect.appendChild(option);
+        yearSel.innerHTML = '';
+        for (let y = currentYear - 65; y >= currentYear - 100; y--) {
+          const opt = document.createElement('option');
+          opt.value = y; opt.textContent = y + '년';
+          yearSel.appendChild(opt);
         }
-        
-        monthSelect.innerHTML = '';
-        for (let month = 1; month <= 12; month++) {
-          const option = document.createElement('option');
-          option.value = month;
-          option.textContent = month + '월';
-          monthSelect.appendChild(option);
+        monthSel.innerHTML = '';
+        for (let m = 1; m <= 12; m++) {
+          const opt = document.createElement('option');
+          opt.value = m; opt.textContent = m + '월';
+          monthSel.appendChild(opt);
         }
       },
-      
+
+      getStepFlow() {
+        const hh = document.getElementById('household')?.value || 'single';
+        const steps = ['birth', 'household', 'area', 'income'];
+        if (hh === 'couple') steps.push('spouseIncome');
+        steps.push('property', 'financial', 'debt');
+        return steps;
+      },
+
       bindEvents() {
         const form = document.getElementById('pensionForm');
-        const household = document.getElementById('household');
-        
-        household.addEventListener('change', () => this.toggleSpouse());
+        const prevBtn = document.getElementById('wizard-prev');
+        const nextBtn = document.getElementById('wizard-next');
+        const resetBtn = document.getElementById('wizard-reset');
+
+        prevBtn.addEventListener('click', () => this.prevStep());
+        nextBtn.addEventListener('click', () => this.nextStep());
+        resetBtn.addEventListener('click', () => this.resetWizard());
+
         form.addEventListener('submit', (e) => {
           e.preventDefault();
-          this.calculate();
+          if (this.validateCurrentStep()) this.calculate();
         });
-        
-        this.toggleSpouse();
+
+        form.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA') return;
+          e.preventDefault();
+          if (this.isLastStep()) { if (this.validateCurrentStep()) this.calculate(); }
+          else { this.nextStep(); }
+        });
+
+        // Card selections
+        document.querySelectorAll('.sel-card[data-field]').forEach(card => {
+          card.addEventListener('click', () => {
+            const field = card.dataset.field;
+            const value = card.dataset.value;
+            // Deselect siblings
+            card.parentElement.querySelectorAll('.sel-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            // Update hidden input
+            if (field === 'household') {
+              document.getElementById('household').value = value;
+              this.handleHouseholdChange();
+            } else if (field === 'area') {
+              document.getElementById('area-value').value = value;
+            }
+          });
+        });
+
+        // Zero buttons
+        document.querySelectorAll('.zero-btn[data-target]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.target);
+            if (input) {
+              input.value = '0원';
+              this.updateAmountPreview(btn.dataset.target);
+            }
+          });
+        });
+
+        // Amount input previews
+        const amountFields = ['income','otherIncome','spouseIncome','spouseOtherIncome','homeValue','deposit','savings','stocks','car','debt'];
+        amountFields.forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('input', () => this.updateAmountPreview(id));
+            input.addEventListener('blur', () => this.updateAmountPreview(id));
+          }
+        });
       },
-      
-      toggleSpouse() {
-        const household = document.getElementById('household').value;
-        const spouseIncomeField = document.getElementById('spouseIncome');
-        const spouseOtherIncomeField = document.getElementById('spouseOtherIncome');
-        const spouseIncomeLabel = document.querySelector('label[for="spouseIncome"]');
-        const spouseOtherIncomeLabel = document.querySelector('label[for="spouseOtherIncome"]');
-        const spouseTargets = [spouseIncomeField, spouseOtherIncomeField, spouseIncomeLabel, spouseOtherIncomeLabel];
-        
-        if (household === 'couple') {
-          spouseTargets.forEach((el) => {
-            if (el) el.style.display = 'block';
-          });
+
+      updateAmountPreview(id) {
+        const input = document.getElementById(id);
+        const preview = document.getElementById(id + '-preview');
+        if (!input || !preview) return;
+        const val = input.value.trim();
+        if (!val || val === '0' || val === '0원') {
+          preview.textContent = '';
+          return;
+        }
+        const amount = this.parseAmount(val);
+        if (amount > 0) {
+          preview.textContent = '= ' + this.formatKRW(amount);
         } else {
-          spouseTargets.forEach((el) => {
-            if (el) el.style.display = 'none';
-          });
-          if (spouseIncomeField) spouseIncomeField.value = '';
-          if (spouseOtherIncomeField) spouseOtherIncomeField.value = '';
+          preview.textContent = '';
         }
       },
-      
+
+      handleHouseholdChange() {
+        const hh = document.getElementById('household')?.value;
+        if (hh !== 'couple') {
+          const si = document.getElementById('spouseIncome');
+          const soi = document.getElementById('spouseOtherIncome');
+          if (si) si.value = '';
+          if (soi) soi.value = '';
+        }
+        const curKey = this.steps[this.currentStepIndex];
+        this.steps = this.getStepFlow();
+        const idx = this.steps.indexOf(curKey);
+        this.currentStepIndex = idx >= 0 ? idx : Math.min(this.currentStepIndex, this.steps.length - 1);
+        this.updateStepUI();
+      },
+
+      isLastStep() { return this.currentStepIndex === this.steps.length - 1; },
+
+      validateCurrentStep() {
+        const step = this.steps[this.currentStepIndex];
+        if (step === 'area') {
+          if (!document.getElementById('area-value').value) {
+            alert('거주 지역을 선택해주세요.');
+            return false;
+          }
+        }
+        if (step === 'income') {
+          const val = document.getElementById('income').value.trim();
+          if (!val) {
+            alert('근로소득을 입력해주세요. 없으시면 "없어요" 버튼을 눌러주세요.');
+            document.getElementById('income').focus();
+            return false;
+          }
+        }
+        return true;
+      },
+
+      nextStep() {
+        if (!this.validateCurrentStep()) return;
+        if (this.isLastStep()) { this.calculate(); return; }
+        this.currentStepIndex++;
+        this.updateStepUI();
+      },
+
+      prevStep() {
+        if (this.currentStepIndex === 0) return;
+        this.currentStepIndex--;
+        this.updateStepUI();
+      },
+
+      resetWizard() {
+        const form = document.getElementById('pensionForm');
+        const resultDiv = document.getElementById('result');
+        const applyDiv = document.getElementById('applyInfo');
+        if (form) form.reset();
+        if (resultDiv) { resultDiv.style.display = 'none'; resultDiv.innerHTML = ''; }
+        if (applyDiv) { applyDiv.style.display = 'none'; applyDiv.innerHTML = ''; }
+        // Reset card selections
+        document.querySelectorAll('.sel-card').forEach(c => c.classList.remove('selected'));
+        document.querySelector('.sel-card[data-value="single"]')?.classList.add('selected');
+        document.getElementById('household').value = 'single';
+        document.getElementById('area-value').value = '';
+        // Reset previews
+        document.querySelectorAll('.amount-preview').forEach(p => p.textContent = '');
+        this.currentStepIndex = 0;
+        this.steps = this.getStepFlow();
+        this.updateStepUI();
+        form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      },
+
+      updateStepUI() {
+        this.steps = this.getStepFlow();
+        if (this.currentStepIndex >= this.steps.length) this.currentStepIndex = this.steps.length - 1;
+
+        const stepKey = this.steps[this.currentStepIndex];
+        document.querySelectorAll('#pensionForm .wizard-step').forEach(el => el.classList.remove('active'));
+        const activeStep = document.querySelector(`#pensionForm .wizard-step[data-step="${stepKey}"]`);
+        if (activeStep) activeStep.classList.add('active');
+
+        const meta = this.STEP_META[stepKey] || { title: '질문', desc: '' };
+        const stepText = document.getElementById('wizard-step-text');
+        const titleEl = document.getElementById('wizard-question-title');
+        const descEl = document.getElementById('wizard-question-desc');
+        const fill = document.getElementById('wizard-progress-fill');
+        const prevBtn = document.getElementById('wizard-prev');
+        const nextBtn = document.getElementById('wizard-next');
+        const submitBtn = document.getElementById('wizard-submit');
+        const resetBtn = document.getElementById('wizard-reset');
+
+        if (stepText) stepText.textContent = `${this.currentStepIndex + 1} / ${this.steps.length} 단계`;
+        if (titleEl) titleEl.textContent = meta.title;
+        if (descEl) descEl.textContent = meta.desc;
+        if (fill) fill.style.width = `${((this.currentStepIndex + 1) / this.steps.length) * 100}%`;
+        if (prevBtn) prevBtn.disabled = this.currentStepIndex === 0;
+
+        if (nextBtn && submitBtn && resetBtn) {
+          if (this.isLastStep()) {
+            nextBtn.classList.add('hidden');
+            submitBtn.classList.remove('hidden');
+            resetBtn.classList.remove('hidden');
+          } else {
+            nextBtn.classList.remove('hidden');
+            submitBtn.classList.add('hidden');
+            resetBtn.classList.add('hidden');
+          }
+        }
+      },
+
       parseAmount(str) {
         if (!str) return 0;
         str = str.replace(/\s|원|,/g, '');
+        if (str === '없음' || str === '없어요' || str === '모름') return 0;
         let total = 0;
-        
-        const okPattern = str.match(/([0-9.]+)억/);
-        if (okPattern) {
-          total += parseFloat(okPattern[1]) * 100000000;
-          str = str.replace(okPattern[0], '');
-        }
-        
-        const manPattern = str.match(/([0-9.]+)만/);
-        if (manPattern) {
-          total += parseFloat(manPattern[1]) * 10000;
-          str = str.replace(manPattern[0], '');
-        }
-        
-        const nums = str.match(/[0-9]+/);
-        if (nums) {
-          total += parseInt(nums[0], 10);
-        }
-        
+
+        const okMatch = str.match(/([0-9.]+)억/);
+        if (okMatch) { total += parseFloat(okMatch[1]) * 100000000; str = str.replace(okMatch[0], ''); }
+
+        const cheonManMatch = str.match(/([0-9.]+)천만/);
+        if (cheonManMatch) { total += parseFloat(cheonManMatch[1]) * 10000000; str = str.replace(cheonManMatch[0], ''); }
+
+        const manMatch = str.match(/([0-9.]+)만/);
+        if (manMatch) { total += parseFloat(manMatch[1]) * 10000; str = str.replace(manMatch[0], ''); }
+
+        const cheonMatch = str.match(/([0-9.]+)천/);
+        if (cheonMatch) { total += parseFloat(cheonMatch[1]) * 1000; str = str.replace(cheonMatch[0], ''); }
+
+        const numMatch = str.match(/[0-9]+/);
+        if (numMatch) { total += parseInt(numMatch[0], 10); }
+
         return isNaN(total) ? 0 : total;
       },
-      
+
       formatKRW(amount) {
-        return amount.toLocaleString('ko-KR') + '원';
+        if (amount === 0) return '0원';
+        const abs = Math.abs(Math.round(amount));
+        const sign = amount < 0 ? '-' : '';
+        const uk = Math.floor(abs / 100000000);
+        const man = Math.floor((abs % 100000000) / 10000);
+        const rest = abs % 10000;
+        let parts = [];
+        if (uk > 0) parts.push(uk + '억');
+        if (man > 0) parts.push(man.toLocaleString() + '만');
+        if (rest > 0) parts.push(rest.toLocaleString());
+        if (parts.length === 0) parts.push('0');
+        return sign + parts.join(' ') + '원';
       },
-      
+
+      formatKRWNum(amount) {
+        return Math.round(amount).toLocaleString('ko-KR') + '원';
+      },
+
       calculateAge(year, month) {
         const today = new Date();
         let age = today.getFullYear() - year;
@@ -857,22 +1372,19 @@
       },
 
       applyWorkIncomeDeduction(workIncome) {
-        const afterBaseDeduction = Math.max(0, workIncome - this.CONFIG.workIncomeDeduction);
-        const recognized = afterBaseDeduction * (1 - this.CONFIG.workIncomeAdditionalDeductionRate);
-        return Math.round(recognized);
+        // 소득평가액 중 근로소득 = {근로소득 - 기본공제(116만원)} × 0.7
+        const afterBase = Math.max(0, workIncome - this.CONFIG.workIncomeDeduction);
+        return Math.round(afterBase * (1 - this.CONFIG.workIncomeAdditionalDeductionRate));
       },
-      
+
       calculate() {
         const year = parseInt(document.getElementById('birthYear').value);
         const month = parseInt(document.getElementById('birthMonth').value);
         const household = document.getElementById('household').value;
-        const area = document.querySelector('input[name="area"]:checked')?.value;
-        
-        if (!area) {
-          alert('거주 지역을 선택해주세요.');
-          return;
-        }
-        
+        const area = document.getElementById('area-value').value;
+
+        if (!area) { alert('거주 지역을 선택해주세요.'); return; }
+
         const income = this.parseAmount(document.getElementById('income').value);
         const otherIncome = this.parseAmount(document.getElementById('otherIncome').value);
         const spouseIncome = this.parseAmount(document.getElementById('spouseIncome').value);
@@ -883,1669 +1395,695 @@
         const stocks = this.parseAmount(document.getElementById('stocks').value);
         const car = this.parseAmount(document.getElementById('car').value);
         const debt = this.parseAmount(document.getElementById('debt').value);
-        
-        const age = this.calculateAge(year, month);
-        
-        const recognizedWorkIncome = this.applyWorkIncomeDeduction(income) + this.applyWorkIncomeDeduction(spouseIncome);
-        const recognizedOtherIncome = otherIncome + spouseOtherIncome;
-        const grossIncome = income + otherIncome + spouseIncome + spouseOtherIncome;
-        const recognizedIncomeOnly = recognizedWorkIncome + recognizedOtherIncome;
 
-        const generalAssets = homeValue + deposit + car - debt;
+        const age = this.calculateAge(year, month);
+
+        // ===== 소득평가액 =====
+        const myWorkRecognized = this.applyWorkIncomeDeduction(income);
+        const spouseWorkRecognized = this.applyWorkIncomeDeduction(spouseIncome);
+        const totalWorkRecognized = myWorkRecognized + spouseWorkRecognized;
+        const totalOtherIncome = otherIncome + spouseOtherIncome;
+        const incomeEvaluation = totalWorkRecognized + totalOtherIncome;
+
+        // ===== 재산의 소득환산액 =====
+        // 공식: {(일반재산 - 기본재산액) + (금융재산 - 2000만원) - 부채} × (연4%/12)
+        const generalAssets = homeValue + deposit + car;  // 부채 미포함
         const financialAssets = savings + stocks;
-        
         const basicAssetAmount = this.CONFIG.basicAsset[area];
-        const netGeneralAssets = Math.max(0, generalAssets - basicAssetAmount);
-        
-        const financialDeduction = this.CONFIG.financialDeduction[household];
-        const netFinancialAssets = Math.max(0, financialAssets - financialDeduction);
-        
-        const assetIncome = (netGeneralAssets + netFinancialAssets) * this.CONFIG.assetConversionRate;
-        const totalRecognizedIncome = recognizedIncomeOnly + assetIncome;
-        
+
+        // 전체 합산 후 max(0) 적용, 부채는 마지막에 차감
+        const netAssetTotal = (generalAssets - basicAssetAmount) + (financialAssets - this.CONFIG.financialDeduction) - debt;
+        const assetIncome = Math.max(0, netAssetTotal) * this.CONFIG.assetConversionRate;
+
+        // ===== 소득인정액 =====
+        const totalRecognizedIncome = incomeEvaluation + assetIncome;
+
+        // ===== 판정 =====
         const threshold = this.CONFIG.incomeThreshold[household];
         const eligible = age >= 65 && totalRecognizedIncome <= threshold;
-        
-        this.showResult(
-          age,
-          totalRecognizedIncome,
-          threshold,
-          household,
-          eligible,
-          { grossIncome, recognizedWorkIncome, recognizedOtherIncome, assetIncome }
-        );
+
+        const grossIncome = income + otherIncome + spouseIncome + spouseOtherIncome;
+
+        this.showResult(age, totalRecognizedIncome, threshold, household, eligible, {
+          grossIncome, totalWorkRecognized, totalOtherIncome,
+          incomeEvaluation, generalAssets, financialAssets,
+          basicAssetAmount, netAssetTotal, assetIncome, debt
+        });
       },
-      
-      showResult(age, totalIncome, threshold, household, eligible, incomeBreakdown) {
+
+      showResult(age, totalIncome, threshold, household, eligible, bd) {
         const resultDiv = document.getElementById('result');
         const applyDiv = document.getElementById('applyInfo');
-        
         let html = '';
-        
+
         if (eligible) {
           const benefit = household === 'single' ? this.CONFIG.benefit.single : this.CONFIG.benefit.couplePer;
           html = `
             <div class="result-success">
-              <p>✅ <strong>${this.CONFIG.year}년 기준 기초연금 수급 가능성이 높습니다!</strong></p>
-              <p class="mt-3">💰 예상 월 지급액: <strong>${this.formatKRW(benefit)}</strong>
-              ${household === 'couple' ? ` (부부 합계: ${this.formatKRW(benefit * 2)})` : ''}</p>
-              <div class="mt-4">
-                <p class="font-semibold">📊 소득인정액 분석:</p>
-                <ul class="mt-2 space-y-1">
-                  <li>• 입력 월소득 합계: ${this.formatKRW(incomeBreakdown.grossIncome)}</li>
-                  <li>• 근로소득 인정액(공제 반영): ${this.formatKRW(incomeBreakdown.recognizedWorkIncome)}</li>
-                  <li>• 기타소득 인정액: ${this.formatKRW(incomeBreakdown.recognizedOtherIncome)}</li>
-                  <li>• 재산의 소득환산액: ${this.formatKRW(Math.round(incomeBreakdown.assetIncome))}</li>
-                  <li>• 총 소득인정액: ${this.formatKRW(Math.round(totalIncome))}</li>
-                  <li>• 선정기준액: ${this.formatKRW(threshold)}</li>
+              <span class="result-emoji">🎉</span>
+              <p class="text-xl font-black text-green-800 mb-1">기초연금 수급 가능성이 높습니다!</p>
+              <p class="text-green-700 mb-3">
+                예상 월 지급액: <strong class="text-2xl">${this.formatKRWNum(benefit)}</strong>
+                ${household === 'couple' ? `<br><span class="text-sm">(부부 합계: ${this.formatKRWNum(benefit * 2)})</span>` : ''}
+              </p>
+              <div class="result-breakdown">
+                <p class="font-bold text-sm text-green-800 mb-2">소득인정액 산출 내역</p>
+                <ul class="space-y-0.5 text-green-900">
+                  <li>입력 월소득 합계: <strong>${this.formatKRWNum(bd.grossIncome)}</strong></li>
+                  <li>→ 근로소득 인정액 (공제 후): <strong>${this.formatKRWNum(bd.totalWorkRecognized)}</strong></li>
+                  <li>→ 기타소득 합계: <strong>${this.formatKRWNum(bd.totalOtherIncome)}</strong></li>
+                  <li>→ 소득평가액: <strong>${this.formatKRWNum(bd.incomeEvaluation)}</strong></li>
+                  <li class="pt-1 border-t border-green-200">일반재산 합계: ${this.formatKRW(bd.generalAssets)} (기본재산 공제: ${this.formatKRW(bd.basicAssetAmount)})</li>
+                  <li>금융재산 합계: ${this.formatKRW(bd.financialAssets)} (공제: 2,000만원)</li>
+                  <li>부채 차감: ${this.formatKRW(bd.debt)}</li>
+                  <li>→ 재산의 소득환산액: <strong>${this.formatKRWNum(Math.round(bd.assetIncome))}</strong></li>
+                  <li class="pt-1 border-t border-green-200 font-bold">총 소득인정액: ${this.formatKRWNum(Math.round(totalIncome))}</li>
+                  <li class="font-bold">선정기준액: ${this.formatKRWNum(threshold)}</li>
                 </ul>
               </div>
-            </div>
-          `;
+            </div>`;
         } else {
+          const reasons = [];
+          if (age < 65) reasons.push(`<li>연령 미충족: 만 65세 이상 필요 (현재 만 ${age}세 → ${65 - age}년 후 신청 가능)</li>`);
+          if (totalIncome > threshold) reasons.push(`
+            <li>소득인정액 초과
+              <ul class="ml-4 mt-1 space-y-0.5">
+                <li>- 소득인정액: <strong>${this.formatKRWNum(Math.round(totalIncome))}</strong></li>
+                <li>- 선정기준액: <strong>${this.formatKRWNum(threshold)}</strong></li>
+                <li>- 초과금액: <strong>${this.formatKRWNum(Math.round(totalIncome - threshold))}</strong></li>
+              </ul>
+            </li>`);
+
           html = `
             <div class="result-fail">
-              <p>❌ <strong>현재 기준으로는 수급 요건을 충족하지 못합니다.</strong></p>
-              <div class="mt-4">
-                <p class="font-semibold">📊 미충족 사유:</p>
-                <ul class="mt-2 space-y-1">
-                  ${age < 65 ? `<li>• 연령 조건: 만 65세 이상 (현재 ${age}세, ${65 - age}년 후 신청 가능)</li>` : ''}
-                  ${totalIncome > threshold ? `
-                    <li>• 소득인정액 초과</li>
-                    <li class="ml-4">- 귀하의 소득인정액: ${this.formatKRW(Math.round(totalIncome))}</li>
-                    <li class="ml-4">- 선정기준액: ${this.formatKRW(threshold)}</li>
-                    <li class="ml-4">- 초과금액: ${this.formatKRW(Math.round(totalIncome - threshold))}</li>
-                  ` : ''}
+              <span class="result-emoji">😔</span>
+              <p class="text-xl font-black text-red-800 mb-1">현재 기준으로는 수급이 어려울 수 있어요</p>
+              <p class="text-red-700 text-sm mb-3">아래 사유를 확인해주세요. 실제 심사 결과는 다를 수 있습니다.</p>
+              <div class="result-breakdown">
+                <p class="font-bold text-sm text-red-800 mb-2">미충족 사유</p>
+                <ul class="space-y-1 text-red-900">${reasons.join('')}</ul>
+              </div>
+              <div class="result-breakdown mt-3">
+                <p class="font-bold text-sm text-red-800 mb-2">상세 산출 내역</p>
+                <ul class="space-y-0.5 text-red-900">
+                  <li>소득평가액: ${this.formatKRWNum(bd.incomeEvaluation)} (근로: ${this.formatKRWNum(bd.totalWorkRecognized)} + 기타: ${this.formatKRWNum(bd.totalOtherIncome)})</li>
+                  <li>재산의 소득환산액: ${this.formatKRWNum(Math.round(bd.assetIncome))}</li>
+                  <li class="font-bold">총 소득인정액: ${this.formatKRWNum(Math.round(totalIncome))}</li>
                 </ul>
               </div>
-            </div>
-          `;
+            </div>`;
         }
-        
+
         resultDiv.innerHTML = html;
         resultDiv.style.display = 'block';
-        
+
         applyDiv.innerHTML = `
-          <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-            <h3 class="text-lg font-bold mb-2 text-blue-700">📝 신청 방법</h3>
-            <ul class="list-disc pl-5 space-y-1">
-              <li><strong>방문 신청:</strong> 주소지 읍·면·동 주민센터 또는 국민연금공단 지사</li>
-              <li><strong>온라인 신청:</strong> <a class="underline" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">복지로(www.bokjiro.go.kr)</a></li>
-              <li><strong>대리 신청:</strong> 배우자, 자녀, 형제자매 등 가능</li>
+          <div class="mt-5 p-5 bg-blue-50 rounded-xl border border-blue-200">
+            <h3 class="text-lg font-bold mb-3 text-blue-800">신청 방법 안내</h3>
+            <ul class="list-none space-y-2 text-sm">
+              <li class="flex gap-2"><span class="text-lg">🏢</span><div><strong>방문 신청</strong><br>주소지 읍·면·동 주민센터 또는 국민연금공단 지사</div></li>
+              <li class="flex gap-2"><span class="text-lg">💻</span><div><strong>온라인 신청</strong><br><a class="underline text-blue-700" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">복지로(www.bokjiro.go.kr)</a></div></li>
+              <li class="flex gap-2"><span class="text-lg">📞</span><div><strong>전화 문의</strong><br>국민연금공단 1355 / 보건복지상담센터 129</div></li>
+              <li class="flex gap-2"><span class="text-lg">👥</span><div><strong>대리 신청 가능</strong><br>배우자, 자녀, 형제자매 등</div></li>
             </ul>
-            <p class="text-xs text-slate-600 mt-3">
-              기준 출처:
-              <a class="underline" href="https://www.basicpension.mohw.go.kr/NXTCESY0000L.web?cmid=S2W010100000" target="_blank" rel="noopener">기초연금 누리집</a>
-            </p>
-          </div>
-        `;
+          </div>`;
         applyDiv.style.display = 'block';
-        
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
       },
 
       scrollToCalculator() {
         const form = document.getElementById('pensionForm');
-        if (form) {
-          form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        this.currentStepIndex = 0;
+        this.updateStepUI();
+        form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       },
 
-      showShareFeedback(message, isError = false) {
-        const feedback = document.getElementById('share-feedback');
-        if (!feedback) return;
-        feedback.textContent = message;
-        feedback.style.color = isError ? '#b91c1c' : '#1e40af';
+      showShareFeedback(msg, isErr) {
+        const el = document.getElementById('share-feedback');
+        if (!el) return;
+        el.textContent = msg;
+        el.style.color = isErr ? '#b91c1c' : '#2563eb';
       },
 
       async sharePage() {
-        const shareData = {
-          title: `${this.CONFIG.year} 기초연금 자격 계산기`,
-          text: `${this.CONFIG.year}년 기준 기초연금 수급 가능성을 1분 계산으로 확인해보세요.`,
-          url: window.location.href
-        };
-
+        const data = { title: `${this.CONFIG.year} 기초연금 자격 계산기`, text: `${this.CONFIG.year}년 기초연금 수급 가능성을 확인해보세요.`, url: location.href };
         try {
-          if (navigator.share) {
-            await navigator.share(shareData);
-            this.showShareFeedback('공유가 완료되었습니다.');
-            return;
-          }
-
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(`${shareData.title}\n${shareData.url}`);
-            this.showShareFeedback('링크가 복사되었습니다.');
-            return;
-          }
-
-          this.showShareFeedback('이 브라우저에서는 자동 공유를 지원하지 않습니다.', true);
-        } catch (error) {
-          this.showShareFeedback('공유가 취소되었거나 실패했습니다.', true);
-        }
+          if (navigator.share) { await navigator.share(data); this.showShareFeedback('공유 완료!'); return; }
+          if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(`${data.title}\n${data.url}`); this.showShareFeedback('링크가 복사되었습니다.'); return; }
+          this.showShareFeedback('이 브라우저에서는 공유를 지원하지 않습니다.', true);
+        } catch { this.showShareFeedback('공유가 취소되었습니다.', true); }
       }
     };
 
+    /* ================================================
+       OMOK (오목) - AI + PVP
+       ================================================ */
     const omokApp = {
-      canvas: null,
-      ctx: null,
-      BOARD_SIZE: 15,
-      cellSize: 0,
-      margin: 0,
-      board: [],
-      currentPlayer: 1,
-      gameOver: false,
-      gameMode: null,
-      lastMove: null,
-      isAIThinking: false,
-      BASE_DEPTH: 2,
-      CRITICAL_DEPTH: 4,
-      
+      canvas: null, ctx: null, BOARD_SIZE: 15, cellSize: 0, margin: 0,
+      board: [], currentPlayer: 1, gameOver: false, gameMode: null,
+      lastMove: null, isAIThinking: false, BASE_DEPTH: 2, CRITICAL_DEPTH: 4,
+
       init() {
         this.canvas = document.getElementById('game-board');
-        if (this.canvas) {
-          this.ctx = this.canvas.getContext('2d');
-          this.bindEvents();
-        }
+        if (this.canvas) { this.ctx = this.canvas.getContext('2d'); this.bindEvents(); }
       },
-      
+
       bindEvents() {
-        const aiBtn = document.getElementById('ai-mode-btn');
-        const pvpBtn = document.getElementById('pvp-mode-btn');
-        const newBtn = document.getElementById('new-game-btn');
-        const backBtn = document.getElementById('game-back-btn');
-        
-        if (aiBtn) aiBtn.addEventListener('click', () => this.startGame('ai'));
-        if (pvpBtn) pvpBtn.addEventListener('click', () => this.startGame('pvp'));
-        if (newBtn) newBtn.addEventListener('click', () => this.initGame());
-        if (backBtn) backBtn.addEventListener('click', () => this.backToMenu());
-        if (this.canvas) this.canvas.addEventListener('click', (e) => this.handleClick(e));
+        document.getElementById('ai-mode-btn')?.addEventListener('click', () => this.startGame('ai'));
+        document.getElementById('pvp-mode-btn')?.addEventListener('click', () => this.startGame('pvp'));
+        document.getElementById('new-game-btn')?.addEventListener('click', () => this.initGame());
+        document.getElementById('game-back-btn')?.addEventListener('click', () => this.backToMenu());
+        this.canvas?.addEventListener('click', (e) => this.handleClick(e));
         window.addEventListener('resize', () => this.resizeCanvas());
       },
-      
+
       startGame(mode) {
         this.gameMode = mode;
         document.getElementById('game-mode-selection').classList.add('hidden');
         document.getElementById('game-container').classList.remove('hidden');
         document.getElementById('game-title').textContent = mode === 'ai' ? '🤖 AI 대전' : '👥 2인 대전';
-        
-        // 캔버스가 화면에 표시된 후 크기를 조정하도록 setTimeout 사용
-        setTimeout(() => {
-          this.resizeCanvas();
-          this.initGame();
-        }, 50);
+        setTimeout(() => { this.resizeCanvas(); this.initGame(); }, 50);
       },
-      
+
       backToMenu() {
         document.getElementById('game-container').classList.add('hidden');
         document.getElementById('game-mode-selection').classList.remove('hidden');
         this.gameMode = null;
       },
-      
+
       initGame() {
         this.board = Array(this.BOARD_SIZE).fill(0).map(() => Array(this.BOARD_SIZE).fill(0));
-        this.currentPlayer = 1;
-        this.gameOver = false;
-        this.isAIThinking = false;
-        this.lastMove = null;
+        this.currentPlayer = 1; this.gameOver = false; this.isAIThinking = false; this.lastMove = null;
         this.updateStatus('⚫ 흑돌 차례입니다.');
         this.drawBoard();
       },
-      
+
       resizeCanvas() {
         if (!this.canvas) return;
         const container = this.canvas.parentElement;
         const size = Math.min(container.clientWidth, container.clientHeight);
-        
-        // 크기가 너무 작으면 기본값 사용
-        if (size < 100) {
-          console.warn('Canvas container too small, using default size');
-          this.canvas.width = 400;
-          this.canvas.height = 400;
-        } else {
-          this.canvas.width = size;
-          this.canvas.height = size;
-        }
-        
+        if (size < 100) { this.canvas.width = 400; this.canvas.height = 400; }
+        else { this.canvas.width = size; this.canvas.height = size; }
         this.cellSize = this.canvas.width / (this.BOARD_SIZE + 1);
         this.margin = this.cellSize;
-        
         if (this.gameMode) this.drawBoard();
       },
-      
+
       drawBoard() {
         if (!this.ctx) return;
-        
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
         const gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
-        gradient.addColorStop(0, '#f4d58d');
-        gradient.addColorStop(1, '#d4a574');
+        gradient.addColorStop(0, '#f4d58d'); gradient.addColorStop(1, '#d4a574');
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.ctx.strokeStyle = '#5b4b3a';
-        this.ctx.lineWidth = 1.5;
+
+        this.ctx.strokeStyle = '#5b4b3a'; this.ctx.lineWidth = 1.5;
         for (let i = 0; i < this.BOARD_SIZE; i++) {
-          this.ctx.beginPath();
-          this.ctx.moveTo(this.margin, this.margin + i * this.cellSize);
-          this.ctx.lineTo(this.canvas.width - this.margin, this.margin + i * this.cellSize);
-          this.ctx.stroke();
-          
-          this.ctx.beginPath();
-          this.ctx.moveTo(this.margin + i * this.cellSize, this.margin);
-          this.ctx.lineTo(this.margin + i * this.cellSize, this.canvas.height - this.margin);
-          this.ctx.stroke();
+          this.ctx.beginPath(); this.ctx.moveTo(this.margin, this.margin + i * this.cellSize); this.ctx.lineTo(this.canvas.width - this.margin, this.margin + i * this.cellSize); this.ctx.stroke();
+          this.ctx.beginPath(); this.ctx.moveTo(this.margin + i * this.cellSize, this.margin); this.ctx.lineTo(this.margin + i * this.cellSize, this.canvas.height - this.margin); this.ctx.stroke();
         }
-        
-        const starPoints = [{x: 3, y: 3}, {x: 11, y: 3}, {x: 3, y: 11}, {x: 11, y: 11}, {x: 7, y: 7}];
+
+        const starPts = [{x:3,y:3},{x:11,y:3},{x:3,y:11},{x:11,y:11},{x:7,y:7}];
         this.ctx.fillStyle = '#5b4b3a';
-        starPoints.forEach(p => {
-          this.ctx.beginPath();
-          this.ctx.arc(this.margin + p.x * this.cellSize, this.margin + p.y * this.cellSize, this.cellSize / 8, 0, 2 * Math.PI);
-          this.ctx.fill();
-        });
-        
-        for (let y = 0; y < this.BOARD_SIZE; y++) {
-          for (let x = 0; x < this.BOARD_SIZE; x++) {
-            if (this.board[y][x] !== 0) {
-              this.drawStone(x, y, this.board[y][x]);
-            }
-          }
-        }
-        
+        starPts.forEach(p => { this.ctx.beginPath(); this.ctx.arc(this.margin + p.x * this.cellSize, this.margin + p.y * this.cellSize, this.cellSize / 8, 0, 2 * Math.PI); this.ctx.fill(); });
+
+        for (let y = 0; y < this.BOARD_SIZE; y++)
+          for (let x = 0; x < this.BOARD_SIZE; x++)
+            if (this.board[y][x] !== 0) this.drawStone(x, y, this.board[y][x]);
+
         if (this.lastMove) {
-          this.ctx.strokeStyle = '#f03e3e';
-          this.ctx.lineWidth = 2;
-          this.ctx.beginPath();
-          this.ctx.arc(this.margin + this.lastMove.x * this.cellSize, this.margin + this.lastMove.y * this.cellSize, this.cellSize * 0.2, 0, 2 * Math.PI);
-          this.ctx.stroke();
+          this.ctx.strokeStyle = '#f03e3e'; this.ctx.lineWidth = 2;
+          this.ctx.beginPath(); this.ctx.arc(this.margin + this.lastMove.x * this.cellSize, this.margin + this.lastMove.y * this.cellSize, this.cellSize * 0.2, 0, 2 * Math.PI); this.ctx.stroke();
         }
       },
-      
+
       drawStone(x, y, player) {
-        const stoneX = this.margin + x * this.cellSize;
-        const stoneY = this.margin + y * this.cellSize;
-        const radius = this.cellSize / 2 * 0.9;
-        
-        const gradient = this.ctx.createRadialGradient(stoneX - radius * 0.3, stoneY - radius * 0.3, radius * 0.1, stoneX, stoneY, radius);
-        if (player === 1) {
-          gradient.addColorStop(0, '#666');
-          gradient.addColorStop(1, '#111');
-        } else {
-          gradient.addColorStop(0, '#fff');
-          gradient.addColorStop(1, '#ccc');
-        }
-        
-        this.ctx.beginPath();
-        this.ctx.arc(stoneX, stoneY, radius, 0, 2 * Math.PI);
-        this.ctx.fillStyle = gradient;
-        this.ctx.fill();
+        const sx = this.margin + x * this.cellSize, sy = this.margin + y * this.cellSize, r = this.cellSize / 2 * 0.9;
+        const g = this.ctx.createRadialGradient(sx - r * 0.3, sy - r * 0.3, r * 0.1, sx, sy, r);
+        if (player === 1) { g.addColorStop(0, '#666'); g.addColorStop(1, '#111'); }
+        else { g.addColorStop(0, '#fff'); g.addColorStop(1, '#ccc'); }
+        this.ctx.beginPath(); this.ctx.arc(sx, sy, r, 0, 2 * Math.PI); this.ctx.fillStyle = g; this.ctx.fill();
       },
-      
-      handleClick(event) {
+
+      handleClick(e) {
         if (this.gameOver || this.isAIThinking) return;
         if (this.gameMode === 'ai' && this.currentPlayer === 2) return;
-        
         const rect = this.canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        
-        const gridX = Math.round((x - this.margin) / this.cellSize);
-        const gridY = Math.round((y - this.margin) / this.cellSize);
-        
-        if (gridX >= 0 && gridX < this.BOARD_SIZE && gridY >= 0 && gridY < this.BOARD_SIZE) {
-          if (this.board[gridY][gridX] === 0) {
-            this.placeStone(gridX, gridY);
-          }
-        }
+        const gx = Math.round(((e.clientX - rect.left) - this.margin) / this.cellSize);
+        const gy = Math.round(((e.clientY - rect.top) - this.margin) / this.cellSize);
+        if (gx >= 0 && gx < this.BOARD_SIZE && gy >= 0 && gy < this.BOARD_SIZE && this.board[gy][gx] === 0)
+          this.placeStone(gx, gy);
       },
-      
+
       placeStone(x, y) {
-        this.board[y][x] = this.currentPlayer;
-        this.lastMove = { x, y };
-        this.drawBoard();
-        
+        this.board[y][x] = this.currentPlayer; this.lastMove = { x, y }; this.drawBoard();
         if (this.checkWin(x, y, this.currentPlayer)) {
           this.gameOver = true;
-          let winner;
-          if (this.gameMode === 'ai') {
-            winner = this.currentPlayer === 1 ? '당신' : 'AI';
-          } else {
-            winner = this.currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌';
-          }
-          this.updateStatus(winner + '의 승리입니다!');
-          return;
+          const w = this.gameMode === 'ai' ? (this.currentPlayer === 1 ? '당신' : 'AI') : (this.currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌');
+          this.updateStatus(w + '의 승리입니다!'); return;
         }
-        
-        if (this.checkDraw()) {
-          this.gameOver = true;
-          this.updateStatus('무승부입니다!');
-          return;
-        }
-        
+        if (this.checkDraw()) { this.gameOver = true; this.updateStatus('무승부입니다!'); return; }
         this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
-        
         if (!this.gameOver) {
-          if (this.gameMode === 'ai' && this.currentPlayer === 2) {
-            this.triggerAITurn();
-          } else {
-            const nextPlayerName = this.currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌';
-            this.updateStatus(nextPlayerName + ' 차례입니다.');
-          }
+          if (this.gameMode === 'ai' && this.currentPlayer === 2) this.triggerAITurn();
+          else this.updateStatus((this.currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌') + ' 차례입니다.');
         }
       },
-      
-      checkWin(x, y, player) {
-        const directions = [
-          { dx: 1, dy: 0 },
-          { dx: 0, dy: 1 },
-          { dx: 1, dy: 1 },
-          { dx: 1, dy: -1 }
-        ];
-        
-        for (const { dx, dy } of directions) {
-          let count = 1;
-          
-          for (let i = 1; i < 5; i++) {
-            const nx = x + i * dx;
-            const ny = y + i * dy;
-            if (nx >= 0 && nx < this.BOARD_SIZE && ny >= 0 && ny < this.BOARD_SIZE) {
-              if (this.board[ny][nx] === player) count++;
-              else break;
-            }
-          }
-          
-          for (let i = 1; i < 5; i++) {
-            const nx = x - i * dx;
-            const ny = y - i * dy;
-            if (nx >= 0 && nx < this.BOARD_SIZE && ny >= 0 && ny < this.BOARD_SIZE) {
-              if (this.board[ny][nx] === player) count++;
-              else break;
-            }
-          }
-          
-          if (count >= 5) return true;
+
+      checkWin(x, y, p) {
+        const dirs = [{dx:1,dy:0},{dx:0,dy:1},{dx:1,dy:1},{dx:1,dy:-1}];
+        for (const {dx,dy} of dirs) {
+          let c = 1;
+          for (let i=1;i<5;i++){const nx=x+i*dx,ny=y+i*dy;if(nx>=0&&nx<this.BOARD_SIZE&&ny>=0&&ny<this.BOARD_SIZE&&this.board[ny][nx]===p)c++;else break;}
+          for (let i=1;i<5;i++){const nx=x-i*dx,ny=y-i*dy;if(nx>=0&&nx<this.BOARD_SIZE&&ny>=0&&ny<this.BOARD_SIZE&&this.board[ny][nx]===p)c++;else break;}
+          if (c >= 5) return true;
         }
-        
         return false;
       },
-      
-      checkDraw() {
-        return this.board.every(row => row.every(cell => cell !== 0));
-      },
-      
+
+      checkDraw() { return this.board.every(r => r.every(c => c !== 0)); },
+
       triggerAITurn() {
-        this.isAIThinking = true;
-        this.updateStatus('AI가 생각 중입니다...');
-        setTimeout(() => {
-          const bestMove = this.findBestMove();
-          if (bestMove) this.placeStone(bestMove.x, bestMove.y);
-          this.isAIThinking = false;
-        }, 100);
+        this.isAIThinking = true; this.updateStatus('AI가 생각 중입니다...');
+        setTimeout(() => { const m = this.findBestMove(); if (m) this.placeStone(m.x, m.y); this.isAIThinking = false; }, 100);
       },
-      
+
       findBestMove() {
-        const possibleMoves = this.getPossibleMoves();
-        
-        for (const {x, y} of possibleMoves) {
-          this.board[y][x] = 2;
-          if (this.checkWin(x, y, 2)) { 
-            this.board[y][x] = 0; 
-            return {x, y}; 
-          }
-          this.board[y][x] = 0;
-        }
-        
-        for (const {x, y} of possibleMoves) {
-          this.board[y][x] = 1;
-          if (this.checkWin(x, y, 1)) { 
-            this.board[y][x] = 0; 
-            return {x, y}; 
-          }
-          this.board[y][x] = 0;
-        }
-        
-        let bestScore = -Infinity;
-        let move = null;
-        let depth = this.isCriticalSituation() ? this.CRITICAL_DEPTH : this.BASE_DEPTH;
-        
-        for (const {x, y} of possibleMoves) {
-          this.board[y][x] = 2;
-          const score = this.minimax(depth - 1, -Infinity, Infinity, false);
-          this.board[y][x] = 0;
-          if (score > bestScore) {
-            bestScore = score;
-            move = {x, y};
-          }
-        }
-        
-        if (!move && possibleMoves.length > 0) {
-          possibleMoves.sort((a, b) => (Math.abs(a.x - 7) + Math.abs(a.y - 7)) - (Math.abs(b.x - 7) + Math.abs(b.y - 7)));
-          move = possibleMoves[0];
-        }
-        
+        const moves = this.getPossibleMoves();
+        for (const {x,y} of moves) { this.board[y][x]=2; if(this.checkWin(x,y,2)){this.board[y][x]=0;return{x,y};} this.board[y][x]=0; }
+        for (const {x,y} of moves) { this.board[y][x]=1; if(this.checkWin(x,y,1)){this.board[y][x]=0;return{x,y};} this.board[y][x]=0; }
+        let best=-Infinity, move=null, depth=this.isCriticalSituation()?this.CRITICAL_DEPTH:this.BASE_DEPTH;
+        for (const {x,y} of moves) { this.board[y][x]=2; const s=this.minimax(depth-1,-Infinity,Infinity,false); this.board[y][x]=0; if(s>best){best=s;move={x,y};} }
+        if (!move && moves.length > 0) { moves.sort((a,b)=>(Math.abs(a.x-7)+Math.abs(a.y-7))-(Math.abs(b.x-7)+Math.abs(b.y-7))); move=moves[0]; }
         return move;
       },
-      
-      minimax(depth, alpha, beta, isMaximizingPlayer) {
-        if (depth === 0 || this.gameOver) return this.evaluateBoard();
-        
-        const possibleMoves = this.getPossibleMoves();
-        
-        if (isMaximizingPlayer) {
-          let maxEval = -Infinity;
-          for (const {x, y} of possibleMoves) {
-            this.board[y][x] = 2;
-            if (this.checkWin(x, y, 2)) { 
-              this.board[y][x] = 0; 
-              return 100000 + depth; 
-            }
-            const eval = this.minimax(depth - 1, alpha, beta, false);
-            this.board[y][x] = 0;
-            maxEval = Math.max(maxEval, eval);
-            alpha = Math.max(alpha, eval);
-            if (beta <= alpha) break;
-          }
-          return maxEval;
+
+      minimax(depth, alpha, beta, isMax) {
+        if (depth===0||this.gameOver) return this.evaluateBoard();
+        const moves = this.getPossibleMoves();
+        if (isMax) {
+          let maxE=-Infinity;
+          for (const {x,y} of moves) { this.board[y][x]=2; if(this.checkWin(x,y,2)){this.board[y][x]=0;return 100000+depth;} const ev=this.minimax(depth-1,alpha,beta,false); this.board[y][x]=0; maxE=Math.max(maxE,ev); alpha=Math.max(alpha,ev); if(beta<=alpha)break; }
+          return maxE;
         } else {
-          let minEval = Infinity;
-          for (const {x, y} of possibleMoves) {
-            this.board[y][x] = 1;
-            if (this.checkWin(x, y, 1)) { 
-              this.board[y][x] = 0; 
-              return -100000 - depth; 
-            }
-            const eval = this.minimax(depth - 1, alpha, beta, true);
-            this.board[y][x] = 0;
-            minEval = Math.min(minEval, eval);
-            beta = Math.min(beta, eval);
-            if (beta <= alpha) break;
-          }
-          return minEval;
+          let minE=Infinity;
+          for (const {x,y} of moves) { this.board[y][x]=1; if(this.checkWin(x,y,1)){this.board[y][x]=0;return -100000-depth;} const ev=this.minimax(depth-1,alpha,beta,true); this.board[y][x]=0; minE=Math.min(minE,ev); beta=Math.min(beta,ev); if(beta<=alpha)break; }
+          return minE;
         }
       },
-      
+
       getPossibleMoves() {
-        const moves = [];
-        const hasStones = Array(this.BOARD_SIZE).fill(0).map(() => Array(this.BOARD_SIZE).fill(false));
-        
-        if (this.board.every(row => row.every(cell => cell === 0))) {
-          return [{x: 7, y: 7}];
-        }
-        
-        for (let y = 0; y < this.BOARD_SIZE; y++) {
-          for (let x = 0; x < this.BOARD_SIZE; x++) {
-            if (this.board[y][x] === 0) {
-              for (let dy = -1; dy <= 1; dy++) {
-                for (let dx = -1; dx <= 1; dx++) {
-                  if (dx === 0 && dy === 0) continue;
-                  const ny = y + dy, nx = x + dx;
-                  if (nx >= 0 && nx < this.BOARD_SIZE && ny >= 0 && ny < this.BOARD_SIZE && this.board[ny][nx] !== 0) {
-                    if (!hasStones[y][x]) {
-                      moves.push({x, y});
-                      hasStones[y][x] = true;
-                    }
-                  }
-                }
-              }
-            }
+        const moves=[], seen=Array(this.BOARD_SIZE).fill(0).map(()=>Array(this.BOARD_SIZE).fill(false));
+        if (this.board.every(r=>r.every(c=>c===0))) return [{x:7,y:7}];
+        for (let y=0;y<this.BOARD_SIZE;y++) for (let x=0;x<this.BOARD_SIZE;x++) if(this.board[y][x]===0) {
+          for (let dy=-1;dy<=1;dy++) for (let dx=-1;dx<=1;dx++) { if(!dx&&!dy)continue; const ny=y+dy,nx=x+dx;
+            if(nx>=0&&nx<this.BOARD_SIZE&&ny>=0&&ny<this.BOARD_SIZE&&this.board[ny][nx]!==0&&!seen[y][x]){moves.push({x,y});seen[y][x]=true;}
           }
         }
         return moves;
       },
-      
+
       isCriticalSituation() {
-        for (let y = 0; y < this.BOARD_SIZE; y++) {
-          for (let x = 0; x < this.BOARD_SIZE; x++) {
-            if (this.board[y][x] === 0) {
-              this.board[y][x] = 2;
-              if (this.checkWin(x, y, 2)) { 
-                this.board[y][x] = 0; 
-                return true; 
-              }
-              this.board[y][x] = 1;
-              if (this.checkWin(x, y, 1)) { 
-                this.board[y][x] = 0; 
-                return true; 
-              }
-              this.board[y][x] = 0;
-            }
-          }
+        for (let y=0;y<this.BOARD_SIZE;y++) for (let x=0;x<this.BOARD_SIZE;x++) if(this.board[y][x]===0) {
+          this.board[y][x]=2; if(this.checkWin(x,y,2)){this.board[y][x]=0;return true;}
+          this.board[y][x]=1; if(this.checkWin(x,y,1)){this.board[y][x]=0;return true;}
+          this.board[y][x]=0;
         }
         return false;
       },
-      
+
       evaluateBoard() {
-        let score = 0;
-        score += this.evaluateAllLines('horizontal');
-        score += this.evaluateAllLines('vertical');
-        score += this.evaluateAllLines('diagonal1');
-        score += this.evaluateAllLines('diagonal2');
-        return score;
+        let s=0; s+=this.evalLines('h'); s+=this.evalLines('v'); s+=this.evalLines('d1'); s+=this.evalLines('d2'); return s;
       },
-      
-      evaluateAllLines(type) {
-        let totalScore = 0;
-        const size = this.BOARD_SIZE;
-        
-        for (let i = 0; i < (type.startsWith('diagonal') ? 2 * size - 1 : size); i++) {
-          let line = [];
-          if (type === 'horizontal') { 
-            line = this.board[i]; 
-          } else if (type === 'vertical') { 
-            line = this.board.map(row => row[i]); 
-          } else if (type === 'diagonal1') { 
-            for (let j = 0; j < size; j++) { 
-              const k = i - j; 
-              if (k >= 0 && k < size) line.push(this.board[j][k]); 
-            }
-          } else if (type === 'diagonal2') { 
-            for (let j = 0; j < size; j++) { 
-              const k = i - (size - 1 - j); 
-              if (k >= 0 && k < size) line.push(this.board[j][k]); 
-            }
-          }
-          
-          if (line.length >= 5) totalScore += this.evaluateLine(line);
+
+      evalLines(type) {
+        let total=0; const sz=this.BOARD_SIZE;
+        for (let i=0;i<(type.startsWith('d')?2*sz-1:sz);i++) {
+          let line=[];
+          if(type==='h') line=this.board[i];
+          else if(type==='v') line=this.board.map(r=>r[i]);
+          else if(type==='d1'){for(let j=0;j<sz;j++){const k=i-j;if(k>=0&&k<sz)line.push(this.board[j][k]);}}
+          else if(type==='d2'){for(let j=0;j<sz;j++){const k=i-(sz-1-j);if(k>=0&&k<sz)line.push(this.board[j][k]);}}
+          if(line.length>=5) total+=this.evalLine(line);
         }
-        return totalScore;
+        return total;
       },
-      
-      evaluateLine(line) {
-        let score = 0;
-        const patterns = {
-          '22222': 100000, '022220': 50000, '122220': 400, '022221': 400, 
-          '02220': 2000, '022020': 1800, '12220': 100, '02221': 100, 
-          '00220': 50, '02020': 50,
-          '11111': -100000, '011110': -80000, '211110': -10000, '011112': -10000, 
-          '01110': -5000, '011010': -4500, '21110': -500, '01112': -500, 
-          '00110': -150, '01010': -150,
-        };
-        
-        const lineStr = line.join('');
-        for (const pattern in patterns) {
-          if (lineStr.includes(pattern)) score += patterns[pattern];
-        }
-        return score;
+
+      evalLine(line) {
+        let s=0;
+        const pats={'22222':100000,'022220':50000,'122220':400,'022221':400,'02220':2000,'022020':1800,'12220':100,'02221':100,'00220':50,'02020':50,'11111':-100000,'011110':-80000,'211110':-10000,'011112':-10000,'01110':-5000,'011010':-4500,'21110':-500,'01112':-500,'00110':-150,'01010':-150};
+        const ls=line.join('');
+        for (const p in pats) if(ls.includes(p)) s+=pats[p];
+        return s;
       },
-      
-      updateStatus(text) {
-        const statusText = document.getElementById('status-text');
-        if (statusText) statusText.textContent = text;
-      }
+
+      updateStatus(text) { const el=document.getElementById('status-text'); if(el) el.textContent=text; }
     };
 
+    /* ================================================
+       2048
+       ================================================ */
     const g2048App = {
-      grid: [],
-      score: 0,
-      size: 4,
-      
+      grid: [], score: 0, size: 4,
+
       init() {
-        const newBtn = document.getElementById('g2048-new');
-        if (newBtn) {
-          newBtn.addEventListener('click', () => this.newGame());
-        }
+        document.getElementById('g2048-new')?.addEventListener('click', () => this.newGame());
         document.addEventListener('keydown', (e) => this.handleKey(e));
+        // Touch swipe support
+        const gridEl = document.getElementById('g2048-grid');
+        if (gridEl) {
+          let sx, sy;
+          gridEl.addEventListener('touchstart', (e) => { sx=e.touches[0].clientX; sy=e.touches[0].clientY; }, {passive:true});
+          gridEl.addEventListener('touchend', (e) => {
+            if (sx==null) return;
+            const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+            if (Math.max(Math.abs(dx),Math.abs(dy))<30) return;
+            if (Math.abs(dx)>Math.abs(dy)) this.move(dx>0?'right':'left');
+            else this.move(dy>0?'down':'up');
+            sx=sy=null;
+          });
+        }
         this.newGame();
       },
-      
-      newGame() {
-        this.grid = Array(this.size).fill(0).map(() => Array(this.size).fill(0));
-        this.score = 0;
-        this.addRandomTile();
-        this.addRandomTile();
-        this.draw();
-      },
-      
+
+      newGame() { this.grid=Array(this.size).fill(0).map(()=>Array(this.size).fill(0)); this.score=0; this.addRandomTile(); this.addRandomTile(); this.draw(); },
+
       addRandomTile() {
-        const emptyCells = [];
-        for (let r = 0; r < this.size; r++) {
-          for (let c = 0; c < this.size; c++) {
-            if (this.grid[r][c] === 0) {
-              emptyCells.push({ r, c });
-            }
-          }
-        }
-        
-        if (emptyCells.length > 0) {
-          const cell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-          this.grid[cell.r][cell.c] = Math.random() < 0.9 ? 2 : 4;
-        }
+        const empty=[];
+        for(let r=0;r<this.size;r++) for(let c=0;c<this.size;c++) if(this.grid[r][c]===0) empty.push({r,c});
+        if(empty.length>0){const cell=empty[Math.floor(Math.random()*empty.length)]; this.grid[cell.r][cell.c]=Math.random()<0.9?2:4;}
       },
-      
-      move(direction) {
-        let moved = false;
-        
-        if (direction === 'left') {
-          for (let r = 0; r < this.size; r++) {
-            const row = this.grid[r].filter(val => val !== 0);
-            const merged = [];
-            let i = 0;
-            
-            while (i < row.length) {
-              if (i < row.length - 1 && row[i] === row[i + 1]) {
-                merged.push(row[i] * 2);
-                this.score += row[i] * 2;
-                i += 2;
-              } else {
-                merged.push(row[i]);
-                i++;
-              }
-            }
-            
-            while (merged.length < this.size) {
-              merged.push(0);
-            }
-            
-            if (merged.some((val, idx) => val !== this.grid[r][idx])) {
-              moved = true;
-            }
-            
-            this.grid[r] = merged;
-          }
-        } else if (direction === 'right') {
-          for (let r = 0; r < this.size; r++) {
-            const row = this.grid[r].filter(val => val !== 0);
-            const merged = [];
-            let i = row.length - 1;
-            
-            while (i >= 0) {
-              if (i > 0 && row[i] === row[i - 1]) {
-                merged.unshift(row[i] * 2);
-                this.score += row[i] * 2;
-                i -= 2;
-              } else {
-                merged.unshift(row[i]);
-                i--;
-              }
-            }
-            
-            while (merged.length < this.size) {
-              merged.unshift(0);
-            }
-            
-            if (merged.some((val, idx) => val !== this.grid[r][idx])) {
-              moved = true;
-            }
-            
-            this.grid[r] = merged;
-          }
-        } else if (direction === 'up') {
-          for (let c = 0; c < this.size; c++) {
-            const column = [];
-            for (let r = 0; r < this.size; r++) {
-              if (this.grid[r][c] !== 0) {
-                column.push(this.grid[r][c]);
-              }
-            }
-            
-            const merged = [];
-            let i = 0;
-            
-            while (i < column.length) {
-              if (i < column.length - 1 && column[i] === column[i + 1]) {
-                merged.push(column[i] * 2);
-                this.score += column[i] * 2;
-                i += 2;
-              } else {
-                merged.push(column[i]);
-                i++;
-              }
-            }
-            
-            while (merged.length < this.size) {
-              merged.push(0);
-            }
-            
-            for (let r = 0; r < this.size; r++) {
-              if (this.grid[r][c] !== merged[r]) {
-                moved = true;
-              }
-              this.grid[r][c] = merged[r];
-            }
-          }
-        } else if (direction === 'down') {
-          for (let c = 0; c < this.size; c++) {
-            const column = [];
-            for (let r = 0; r < this.size; r++) {
-              if (this.grid[r][c] !== 0) {
-                column.push(this.grid[r][c]);
-              }
-            }
-            
-            const merged = [];
-            let i = column.length - 1;
-            
-            while (i >= 0) {
-              if (i > 0 && column[i] === column[i - 1]) {
-                merged.unshift(column[i] * 2);
-                this.score += column[i] * 2;
-                i -= 2;
-              } else {
-                merged.unshift(column[i]);
-                i--;
-              }
-            }
-            
-            while (merged.length < this.size) {
-              merged.unshift(0);
-            }
-            
-            for (let r = 0; r < this.size; r++) {
-              if (this.grid[r][c] !== merged[r]) {
-                moved = true;
-              }
-              this.grid[r][c] = merged[r];
-            }
-          }
-        }
-        
-        if (moved) {
-          this.addRandomTile();
-          this.draw();
-          
-          if (this.isGameOver()) {
-            setTimeout(() => alert('게임 종료! 점수: ' + this.score), 100);
-          }
-        }
+
+      move(dir) {
+        let moved=false;
+        const merge=(arr)=>{const filtered=arr.filter(v=>v!==0);const res=[];let i=0;while(i<filtered.length){if(i<filtered.length-1&&filtered[i]===filtered[i+1]){res.push(filtered[i]*2);this.score+=filtered[i]*2;i+=2;}else{res.push(filtered[i]);i++;}}while(res.length<this.size)res.push(0);return res;};
+
+        if(dir==='left'){for(let r=0;r<this.size;r++){const m=merge(this.grid[r]);if(m.some((v,i)=>v!==this.grid[r][i]))moved=true;this.grid[r]=m;}}
+        else if(dir==='right'){for(let r=0;r<this.size;r++){const m=merge([...this.grid[r]].reverse()).reverse();if(m.some((v,i)=>v!==this.grid[r][i]))moved=true;this.grid[r]=m;}}
+        else if(dir==='up'){for(let c=0;c<this.size;c++){const col=[];for(let r=0;r<this.size;r++)col.push(this.grid[r][c]);const m=merge(col);for(let r=0;r<this.size;r++){if(this.grid[r][c]!==m[r])moved=true;this.grid[r][c]=m[r];}}}
+        else if(dir==='down'){for(let c=0;c<this.size;c++){const col=[];for(let r=0;r<this.size;r++)col.push(this.grid[r][c]);const m=merge([...col].reverse()).reverse();for(let r=0;r<this.size;r++){if(this.grid[r][c]!==m[r])moved=true;this.grid[r][c]=m[r];}}}
+
+        if(moved){this.addRandomTile();this.draw();if(this.isGameOver())setTimeout(()=>alert('게임 종료! 점수: '+this.score),100);}
       },
-      
+
       isGameOver() {
-        for (let r = 0; r < this.size; r++) {
-          for (let c = 0; c < this.size; c++) {
-            if (this.grid[r][c] === 0) return false;
-          }
-        }
-        
-        for (let r = 0; r < this.size; r++) {
-          for (let c = 0; c < this.size; c++) {
-            const current = this.grid[r][c];
-            if (c < this.size - 1 && current === this.grid[r][c + 1]) return false;
-            if (r < this.size - 1 && current === this.grid[r + 1][c]) return false;
-          }
-        }
-        
+        for(let r=0;r<this.size;r++) for(let c=0;c<this.size;c++){if(this.grid[r][c]===0)return false;if(c<this.size-1&&this.grid[r][c]===this.grid[r][c+1])return false;if(r<this.size-1&&this.grid[r][c]===this.grid[r+1][c])return false;}
         return true;
       },
-      
+
       handleKey(e) {
-        if (activeGame !== '2048') return;
-        
-        switch (e.key) {
-          case 'ArrowLeft':
-            e.preventDefault();
-            this.move('left');
-            break;
-          case 'ArrowRight':
-            e.preventDefault();
-            this.move('right');
-            break;
-          case 'ArrowUp':
-            e.preventDefault();
-            this.move('up');
-            break;
-          case 'ArrowDown':
-            e.preventDefault();
-            this.move('down');
-            break;
-        }
+        if(activeGame!=='2048')return;
+        const map={'ArrowLeft':'left','ArrowRight':'right','ArrowUp':'up','ArrowDown':'down'};
+        if(map[e.key]){e.preventDefault();this.move(map[e.key]);}
       },
-      
+
       draw() {
-        const gridEl = document.getElementById('g2048-grid');
-        const scoreEl = document.getElementById('g2048-score');
-        
-        if (scoreEl) scoreEl.textContent = this.score;
-        if (gridEl) {
-          gridEl.innerHTML = '';
-          
-          for (let r = 0; r < this.size; r++) {
-            for (let c = 0; c < this.size; c++) {
-              const cell = document.createElement('div');
-              const value = this.grid[r][c];
-              cell.className = 'g2048-cell tile-' + value;
-              cell.textContent = value || '';
-              gridEl.appendChild(cell);
-            }
-          }
-        }
+        const gridEl=document.getElementById('g2048-grid'), scoreEl=document.getElementById('g2048-score');
+        if(scoreEl)scoreEl.textContent=this.score;
+        if(gridEl){gridEl.innerHTML='';for(let r=0;r<this.size;r++)for(let c=0;c<this.size;c++){const cell=document.createElement('div');const v=this.grid[r][c];cell.className='g2048-cell tile-'+v;cell.textContent=v||'';gridEl.appendChild(cell);}}
       }
     };
 
+    /* ================================================
+       SNAKE
+       ================================================ */
     const snakeApp = {
-      canvas: null,
-      ctx: null,
-      gridSize: 21,
-      cellSize: 20,
-      snake: [],
-      direction: { x: 1, y: 0 },
-      food: null,
-      score: 0,
-      gameLoop: null,
-      
+      canvas:null, ctx:null, gridSize:21, cellSize:20, snake:[], direction:{x:1,y:0}, food:null, score:0, gameLoop:null,
+
       init() {
-        this.canvas = document.getElementById('snake-canvas');
-        if (this.canvas) {
-          this.ctx = this.canvas.getContext('2d');
-          this.cellSize = this.canvas.width / this.gridSize;
-          
-          const newBtn = document.getElementById('snake-new');
-          if (newBtn) {
-            newBtn.addEventListener('click', () => this.newGame());
-          }
-          document.addEventListener('keydown', (e) => this.handleKey(e));
-          
-          this.newGame();
-        }
+        this.canvas=document.getElementById('snake-canvas');
+        if(this.canvas){this.ctx=this.canvas.getContext('2d');this.cellSize=this.canvas.width/this.gridSize;
+        document.getElementById('snake-new')?.addEventListener('click',()=>this.newGame());
+        document.addEventListener('keydown',(e)=>this.handleKey(e)); this.newGame();}
       },
-      
+
       newGame() {
-        this.snake = [{ x: 10, y: 10 }];
-        this.direction = { x: 1, y: 0 };
-        this.score = 0;
-        this.spawnFood();
-        
-        if (this.gameLoop) clearInterval(this.gameLoop);
-        this.gameLoop = setInterval(() => this.update(), 100);
-        
-        this.draw();
+        this.snake=[{x:10,y:10}]; this.direction={x:1,y:0}; this.score=0; this.spawnFood();
+        if(this.gameLoop)clearInterval(this.gameLoop); this.gameLoop=setInterval(()=>this.update(),100); this.draw();
       },
-      
-      spawnFood() {
-        do {
-          this.food = {
-            x: Math.floor(Math.random() * this.gridSize),
-            y: Math.floor(Math.random() * this.gridSize)
-          };
-        } while (this.snake.some(segment => segment.x === this.food.x && segment.y === this.food.y));
-      },
-      
+
+      spawnFood() { do{this.food={x:Math.floor(Math.random()*this.gridSize),y:Math.floor(Math.random()*this.gridSize)};}while(this.snake.some(s=>s.x===this.food.x&&s.y===this.food.y)); },
+
       update() {
-        if (activeGame !== 'snake') return;
-        
-        const head = { ...this.snake[0] };
-        head.x += this.direction.x;
-        head.y += this.direction.y;
-
-        // 벽 충돌 시 즉시 게임 오버
-        if (head.x < 0 || head.x >= this.gridSize || head.y < 0 || head.y >= this.gridSize) {
-          this.gameOver('벽에 부딪혔습니다.');
-          return;
-        }
-        
-        if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
-          this.gameOver('자기 몸에 부딪혔습니다.');
-          return;
-        }
-        
+        if(activeGame!=='snake')return;
+        const head={...this.snake[0]}; head.x+=this.direction.x; head.y+=this.direction.y;
+        if(head.x<0||head.x>=this.gridSize||head.y<0||head.y>=this.gridSize){this.gameOverFn('벽에 부딪혔습니다.');return;}
+        if(this.snake.some(s=>s.x===head.x&&s.y===head.y)){this.gameOverFn('자기 몸에 부딪혔습니다.');return;}
         this.snake.unshift(head);
-        
-        if (head.x === this.food.x && head.y === this.food.y) {
-          this.score += 10;
-          this.spawnFood();
-        } else {
-          this.snake.pop();
-        }
-        
+        if(head.x===this.food.x&&head.y===this.food.y){this.score+=10;this.spawnFood();}else{this.snake.pop();}
         this.draw();
       },
-      
-      gameOver(reason = '') {
-        clearInterval(this.gameLoop);
-        const message = reason ? `${reason}\n게임 종료! 점수: ${this.score}` : `게임 종료! 점수: ${this.score}`;
-        alert(message);
-      },
-      
+
+      gameOverFn(reason) { clearInterval(this.gameLoop); alert((reason?reason+'\n':'')+'게임 종료! 점수: '+this.score); },
+
       handleKey(e) {
-        if (activeGame !== 'snake') return;
-
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-          e.preventDefault();
-        }
-        
-        switch (e.key) {
-          case 'ArrowLeft':
-            if (this.direction.x === 0) {
-              this.direction = { x: -1, y: 0 };
-            }
-            break;
-          case 'ArrowRight':
-            if (this.direction.x === 0) {
-              this.direction = { x: 1, y: 0 };
-            }
-            break;
-          case 'ArrowUp':
-            if (this.direction.y === 0) {
-              this.direction = { x: 0, y: -1 };
-            }
-            break;
-          case 'ArrowDown':
-            if (this.direction.y === 0) {
-              this.direction = { x: 0, y: 1 };
-            }
-            break;
-        }
+        if(activeGame!=='snake')return;
+        if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))e.preventDefault();
+        if(e.key==='ArrowLeft'&&this.direction.x===0)this.direction={x:-1,y:0};
+        else if(e.key==='ArrowRight'&&this.direction.x===0)this.direction={x:1,y:0};
+        else if(e.key==='ArrowUp'&&this.direction.y===0)this.direction={x:0,y:-1};
+        else if(e.key==='ArrowDown'&&this.direction.y===0)this.direction={x:0,y:1};
       },
-      
+
       draw() {
-        if (!this.ctx) return;
-        
-        this.ctx.fillStyle = '#0f172a';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.ctx.fillStyle = '#f59e0b';
-        this.ctx.fillRect(
-          this.food.x * this.cellSize + 2,
-          this.food.y * this.cellSize + 2,
-          this.cellSize - 4,
-          this.cellSize - 4
-        );
-        
-        this.snake.forEach((segment, index) => {
-          this.ctx.fillStyle = index === 0 ? '#22c55e' : '#10b981';
-          this.ctx.fillRect(
-            segment.x * this.cellSize + 2,
-            segment.y * this.cellSize + 2,
-            this.cellSize - 4,
-            this.cellSize - 4
-          );
-        });
-        
-        const scoreEl = document.getElementById('snake-score');
-        if (scoreEl) scoreEl.textContent = this.score;
+        if(!this.ctx)return;
+        this.ctx.fillStyle='#0f172a'; this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+        this.ctx.fillStyle='#f59e0b'; this.ctx.fillRect(this.food.x*this.cellSize+2,this.food.y*this.cellSize+2,this.cellSize-4,this.cellSize-4);
+        this.snake.forEach((s,i)=>{this.ctx.fillStyle=i===0?'#22c55e':'#10b981';this.ctx.fillRect(s.x*this.cellSize+2,s.y*this.cellSize+2,this.cellSize-4,this.cellSize-4);});
+        const el=document.getElementById('snake-score'); if(el)el.textContent=this.score;
       }
     };
 
+    /* ================================================
+       BREAKOUT (벽돌깨기)
+       ================================================ */
     const breakoutApp = {
-      canvas: null,
-      ctx: null,
-      ballRadius: 10,
-      paddleHeight: 10,
-      paddleWidth: 75,
-      brickRowCount: 5,
-      brickColumnCount: 8,
-      brickWidth: 50,
-      brickHeight: 20,
-      brickPadding: 10,
-      brickOffsetTop: 30,
-      brickOffsetLeft: 30,
-      x: 0,
-      y: 0,
-      dx: 2,
-      dy: -2,
-      paddleX: 0,
-      score: 0,
-      lives: 3,
-      bricks: [],
-      gameLoop: null,
-      
+      canvas:null,ctx:null,ballRadius:10,paddleHeight:10,paddleWidth:75,
+      brickRowCount:5,brickColumnCount:8,brickWidth:50,brickHeight:20,brickPadding:10,brickOffsetTop:30,brickOffsetLeft:30,
+      x:0,y:0,dx:2,dy:-2,paddleX:0,score:0,lives:3,bricks:[],gameLoop:null,
+
       init() {
-        this.canvas = document.getElementById('breakout-canvas');
-        if (this.canvas) {
-          this.ctx = this.canvas.getContext('2d');
-          
-          const newBtn = document.getElementById('breakout-new');
-          if (newBtn) {
-            newBtn.addEventListener('click', () => this.newGame());
-          }
-          
-          this.canvas.addEventListener('mousemove', (e) => this.handleMouse(e));
-          this.canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            const rect = this.canvas.getBoundingClientRect();
-            const relativeX = touch.clientX - rect.left;
-            if (relativeX > 0 && relativeX < this.canvas.width) {
-              this.paddleX = relativeX - this.paddleWidth / 2;
-            }
-          });
-          
-          this.newGame();
-        }
+        this.canvas=document.getElementById('breakout-canvas');
+        if(this.canvas){this.ctx=this.canvas.getContext('2d');
+        document.getElementById('breakout-new')?.addEventListener('click',()=>this.newGame());
+        this.canvas.addEventListener('mousemove',(e)=>this.handleMouse(e));
+        this.canvas.addEventListener('touchmove',(e)=>{e.preventDefault();const t=e.touches[0],r=this.canvas.getBoundingClientRect(),rx=t.clientX-r.left;if(rx>0&&rx<this.canvas.width)this.paddleX=rx-this.paddleWidth/2;});
+        this.newGame();}
       },
-      
+
       newGame() {
-        this.x = this.canvas.width / 2;
-        this.y = this.canvas.height - 30;
-        this.dx = 3;
-        this.dy = -3;
-        this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
-        this.score = 0;
-        this.lives = 3;
-        
-        this.bricks = [];
-        for (let c = 0; c < this.brickColumnCount; c++) {
-          this.bricks[c] = [];
-          for (let r = 0; r < this.brickRowCount; r++) {
-            const color = 'hsl(' + ((r * 60) % 360) + ', 70%, 50%)';
-            this.bricks[c][r] = { x: 0, y: 0, status: 1, color: color };
-          }
-        }
-        
-        if (this.gameLoop) cancelAnimationFrame(this.gameLoop);
-        this.draw();
+        this.x=this.canvas.width/2;this.y=this.canvas.height-30;this.dx=3;this.dy=-3;
+        this.paddleX=(this.canvas.width-this.paddleWidth)/2;this.score=0;this.lives=3;
+        this.bricks=[];
+        for(let c=0;c<this.brickColumnCount;c++){this.bricks[c]=[];for(let r=0;r<this.brickRowCount;r++){this.bricks[c][r]={x:0,y:0,status:1,color:'hsl('+((r*60)%360)+', 70%, 50%)'};}}
+        if(this.gameLoop)cancelAnimationFrame(this.gameLoop); this.draw();
       },
-      
-      handleMouse(e) {
-        if (activeGame !== 'breakout') return;
-        const rect = this.canvas.getBoundingClientRect();
-        const relativeX = e.clientX - rect.left;
-        if (relativeX > 0 && relativeX < this.canvas.width) {
-          this.paddleX = relativeX - this.paddleWidth / 2;
-        }
-      },
-      
+
+      handleMouse(e) { if(activeGame!=='breakout')return; const r=this.canvas.getBoundingClientRect(),rx=e.clientX-r.left; if(rx>0&&rx<this.canvas.width)this.paddleX=rx-this.paddleWidth/2; },
+
       collisionDetection() {
-        for (let c = 0; c < this.brickColumnCount; c++) {
-          for (let r = 0; r < this.brickRowCount; r++) {
-            const b = this.bricks[c][r];
-            if (b.status === 1) {
-              if (this.x > b.x && this.x < b.x + this.brickWidth && 
-                  this.y > b.y && this.y < b.y + this.brickHeight) {
-                this.dy = -this.dy;
-                b.status = 0;
-                this.score++;
-                
-                if (this.score === this.brickRowCount * this.brickColumnCount) {
-                  alert('축하합니다! 모든 벽돌을 깨뜨렸습니다!');
-                  this.newGame();
-                }
-              }
-            }
-          }
-        }
+        for(let c=0;c<this.brickColumnCount;c++) for(let r=0;r<this.brickRowCount;r++){const b=this.bricks[c][r];
+          if(b.status===1&&this.x>b.x&&this.x<b.x+this.brickWidth&&this.y>b.y&&this.y<b.y+this.brickHeight){
+            this.dy=-this.dy;b.status=0;this.score++;
+            if(this.score===this.brickRowCount*this.brickColumnCount){alert('축하합니다! 모든 벽돌을 깨뜨렸습니다!');this.newGame();}
+          }}
       },
-      
-      drawBall() {
-        this.ctx.beginPath();
-        this.ctx.arc(this.x, this.y, this.ballRadius, 0, Math.PI * 2);
-        this.ctx.fillStyle = '#fff';
-        this.ctx.fill();
-        this.ctx.closePath();
-      },
-      
-      drawPaddle() {
-        this.ctx.beginPath();
-        this.ctx.rect(this.paddleX, this.canvas.height - this.paddleHeight, this.paddleWidth, this.paddleHeight);
-        this.ctx.fillStyle = '#22c55e';
-        this.ctx.fill();
-        this.ctx.closePath();
-      },
-      
-      drawBricks() {
-        for (let c = 0; c < this.brickColumnCount; c++) {
-          for (let r = 0; r < this.brickRowCount; r++) {
-            if (this.bricks[c][r].status === 1) {
-              const brickX = (c * (this.brickWidth + this.brickPadding)) + this.brickOffsetLeft;
-              const brickY = (r * (this.brickHeight + this.brickPadding)) + this.brickOffsetTop;
-              this.bricks[c][r].x = brickX;
-              this.bricks[c][r].y = brickY;
-              
-              this.ctx.beginPath();
-              this.ctx.rect(brickX, brickY, this.brickWidth, this.brickHeight);
-              this.ctx.fillStyle = this.bricks[c][r].color;
-              this.ctx.fill();
-              this.ctx.closePath();
-            }
-          }
-        }
-      },
-      
+
       draw() {
-        if (activeGame !== 'breakout') {
-          cancelAnimationFrame(this.gameLoop);
-          return;
+        if(activeGame!=='breakout'){cancelAnimationFrame(this.gameLoop);return;}
+        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+        // Bricks
+        for(let c=0;c<this.brickColumnCount;c++) for(let r=0;r<this.brickRowCount;r++) if(this.bricks[c][r].status===1){
+          const bx=c*(this.brickWidth+this.brickPadding)+this.brickOffsetLeft, by=r*(this.brickHeight+this.brickPadding)+this.brickOffsetTop;
+          this.bricks[c][r].x=bx;this.bricks[c][r].y=by;
+          this.ctx.beginPath();this.ctx.rect(bx,by,this.brickWidth,this.brickHeight);this.ctx.fillStyle=this.bricks[c][r].color;this.ctx.fill();this.ctx.closePath();
         }
-        
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.drawBricks();
-        this.drawBall();
-        this.drawPaddle();
+        // Ball
+        this.ctx.beginPath();this.ctx.arc(this.x,this.y,this.ballRadius,0,Math.PI*2);this.ctx.fillStyle='#fff';this.ctx.fill();this.ctx.closePath();
+        // Paddle
+        this.ctx.beginPath();this.ctx.rect(this.paddleX,this.canvas.height-this.paddleHeight,this.paddleWidth,this.paddleHeight);this.ctx.fillStyle='#22c55e';this.ctx.fill();this.ctx.closePath();
+
         this.collisionDetection();
-        
-        if (this.x + this.dx > this.canvas.width - this.ballRadius || this.x + this.dx < this.ballRadius) {
-          this.dx = -this.dx;
+
+        if(this.x+this.dx>this.canvas.width-this.ballRadius||this.x+this.dx<this.ballRadius)this.dx=-this.dx;
+        if(this.y+this.dy<this.ballRadius)this.dy=-this.dy;
+        else if(this.y+this.dy>this.canvas.height-this.ballRadius){
+          if(this.x>this.paddleX&&this.x<this.paddleX+this.paddleWidth){this.dy=-this.dy;this.dx=8*((this.x-this.paddleX)/this.paddleWidth-0.5);}
+          else{this.lives--;if(!this.lives){alert('게임 종료! 최종 점수: '+this.score);this.newGame();return;}else{this.x=this.canvas.width/2;this.y=this.canvas.height-30;this.dx=3;this.dy=-3;this.paddleX=(this.canvas.width-this.paddleWidth)/2;}}
         }
-        if (this.y + this.dy < this.ballRadius) {
-          this.dy = -this.dy;
-        } else if (this.y + this.dy > this.canvas.height - this.ballRadius) {
-          if (this.x > this.paddleX && this.x < this.paddleX + this.paddleWidth) {
-            this.dy = -this.dy;
-            const hitPos = (this.x - this.paddleX) / this.paddleWidth;
-            this.dx = 8 * (hitPos - 0.5);
-          } else {
-            this.lives--;
-            if (!this.lives) {
-              alert('게임 종료! 최종 점수: ' + this.score);
-              this.newGame();
-              return;
-            } else {
-              this.x = this.canvas.width / 2;
-              this.y = this.canvas.height - 30;
-              this.dx = 3;
-              this.dy = -3;
-              this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
-            }
-          }
-        }
-        
-        if (this.paddleX < 0) {
-          this.paddleX = 0;
-        } else if (this.paddleX + this.paddleWidth > this.canvas.width) {
-          this.paddleX = this.canvas.width - this.paddleWidth;
-        }
-        
-        this.x += this.dx;
-        this.y += this.dy;
-        
-        const scoreEl = document.getElementById('breakout-score');
-        const livesEl = document.getElementById('breakout-lives');
-        if (scoreEl) scoreEl.textContent = this.score;
-        if (livesEl) livesEl.textContent = this.lives;
-        
-        this.gameLoop = requestAnimationFrame(() => this.draw());
+        if(this.paddleX<0)this.paddleX=0;else if(this.paddleX+this.paddleWidth>this.canvas.width)this.paddleX=this.canvas.width-this.paddleWidth;
+        this.x+=this.dx;this.y+=this.dy;
+        const sEl=document.getElementById('breakout-score'),lEl=document.getElementById('breakout-lives');
+        if(sEl)sEl.textContent=this.score;if(lEl)lEl.textContent=this.lives;
+        this.gameLoop=requestAnimationFrame(()=>this.draw());
       }
     };
 
+    /* ================================================
+       TETRIS
+       ================================================ */
     const tetrisApp = {
-      canvas: null,
-      ctx: null,
-      nextCanvas: null,
-      nextCtx: null,
-      board: [],
-      currentPiece: null,
-      nextPiece: null,
-      score: 0,
-      level: 1,
-      lines: 0,
-      dropTime: 1000,
-      lastDrop: 0,
-      gameOver: false,
-      
-      COLS: 10,
-      ROWS: 20,
-      BLOCK_SIZE: 30,
-      
-      PIECES: [
-        [[1,1,1,1]],
-        [[1,1],[1,1]],
-        [[0,1,1],[1,1,0]],
-        [[1,1,0],[0,1,1]],
-        [[1,0,0],[1,1,1]],
-        [[0,0,1],[1,1,1]],
-        [[0,1,0],[1,1,1]]
-      ],
-      
-      COLORS: [
-        '#00ffff',
-        '#ffff00',
-        '#00ff00',
-        '#ff0000',
-        '#ff7f00',
-        '#0000ff',
-        '#ff00ff'
-      ],
-      
+      canvas:null,ctx:null,nextCanvas:null,nextCtx:null,board:[],currentPiece:null,nextPiece:null,
+      score:0,level:1,lines:0,dropTime:1000,lastDrop:0,gameOver:false,
+      COLS:10,ROWS:20,BLOCK_SIZE:30,
+      PIECES:[[[1,1,1,1]],[[1,1],[1,1]],[[0,1,1],[1,1,0]],[[1,1,0],[0,1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]],[[0,1,0],[1,1,1]]],
+      COLORS:['#00ffff','#ffff00','#00ff00','#ff0000','#ff7f00','#0000ff','#ff00ff'],
+
       init() {
-        this.canvas = document.getElementById('tetris-board');
-        this.nextCanvas = document.getElementById('tetris-next');
-        if (this.canvas && this.nextCanvas) {
-          this.ctx = this.canvas.getContext('2d');
-          this.nextCtx = this.nextCanvas.getContext('2d');
-          
-          const newBtn = document.getElementById('tetris-new');
-          if (newBtn) {
-            newBtn.addEventListener('click', () => this.newGame());
-          }
-          document.addEventListener('keydown', (e) => this.handleKey(e));
-          
-          this.newGame();
-        }
+        this.canvas=document.getElementById('tetris-board');this.nextCanvas=document.getElementById('tetris-next');
+        if(this.canvas&&this.nextCanvas){this.ctx=this.canvas.getContext('2d');this.nextCtx=this.nextCanvas.getContext('2d');
+        document.getElementById('tetris-new')?.addEventListener('click',()=>this.newGame());
+        document.addEventListener('keydown',(e)=>this.handleKey(e)); this.newGame();}
       },
-      
+
       newGame() {
-        this.board = Array(this.ROWS).fill(0).map(() => Array(this.COLS).fill(0));
-        this.score = 0;
-        this.level = 1;
-        this.lines = 0;
-        this.dropTime = 1000;
-        this.gameOver = false;
-        
-        this.nextPiece = this.randomPiece();
-        this.spawnPiece();
-        
-        this.gameLoop();
+        this.board=Array(this.ROWS).fill(0).map(()=>Array(this.COLS).fill(0));
+        this.score=0;this.level=1;this.lines=0;this.dropTime=1000;this.gameOver=false;
+        this.nextPiece=this.randomPiece();this.spawnPiece();this.gameLoop();
       },
-      
-      randomPiece() {
-        const type = Math.floor(Math.random() * this.PIECES.length);
-        return {
-          type,
-          shape: this.PIECES[type],
-          color: this.COLORS[type],
-          x: Math.floor((this.COLS - this.PIECES[type][0].length) / 2),
-          y: 0
-        };
-      },
-      
-      spawnPiece() {
-        this.currentPiece = this.nextPiece;
-        this.nextPiece = this.randomPiece();
-        
-        if (this.collision()) {
-          this.gameOver = true;
-        }
-      },
-      
+
+      randomPiece() { const t=Math.floor(Math.random()*this.PIECES.length); return{type:t,shape:this.PIECES[t],color:this.COLORS[t],x:Math.floor((this.COLS-this.PIECES[t][0].length)/2),y:0}; },
+      spawnPiece() { this.currentPiece=this.nextPiece;this.nextPiece=this.randomPiece();if(this.collision())this.gameOver=true; },
+
       collision() {
-        for (let y = 0; y < this.currentPiece.shape.length; y++) {
-          for (let x = 0; x < this.currentPiece.shape[y].length; x++) {
-            if (this.currentPiece.shape[y][x]) {
-              const boardX = this.currentPiece.x + x;
-              const boardY = this.currentPiece.y + y;
-              
-              if (boardX < 0 || boardX >= this.COLS ||
-                  boardY >= this.ROWS ||
-                  (boardY >= 0 && this.board[boardY][boardX])) {
-                return true;
-              }
-            }
-          }
-        }
+        for(let y=0;y<this.currentPiece.shape.length;y++) for(let x=0;x<this.currentPiece.shape[y].length;x++)
+          if(this.currentPiece.shape[y][x]){const bx=this.currentPiece.x+x,by=this.currentPiece.y+y;
+            if(bx<0||bx>=this.COLS||by>=this.ROWS||(by>=0&&this.board[by][bx]))return true;}
         return false;
       },
-      
-      merge() {
-        for (let y = 0; y < this.currentPiece.shape.length; y++) {
-          for (let x = 0; x < this.currentPiece.shape[y].length; x++) {
-            if (this.currentPiece.shape[y][x]) {
-              const boardY = this.currentPiece.y + y;
-              const boardX = this.currentPiece.x + x;
-              if (boardY >= 0) {
-                this.board[boardY][boardX] = this.currentPiece.type + 1;
-              }
-            }
-          }
-        }
-      },
-      
+
+      merge() { for(let y=0;y<this.currentPiece.shape.length;y++) for(let x=0;x<this.currentPiece.shape[y].length;x++) if(this.currentPiece.shape[y][x]){const by=this.currentPiece.y+y,bx=this.currentPiece.x+x;if(by>=0)this.board[by][bx]=this.currentPiece.type+1;} },
+
       clearLines() {
-        let linesCleared = 0;
-        
-        for (let y = this.ROWS - 1; y >= 0; y--) {
-          if (this.board[y].every(cell => cell > 0)) {
-            this.board.splice(y, 1);
-            this.board.unshift(Array(this.COLS).fill(0));
-            linesCleared++;
-            y++;
-          }
-        }
-        
-        if (linesCleared > 0) {
-          this.lines += linesCleared;
-          this.score += linesCleared * 100 * this.level;
-          this.level = Math.floor(this.lines / 10) + 1;
-          this.dropTime = Math.max(100, 1000 - (this.level - 1) * 100);
-        }
+        let cleared=0;
+        for(let y=this.ROWS-1;y>=0;y--) if(this.board[y].every(c=>c>0)){this.board.splice(y,1);this.board.unshift(Array(this.COLS).fill(0));cleared++;y++;}
+        if(cleared>0){this.lines+=cleared;this.score+=cleared*100*this.level;this.level=Math.floor(this.lines/10)+1;this.dropTime=Math.max(100,1000-(this.level-1)*100);}
       },
-      
+
       rotate() {
-        const rotated = this.currentPiece.shape[0].map((_, i) =>
-          this.currentPiece.shape.map(row => row[i]).reverse()
-        );
-        
-        const oldShape = this.currentPiece.shape;
-        this.currentPiece.shape = rotated;
-        
-        if (this.collision()) {
-          this.currentPiece.shape = oldShape;
-        }
+        const rot=this.currentPiece.shape[0].map((_,i)=>this.currentPiece.shape.map(r=>r[i]).reverse());
+        const old=this.currentPiece.shape;this.currentPiece.shape=rot;if(this.collision())this.currentPiece.shape=old;
       },
-      
-      move(dx, dy) {
-        this.currentPiece.x += dx;
-        this.currentPiece.y += dy;
-        
-        if (this.collision()) {
-          this.currentPiece.x -= dx;
-          this.currentPiece.y -= dy;
-          
-          if (dy > 0) {
-            this.merge();
-            this.clearLines();
-            this.spawnPiece();
-          }
-        }
+
+      move(dx,dy) {
+        this.currentPiece.x+=dx;this.currentPiece.y+=dy;
+        if(this.collision()){this.currentPiece.x-=dx;this.currentPiece.y-=dy;if(dy>0){this.merge();this.clearLines();this.spawnPiece();}}
       },
-      
-      drop() {
-        while (!this.collision()) {
-          this.currentPiece.y++;
-        }
-        this.currentPiece.y--;
-        this.merge();
-        this.clearLines();
-        this.spawnPiece();
-      },
-      
+
+      drop() { while(!this.collision())this.currentPiece.y++; this.currentPiece.y--; this.merge();this.clearLines();this.spawnPiece(); },
+
       handleKey(e) {
-        if (activeGame !== 'tetris' || this.gameOver) return;
-        
-        switch(e.key) {
-          case 'ArrowLeft':
-            e.preventDefault();
-            this.move(-1, 0);
-            break;
-          case 'ArrowRight':
-            e.preventDefault();
-            this.move(1, 0);
-            break;
-          case 'ArrowDown':
-            e.preventDefault();
-            this.move(0, 1);
-            break;
-          case 'ArrowUp':
-            e.preventDefault();
-            this.rotate();
-            break;
-          case ' ':
-            e.preventDefault();
-            this.drop();
-            break;
-        }
+        if(activeGame!=='tetris'||this.gameOver)return;
+        switch(e.key){case'ArrowLeft':e.preventDefault();this.move(-1,0);break;case'ArrowRight':e.preventDefault();this.move(1,0);break;case'ArrowDown':e.preventDefault();this.move(0,1);break;case'ArrowUp':e.preventDefault();this.rotate();break;case' ':e.preventDefault();this.drop();break;}
       },
-      
+
       draw() {
-        if (!this.ctx) return;
-        
-        this.ctx.fillStyle = '#1a1a2e';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        for (let y = 0; y < this.ROWS; y++) {
-          for (let x = 0; x < this.COLS; x++) {
-            if (this.board[y][x]) {
-              this.ctx.fillStyle = this.COLORS[this.board[y][x] - 1];
-              this.ctx.fillRect(
-                x * this.BLOCK_SIZE,
-                y * this.BLOCK_SIZE,
-                this.BLOCK_SIZE - 1,
-                this.BLOCK_SIZE - 1
-              );
-            }
-          }
-        }
-        
-        if (this.currentPiece) {
-          this.ctx.fillStyle = this.currentPiece.color;
-          for (let y = 0; y < this.currentPiece.shape.length; y++) {
-            for (let x = 0; x < this.currentPiece.shape[y].length; x++) {
-              if (this.currentPiece.shape[y][x]) {
-                this.ctx.fillRect(
-                  (this.currentPiece.x + x) * this.BLOCK_SIZE,
-                  (this.currentPiece.y + y) * this.BLOCK_SIZE,
-                  this.BLOCK_SIZE - 1,
-                  this.BLOCK_SIZE - 1
-                );
-              }
-            }
-          }
-        }
-        
-        if (this.nextCtx) {
-          this.nextCtx.fillStyle = '#f0f0f0';
-          this.nextCtx.fillRect(0, 0, this.nextCanvas.width, this.nextCanvas.height);
-          
-          if (this.nextPiece) {
-            this.nextCtx.fillStyle = this.nextPiece.color;
-            const offsetX = (4 - this.nextPiece.shape[0].length) / 2;
-            const offsetY = (4 - this.nextPiece.shape.length) / 2;
-            
-            for (let y = 0; y < this.nextPiece.shape.length; y++) {
-              for (let x = 0; x < this.nextPiece.shape[y].length; x++) {
-                if (this.nextPiece.shape[y][x]) {
-                  this.nextCtx.fillRect(
-                    (offsetX + x) * 25,
-                    (offsetY + y) * 25,
-                    24,
-                    24
-                  );
-                }
-              }
-            }
-          }
-        }
-        
-        const scoreEl = document.getElementById('tetris-score');
-        const levelEl = document.getElementById('tetris-level');
-        if (scoreEl) scoreEl.textContent = this.score;
-        if (levelEl) levelEl.textContent = this.level;
+        if(!this.ctx)return;
+        this.ctx.fillStyle='#1a1a2e';this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+        for(let y=0;y<this.ROWS;y++) for(let x=0;x<this.COLS;x++) if(this.board[y][x]){this.ctx.fillStyle=this.COLORS[this.board[y][x]-1];this.ctx.fillRect(x*this.BLOCK_SIZE,y*this.BLOCK_SIZE,this.BLOCK_SIZE-1,this.BLOCK_SIZE-1);}
+        if(this.currentPiece){this.ctx.fillStyle=this.currentPiece.color;for(let y=0;y<this.currentPiece.shape.length;y++) for(let x=0;x<this.currentPiece.shape[y].length;x++) if(this.currentPiece.shape[y][x])this.ctx.fillRect((this.currentPiece.x+x)*this.BLOCK_SIZE,(this.currentPiece.y+y)*this.BLOCK_SIZE,this.BLOCK_SIZE-1,this.BLOCK_SIZE-1);}
+        if(this.nextCtx){this.nextCtx.fillStyle='#f0f0f0';this.nextCtx.fillRect(0,0,this.nextCanvas.width,this.nextCanvas.height);
+          if(this.nextPiece){this.nextCtx.fillStyle=this.nextPiece.color;const ox=(4-this.nextPiece.shape[0].length)/2,oy=(4-this.nextPiece.shape.length)/2;
+            for(let y=0;y<this.nextPiece.shape.length;y++) for(let x=0;x<this.nextPiece.shape[y].length;x++) if(this.nextPiece.shape[y][x])this.nextCtx.fillRect((ox+x)*25,(oy+y)*25,24,24);}}
+        const sEl=document.getElementById('tetris-score'),lEl=document.getElementById('tetris-level');
+        if(sEl)sEl.textContent=this.score;if(lEl)lEl.textContent=this.level;
       },
-      
+
       gameLoop() {
-        if (activeGame !== 'tetris') return;
-        
-        const now = Date.now();
-        if (now - this.lastDrop > this.dropTime) {
-          this.move(0, 1);
-          this.lastDrop = now;
-        }
-        
+        if(activeGame!=='tetris')return;
+        const now=Date.now();if(now-this.lastDrop>this.dropTime){this.move(0,1);this.lastDrop=now;}
         this.draw();
-        
-        if (!this.gameOver) {
-          requestAnimationFrame(() => this.gameLoop());
-        } else {
-          alert('게임 종료! 점수: ' + this.score);
-        }
+        if(!this.gameOver)requestAnimationFrame(()=>this.gameLoop());else alert('게임 종료! 점수: '+this.score);
       }
     };
 
+    /* ================================================
+       FLAPPY BIRD
+       ================================================ */
     const flappyApp = {
-      canvas: null,
-      ctx: null,
-      bird: null,
-      pipes: [],
-      score: 0,
-      bestScore: 0,
-      gameState: 'ready',
-      
+      canvas:null,ctx:null,bird:null,pipes:[],score:0,bestScore:0,gameState:'ready',
+
       init() {
-        this.canvas = document.getElementById('flappy-canvas');
-        if (this.canvas) {
-          this.ctx = this.canvas.getContext('2d');
-          
-          this.bestScore = 0;
-          const bestEl = document.getElementById('flappy-best');
-          if (bestEl) bestEl.textContent = this.bestScore;
-          
-          const newBtn = document.getElementById('flappy-new');
-          if (newBtn) {
-            newBtn.addEventListener('click', () => this.newGame());
-          }
-          this.canvas.addEventListener('click', () => this.jump());
-          document.addEventListener('keydown', (e) => {
-            if (activeGame === 'flappy' && e.key === ' ') {
-              e.preventDefault();
-              this.jump();
-            }
-          });
-          
-          this.newGame();
-        }
+        this.canvas=document.getElementById('flappy-canvas');
+        if(this.canvas){this.ctx=this.canvas.getContext('2d');
+        document.getElementById('flappy-best')&&(document.getElementById('flappy-best').textContent=0);
+        document.getElementById('flappy-new')?.addEventListener('click',()=>this.newGame());
+        this.canvas.addEventListener('click',()=>this.jump());
+        document.addEventListener('keydown',(e)=>{if(activeGame==='flappy'&&e.key===' '){e.preventDefault();this.jump();}});
+        this.newGame();}
       },
-      
+
       newGame() {
-        this.bird = {
-          x: 100,
-          y: this.canvas.height / 2,
-          vy: 0,
-          size: 20,
-          gravity: 0.5,
-          jumpPower: -8
-        };
-        
-        this.pipes = [];
-        this.score = 0;
-        this.gameState = 'ready';
-        
-        const scoreEl = document.getElementById('flappy-score');
-        if (scoreEl) scoreEl.textContent = this.score;
-        
+        this.bird={x:100,y:this.canvas.height/2,vy:0,size:20,gravity:0.5,jumpPower:-8};
+        this.pipes=[];this.score=0;this.gameState='ready';
+        const el=document.getElementById('flappy-score');if(el)el.textContent=0;
         this.gameLoop();
       },
-      
-      jump() {
-        if (this.gameState === 'ready') {
-          this.gameState = 'playing';
-        }
-        
-        if (this.gameState === 'playing') {
-          this.bird.vy = this.bird.jumpPower;
-        }
-      },
-      
+
+      jump() { if(this.gameState==='ready')this.gameState='playing'; if(this.gameState==='playing')this.bird.vy=this.bird.jumpPower; },
+
       update() {
-        if (this.gameState !== 'playing') return;
-        
-        this.bird.vy += this.bird.gravity;
-        this.bird.y += this.bird.vy;
-        
-        if (this.bird.y < 0 || this.bird.y + this.bird.size > this.canvas.height) {
-          this.gameOver();
+        if(this.gameState!=='playing')return;
+        this.bird.vy+=this.bird.gravity;this.bird.y+=this.bird.vy;
+        if(this.bird.y<0||this.bird.y+this.bird.size>this.canvas.height)this.gameOverFn();
+
+        if(this.pipes.length===0||this.pipes[this.pipes.length-1].x<this.canvas.width-200){
+          const gap=150,minH=50,maxH=this.canvas.height-gap-minH,h=Math.random()*(maxH-minH)+minH;
+          this.pipes.push({x:this.canvas.width,topHeight:h,bottomY:h+gap,width:50,passed:false});
         }
-        
-        if (this.pipes.length === 0 || this.pipes[this.pipes.length - 1].x < this.canvas.width - 200) {
-          const gap = 150;
-          const minHeight = 50;
-          const maxHeight = this.canvas.height - gap - minHeight;
-          const height = Math.random() * (maxHeight - minHeight) + minHeight;
-          
-          this.pipes.push({
-            x: this.canvas.width,
-            topHeight: height,
-            bottomY: height + gap,
-            width: 50,
-            passed: false
-          });
-        }
-        
-        this.pipes.forEach((pipe, index) => {
-          pipe.x -= 3;
-          
-          if (pipe.x + pipe.width < 0) {
-            this.pipes.splice(index, 1);
-          }
-          
-          if (this.bird.x + this.bird.size > pipe.x &&
-              this.bird.x < pipe.x + pipe.width) {
-            if (this.bird.y < pipe.topHeight ||
-                this.bird.y + this.bird.size > pipe.bottomY) {
-              this.gameOver();
-            }
-          }
-          
-          if (!pipe.passed && pipe.x + pipe.width < this.bird.x) {
-            pipe.passed = true;
-            this.score++;
-            const scoreEl = document.getElementById('flappy-score');
-            if (scoreEl) scoreEl.textContent = this.score;
-          }
+
+        this.pipes.forEach((pipe,i)=>{
+          pipe.x-=3;if(pipe.x+pipe.width<0)this.pipes.splice(i,1);
+          if(this.bird.x+this.bird.size>pipe.x&&this.bird.x<pipe.x+pipe.width)
+            if(this.bird.y<pipe.topHeight||this.bird.y+this.bird.size>pipe.bottomY)this.gameOverFn();
+          if(!pipe.passed&&pipe.x+pipe.width<this.bird.x){pipe.passed=true;this.score++;const el=document.getElementById('flappy-score');if(el)el.textContent=this.score;}
         });
       },
-      
+
       draw() {
-        if (!this.ctx) return;
-        
-        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
-        gradient.addColorStop(0, '#4EC0CA');
-        gradient.addColorStop(0.5, '#7FD6E1');
-        gradient.addColorStop(1, '#9FE6F1');
-        this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.ctx.fillStyle = '#228B22';
-        this.pipes.forEach(pipe => {
-          this.ctx.fillRect(pipe.x, 0, pipe.width, pipe.topHeight);
-          this.ctx.fillRect(pipe.x, pipe.bottomY, pipe.width, this.canvas.height - pipe.bottomY);
-        });
-        
-        this.ctx.fillStyle = '#FFD700';
-        this.ctx.beginPath();
-        this.ctx.arc(this.bird.x, this.bird.y, this.bird.size, 0, Math.PI * 2);
-        this.ctx.fill();
-        
-        if (this.gameState === 'ready') {
-          this.ctx.fillStyle = 'rgba(0,0,0,0.5)';
-          this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-          this.ctx.fillStyle = '#fff';
-          this.ctx.font = 'bold 24px Arial';
-          this.ctx.textAlign = 'center';
-          this.ctx.fillText('클릭 또는 Space로 시작', this.canvas.width/2, this.canvas.height/2);
-        }
+        if(!this.ctx)return;
+        const g=this.ctx.createLinearGradient(0,0,0,this.canvas.height);g.addColorStop(0,'#4EC0CA');g.addColorStop(0.5,'#7FD6E1');g.addColorStop(1,'#9FE6F1');
+        this.ctx.fillStyle=g;this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+        this.ctx.fillStyle='#228B22';this.pipes.forEach(p=>{this.ctx.fillRect(p.x,0,p.width,p.topHeight);this.ctx.fillRect(p.x,p.bottomY,p.width,this.canvas.height-p.bottomY);});
+        this.ctx.fillStyle='#FFD700';this.ctx.beginPath();this.ctx.arc(this.bird.x,this.bird.y,this.bird.size,0,Math.PI*2);this.ctx.fill();
+        if(this.gameState==='ready'){this.ctx.fillStyle='rgba(0,0,0,0.5)';this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);this.ctx.fillStyle='#fff';this.ctx.font='bold 24px Arial';this.ctx.textAlign='center';this.ctx.fillText('클릭 또는 Space로 시작',this.canvas.width/2,this.canvas.height/2);}
       },
-      
+
       gameLoop() {
-        if (activeGame !== 'flappy') return;
-        
-        this.update();
-        this.draw();
-        
-        if (this.gameState !== 'over') {
-          requestAnimationFrame(() => this.gameLoop());
-        }
+        if(activeGame!=='flappy')return;
+        this.update();this.draw();
+        if(this.gameState!=='over')requestAnimationFrame(()=>this.gameLoop());
       },
-      
-      gameOver() {
-        this.gameState = 'over';
-        
-        if (this.score > this.bestScore) {
-          this.bestScore = this.score;
-          const bestEl = document.getElementById('flappy-best');
-          if (bestEl) bestEl.textContent = this.bestScore;
-        }
-        
-        alert('게임 종료! 점수: ' + this.score);
+
+      gameOverFn() {
+        this.gameState='over';
+        if(this.score>this.bestScore){this.bestScore=this.score;const el=document.getElementById('flappy-best');if(el)el.textContent=this.bestScore;}
+        alert('게임 종료! 점수: '+this.score);
       }
     };
 
+    /* ================================================
+       INITIALIZATION
+       ================================================ */
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('floating-game-btn').addEventListener('click', () => {
-        showSection('game-hub');
-      });
-      
-      document.getElementById('tab-pension').addEventListener('click', () => {
-        showSection('pension-container');
-      });
-      
-      document.getElementById('tab-games').addEventListener('click', () => {
-        showSection('game-hub');
-      });
+      document.getElementById('floating-game-btn').addEventListener('click', () => showSection('game-hub'));
+      document.getElementById('tab-pension').addEventListener('click', () => showSection('pension-container'));
+      document.getElementById('tab-games').addEventListener('click', () => showSection('game-hub'));
+      document.getElementById('jump-to-calc')?.addEventListener('click', () => pensionApp.scrollToCalculator());
+      document.getElementById('share-page-btn')?.addEventListener('click', () => pensionApp.sharePage());
+      document.getElementById('goto-fuel')?.addEventListener('click', () => { showSection('fuel-support'); window.scrollTo(0,0); });
+      document.getElementById('fuel-back-to-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
+      document.getElementById('fuel-back-bottom')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
 
-      const jumpCalcBtn = document.getElementById('jump-to-calc');
-      if (jumpCalcBtn) {
-        jumpCalcBtn.addEventListener('click', () => pensionApp.scrollToCalculator());
-      }
-
-      const shareBtn = document.getElementById('share-page-btn');
-      if (shareBtn) {
-        shareBtn.addEventListener('click', () => pensionApp.sharePage());
-      }
-      
-      document.querySelectorAll('.back-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          showSection('game-hub');
-        });
-      });
-      
+      document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', () => showSection('game-hub')));
       document.querySelectorAll('[data-game]').forEach(card => {
         card.addEventListener('click', () => {
           const game = card.dataset.game;
           const idMap = { omok: 'omok-game', g2048: 'game-2048' };
-            showSection(idMap[game] || ('game-' + game));
+          showSection(idMap[game] || ('game-' + game));
         });
       });
-      
+
       pensionApp.init();
       omokApp.init();
       g2048App.init();
@@ -2553,7 +2091,6 @@
       breakoutApp.init();
       tetrisApp.init();
       flappyApp.init();
-      
       showSection('pension-container');
     });
   </script>
