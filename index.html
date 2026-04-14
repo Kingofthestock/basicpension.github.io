@@ -908,6 +908,27 @@
           </div>
           <p class="text-sm text-gray-500">파이프를 피해 날아가세요</p>
         </div>
+        <div data-game="minesweeper" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-gray-500 to-gray-700 rounded-full flex items-center justify-center text-white text-xl">💣</div>
+            <div><h3 class="text-xl font-bold">지뢰찾기</h3><p class="text-sm text-gray-600">두뇌 퍼즐</p></div>
+          </div>
+          <p class="text-sm text-gray-500">Windows 추억의 지뢰찾기</p>
+        </div>
+        <div data-game="memory" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center text-white text-xl">🃏</div>
+            <div><h3 class="text-xl font-bold">카드 짝맞추기</h3><p class="text-sm text-gray-600">기억력 게임</p></div>
+          </div>
+          <p class="text-sm text-gray-500">같은 그림 카드를 찾아보세요</p>
+        </div>
+        <div data-game="sudoku" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white text-xl">🔢</div>
+            <div><h3 class="text-xl font-bold">스도쿠</h3><p class="text-sm text-gray-600">숫자 퍼즐</p></div>
+          </div>
+          <p class="text-sm text-gray-500">빈칸에 1~9를 채워 완성하세요</p>
+        </div>
       </div>
     </div>
   </section>
@@ -1038,6 +1059,81 @@
           <canvas id="flappy-canvas" width="480" height="640" style="background:linear-gradient(to bottom,#4EC0CA 0%,#7FD6E1 50%,#9FE6F1 100%);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.2);"></canvas>
         </div>
         <p class="text-sm text-gray-600 mt-3">Space 또는 클릭/터치로 점프</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Minesweeper Game ===== -->
+  <section id="game-minesweeper" class="hidden min-h-screen bg-gradient-to-br from-gray-100 to-gray-300">
+    <div class="max-w-xl mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
+      <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h2 class="text-2xl font-bold">지뢰찾기</h2>
+          <div class="flex items-center gap-2">
+            <div class="px-3 py-2 bg-red-100 rounded text-sm">💣 <span id="mine-count" class="font-bold">10</span></div>
+            <div class="px-3 py-2 bg-gray-100 rounded text-sm">⏱ <span id="mine-timer" class="font-bold">0</span></div>
+            <button id="mine-new" class="px-3 py-2 bg-gray-700 text-white rounded-lg text-sm font-bold hover:bg-gray-800">새 게임</button>
+          </div>
+        </div>
+        <div class="flex gap-2 mb-3">
+          <button class="mine-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-green-500 text-white" data-diff="easy">쉬움</button>
+          <button class="mine-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700" data-diff="medium">보통</button>
+          <button class="mine-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700" data-diff="hard">어려움</button>
+        </div>
+        <div id="mine-board" style="display:grid; gap:2px; user-select:none; margin:0 auto;"></div>
+        <div id="mine-msg" class="text-center text-lg font-bold mt-3 hidden"></div>
+        <p class="text-sm text-gray-500 mt-3 text-center">클릭: 열기 | 길게 누르기(또는 우클릭): 깃발</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Memory Match Game ===== -->
+  <section id="game-memory" class="hidden min-h-screen bg-gradient-to-br from-pink-50 to-rose-100">
+    <div class="max-w-xl mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
+      <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h2 class="text-2xl font-bold">카드 짝맞추기</h2>
+          <div class="flex items-center gap-2">
+            <div class="px-3 py-2 bg-pink-100 rounded text-sm">시도 <span id="mem-moves" class="font-bold">0</span></div>
+            <div class="px-3 py-2 bg-gray-100 rounded text-sm">짝 <span id="mem-pairs" class="font-bold">0</span>/<span id="mem-total" class="font-bold">8</span></div>
+            <button id="mem-new" class="px-3 py-2 bg-rose-500 text-white rounded-lg text-sm font-bold hover:bg-rose-600">새 게임</button>
+          </div>
+        </div>
+        <div class="flex gap-2 mb-3">
+          <button class="mem-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-rose-500 text-white" data-size="4">4x4 쉬움</button>
+          <button class="mem-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700" data-size="6">6x6 어려움</button>
+        </div>
+        <div id="mem-board" style="display:grid; gap:8px; margin:0 auto;"></div>
+        <div id="mem-msg" class="text-center text-lg font-bold mt-3 hidden"></div>
+        <p class="text-sm text-gray-500 mt-3 text-center">카드를 눌러 같은 그림을 찾아주세요</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Sudoku Game ===== -->
+  <section id="game-sudoku" class="hidden min-h-screen bg-gradient-to-br from-cyan-50 to-blue-100">
+    <div class="max-w-xl mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
+      <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h2 class="text-2xl font-bold">스도쿠</h2>
+          <div class="flex items-center gap-2">
+            <div class="px-3 py-2 bg-gray-100 rounded text-sm">⏱ <span id="sdk-timer" class="font-bold">0</span></div>
+            <button id="sdk-check" class="px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700">정답 확인</button>
+            <button id="sdk-new" class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700">새 게임</button>
+          </div>
+        </div>
+        <div class="flex gap-2 mb-3">
+          <button class="sdk-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-blue-500 text-white" data-diff="easy">쉬움</button>
+          <button class="sdk-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700" data-diff="medium">보통</button>
+          <button class="sdk-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700" data-diff="hard">어려움</button>
+        </div>
+        <div id="sdk-board" style="display:grid; grid-template-columns:repeat(9,1fr); gap:0; margin:0 auto; max-width:400px; border:3px solid #1e293b;"></div>
+        <div id="sdk-numpad" class="flex justify-center gap-2 mt-3 flex-wrap"></div>
+        <div id="sdk-msg" class="text-center text-lg font-bold mt-3 hidden"></div>
+        <p class="text-sm text-gray-500 mt-3 text-center">빈칸을 누르고 아래 숫자를 선택하세요</p>
       </div>
     </div>
   </section>
@@ -2063,6 +2159,231 @@
     };
 
     /* ================================================
+       MINESWEEPER (지뢰찾기)
+       ================================================ */
+    const minesweeperApp = {
+      rows:9, cols:9, mines:10, board:[], revealed:[], flagged:[], gameOver:false, started:false, timer:0, timerInterval:null, difficulty:'easy',
+      DIFFS: { easy:{r:9,c:9,m:10}, medium:{r:12,c:12,m:25}, hard:{r:16,c:16,m:50} },
+      init() {
+        document.getElementById('mine-new').addEventListener('click',()=>this.newGame());
+        document.querySelectorAll('.mine-diff').forEach(b=>b.addEventListener('click',()=>{
+          this.difficulty=b.dataset.diff; document.querySelectorAll('.mine-diff').forEach(x=>{x.className='mine-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700';});
+          b.className='mine-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-green-500 text-white'; this.newGame();
+        }));
+        this.newGame();
+      },
+      newGame() {
+        const d=this.DIFFS[this.difficulty]; this.rows=d.r; this.cols=d.c; this.mines=d.m;
+        this.board=Array.from({length:this.rows},()=>Array(this.cols).fill(0));
+        this.revealed=Array.from({length:this.rows},()=>Array(this.cols).fill(false));
+        this.flagged=Array.from({length:this.rows},()=>Array(this.cols).fill(false));
+        this.gameOver=false; this.started=false; this.timer=0;
+        clearInterval(this.timerInterval); document.getElementById('mine-timer').textContent='0';
+        document.getElementById('mine-count').textContent=this.mines;
+        const msg=document.getElementById('mine-msg'); msg.classList.add('hidden'); msg.textContent='';
+        this.render();
+      },
+      placeMines(fr,fc) {
+        let placed=0;
+        while(placed<this.mines){const r=Math.floor(Math.random()*this.rows),c=Math.floor(Math.random()*this.cols);
+          if(this.board[r][c]!==-1&&(Math.abs(r-fr)>1||Math.abs(c-fc)>1)){this.board[r][c]=-1;placed++;}}
+        for(let r=0;r<this.rows;r++)for(let c=0;c<this.cols;c++){if(this.board[r][c]===-1)continue;let cnt=0;
+          for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){const nr=r+dr,nc=c+dc;if(nr>=0&&nr<this.rows&&nc>=0&&nc<this.cols&&this.board[nr][nc]===-1)cnt++;}this.board[r][c]=cnt;}
+      },
+      reveal(r,c) {
+        if(r<0||r>=this.rows||c<0||c>=this.cols||this.revealed[r][c]||this.flagged[r][c]||this.gameOver)return;
+        if(!this.started){this.started=true;this.placeMines(r,c);this.timerInterval=setInterval(()=>{this.timer++;document.getElementById('mine-timer').textContent=this.timer;},1000);}
+        this.revealed[r][c]=true;
+        if(this.board[r][c]===-1){this.gameOver=true;clearInterval(this.timerInterval);
+          for(let i=0;i<this.rows;i++)for(let j=0;j<this.cols;j++)if(this.board[i][j]===-1)this.revealed[i][j]=true;
+          this.render();const msg=document.getElementById('mine-msg');msg.textContent='💥 지뢰를 밟았습니다!';msg.style.color='#dc2626';msg.classList.remove('hidden');return;}
+        if(this.board[r][c]===0){for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++)this.reveal(r+dr,c+dc);}
+        this.checkWin(); this.render();
+      },
+      toggleFlag(r,c) {
+        if(this.revealed[r][c]||this.gameOver)return;
+        this.flagged[r][c]=!this.flagged[r][c];
+        const remaining=this.mines-this.flagged.flat().filter(Boolean).length;
+        document.getElementById('mine-count').textContent=remaining; this.render();
+      },
+      checkWin() {
+        let unrevealed=0;for(let r=0;r<this.rows;r++)for(let c=0;c<this.cols;c++)if(!this.revealed[r][c])unrevealed++;
+        if(unrevealed===this.mines){this.gameOver=true;clearInterval(this.timerInterval);
+          const msg=document.getElementById('mine-msg');msg.textContent='🎉 축하합니다! '+this.timer+'초 만에 클리어!';msg.style.color='#16a34a';msg.classList.remove('hidden');}
+      },
+      render() {
+        const el=document.getElementById('mine-board');
+        const cellSize=Math.min(Math.floor((window.innerWidth-60)/this.cols),36);
+        el.style.gridTemplateColumns=`repeat(${this.cols},${cellSize}px)`;el.style.width=cellSize*this.cols+this.cols*2+'px';
+        el.innerHTML='';const colors=['','#2563eb','#16a34a','#dc2626','#7c3aed','#92400e','#0891b2','#000','#6b7280'];
+        for(let r=0;r<this.rows;r++)for(let c=0;c<this.cols;c++){
+          const cell=document.createElement('div');cell.style.cssText=`width:${cellSize}px;height:${cellSize}px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:${cellSize>28?14:11}px;border-radius:3px;cursor:pointer;user-select:none;`;
+          if(this.revealed[r][c]){cell.style.background='#e2e8f0';
+            if(this.board[r][c]===-1){cell.textContent='💣';cell.style.background='#fecaca';}
+            else if(this.board[r][c]>0){cell.textContent=this.board[r][c];cell.style.color=colors[this.board[r][c]];}
+          }else{cell.style.background='linear-gradient(145deg,#94a3b8,#64748b)';cell.style.boxShadow='inset 1px 1px 2px rgba(255,255,255,0.3)';
+            if(this.flagged[r][c])cell.textContent='🚩';}
+          let pressTimer;
+          cell.addEventListener('pointerdown',(e)=>{e.preventDefault();pressTimer=setTimeout(()=>{this.toggleFlag(r,c);pressTimer=null;},400);});
+          cell.addEventListener('pointerup',(e)=>{e.preventDefault();if(pressTimer){clearTimeout(pressTimer);this.reveal(r,c);}});
+          cell.addEventListener('pointerleave',()=>{if(pressTimer)clearTimeout(pressTimer);});
+          cell.addEventListener('contextmenu',(e)=>{e.preventDefault();this.toggleFlag(r,c);});
+          el.appendChild(cell);
+        }
+      }
+    };
+
+    /* ================================================
+       MEMORY MATCH (카드 짝맞추기)
+       ================================================ */
+    const memoryApp = {
+      size:4, cards:[], flipped:[], matched:[], moves:0, busy:false, totalPairs:8,
+      EMOJIS:['🍎','🍊','🍋','🍇','🍉','🍓','🍑','🍒','🌺','🌻','🌸','🎀','🎈','🎁','🎵','🎲','🐶','🐱'],
+      init() {
+        document.getElementById('mem-new').addEventListener('click',()=>this.newGame());
+        document.querySelectorAll('.mem-diff').forEach(b=>b.addEventListener('click',()=>{
+          this.size=parseInt(b.dataset.size); document.querySelectorAll('.mem-diff').forEach(x=>{x.className='mem-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700';});
+          b.className='mem-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-rose-500 text-white'; this.newGame();
+        }));
+        this.newGame();
+      },
+      newGame() {
+        this.totalPairs=(this.size*this.size)/2; this.moves=0; this.flipped=[]; this.matched=[]; this.busy=false;
+        document.getElementById('mem-moves').textContent='0';
+        document.getElementById('mem-pairs').textContent='0';
+        document.getElementById('mem-total').textContent=this.totalPairs;
+        const msg=document.getElementById('mem-msg');msg.classList.add('hidden');msg.textContent='';
+        const emojis=[...this.EMOJIS].sort(()=>Math.random()-0.5).slice(0,this.totalPairs);
+        this.cards=[...emojis,...emojis].sort(()=>Math.random()-0.5);
+        this.render();
+      },
+      flip(idx) {
+        if(this.busy||this.flipped.includes(idx)||this.matched.includes(idx))return;
+        this.flipped.push(idx); this.renderCard(idx,true);
+        if(this.flipped.length===2){
+          this.moves++; document.getElementById('mem-moves').textContent=this.moves; this.busy=true;
+          const [a,b]=this.flipped;
+          if(this.cards[a]===this.cards[b]){this.matched.push(a,b);this.flipped=[];this.busy=false;
+            document.getElementById('mem-pairs').textContent=this.matched.length/2;
+            if(this.matched.length===this.cards.length){const msg=document.getElementById('mem-msg');msg.textContent='🎉 '+this.moves+'번 만에 완성!';msg.style.color='#e11d48';msg.classList.remove('hidden');}
+          } else {setTimeout(()=>{this.renderCard(a,false);this.renderCard(b,false);this.flipped=[];this.busy=false;},800);}
+        }
+      },
+      renderCard(idx,show) {
+        const card=document.getElementById('mem-board').children[idx]; if(!card)return;
+        const inner=card.firstChild;
+        if(show||this.matched.includes(idx)){inner.style.transform='rotateY(180deg)';} else {inner.style.transform='rotateY(0deg)';}
+      },
+      render() {
+        const el=document.getElementById('mem-board');
+        const cellSize=Math.min(Math.floor((window.innerWidth-80)/this.size),90);
+        el.style.gridTemplateColumns=`repeat(${this.size},${cellSize}px)`;el.style.width=cellSize*this.size+(this.size-1)*8+'px';el.style.gap='8px';
+        el.innerHTML='';
+        this.cards.forEach((emoji,idx)=>{
+          const card=document.createElement('div');
+          card.style.cssText=`width:${cellSize}px;height:${cellSize}px;perspective:600px;cursor:pointer;`;
+          const inner=document.createElement('div');
+          inner.style.cssText='width:100%;height:100%;position:relative;transition:transform 0.4s;transform-style:preserve-3d;';
+          const front=document.createElement('div');
+          front.style.cssText=`position:absolute;width:100%;height:100%;backface-visibility:hidden;background:linear-gradient(135deg,#f472b6,#e11d48);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:${cellSize>60?28:20}px;color:white;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.15);`;
+          front.textContent='?';
+          const back=document.createElement('div');
+          back.style.cssText=`position:absolute;width:100%;height:100%;backface-visibility:hidden;transform:rotateY(180deg);background:white;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:${cellSize>60?36:24}px;border:3px solid #fda4af;box-shadow:0 2px 8px rgba(0,0,0,0.1);`;
+          back.textContent=emoji;
+          inner.appendChild(front);inner.appendChild(back);card.appendChild(inner);
+          card.addEventListener('click',()=>this.flip(idx));
+          if(this.matched.includes(idx))inner.style.transform='rotateY(180deg)';
+          el.appendChild(card);
+        });
+      }
+    };
+
+    /* ================================================
+       SUDOKU (스도쿠)
+       ================================================ */
+    const sudokuApp = {
+      board:[], solution:[], fixed:[], selected:null, timer:0, timerInterval:null, difficulty:'easy',
+      init() {
+        document.getElementById('sdk-new').addEventListener('click',()=>this.newGame());
+        document.getElementById('sdk-check').addEventListener('click',()=>this.checkSolution());
+        document.querySelectorAll('.sdk-diff').forEach(b=>b.addEventListener('click',()=>{
+          this.difficulty=b.dataset.diff; document.querySelectorAll('.sdk-diff').forEach(x=>{x.className='sdk-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700';});
+          b.className='sdk-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-blue-500 text-white'; this.newGame();
+        }));
+        this.buildNumpad(); this.newGame();
+      },
+      generate() {
+        const grid=Array.from({length:9},()=>Array(9).fill(0));
+        const fill=(r,c)=>{
+          if(c===9){c=0;r++;} if(r===9)return true;
+          const nums=[1,2,3,4,5,6,7,8,9].sort(()=>Math.random()-0.5);
+          for(const n of nums){if(this.valid(grid,r,c,n)){grid[r][c]=n;if(fill(r,c+1))return true;grid[r][c]=0;}}return false;
+        };
+        fill(0,0); return grid;
+      },
+      valid(grid,r,c,n) {
+        for(let i=0;i<9;i++){if(grid[r][i]===n||grid[i][c]===n)return false;}
+        const br=Math.floor(r/3)*3,bc=Math.floor(c/3)*3;
+        for(let i=br;i<br+3;i++)for(let j=bc;j<bc+3;j++)if(grid[i][j]===n)return false;return true;
+      },
+      newGame() {
+        this.solution=this.generate();
+        this.board=this.solution.map(r=>[...r]);
+        this.fixed=Array.from({length:9},()=>Array(9).fill(false));
+        const blanks={easy:35,medium:45,hard:55}[this.difficulty];
+        let removed=0;const positions=[];for(let r=0;r<9;r++)for(let c=0;c<9;c++)positions.push([r,c]);
+        positions.sort(()=>Math.random()-0.5);
+        for(const [r,c] of positions){if(removed>=blanks)break;this.board[r][c]=0;removed++;}
+        for(let r=0;r<9;r++)for(let c=0;c<9;c++)this.fixed[r][c]=this.board[r][c]!==0;
+        this.selected=null; this.timer=0; clearInterval(this.timerInterval);
+        document.getElementById('sdk-timer').textContent='0';
+        this.timerInterval=setInterval(()=>{this.timer++;document.getElementById('sdk-timer').textContent=this.timer;},1000);
+        const msg=document.getElementById('sdk-msg');msg.classList.add('hidden');msg.textContent='';
+        this.render();
+      },
+      buildNumpad() {
+        const el=document.getElementById('sdk-numpad');el.innerHTML='';
+        for(let n=1;n<=9;n++){const btn=document.createElement('button');
+          btn.textContent=n;btn.style.cssText='width:40px;height:40px;border-radius:10px;font-size:18px;font-weight:bold;border:2px solid #93c5fd;background:white;color:#1e40af;cursor:pointer;';
+          btn.addEventListener('click',()=>this.placeNumber(n));el.appendChild(btn);}
+        const clr=document.createElement('button');clr.textContent='지우기';
+        clr.style.cssText='padding:0 12px;height:40px;border-radius:10px;font-size:14px;font-weight:bold;border:2px solid #fca5a5;background:white;color:#dc2626;cursor:pointer;';
+        clr.addEventListener('click',()=>this.placeNumber(0));el.appendChild(clr);
+      },
+      placeNumber(n) {
+        if(!this.selected)return;const [r,c]=this.selected;if(this.fixed[r][c])return;
+        this.board[r][c]=n;this.render();
+      },
+      checkSolution() {
+        let complete=true,correct=true;
+        for(let r=0;r<9;r++)for(let c=0;c<9;c++){if(this.board[r][c]===0)complete=false;else if(this.board[r][c]!==this.solution[r][c])correct=false;}
+        const msg=document.getElementById('sdk-msg');msg.classList.remove('hidden');
+        if(!complete){msg.textContent='아직 빈칸이 있어요!';msg.style.color='#d97706';}
+        else if(correct){msg.textContent='🎉 정답입니다! '+this.timer+'초 만에 완성!';msg.style.color='#16a34a';clearInterval(this.timerInterval);}
+        else{msg.textContent='❌ 틀린 칸이 있어요. 다시 확인해보세요!';msg.style.color='#dc2626';
+          this.render(true);}
+      },
+      render(showErrors) {
+        const el=document.getElementById('sdk-board');el.innerHTML='';
+        const cellSize=Math.min(Math.floor((window.innerWidth-60)/9),44);
+        el.style.gridTemplateColumns=`repeat(9,${cellSize}px)`;el.style.width=cellSize*9+'px';
+        for(let r=0;r<9;r++)for(let c=0;c<9;c++){
+          const cell=document.createElement('div');
+          const isSelected=this.selected&&this.selected[0]===r&&this.selected[1]===c;
+          const isError=showErrors&&!this.fixed[r][c]&&this.board[r][c]!==0&&this.board[r][c]!==this.solution[r][c];
+          let bg=this.fixed[r][c]?'#f1f5f9':'#fff';
+          if(isSelected)bg='#bfdbfe';if(isError)bg='#fecaca';
+          const borderR=c===2||c===5?'3px solid #1e293b':'1px solid #cbd5e1';
+          const borderB=r===2||r===5?'3px solid #1e293b':'1px solid #cbd5e1';
+          cell.style.cssText=`width:${cellSize}px;height:${cellSize}px;display:flex;align-items:center;justify-content:center;font-size:${cellSize>36?20:16}px;font-weight:bold;cursor:pointer;background:${bg};border-right:${borderR};border-bottom:${borderB};border-left:${c===0?'none':'none'};border-top:${r===0?'none':'none'};color:${this.fixed[r][c]?'#1e293b':'#2563eb'};user-select:none;`;
+          if(this.board[r][c]!==0)cell.textContent=this.board[r][c];
+          if(!this.fixed[r][c])cell.addEventListener('click',()=>{this.selected=[r,c];this.render();});
+          el.appendChild(cell);
+        }
+      }
+    };
+
+    /* ================================================
        INITIALIZATION
        ================================================ */
     document.addEventListener('DOMContentLoaded', () => {
@@ -2091,6 +2412,9 @@
       breakoutApp.init();
       tetrisApp.init();
       flappyApp.init();
+      minesweeperApp.init();
+      memoryApp.init();
+      sudokuApp.init();
       showSection('pension-container');
     });
   </script>
