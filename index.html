@@ -152,7 +152,9 @@
 
     /* ===== Omok ===== */
     .board-container { position: relative; width: 95vw; max-width: 600px; margin: auto; aspect-ratio: 1/1; }
-    #game-board { background: #e3c16f; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,.15); cursor: pointer; width: 100%; height: 100%; }
+    #game-board { background: #e3c16f; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,.15); cursor: pointer; width: 100%; height: 100%; display:block; }
+    #game-hover, #game-fireworks { width: 100%; height: 100%; pointer-events: none; }
+    #game-fireworks { z-index: 10; }
 
     /* ===== 2048 ===== */
     .g2048-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: .6rem; background: #bbada0; padding: .6rem; border-radius: .75rem; user-select: none; -webkit-user-select: none; touch-action: none; }
@@ -944,15 +946,45 @@
           <button id="pvp-mode-btn" class="w-full py-4 bg-green-600 text-white rounded-xl hover:bg-green-700 font-semibold text-lg">👥 2인 대전</button>
         </div>
       </div>
+      <div id="game-setup" class="hidden max-w-md mx-auto bg-white rounded-2xl shadow-lg p-6">
+        <h2 class="text-2xl font-bold text-center mb-6">🎯 게임 설정</h2>
+        <div class="mb-5">
+          <label class="block text-sm font-bold text-gray-700 mb-2">AI 난이도</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button class="diff-btn py-3 rounded-xl font-bold bg-blue-500 text-white" data-diff="basic">🌱 기본 모드</button>
+            <button class="diff-btn py-3 rounded-xl font-bold bg-gray-200 text-gray-700" data-diff="master">🔥 초고수 모드</button>
+          </div>
+          <p id="diff-desc" class="text-xs text-gray-500 mt-2">빠르고 가볍게 즐기는 직관적인 AI</p>
+        </div>
+        <div class="mb-5">
+          <label class="block text-sm font-bold text-gray-700 mb-2">무르기 횟수</label>
+          <div class="grid grid-cols-5 gap-1">
+            <button class="undo-btn py-2 rounded-lg font-bold text-sm bg-gray-200 text-gray-700" data-undo="0">0회</button>
+            <button class="undo-btn py-2 rounded-lg font-bold text-sm bg-indigo-500 text-white" data-undo="3">3회</button>
+            <button class="undo-btn py-2 rounded-lg font-bold text-sm bg-gray-200 text-gray-700" data-undo="5">5회</button>
+            <button class="undo-btn py-2 rounded-lg font-bold text-sm bg-gray-200 text-gray-700" data-undo="10">10회</button>
+            <button class="undo-btn py-2 rounded-lg font-bold text-sm bg-gray-200 text-gray-700" data-undo="-1">무제한</button>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button id="setup-back" class="flex-1 py-3 bg-gray-400 text-white rounded-xl font-bold hover:bg-gray-500">뒤로</button>
+          <button id="setup-confirm" class="flex-1 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700">게임 시작 →</button>
+        </div>
+      </div>
       <div id="game-container" class="hidden">
         <h2 id="game-title" class="text-2xl font-bold text-center mb-4"></h2>
         <div id="status-box" class="bg-white p-4 rounded-xl shadow mb-6 text-center">
           <p id="status-text" class="text-lg font-semibold">게임을 시작하세요</p>
         </div>
-        <div class="board-container"><canvas id="game-board"></canvas></div>
-        <div class="mt-6 grid grid-cols-2 gap-4">
-          <button id="new-game-btn" class="py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-semibold">🔄 새 게임</button>
-          <button id="game-back-btn" class="py-3 bg-gray-600 text-white rounded-xl hover:bg-gray-700 font-semibold">📋 모드 선택</button>
+        <div class="board-container" style="position:relative;">
+          <canvas id="game-board"></canvas>
+          <canvas id="game-hover" style="position:absolute;top:0;left:0;pointer-events:none;"></canvas>
+          <canvas id="game-fireworks" style="position:absolute;top:0;left:0;pointer-events:none;"></canvas>
+        </div>
+        <div class="mt-6 grid grid-cols-3 gap-2">
+          <button id="undo-btn" class="py-3 bg-amber-500 text-white rounded-xl hover:bg-amber-600 font-semibold text-sm disabled:bg-gray-300 disabled:cursor-not-allowed">↩ 무르기 <span id="undo-count" class="text-xs">(3)</span></button>
+          <button id="new-game-btn" class="py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-semibold text-sm">🔄 새 게임</button>
+          <button id="game-back-btn" class="py-3 bg-gray-600 text-white rounded-xl hover:bg-gray-700 font-semibold text-sm">📋 처음으로</button>
         </div>
       </div>
     </div>
@@ -1632,55 +1664,110 @@
     };
 
     /* ================================================
-       OMOK (오목) - AI + PVP
+       OMOK (오목) - AI + PVP [Enhanced]
        ================================================ */
     const omokApp = {
-      canvas: null, ctx: null, BOARD_SIZE: 15, cellSize: 0, margin: 0,
-      board: [], currentPlayer: 1, gameOver: false, gameMode: null,
-      lastMove: null, isAIThinking: false, BASE_DEPTH: 2, CRITICAL_DEPTH: 4,
+      canvas:null, ctx:null, hoverCanvas:null, hoverCtx:null, fxCanvas:null, fxCtx:null,
+      BOARD_SIZE:15, cellSize:0, margin:0,
+      board:[], currentPlayer:1, gameOver:false, gameMode:null,
+      difficulty:'basic', undoLimit:3, undoUsed:0, history:[],
+      lastMove:null, hoverPos:null, isAIThinking:false,
+      winLine:null, fireworksActive:false, audioCtx:null,
 
       init() {
         this.canvas = document.getElementById('game-board');
-        if (this.canvas) { this.ctx = this.canvas.getContext('2d'); this.bindEvents(); }
+        this.hoverCanvas = document.getElementById('game-hover');
+        this.fxCanvas = document.getElementById('game-fireworks');
+        if (this.canvas) {
+          this.ctx = this.canvas.getContext('2d');
+          this.hoverCtx = this.hoverCanvas.getContext('2d');
+          this.fxCtx = this.fxCanvas.getContext('2d');
+          this.bindEvents();
+        }
       },
 
       bindEvents() {
-        document.getElementById('ai-mode-btn')?.addEventListener('click', () => this.startGame('ai'));
+        document.getElementById('ai-mode-btn')?.addEventListener('click', () => this.openSetup('ai'));
         document.getElementById('pvp-mode-btn')?.addEventListener('click', () => this.startGame('pvp'));
+        document.getElementById('setup-back')?.addEventListener('click', () => this.closeSetup());
+        document.getElementById('setup-confirm')?.addEventListener('click', () => this.startGame('ai'));
+        document.querySelectorAll('.diff-btn').forEach(b => b.addEventListener('click', () => this.selectDifficulty(b.dataset.diff)));
+        document.querySelectorAll('.undo-btn').forEach(b => b.addEventListener('click', () => this.selectUndoLimit(parseInt(b.dataset.undo))));
         document.getElementById('new-game-btn')?.addEventListener('click', () => this.initGame());
         document.getElementById('game-back-btn')?.addEventListener('click', () => this.backToMenu());
+        document.getElementById('undo-btn')?.addEventListener('click', () => this.undo());
         this.canvas?.addEventListener('click', (e) => this.handleClick(e));
+        this.canvas?.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+        this.canvas?.addEventListener('mouseleave', () => this.clearHover());
         window.addEventListener('resize', () => this.resizeCanvas());
+      },
+
+      selectDifficulty(d) {
+        this.difficulty = d;
+        document.querySelectorAll('.diff-btn').forEach(b => {
+          const on = b.dataset.diff === d;
+          b.className = 'diff-btn py-3 rounded-xl font-bold ' + (on ? (d==='master'?'bg-red-600 text-white':'bg-blue-500 text-white') : 'bg-gray-200 text-gray-700');
+        });
+        const desc = document.getElementById('diff-desc');
+        if (desc) desc.textContent = d==='master' ? '🔥 모든 수를 깊이 고민하는 초고수 AI (응답 최대 1.2초)' : '빠르고 가볍게 즐기는 직관적인 AI';
+      },
+
+      selectUndoLimit(n) {
+        this.undoLimit = n;
+        document.querySelectorAll('.undo-btn').forEach(b => {
+          const on = parseInt(b.dataset.undo) === n;
+          b.className = 'undo-btn py-2 rounded-lg font-bold text-sm ' + (on ? 'bg-indigo-500 text-white' : 'bg-gray-200 text-gray-700');
+        });
+      },
+
+      openSetup(mode) {
+        this.gameMode = mode;
+        document.getElementById('game-mode-selection').classList.add('hidden');
+        document.getElementById('game-setup').classList.remove('hidden');
+      },
+      closeSetup() {
+        document.getElementById('game-setup').classList.add('hidden');
+        document.getElementById('game-mode-selection').classList.remove('hidden');
       },
 
       startGame(mode) {
         this.gameMode = mode;
         document.getElementById('game-mode-selection').classList.add('hidden');
+        document.getElementById('game-setup').classList.add('hidden');
         document.getElementById('game-container').classList.remove('hidden');
-        document.getElementById('game-title').textContent = mode === 'ai' ? '🤖 AI 대전' : '👥 2인 대전';
+        const title = mode === 'ai' ? ('🤖 AI 대전 · ' + (this.difficulty==='master'?'🔥 초고수':'🌱 기본')) : '👥 2인 대전';
+        document.getElementById('game-title').textContent = title;
+        this.initAudio();
         setTimeout(() => { this.resizeCanvas(); this.initGame(); }, 50);
       },
 
       backToMenu() {
         document.getElementById('game-container').classList.add('hidden');
+        document.getElementById('game-setup').classList.add('hidden');
         document.getElementById('game-mode-selection').classList.remove('hidden');
+        this.stopFireworks();
         this.gameMode = null;
       },
 
       initGame() {
         this.board = Array(this.BOARD_SIZE).fill(0).map(() => Array(this.BOARD_SIZE).fill(0));
-        this.currentPlayer = 1; this.gameOver = false; this.isAIThinking = false; this.lastMove = null;
+        this.currentPlayer = 1; this.gameOver = false; this.isAIThinking = false;
+        this.lastMove = null; this.history = []; this.undoUsed = 0; this.winLine = null;
+        this.hoverPos = null;
+        this.updateUndoBtn();
+        this.stopFireworks();
         this.updateStatus('⚫ 흑돌 차례입니다.');
         this.drawBoard();
+        this.clearHover();
       },
 
       resizeCanvas() {
         if (!this.canvas) return;
         const container = this.canvas.parentElement;
-        const size = Math.min(container.clientWidth, container.clientHeight);
-        if (size < 100) { this.canvas.width = 400; this.canvas.height = 400; }
-        else { this.canvas.width = size; this.canvas.height = size; }
-        this.cellSize = this.canvas.width / (this.BOARD_SIZE + 1);
+        const size = Math.min(container.clientWidth, container.clientHeight || container.clientWidth);
+        const actual = size < 100 ? 400 : size;
+        [this.canvas, this.hoverCanvas, this.fxCanvas].forEach(c => { c.width = actual; c.height = actual; });
+        this.cellSize = actual / (this.BOARD_SIZE + 1);
         this.margin = this.cellSize;
         if (this.gameMode) this.drawBoard();
       },
@@ -1688,55 +1775,117 @@
       drawBoard() {
         if (!this.ctx) return;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        const gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
-        gradient.addColorStop(0, '#f4d58d'); gradient.addColorStop(1, '#d4a574');
-        this.ctx.fillStyle = gradient;
+        const g = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
+        g.addColorStop(0, '#f4d58d'); g.addColorStop(1, '#d4a574');
+        this.ctx.fillStyle = g;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.strokeStyle = '#5b4b3a'; this.ctx.lineWidth = 1.5;
         for (let i = 0; i < this.BOARD_SIZE; i++) {
           this.ctx.beginPath(); this.ctx.moveTo(this.margin, this.margin + i * this.cellSize); this.ctx.lineTo(this.canvas.width - this.margin, this.margin + i * this.cellSize); this.ctx.stroke();
           this.ctx.beginPath(); this.ctx.moveTo(this.margin + i * this.cellSize, this.margin); this.ctx.lineTo(this.margin + i * this.cellSize, this.canvas.height - this.margin); this.ctx.stroke();
         }
-
         const starPts = [{x:3,y:3},{x:11,y:3},{x:3,y:11},{x:11,y:11},{x:7,y:7}];
         this.ctx.fillStyle = '#5b4b3a';
         starPts.forEach(p => { this.ctx.beginPath(); this.ctx.arc(this.margin + p.x * this.cellSize, this.margin + p.y * this.cellSize, this.cellSize / 8, 0, 2 * Math.PI); this.ctx.fill(); });
-
         for (let y = 0; y < this.BOARD_SIZE; y++)
           for (let x = 0; x < this.BOARD_SIZE; x++)
-            if (this.board[y][x] !== 0) this.drawStone(x, y, this.board[y][x]);
-
+            if (this.board[y][x] !== 0) this.drawStone(x, y, this.board[y][x], 1);
         if (this.lastMove) {
           this.ctx.strokeStyle = '#f03e3e'; this.ctx.lineWidth = 2;
           this.ctx.beginPath(); this.ctx.arc(this.margin + this.lastMove.x * this.cellSize, this.margin + this.lastMove.y * this.cellSize, this.cellSize * 0.2, 0, 2 * Math.PI); this.ctx.stroke();
         }
+        if (this.winLine) {
+          this.ctx.save();
+          this.ctx.strokeStyle = 'rgba(255,215,0,0.9)'; this.ctx.lineWidth = 4;
+          this.ctx.shadowColor = '#fff59d'; this.ctx.shadowBlur = 15;
+          const s = this.winLine[0], e = this.winLine[this.winLine.length-1];
+          this.ctx.beginPath();
+          this.ctx.moveTo(this.margin + s.x * this.cellSize, this.margin + s.y * this.cellSize);
+          this.ctx.lineTo(this.margin + e.x * this.cellSize, this.margin + e.y * this.cellSize);
+          this.ctx.stroke();
+          this.ctx.restore();
+        }
       },
 
-      drawStone(x, y, player) {
+      drawStone(x, y, player, opacity) {
         const sx = this.margin + x * this.cellSize, sy = this.margin + y * this.cellSize, r = this.cellSize / 2 * 0.9;
-        const g = this.ctx.createRadialGradient(sx - r * 0.3, sy - r * 0.3, r * 0.1, sx, sy, r);
+        const ctx = this.ctx;
+        ctx.save();
+        ctx.globalAlpha = opacity;
+        const g = ctx.createRadialGradient(sx - r * 0.3, sy - r * 0.3, r * 0.1, sx, sy, r);
         if (player === 1) { g.addColorStop(0, '#666'); g.addColorStop(1, '#111'); }
         else { g.addColorStop(0, '#fff'); g.addColorStop(1, '#ccc'); }
-        this.ctx.beginPath(); this.ctx.arc(sx, sy, r, 0, 2 * Math.PI); this.ctx.fillStyle = g; this.ctx.fill();
+        ctx.beginPath(); ctx.arc(sx, sy, r, 0, 2 * Math.PI); ctx.fillStyle = g; ctx.fill();
+        ctx.restore();
+      },
+
+      handleMouseMove(e) {
+        if (this.gameOver || this.isAIThinking) { this.clearHover(); return; }
+        if (this.gameMode === 'ai' && this.currentPlayer === 2) { this.clearHover(); return; }
+        const rect = this.canvas.getBoundingClientRect();
+        const scale = this.canvas.width / rect.width;
+        const gx = Math.round(((e.clientX - rect.left) * scale - this.margin) / this.cellSize);
+        const gy = Math.round(((e.clientY - rect.top) * scale - this.margin) / this.cellSize);
+        if (gx >= 0 && gx < this.BOARD_SIZE && gy >= 0 && gy < this.BOARD_SIZE && this.board[gy][gx] === 0) {
+          if (!this.hoverPos || this.hoverPos.x !== gx || this.hoverPos.y !== gy) {
+            this.hoverPos = { x: gx, y: gy };
+            this.drawHover();
+          }
+        } else { this.clearHover(); }
+      },
+
+      drawHover() {
+        const hc = this.hoverCtx;
+        hc.clearRect(0, 0, this.hoverCanvas.width, this.hoverCanvas.height);
+        if (!this.hoverPos) return;
+        const { x, y } = this.hoverPos;
+        const sx = this.margin + x * this.cellSize, sy = this.margin + y * this.cellSize, r = this.cellSize / 2 * 0.85;
+        hc.save();
+        hc.globalAlpha = 0.45;
+        const g = hc.createRadialGradient(sx - r * 0.3, sy - r * 0.3, r * 0.1, sx, sy, r);
+        if (this.currentPlayer === 1) { g.addColorStop(0, '#666'); g.addColorStop(1, '#111'); }
+        else { g.addColorStop(0, '#fff'); g.addColorStop(1, '#ccc'); }
+        hc.beginPath(); hc.arc(sx, sy, r, 0, 2 * Math.PI); hc.fillStyle = g; hc.fill();
+        hc.strokeStyle = 'rgba(79,70,229,0.9)'; hc.lineWidth = 2;
+        hc.beginPath(); hc.arc(sx, sy, r, 0, 2 * Math.PI); hc.stroke();
+        hc.restore();
+      },
+
+      clearHover() {
+        this.hoverPos = null;
+        if (this.hoverCtx) this.hoverCtx.clearRect(0, 0, this.hoverCanvas.width, this.hoverCanvas.height);
       },
 
       handleClick(e) {
         if (this.gameOver || this.isAIThinking) return;
         if (this.gameMode === 'ai' && this.currentPlayer === 2) return;
         const rect = this.canvas.getBoundingClientRect();
-        const gx = Math.round(((e.clientX - rect.left) - this.margin) / this.cellSize);
-        const gy = Math.round(((e.clientY - rect.top) - this.margin) / this.cellSize);
-        if (gx >= 0 && gx < this.BOARD_SIZE && gy >= 0 && gy < this.BOARD_SIZE && this.board[gy][gx] === 0)
+        const scale = this.canvas.width / rect.width;
+        const gx = Math.round(((e.clientX - rect.left) * scale - this.margin) / this.cellSize);
+        const gy = Math.round(((e.clientY - rect.top) * scale - this.margin) / this.cellSize);
+        if (gx >= 0 && gx < this.BOARD_SIZE && gy >= 0 && gy < this.BOARD_SIZE && this.board[gy][gx] === 0) {
+          this.initAudio();
           this.placeStone(gx, gy);
+        }
       },
 
       placeStone(x, y) {
-        this.board[y][x] = this.currentPlayer; this.lastMove = { x, y }; this.drawBoard();
-        if (this.checkWin(x, y, this.currentPlayer)) {
+        this.board[y][x] = this.currentPlayer;
+        this.history.push({ x, y, player: this.currentPlayer });
+        this.lastMove = { x, y };
+        this.playStoneSound();
+        this.clearHover();
+        this.drawBoard();
+        const winLine = this.getWinLine(x, y, this.currentPlayer);
+        if (winLine) {
           this.gameOver = true;
-          const w = this.gameMode === 'ai' ? (this.currentPlayer === 1 ? '당신' : 'AI') : (this.currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌');
-          this.updateStatus(w + '의 승리입니다!'); return;
+          this.winLine = winLine;
+          this.drawBoard();
+          const w = this.gameMode === 'ai' ? (this.currentPlayer === 1 ? '🏆 당신' : '💻 AI') : (this.currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌');
+          this.updateStatus(w + ' 승리!');
+          this.playWinSound();
+          this.startFireworks();
+          return;
         }
         if (this.checkDraw()) { this.gameOver = true; this.updateStatus('무승부입니다!'); return; }
         this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
@@ -1746,60 +1895,99 @@
         }
       },
 
-      checkWin(x, y, p) {
-        const dirs = [{dx:1,dy:0},{dx:0,dy:1},{dx:1,dy:1},{dx:1,dy:-1}];
-        for (const {dx,dy} of dirs) {
-          let c = 1;
-          for (let i=1;i<5;i++){const nx=x+i*dx,ny=y+i*dy;if(nx>=0&&nx<this.BOARD_SIZE&&ny>=0&&ny<this.BOARD_SIZE&&this.board[ny][nx]===p)c++;else break;}
-          for (let i=1;i<5;i++){const nx=x-i*dx,ny=y-i*dy;if(nx>=0&&nx<this.BOARD_SIZE&&ny>=0&&ny<this.BOARD_SIZE&&this.board[ny][nx]===p)c++;else break;}
-          if (c >= 5) return true;
+      undo() {
+        if (this.isAIThinking || this.history.length === 0) return;
+        if (this.undoLimit !== -1 && this.undoUsed >= this.undoLimit) return;
+        const stepsBack = (this.gameMode === 'ai') ? 2 : 1;
+        let undone = 0;
+        for (let i = 0; i < stepsBack && this.history.length > 0; i++) {
+          const m = this.history.pop();
+          this.board[m.y][m.x] = 0;
+          undone++;
         }
-        return false;
+        if (undone === 0) return;
+        this.undoUsed++;
+        this.gameOver = false; this.winLine = null;
+        this.lastMove = this.history.length > 0 ? this.history[this.history.length - 1] : null;
+        this.currentPlayer = (this.gameMode === 'ai') ? 1 : (this.history.length > 0 ? (this.history[this.history.length - 1].player === 1 ? 2 : 1) : 1);
+        this.stopFireworks();
+        this.updateStatus((this.currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌') + ' 차례입니다. (무르기 사용)');
+        this.updateUndoBtn();
+        this.drawBoard();
       },
 
+      updateUndoBtn() {
+        const btn = document.getElementById('undo-btn');
+        const cnt = document.getElementById('undo-count');
+        if (!btn || !cnt) return;
+        if (this.undoLimit === -1) { cnt.textContent = '(∞)'; btn.disabled = false; }
+        else {
+          const remain = this.undoLimit - this.undoUsed;
+          cnt.textContent = '(' + remain + ')';
+          btn.disabled = remain <= 0;
+        }
+      },
+
+      getWinLine(x, y, p) {
+        const dirs = [{dx:1,dy:0},{dx:0,dy:1},{dx:1,dy:1},{dx:1,dy:-1}];
+        for (const {dx,dy} of dirs) {
+          const line = [{x,y}];
+          for (let i=1;i<5;i++){const nx=x+i*dx,ny=y+i*dy;if(nx>=0&&nx<this.BOARD_SIZE&&ny>=0&&ny<this.BOARD_SIZE&&this.board[ny][nx]===p)line.push({x:nx,y:ny});else break;}
+          for (let i=1;i<5;i++){const nx=x-i*dx,ny=y-i*dy;if(nx>=0&&nx<this.BOARD_SIZE&&ny>=0&&ny<this.BOARD_SIZE&&this.board[ny][nx]===p)line.unshift({x:nx,y:ny});else break;}
+          if (line.length >= 5) return line;
+        }
+        return null;
+      },
+
+      checkWin(x, y, p) { return this.getWinLine(x, y, p) !== null; },
       checkDraw() { return this.board.every(r => r.every(c => c !== 0)); },
 
       triggerAITurn() {
         this.isAIThinking = true; this.updateStatus('AI가 생각 중입니다...');
-        setTimeout(() => { const m = this.findBestMove(); if (m) this.placeStone(m.x, m.y); this.isAIThinking = false; }, 100);
-      },
-
-      findBestMove() {
-        const moves = this.getPossibleMoves();
-        for (const {x,y} of moves) { this.board[y][x]=2; if(this.checkWin(x,y,2)){this.board[y][x]=0;return{x,y};} this.board[y][x]=0; }
-        for (const {x,y} of moves) { this.board[y][x]=1; if(this.checkWin(x,y,1)){this.board[y][x]=0;return{x,y};} this.board[y][x]=0; }
-        let best=-Infinity, move=null, depth=this.isCriticalSituation()?this.CRITICAL_DEPTH:this.BASE_DEPTH;
-        for (const {x,y} of moves) { this.board[y][x]=2; const s=this.minimax(depth-1,-Infinity,Infinity,false); this.board[y][x]=0; if(s>best){best=s;move={x,y};} }
-        if (!move && moves.length > 0) { moves.sort((a,b)=>(Math.abs(a.x-7)+Math.abs(a.y-7))-(Math.abs(b.x-7)+Math.abs(b.y-7))); move=moves[0]; }
-        return move;
-      },
-
-      minimax(depth, alpha, beta, isMax) {
-        if (depth===0||this.gameOver) return this.evaluateBoard();
-        const moves = this.getPossibleMoves();
-        if (isMax) {
-          let maxE=-Infinity;
-          for (const {x,y} of moves) { this.board[y][x]=2; if(this.checkWin(x,y,2)){this.board[y][x]=0;return 100000+depth;} const ev=this.minimax(depth-1,alpha,beta,false); this.board[y][x]=0; maxE=Math.max(maxE,ev); alpha=Math.max(alpha,ev); if(beta<=alpha)break; }
-          return maxE;
-        } else {
-          let minE=Infinity;
-          for (const {x,y} of moves) { this.board[y][x]=1; if(this.checkWin(x,y,1)){this.board[y][x]=0;return -100000-depth;} const ev=this.minimax(depth-1,alpha,beta,true); this.board[y][x]=0; minE=Math.min(minE,ev); beta=Math.min(beta,ev); if(beta<=alpha)break; }
-          return minE;
-        }
+        setTimeout(() => {
+          const m = (this.difficulty === 'master') ? this.findBestMoveMaster() : this.findBestMoveBasic();
+          if (m) this.placeStone(m.x, m.y);
+          this.isAIThinking = false;
+        }, 80);
       },
 
       getPossibleMoves() {
-        const moves=[], seen=Array(this.BOARD_SIZE).fill(0).map(()=>Array(this.BOARD_SIZE).fill(false));
+        const moves=[], sz=this.BOARD_SIZE, seen=Array(sz).fill(0).map(()=>Array(sz).fill(false));
         if (this.board.every(r=>r.every(c=>c===0))) return [{x:7,y:7}];
-        for (let y=0;y<this.BOARD_SIZE;y++) for (let x=0;x<this.BOARD_SIZE;x++) if(this.board[y][x]===0) {
+        for (let y=0;y<sz;y++) for (let x=0;x<sz;x++) if(this.board[y][x]===0) {
           for (let dy=-1;dy<=1;dy++) for (let dx=-1;dx<=1;dx++) { if(!dx&&!dy)continue; const ny=y+dy,nx=x+dx;
-            if(nx>=0&&nx<this.BOARD_SIZE&&ny>=0&&ny<this.BOARD_SIZE&&this.board[ny][nx]!==0&&!seen[y][x]){moves.push({x,y});seen[y][x]=true;}
+            if(nx>=0&&nx<sz&&ny>=0&&ny<sz&&this.board[ny][nx]!==0&&!seen[y][x]){moves.push({x,y});seen[y][x]=true;}
           }
         }
         return moves;
       },
 
-      isCriticalSituation() {
+      /* ===== BASIC MODE AI (fast, intuitive) ===== */
+      findBestMoveBasic() {
+        const moves = this.getPossibleMoves();
+        for (const {x,y} of moves) { this.board[y][x]=2; if(this.checkWin(x,y,2)){this.board[y][x]=0;return{x,y};} this.board[y][x]=0; }
+        for (const {x,y} of moves) { this.board[y][x]=1; if(this.checkWin(x,y,1)){this.board[y][x]=0;return{x,y};} this.board[y][x]=0; }
+        let best=-Infinity, move=null, depth=this.hasImmediateThreat()?3:2;
+        for (const {x,y} of moves) { this.board[y][x]=2; const s=this.basicMinimax(depth-1,-Infinity,Infinity,false); this.board[y][x]=0; if(s>best){best=s;move={x,y};} }
+        if (!move && moves.length > 0) { moves.sort((a,b)=>(Math.abs(a.x-7)+Math.abs(a.y-7))-(Math.abs(b.x-7)+Math.abs(b.y-7))); move=moves[0]; }
+        return move;
+      },
+
+      basicMinimax(depth, alpha, beta, isMax) {
+        if (depth===0) return this.evaluateBoardBasic();
+        const moves = this.getPossibleMoves();
+        if (isMax) {
+          let maxE=-Infinity;
+          for (const {x,y} of moves) { this.board[y][x]=2; if(this.checkWin(x,y,2)){this.board[y][x]=0;return 100000+depth;} const ev=this.basicMinimax(depth-1,alpha,beta,false); this.board[y][x]=0; maxE=Math.max(maxE,ev); alpha=Math.max(alpha,ev); if(beta<=alpha)break; }
+          return maxE;
+        } else {
+          let minE=Infinity;
+          for (const {x,y} of moves) { this.board[y][x]=1; if(this.checkWin(x,y,1)){this.board[y][x]=0;return -100000-depth;} const ev=this.basicMinimax(depth-1,alpha,beta,true); this.board[y][x]=0; minE=Math.min(minE,ev); beta=Math.min(beta,ev); if(beta<=alpha)break; }
+          return minE;
+        }
+      },
+
+      hasImmediateThreat() {
         for (let y=0;y<this.BOARD_SIZE;y++) for (let x=0;x<this.BOARD_SIZE;x++) if(this.board[y][x]===0) {
           this.board[y][x]=2; if(this.checkWin(x,y,2)){this.board[y][x]=0;return true;}
           this.board[y][x]=1; if(this.checkWin(x,y,1)){this.board[y][x]=0;return true;}
@@ -1808,29 +1996,216 @@
         return false;
       },
 
-      evaluateBoard() {
-        let s=0; s+=this.evalLines('h'); s+=this.evalLines('v'); s+=this.evalLines('d1'); s+=this.evalLines('d2'); return s;
-      },
-
-      evalLines(type) {
-        let total=0; const sz=this.BOARD_SIZE;
-        for (let i=0;i<(type.startsWith('d')?2*sz-1:sz);i++) {
-          let line=[];
-          if(type==='h') line=this.board[i];
-          else if(type==='v') line=this.board.map(r=>r[i]);
-          else if(type==='d1'){for(let j=0;j<sz;j++){const k=i-j;if(k>=0&&k<sz)line.push(this.board[j][k]);}}
-          else if(type==='d2'){for(let j=0;j<sz;j++){const k=i-(sz-1-j);if(k>=0&&k<sz)line.push(this.board[j][k]);}}
-          if(line.length>=5) total+=this.evalLine(line);
+      evaluateBoardBasic() {
+        let s=0;
+        for (let i=0;i<this.BOARD_SIZE;i++){s+=this.evalLineBasic(this.board[i]);s+=this.evalLineBasic(this.board.map(r=>r[i]));}
+        for (let i=0;i<2*this.BOARD_SIZE-1;i++){
+          const l1=[],l2=[];
+          for(let j=0;j<this.BOARD_SIZE;j++){const k1=i-j,k2=i-(this.BOARD_SIZE-1-j);if(k1>=0&&k1<this.BOARD_SIZE)l1.push(this.board[j][k1]);if(k2>=0&&k2<this.BOARD_SIZE)l2.push(this.board[j][k2]);}
+          if(l1.length>=5)s+=this.evalLineBasic(l1); if(l2.length>=5)s+=this.evalLineBasic(l2);
         }
-        return total;
+        return s;
       },
 
-      evalLine(line) {
+      evalLineBasic(line) {
         let s=0;
         const pats={'22222':100000,'022220':50000,'122220':400,'022221':400,'02220':2000,'022020':1800,'12220':100,'02221':100,'00220':50,'02020':50,'11111':-100000,'011110':-80000,'211110':-10000,'011112':-10000,'01110':-5000,'011010':-4500,'21110':-500,'01112':-500,'00110':-150,'01010':-150};
         const ls=line.join('');
         for (const p in pats) if(ls.includes(p)) s+=pats[p];
         return s;
+      },
+
+      /* ===== MASTER MODE AI (iterative deepening + threat detection) ===== */
+      findBestMoveMaster() {
+        const moves = this.getPossibleMoves();
+        if (moves.length === 0) return null;
+        if (moves.length === 1) return moves[0];
+        // Instant win/block
+        for (const {x,y} of moves) { this.board[y][x]=2; if(this.checkWin(x,y,2)){this.board[y][x]=0;return{x,y};} this.board[y][x]=0; }
+        for (const {x,y} of moves) { this.board[y][x]=1; if(this.checkWin(x,y,1)){this.board[y][x]=0;return{x,y};} this.board[y][x]=0; }
+        // Move ordering: top 14 by shallow eval
+        const scored = moves.map(m => ({ ...m, q: this.quickMoveScore(m.x, m.y) }));
+        scored.sort((a,b) => b.q - a.q);
+        const candidates = scored.slice(0, Math.min(14, scored.length));
+        // Iterative deepening
+        const timeBudget = 1200;
+        const start = Date.now();
+        let bestMove = candidates[0];
+        for (let depth = 2; depth <= 8; depth += 2) {
+          if (Date.now() - start > timeBudget * 0.45) break;
+          let curBest = candidates[0], curScore = -Infinity, timedOut = false;
+          for (const {x,y} of candidates) {
+            if (Date.now() - start > timeBudget) { timedOut = true; break; }
+            this.board[y][x] = 2;
+            const sc = this.masterMinimax(depth - 1, -Infinity, Infinity, false, start, timeBudget);
+            this.board[y][x] = 0;
+            if (sc > curScore) { curScore = sc; curBest = {x,y}; }
+            if (curScore >= 900000) { timedOut = false; break; }
+          }
+          if (!timedOut) { bestMove = curBest; if (curScore >= 900000) break; }
+          else break;
+        }
+        return bestMove;
+      },
+
+      masterMinimax(depth, alpha, beta, isMax, startTime, budget) {
+        if (Date.now() - startTime > budget) return this.evaluateBoardMaster();
+        if (depth === 0) return this.evaluateBoardMaster();
+        const moves = this.getPossibleMoves();
+        if (moves.length === 0) return this.evaluateBoardMaster();
+        const player = isMax ? 2 : 1;
+        const scored = moves.map(m => ({ ...m, q: this.quickMoveScore(m.x, m.y) }));
+        scored.sort((a,b) => b.q - a.q);
+        const topMoves = scored.slice(0, Math.min(8, scored.length));
+        if (isMax) {
+          let maxE = -Infinity;
+          for (const {x,y} of topMoves) {
+            this.board[y][x] = 2;
+            if (this.checkWin(x, y, 2)) { this.board[y][x] = 0; return 900000 + depth; }
+            const ev = this.masterMinimax(depth - 1, alpha, beta, false, startTime, budget);
+            this.board[y][x] = 0;
+            maxE = Math.max(maxE, ev); alpha = Math.max(alpha, ev);
+            if (beta <= alpha) break;
+          }
+          return maxE;
+        } else {
+          let minE = Infinity;
+          for (const {x,y} of topMoves) {
+            this.board[y][x] = 1;
+            if (this.checkWin(x, y, 1)) { this.board[y][x] = 0; return -900000 - depth; }
+            const ev = this.masterMinimax(depth - 1, alpha, beta, true, startTime, budget);
+            this.board[y][x] = 0;
+            minE = Math.min(minE, ev); beta = Math.min(beta, ev);
+            if (beta <= alpha) break;
+          }
+          return minE;
+        }
+      },
+
+      quickMoveScore(x, y) {
+        // Fast heuristic: sum of own/opponent influence in 4 directions
+        let score = 0;
+        const dirs = [[0,1],[1,0],[1,1],[1,-1]], sz = this.BOARD_SIZE;
+        for (const [dx,dy] of dirs) {
+          for (const p of [2, 1]) {
+            let cnt = 0, openEnds = 0;
+            // Forward
+            let blocked = false;
+            for (let i=1;i<5;i++){const nx=x+i*dx,ny=y+i*dy;if(nx<0||nx>=sz||ny<0||ny>=sz){blocked=true;break;}const s=this.board[ny][nx];if(s===p)cnt++;else if(s===0){if(!blocked)openEnds++;break;}else{blocked=true;break;}}
+            blocked = false;
+            for (let i=1;i<5;i++){const nx=x-i*dx,ny=y-i*dy;if(nx<0||nx>=sz||ny<0||ny>=sz){blocked=true;break;}const s=this.board[ny][nx];if(s===p)cnt++;else if(s===0){if(!blocked)openEnds++;break;}else{blocked=true;break;}}
+            const base = cnt*cnt*10 + openEnds*2;
+            score += (p === 2 ? 1.05 : 1.0) * base;
+          }
+        }
+        const centerDist = Math.abs(x-7) + Math.abs(y-7);
+        score += (14 - centerDist) * 0.5;
+        return score;
+      },
+
+      evaluateBoardMaster() {
+        let score = 0;
+        const sz = this.BOARD_SIZE;
+        const dirs = [[0,1],[1,0],[1,1],[1,-1]];
+        const patternScore = (count, openStart, openEnd) => {
+          if (count >= 5) return 1000000;
+          if (count === 4) return (openStart && openEnd) ? 100000 : (openStart || openEnd ? 8000 : 0);
+          if (count === 3) return (openStart && openEnd) ? 6000 : (openStart || openEnd ? 500 : 0);
+          if (count === 2) return (openStart && openEnd) ? 200 : (openStart || openEnd ? 40 : 0);
+          if (count === 1) return (openStart && openEnd) ? 10 : 0;
+          return 0;
+        };
+        let open3_AI=0, open3_P=0, four_AI=0, four_P=0;
+        for (let y=0;y<sz;y++) for (let x=0;x<sz;x++) {
+          if (this.board[y][x] === 0) continue;
+          const player = this.board[y][x];
+          for (const [dx,dy] of dirs) {
+            const px=x-dx, py=y-dy;
+            if (px>=0&&px<sz&&py>=0&&py<sz&&this.board[py][px]===player) continue;
+            let count=0, cx=x, cy=y;
+            while (cx>=0&&cx<sz&&cy>=0&&cy<sz&&this.board[cy][cx]===player){count++;cx+=dx;cy+=dy;}
+            const openStart = px>=0&&px<sz&&py>=0&&py<sz&&this.board[py][px]===0;
+            const openEnd = cx>=0&&cx<sz&&cy>=0&&cy<sz&&this.board[cy][cx]===0;
+            const val = patternScore(count, openStart, openEnd);
+            score += (player === 2 ? 1 : -1) * val;
+            if (count === 3 && openStart && openEnd) { if (player === 2) open3_AI++; else open3_P++; }
+            if (count === 4 && (openStart || openEnd)) { if (player === 2) four_AI++; else four_P++; }
+          }
+        }
+        // Double threat bonuses
+        if (open3_AI >= 2) score += 30000;
+        if (open3_P >= 2) score -= 40000;
+        if (four_AI >= 2) score += 200000;
+        if (four_P >= 2) score -= 300000;
+        if (open3_AI >= 1 && four_AI >= 1) score += 80000;
+        if (open3_P >= 1 && four_P >= 1) score -= 100000;
+        return score;
+      },
+
+      /* ===== SOUND ===== */
+      initAudio() {
+        if (this.audioCtx) return;
+        try { this.audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+      },
+
+      playStoneSound() {
+        if (!this.audioCtx) return;
+        const ctx = this.audioCtx, t = ctx.currentTime;
+        // Elegant wooden "tock" - sharp attack + wooden body resonance
+        const o1 = ctx.createOscillator(), g1 = ctx.createGain();
+        o1.type = 'sine'; o1.frequency.setValueAtTime(1200, t); o1.frequency.exponentialRampToValueAtTime(400, t + 0.04);
+        g1.gain.setValueAtTime(0.25, t); g1.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+        o1.connect(g1).connect(ctx.destination); o1.start(t); o1.stop(t + 0.08);
+        const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+        o2.type = 'triangle'; o2.frequency.setValueAtTime(180, t); o2.frequency.exponentialRampToValueAtTime(90, t + 0.12);
+        g2.gain.setValueAtTime(0.18, t); g2.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+        o2.connect(g2).connect(ctx.destination); o2.start(t); o2.stop(t + 0.22);
+      },
+
+      playWinSound() {
+        if (!this.audioCtx) return;
+        const ctx = this.audioCtx, t = ctx.currentTime;
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C E G C
+        notes.forEach((freq, i) => {
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = 'triangle'; o.frequency.setValueAtTime(freq, t + i * 0.13);
+          g.gain.setValueAtTime(0, t + i * 0.13);
+          g.gain.linearRampToValueAtTime(0.18, t + i * 0.13 + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.13 + 0.5);
+          o.connect(g).connect(ctx.destination); o.start(t + i * 0.13); o.stop(t + i * 0.13 + 0.55);
+        });
+      },
+
+      /* ===== FIREWORKS ===== */
+      startFireworks() {
+        if (!this.fxCtx) return;
+        const cvs = this.fxCanvas, ctx = this.fxCtx;
+        const particles = [];
+        const colors = ['#ff006e','#fb5607','#ffbe0b','#8338ec','#3a86ff','#06ffa5','#ff4081','#ffd60a'];
+        const burst = (cx, cy) => {
+          const color = colors[Math.floor(Math.random()*colors.length)];
+          const count = 40 + Math.floor(Math.random()*20);
+          for (let i=0;i<count;i++){const ang = (Math.PI*2*i)/count + (Math.random()-0.5)*0.15; const sp = 2.5 + Math.random()*3.5;
+            particles.push({x:cx,y:cy,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,life:1,color,size:2+Math.random()*2});}
+        };
+        for (let i=0;i<8;i++){setTimeout(()=>{if(!this.fireworksActive)return;const cx=cvs.width*(0.15+Math.random()*0.7),cy=cvs.height*(0.15+Math.random()*0.5);burst(cx,cy);},i*350);}
+        this.fireworksActive = true;
+        const animate = () => {
+          if (!this.fireworksActive) { ctx.clearRect(0,0,cvs.width,cvs.height); return; }
+          ctx.clearRect(0,0,cvs.width,cvs.height);
+          for (let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx;p.y+=p.vy;p.vy+=0.09;p.vx*=0.99;p.life-=0.013;
+            if(p.life<=0){particles.splice(i,1);continue;}
+            ctx.save();ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;ctx.shadowColor=p.color;ctx.shadowBlur=8;
+            ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.restore();}
+          requestAnimationFrame(animate);
+        };
+        animate();
+        setTimeout(()=>{ this.fireworksActive=false; setTimeout(()=>{ if(this.fxCtx) this.fxCtx.clearRect(0,0,cvs.width,cvs.height); },200); }, 4500);
+      },
+
+      stopFireworks() {
+        this.fireworksActive = false;
+        if (this.fxCtx) this.fxCtx.clearRect(0,0,this.fxCanvas.width,this.fxCanvas.height);
       },
 
       updateStatus(text) { const el=document.getElementById('status-text'); if(el) el.textContent=text; }
