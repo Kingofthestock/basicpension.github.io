@@ -1881,10 +1881,11 @@
           this.gameOver = true;
           this.winLine = winLine;
           this.drawBoard();
+          const playerWon = (this.gameMode === 'ai' && this.currentPlayer === 1) || this.gameMode === 'pvp';
           const w = this.gameMode === 'ai' ? (this.currentPlayer === 1 ? '🏆 당신' : '💻 AI') : (this.currentPlayer === 1 ? '⚫ 흑돌' : '⚪ 백돌');
           this.updateStatus(w + ' 승리!');
-          this.playWinSound();
-          this.startFireworks();
+          if (playerWon) { this.playWinSound(); this.startFireworks(); }
+          else { this.playLoseSound(); }
           return;
         }
         if (this.checkDraw()) { this.gameOver = true; this.updateStatus('무승부입니다!'); return; }
@@ -2173,6 +2174,21 @@
           g.gain.linearRampToValueAtTime(0.18, t + i * 0.13 + 0.02);
           g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.13 + 0.5);
           o.connect(g).connect(ctx.destination); o.start(t + i * 0.13); o.stop(t + i * 0.13 + 0.55);
+        });
+      },
+
+      playLoseSound() {
+        if (!this.audioCtx) return;
+        const ctx = this.audioCtx, t = ctx.currentTime;
+        // Descending minor notes: 아쉬운 느낌
+        const notes = [440.00, 349.23, 293.66]; // A F D
+        notes.forEach((freq, i) => {
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = 'sine'; o.frequency.setValueAtTime(freq, t + i * 0.18);
+          g.gain.setValueAtTime(0, t + i * 0.18);
+          g.gain.linearRampToValueAtTime(0.12, t + i * 0.18 + 0.03);
+          g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.18 + 0.6);
+          o.connect(g).connect(ctx.destination); o.start(t + i * 0.18); o.stop(t + i * 0.18 + 0.65);
         });
       },
 
