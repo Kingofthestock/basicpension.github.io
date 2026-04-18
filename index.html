@@ -13,6 +13,7 @@
   <meta property="og:description" content="2026년 기준으로 기초연금 수급 가능성을 빠르게 확인해보세요.">
   <meta name="twitter:card" content="summary">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
@@ -146,6 +147,104 @@
     /* ===== Share Feedback ===== */
     .share-feedback { min-height: 1.3rem; font-size: .85rem; color: #2563eb; margin-top: .4rem; font-weight: 500; }
 
+    /* ===== Share Modal ===== */
+    .share-modal-backdrop {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .55);
+      display: none; align-items: center; justify-content: center;
+      z-index: 9999; padding: 1rem; backdrop-filter: blur(3px);
+      animation: fadeIn .2s ease-out;
+    }
+    .share-modal-backdrop.active { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .share-modal {
+      background: #fff; border-radius: 1.25rem; width: 100%; max-width: 460px;
+      max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      animation: slideUp .25s ease-out;
+    }
+    .share-modal-header {
+      padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .share-modal-header h3 { font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 0; }
+    .share-modal-subtitle { font-size: .85rem; color: #64748b; margin-top: .25rem; }
+    .share-modal-close {
+      width: 2rem; height: 2rem; border-radius: 50%; border: none;
+      background: #f1f5f9; color: #475569; cursor: pointer; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center; transition: all .15s;
+    }
+    .share-modal-close:hover { background: #e2e8f0; color: #0f172a; }
+    .share-modal-body { padding: 1.25rem 1.5rem; }
+    .share-preview-box {
+      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: .75rem;
+      padding: .85rem 1rem; margin-bottom: 1rem; font-size: .9rem; color: #334155;
+      line-height: 1.55; white-space: pre-wrap; word-break: break-all;
+    }
+    .share-preview-box .share-preview-title { font-weight: 700; color: #0f172a; margin-bottom: .35rem; }
+    .share-options-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; margin-bottom: 1rem;
+    }
+    .share-option-btn {
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+      padding: .85rem .4rem; border: 1px solid #e2e8f0; border-radius: .8rem;
+      background: #fff; cursor: pointer; transition: all .15s; font-size: .78rem;
+      color: #334155; font-weight: 600;
+    }
+    .share-option-btn:hover { background: #f8fafc; border-color: #cbd5e1; transform: translateY(-2px); }
+    .share-option-btn .share-icon {
+      width: 2.4rem; height: 2.4rem; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    }
+    .share-icon-link { background: #dbeafe; color: #1e40af; }
+    .share-icon-kakao { background: #fef3c7; color: #78350f; }
+    .share-icon-sms { background: #dcfce7; color: #166534; }
+    .share-icon-native { background: #ede9fe; color: #5b21b6; }
+    .share-icon-qr { background: #fce7f3; color: #9f1239; }
+    .share-icon-email { background: #fee2e2; color: #991b1b; }
+    .share-icon-fb { background: #dbeafe; color: #1e3a8a; }
+    .share-icon-twitter { background: #e0f2fe; color: #0c4a6e; }
+    .share-qr-wrap {
+      display: none; text-align: center; padding: 1rem; background: #fff;
+      border: 1px solid #e2e8f0; border-radius: .75rem; margin-top: .5rem;
+    }
+    .share-qr-wrap.active { display: block; }
+    .share-qr-wrap canvas { margin: 0 auto; border: 1px solid #f1f5f9; border-radius: .5rem; }
+    .share-qr-wrap p { font-size: .8rem; color: #64748b; margin-top: .5rem; }
+    .share-link-row {
+      display: flex; gap: .4rem; background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: .6rem; padding: .5rem; align-items: center;
+    }
+    .share-link-row input {
+      flex: 1; border: none; background: transparent; font-size: .85rem;
+      color: #334155; outline: none; min-width: 0;
+    }
+    .share-link-row button {
+      padding: .4rem .8rem; background: #2563eb; color: #fff; border: none;
+      border-radius: .4rem; font-size: .8rem; font-weight: 600; cursor: pointer;
+      white-space: nowrap;
+    }
+    .share-link-row button:hover { background: #1d4ed8; }
+    .share-modal-footer-msg {
+      min-height: 1.3rem; font-size: .82rem; color: #2563eb;
+      text-align: center; margin-top: .75rem; font-weight: 600;
+    }
+    .share-modal-footer-msg.err { color: #b91c1c; }
+    @media(max-width:480px) {
+      .share-options-grid { grid-template-columns: repeat(3, 1fr); }
+      .share-option-btn { font-size: .72rem; }
+    }
+
+    /* ===== Result Share Button ===== */
+    .result-share-btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      margin-top: .85rem; padding: .6rem 1.1rem; background: #2563eb; color: #fff;
+      border: none; border-radius: .6rem; font-weight: 700; font-size: .92rem;
+      cursor: pointer; transition: all .15s;
+    }
+    .result-share-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .result-share-btn.green { background: #16a34a; }
+    .result-share-btn.green:hover { background: #15803d; }
+
     /* ===== Game Hub ===== */
     .game-card { background: #fff; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,.04); transition: all .25s; cursor: pointer; position: relative; overflow: hidden; border: 1px solid #f1f5f9; }
     .game-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,.1); border-color: #e2e8f0; }
@@ -185,6 +284,72 @@
 
   <!-- ===== Floating Game Button ===== -->
   <button id="floating-game-btn" class="game-float-btn" title="게임 하러가기" aria-label="게임 허브로 이동">🎮</button>
+
+  <!-- ===== Share Modal ===== -->
+  <div id="share-modal" class="share-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+    <div class="share-modal" onclick="event.stopPropagation()">
+      <div class="share-modal-header">
+        <div>
+          <h3 id="share-modal-title">공유하기</h3>
+          <p class="share-modal-subtitle" id="share-modal-subtitle">가족과 이웃에게 알려주세요</p>
+        </div>
+        <button id="share-modal-close" class="share-modal-close" aria-label="닫기">✕</button>
+      </div>
+      <div class="share-modal-body">
+        <div id="share-preview" class="share-preview-box">
+          <div class="share-preview-title" id="share-preview-title"></div>
+          <div id="share-preview-text"></div>
+        </div>
+
+        <div class="share-options-grid">
+          <button type="button" class="share-option-btn" data-share-action="copy">
+            <span class="share-icon share-icon-link">🔗</span>
+            <span>링크 복사</span>
+          </button>
+          <button type="button" class="share-option-btn" data-share-action="kakao">
+            <span class="share-icon share-icon-kakao">💬</span>
+            <span>카카오톡</span>
+          </button>
+          <button type="button" class="share-option-btn" data-share-action="sms">
+            <span class="share-icon share-icon-sms">📱</span>
+            <span>문자</span>
+          </button>
+          <button type="button" class="share-option-btn" data-share-action="email">
+            <span class="share-icon share-icon-email">✉️</span>
+            <span>이메일</span>
+          </button>
+          <button type="button" class="share-option-btn" data-share-action="qr">
+            <span class="share-icon share-icon-qr">📷</span>
+            <span>QR 코드</span>
+          </button>
+          <button type="button" class="share-option-btn" data-share-action="facebook">
+            <span class="share-icon share-icon-fb">📘</span>
+            <span>페이스북</span>
+          </button>
+          <button type="button" class="share-option-btn" data-share-action="twitter">
+            <span class="share-icon share-icon-twitter">🐦</span>
+            <span>X(트위터)</span>
+          </button>
+          <button type="button" class="share-option-btn" data-share-action="native">
+            <span class="share-icon share-icon-native">📤</span>
+            <span>더보기</span>
+          </button>
+        </div>
+
+        <div class="share-link-row">
+          <input type="text" id="share-link-input" readonly>
+          <button type="button" id="share-link-copy">복사</button>
+        </div>
+
+        <div id="share-qr-wrap" class="share-qr-wrap">
+          <canvas id="share-qr-canvas" width="180" height="180"></canvas>
+          <p>카메라로 QR을 스캔하면 페이지가 열립니다</p>
+        </div>
+
+        <p id="share-modal-msg" class="share-modal-footer-msg"></p>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== Pension Section ===== -->
   <section id="pension-container">
@@ -1563,9 +1728,10 @@
         const resultDiv = document.getElementById('result');
         const applyDiv = document.getElementById('applyInfo');
         let html = '';
+        let benefit = 0;
 
         if (eligible) {
-          const benefit = household === 'single' ? this.CONFIG.benefit.single : this.CONFIG.benefit.couplePer;
+          benefit = household === 'single' ? this.CONFIG.benefit.single : this.CONFIG.benefit.couplePer;
           html = `
             <div class="result-success">
               <span class="result-emoji">🎉</span>
@@ -1589,6 +1755,9 @@
                   <li class="font-bold">선정기준액: ${this.formatKRWNum(threshold)}</li>
                 </ul>
               </div>
+              <button type="button" id="share-result-btn" class="result-share-btn green">
+                <span>📤</span><span>결과 공유하기</span>
+              </button>
             </div>`;
         } else {
           const reasons = [];
@@ -1619,11 +1788,23 @@
                   <li class="font-bold">총 소득인정액: ${this.formatKRWNum(Math.round(totalIncome))}</li>
                 </ul>
               </div>
+              <button type="button" id="share-result-btn" class="result-share-btn">
+                <span>📤</span><span>결과 공유하기</span>
+              </button>
             </div>`;
         }
 
+        // 결과 공유를 위한 컨텍스트 저장
+        this.lastResultContext = {
+          age, totalIncome: Math.round(totalIncome), threshold, household, eligible,
+          benefit: eligible ? benefit : 0
+        };
+
         resultDiv.innerHTML = html;
         resultDiv.style.display = 'block';
+
+        // 결과 공유 버튼 이벤트 바인딩
+        document.getElementById('share-result-btn')?.addEventListener('click', () => this.shareResult());
 
         applyDiv.innerHTML = `
           <div class="mt-5 p-5 bg-blue-50 rounded-xl border border-blue-200">
@@ -1653,13 +1834,214 @@
         el.style.color = isErr ? '#b91c1c' : '#2563eb';
       },
 
-      async sharePage() {
-        const data = { title: `${this.CONFIG.year} 기초연금 자격 계산기`, text: `${this.CONFIG.year}년 기초연금 수급 가능성을 확인해보세요.`, url: location.href };
+      lastResultContext: null,
+
+      sharePage() {
+        shareModal.open({
+          title: `${this.CONFIG.year} 기초연금 자격 계산기`,
+          subtitle: '가족과 이웃에게 알려주세요',
+          previewTitle: `${this.CONFIG.year} 기초연금 자격 계산기`,
+          previewText: `${this.CONFIG.year}년 기초연금 수급 가능성을 1분 안에 확인해보세요!\n소득, 재산을 입력하면 자동으로 계산됩니다.`,
+          url: location.href
+        });
+      },
+
+      shareResult() {
+        const ctx = this.lastResultContext;
+        if (!ctx) { this.sharePage(); return; }
+        const emoji = ctx.eligible ? '🎉' : '📋';
+        const titleText = ctx.eligible
+          ? `${this.CONFIG.year} 기초연금 모의계산 결과 ${emoji}`
+          : `${this.CONFIG.year} 기초연금 모의계산 결과 ${emoji}`;
+        const summary = ctx.eligible
+          ? `수급 가능성 높음\n예상 월 지급액: ${this.formatKRWNum(ctx.benefit)}\n소득인정액: ${this.formatKRWNum(ctx.totalIncome)} / 기준: ${this.formatKRWNum(ctx.threshold)}`
+          : `현재 기준으로는 수급이 어려울 수 있어요\n소득인정액: ${this.formatKRWNum(ctx.totalIncome)} / 기준: ${this.formatKRWNum(ctx.threshold)}`;
+        shareModal.open({
+          title: '결과 공유하기',
+          subtitle: '계산 결과를 가족에게 알려드릴까요?',
+          previewTitle: titleText,
+          previewText: `${summary}\n\n직접 계산해보려면 링크를 방문하세요.`,
+          url: location.href
+        });
+      }
+    };
+
+    /* ================================================
+       SHARE MODAL
+       ================================================ */
+    const shareModal = {
+      backdrop: null, msgEl: null, linkInput: null, previewTitle: null, previewText: null,
+      qrWrap: null, qrCanvas: null, subtitle: null, titleEl: null,
+      currentShare: null, qrDrawn: false,
+
+      init() {
+        this.backdrop = document.getElementById('share-modal');
+        this.msgEl = document.getElementById('share-modal-msg');
+        this.linkInput = document.getElementById('share-link-input');
+        this.previewTitle = document.getElementById('share-preview-title');
+        this.previewText = document.getElementById('share-preview-text');
+        this.qrWrap = document.getElementById('share-qr-wrap');
+        this.qrCanvas = document.getElementById('share-qr-canvas');
+        this.subtitle = document.getElementById('share-modal-subtitle');
+        this.titleEl = document.getElementById('share-modal-title');
+        if (!this.backdrop) return;
+
+        this.backdrop.addEventListener('click', (e) => { if (e.target === this.backdrop) this.close(); });
+        document.getElementById('share-modal-close')?.addEventListener('click', () => this.close());
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && this.backdrop.classList.contains('active')) this.close(); });
+
+        document.querySelectorAll('[data-share-action]').forEach(btn => {
+          btn.addEventListener('click', () => this.handleAction(btn.dataset.shareAction));
+        });
+
+        document.getElementById('share-link-copy')?.addEventListener('click', () => this.copyLink());
+      },
+
+      open(data) {
+        this.currentShare = data;
+        if (this.titleEl) this.titleEl.textContent = data.title || '공유하기';
+        if (this.subtitle) this.subtitle.textContent = data.subtitle || '가족과 이웃에게 알려주세요';
+        if (this.previewTitle) this.previewTitle.textContent = data.previewTitle || data.title || '';
+        if (this.previewText) this.previewText.textContent = data.previewText || '';
+        if (this.linkInput) this.linkInput.value = data.url || location.href;
+        this.setMsg('');
+        this.qrWrap?.classList.remove('active');
+        this.qrDrawn = false;
+        this.backdrop?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      },
+
+      close() {
+        this.backdrop?.classList.remove('active');
+        document.body.style.overflow = '';
+        this.setMsg('');
+      },
+
+      setMsg(msg, isErr) {
+        if (!this.msgEl) return;
+        this.msgEl.textContent = msg || '';
+        this.msgEl.classList.toggle('err', !!isErr);
+      },
+
+      getShareText() {
+        const s = this.currentShare || {};
+        return `${s.previewTitle || s.title || ''}\n\n${s.previewText || ''}\n\n${s.url || location.href}`.trim();
+      },
+
+      async copyLink() {
+        const url = this.currentShare?.url || location.href;
         try {
-          if (navigator.share) { await navigator.share(data); this.showShareFeedback('공유 완료!'); return; }
-          if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(`${data.title}\n${data.url}`); this.showShareFeedback('링크가 복사되었습니다.'); return; }
-          this.showShareFeedback('이 브라우저에서는 공유를 지원하지 않습니다.', true);
-        } catch { this.showShareFeedback('공유가 취소되었습니다.', true); }
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(url);
+            this.setMsg('✅ 링크가 복사되었습니다!');
+          } else if (this.linkInput) {
+            this.linkInput.select();
+            document.execCommand('copy');
+            this.setMsg('✅ 링크가 복사되었습니다!');
+          }
+        } catch { this.setMsg('복사에 실패했습니다. 수동으로 복사해주세요.', true); }
+      },
+
+      async handleAction(action) {
+        const s = this.currentShare || {};
+        const url = s.url || location.href;
+        const text = this.getShareText();
+        const encUrl = encodeURIComponent(url);
+        const encText = encodeURIComponent(text);
+        const encTitle = encodeURIComponent(s.previewTitle || s.title || '');
+
+        switch (action) {
+          case 'copy': {
+            try {
+              if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(text);
+                this.setMsg('✅ 내용이 복사되었습니다! 원하는 곳에 붙여넣으세요.');
+              } else { this.setMsg('이 브라우저에서는 복사를 지원하지 않습니다.', true); }
+            } catch { this.setMsg('복사에 실패했습니다.', true); }
+            break;
+          }
+          case 'kakao': {
+            // 카카오 공유 SDK가 없으므로 링크 복사 + 안내로 대체
+            try {
+              if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(text); }
+            } catch {}
+            this.setMsg('📋 내용을 복사했습니다. 카카오톡에 붙여넣어 공유하세요!');
+            // 모바일이면 카카오톡 앱 실행 시도
+            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+              setTimeout(() => { window.location.href = 'kakaotalk://inappbrowser/close'; }, 300);
+            }
+            break;
+          }
+          case 'sms': {
+            // iOS: sms:&body=..., Android: sms:?body=...
+            const body = encodeURIComponent(text);
+            const sep = /iPhone|iPad|iPod/i.test(navigator.userAgent) ? '&' : '?';
+            window.location.href = `sms:${sep}body=${body}`;
+            this.setMsg('문자 앱이 열렸습니다.');
+            break;
+          }
+          case 'email': {
+            const subject = encodeURIComponent(s.previewTitle || s.title || '공유합니다');
+            window.location.href = `mailto:?subject=${subject}&body=${encText}`;
+            this.setMsg('이메일 앱이 열렸습니다.');
+            break;
+          }
+          case 'qr': {
+            this.toggleQR();
+            break;
+          }
+          case 'facebook': {
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encUrl}`, '_blank', 'noopener,width=600,height=500');
+            break;
+          }
+          case 'twitter': {
+            window.open(`https://twitter.com/intent/tweet?url=${encUrl}&text=${encTitle}`, '_blank', 'noopener,width=600,height=500');
+            break;
+          }
+          case 'native': {
+            if (navigator.share) {
+              try {
+                await navigator.share({ title: s.previewTitle || s.title, text: s.previewText, url });
+                this.setMsg('공유 완료!');
+              } catch { this.setMsg('공유가 취소되었습니다.', true); }
+            } else {
+              this.setMsg('이 브라우저에서는 네이티브 공유를 지원하지 않습니다.', true);
+            }
+            break;
+          }
+        }
+      },
+
+      toggleQR() {
+        if (!this.qrWrap || !this.qrCanvas) return;
+        const isActive = this.qrWrap.classList.contains('active');
+        if (isActive) { this.qrWrap.classList.remove('active'); return; }
+        this.qrWrap.classList.add('active');
+        if (this.qrDrawn) return;
+        const url = this.currentShare?.url || location.href;
+        if (window.QRCode && typeof window.QRCode.toCanvas === 'function') {
+          window.QRCode.toCanvas(this.qrCanvas, url, { width: 180, margin: 1, color: { dark: '#0f172a', light: '#ffffff' } }, (err) => {
+            if (err) { this.setMsg('QR 코드 생성에 실패했습니다.', true); }
+            else { this.qrDrawn = true; this.setMsg('📷 카메라로 QR을 스캔하세요.'); }
+          });
+        } else {
+          // Fallback: use Google Chart API as last resort
+          this.drawQRFallback(url);
+        }
+      },
+
+      drawQRFallback(url) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          const ctx = this.qrCanvas.getContext('2d');
+          ctx.clearRect(0, 0, this.qrCanvas.width, this.qrCanvas.height);
+          ctx.drawImage(img, 0, 0, this.qrCanvas.width, this.qrCanvas.height);
+          this.qrDrawn = true;
+          this.setMsg('📷 카메라로 QR을 스캔하세요.');
+        };
+        img.onerror = () => { this.setMsg('QR 코드 생성에 실패했습니다. 링크를 대신 공유하세요.', true); };
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}`;
       }
     };
 
@@ -2797,6 +3179,7 @@
       });
 
       pensionApp.init();
+      shareModal.init();
       omokApp.init();
       g2048App.init();
       snakeApp.init();
