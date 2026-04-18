@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026 기초연금 자격 계산기 | 1분 모의계산 + 게임 허브</title>
-  <meta name="description" content="2026년 기초연금 선정기준액을 반영한 자격 확인 계산기. 단독가구/부부가구 소득인정액을 1분 안에 확인하고 신청 방법까지 바로 확인하세요.">
-  <meta name="keywords" content="2026 기초연금, 기초연금 계산기, 기초연금 수급자격, 소득인정액, 단독가구, 부부가구, 복지로 신청">
+  <title>2026 기초연금 · 장애인연금 자격 계산기 | 1분 모의계산 + 게임 허브</title>
+  <meta name="description" content="2026년 기초연금·장애인연금 선정기준액을 반영한 자격 확인 계산기. 단독/부부 소득인정액과 예상 수령액을 1분 안에 확인하고 신청 방법까지 바로 확인하세요.">
+  <meta name="keywords" content="2026 기초연금, 기초연금 계산기, 장애인연금 계산기, 장애인연금 2026, 기초연금 수급자격, 소득인정액, 단독가구, 부부가구, 복지로 신청, 중증장애인, 부가급여">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
@@ -70,6 +70,35 @@
     #pension-container header { background: linear-gradient(135deg,#1e3a8a 0%,#2563eb 50%,#0ea5e9 100%); color: #fff; padding: 2.5rem 1.5rem 3rem; text-align: center; position: relative; overflow: hidden; }
     #pension-container header::after { content:''; position:absolute; bottom:-1px; left:0; right:0; height:40px; background:#f0f4ff; border-radius:50% 50% 0 0/100% 100% 0 0; }
     #pension-container main { max-width: 720px; margin: -1rem auto 0; padding: 0 1rem; position: relative; z-index: 1; }
+
+    /* ===== Disability Pension Container (바이브는 동일, 색감만 인디고/보라) ===== */
+    #disability-pension { --primary: #4338ca; --accent: #6366f1; background: linear-gradient(180deg,#eef2ff 0%,#fafbff 40%,#f8fafc 100%); min-height: 100vh; padding-bottom: 100px; }
+    #disability-pension header { background: linear-gradient(135deg,#312e81 0%,#4f46e5 50%,#7c3aed 100%); color: #fff; padding: 2.5rem 1.5rem 3rem; text-align: center; position: relative; overflow: hidden; }
+    #disability-pension header::after { content:''; position:absolute; bottom:-1px; left:0; right:0; height:40px; background:#eef2ff; border-radius:50% 50% 0 0/100% 100% 0 0; }
+    #disability-pension main { max-width: 720px; margin: -1rem auto 0; padding: 0 1rem; position: relative; z-index: 1; }
+    #disability-pension .kpi-card { border-color: #c7d2fe; }
+    #disability-pension .kpi-card .value { color: #312e81; }
+    #disability-pension .sel-card.selected { border-color: #4f46e5; background: linear-gradient(135deg,#eef2ff,#e0e7ff); box-shadow: 0 4px 16px rgba(79,70,229,.15); }
+    #disability-pension .sel-card.selected::after { background: #4f46e5; }
+    #disability-pension .wizard-progress-fill { background: linear-gradient(90deg,#4f46e5,#7c3aed); }
+    #disability-pension .wizard-btn.next, #disability-pension .wizard-btn.submit { background: linear-gradient(135deg,#4f46e5,#4338ca); box-shadow: 0 2px 8px rgba(79,70,229,.25); }
+    #disability-pension .wizard-btn.next:hover, #disability-pension .wizard-btn.submit:hover { box-shadow: 0 4px 16px rgba(79,70,229,.35); }
+    #disability-pension .wizard-step input[type="text"]:focus, #disability-pension .wizard-step select:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,.12); }
+    #disability-pension .amount-preview { color: #4f46e5; }
+    #disability-pension .quick-btn.ghost { color: #4f46e5; border-color: #a5b4fc; }
+    #disability-pension .quick-btn.ghost:hover { background: #eef2ff; }
+    #disability-pension .faq-item[open] summary { color: #4f46e5; }
+    .dp-result-success { background: linear-gradient(135deg,#eef2ff,#e0e7ff); border: 2px solid #a5b4fc; padding: 1.5rem; border-radius: 1rem; margin-top: 1.5rem; animation: fadeSlideIn .4s ease; }
+    .dp-result-success .result-breakdown { background: rgba(255,255,255,.7); border-radius: .75rem; padding: 1rem; margin-top: 1rem; }
+    .dp-result-success .result-breakdown li { padding: .35rem 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: .95rem; color: #312e81; }
+    .dp-result-success .result-breakdown li:last-child { border-bottom: none; }
+    .dp-benefit-total { background: #fff; border: 2px dashed #6366f1; border-radius: .9rem; padding: 1rem; margin-top: 1rem; text-align: center; }
+    .dp-benefit-total .label { font-size: .85rem; color: #64748b; }
+    .dp-benefit-total .amount { display: block; font-size: 2rem; font-weight: 900; color: #4338ca; letter-spacing: -.02em; }
+    .dp-disqualify { background: linear-gradient(135deg,#fef2f2,#fee2e2); border: 2px solid #fca5a5; padding: 1.5rem; border-radius: 1rem; margin-top: 1.5rem; animation: fadeSlideIn .4s ease; }
+    .dp-disqualify .result-breakdown { background: rgba(255,255,255,.7); border-radius: .75rem; padding: 1rem; margin-top: 1rem; }
+    .dp-disqualify .result-breakdown li { padding: .35rem 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: .95rem; }
+    .dp-disqualify .result-breakdown li:last-child { border-bottom: none; }
 
     /* ===== Selection Cards ===== */
     .sel-card { display: flex; flex-direction: column; align-items: center; gap: .4rem; padding: 1.2rem .8rem; background: #fff; border: 2.5px solid #e2e8f0; border-radius: 1rem; cursor: pointer; transition: all .2s; text-align: center; -webkit-tap-highlight-color: transparent; }
@@ -760,10 +789,10 @@
             <h3 class="font-bold text-sm mt-1 text-slate-800">주거급여</h3>
             <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div id="goto-disability" class="benefit-teaser-card" style="cursor:pointer; border-color:#6366f1;">
             <span class="text-2xl">♿</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">장애인연금</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
           <div id="goto-fuel" class="benefit-teaser-card" style="cursor:pointer; border-color:#f97316;">
             <span class="text-2xl">⛽</span>
@@ -1023,6 +1052,386 @@
 
       <button id="fuel-back-bottom" class="w-full py-3.5 rounded-xl font-bold text-white mb-8" style="background:linear-gradient(135deg,#ea580c,#f97316); box-shadow:0 2px 10px rgba(249,115,22,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 기초연금 계산기로 돌아가기</button>
     </div>
+  </section>
+
+  <!-- ===== 장애인연금 모의계산기 ===== -->
+  <section id="disability-pension" class="hidden">
+    <header>
+      <p class="text-indigo-200 text-sm font-medium mb-2">2026년 기준 · 모의계산</p>
+      <h1 class="text-3xl sm:text-4xl font-black mb-3 leading-tight">장애인연금,<br>받을 수 있을까요?</h1>
+      <p class="text-indigo-100 text-lg">만 18세 이상 중증장애인 대상<br class="sm:hidden"> <strong>1분 안에</strong> 확인할 수 있어요</p>
+    </header>
+
+    <main>
+      <!-- 상단 복귀 -->
+      <button id="dp-back-to-pension" type="button" class="quick-btn ghost" style="margin-top:1rem;">← 기초연금 계산기로 돌아가기</button>
+
+      <!-- KPI Cards -->
+      <section class="mb-6 mt-3 p-5 rounded-2xl bg-white border border-indigo-100 shadow-sm relative z-10">
+        <h2 class="text-lg font-bold text-slate-800 mb-3">2026 장애인연금 핵심 기준</h2>
+        <div class="kpi-grid">
+          <article class="kpi-card">
+            <span class="label">단독가구 선정기준액</span>
+            <strong class="value">월 1,400,000원</strong>
+          </article>
+          <article class="kpi-card">
+            <span class="label">부부가구 선정기준액</span>
+            <strong class="value">월 2,240,000원</strong>
+          </article>
+          <article class="kpi-card">
+            <span class="label">최대 월 수령액</span>
+            <strong class="value">월 439,700원</strong>
+          </article>
+        </div>
+        <div class="flex flex-wrap gap-2 items-center mt-3">
+          <button id="dp-jump-to-calc" type="button" class="quick-btn primary" style="background:linear-gradient(135deg,#4f46e5,#4338ca); box-shadow:0 2px 10px rgba(79,70,229,.3);">1분 계산 시작하기</button>
+          <button id="dp-share-page-btn" type="button" class="quick-btn ghost">페이지 공유</button>
+        </div>
+        <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+          장애인연금은 <strong>만 18세 이상</strong>이고 장애의 정도가 <strong>심한 장애인</strong>(중증)으로 등록된 분 중<br>
+          본인·배우자의 <strong>소득인정액이 선정기준액 이하</strong>인 경우에 지급됩니다.
+        </p>
+      </section>
+
+      <!-- Wizard -->
+      <form id="dp-form" class="wizard-shell">
+        <div class="flex items-center justify-between mb-3">
+          <span id="dp-wizard-step-text" class="wizard-step-meta">1 / 8 단계</span>
+        </div>
+        <div class="wizard-progress-track"><div id="dp-wizard-progress-fill" class="wizard-progress-fill"></div></div>
+        <h2 id="dp-wizard-question-title" class="wizard-question-title"></h2>
+        <p id="dp-wizard-question-desc" class="wizard-question-desc"></p>
+
+        <!-- Step: Severity (중증 여부) -->
+        <div class="wizard-step" data-step="severity">
+          <input type="hidden" id="dp-severity" value="">
+          <div class="grid grid-cols-1 gap-3">
+            <button type="button" class="sel-card" data-dpfield="severity" data-value="severe">
+              <span class="text-4xl leading-none">♿</span>
+              <span class="text-base font-bold text-slate-800">네, 중증장애인이에요</span>
+              <span class="text-sm text-slate-500">장애의 정도가 심한 장애인 (구 1·2급, 3급 중복)</span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="severity" data-value="mild">
+              <span class="text-4xl leading-none">🚶</span>
+              <span class="text-base font-bold text-slate-800">경증(심하지 않은) 장애인</span>
+              <span class="text-sm text-slate-500">장애수당 대상 · 장애인연금은 해당 없음</span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="severity" data-value="none">
+              <span class="text-4xl leading-none">❓</span>
+              <span class="text-base font-bold text-slate-800">아직 장애 등록을 하지 않았어요</span>
+              <span class="text-sm text-slate-500">읍·면·동 주민센터에서 먼저 등록해야 합니다</span>
+            </button>
+          </div>
+          <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+            <strong>장애인연금은 중증장애인만 신청 가능</strong>합니다. 경증장애인은 장애수당(월 6만원·기초수급자 기준) 대상입니다.
+          </p>
+        </div>
+
+        <!-- Step: Birth -->
+        <div class="wizard-step" data-step="birth">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="dp-birthYear">출생 연도</label>
+              <select id="dp-birthYear" required></select>
+            </div>
+            <div>
+              <label for="dp-birthMonth">출생 월</label>
+              <select id="dp-birthMonth" required></select>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+            만 18세 이상 ~ 64세는 <strong>기초급여 + 부가급여</strong>, 만 65세 이상은 <strong>기초연금 + 부가급여</strong>로 전환됩니다.
+          </p>
+        </div>
+
+        <!-- Step: Household -->
+        <div class="wizard-step" data-step="household">
+          <input type="hidden" id="dp-household" value="single">
+          <div class="grid grid-cols-2 gap-4">
+            <button type="button" class="sel-card selected" data-dpfield="household" data-value="single">
+              <span class="text-4xl leading-none">👤</span>
+              <span class="text-base font-bold text-slate-800">혼자 살고 있어요</span>
+              <span class="text-sm text-slate-500">단독가구 (1인)</span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="household" data-value="couple">
+              <span class="text-4xl leading-none">👫</span>
+              <span class="text-base font-bold text-slate-800">배우자와 함께</span>
+              <span class="text-sm text-slate-500">부부가구 (2인)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step: Spouse Severity (부부일 때만) -->
+        <div class="wizard-step" data-step="spouseSeverity">
+          <input type="hidden" id="dp-spouseSeverity" value="no">
+          <div class="grid grid-cols-2 gap-4">
+            <button type="button" class="sel-card selected" data-dpfield="spouseSeverity" data-value="no">
+              <span class="text-4xl leading-none">🙅</span>
+              <span class="text-base font-bold text-slate-800">아니요, 저만이에요</span>
+              <span class="text-sm text-slate-500">기초급여 전액 지급</span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="spouseSeverity" data-value="yes">
+              <span class="text-4xl leading-none">👫</span>
+              <span class="text-base font-bold text-slate-800">배우자도 중증장애인이에요</span>
+              <span class="text-sm text-slate-500">기초급여 각자 20% 감액</span>
+            </button>
+          </div>
+          <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+            부부가 모두 장애인연금 수급자면 기초급여(349,700원)의 <strong>20%가 감액</strong>되어 각자 <strong>279,760원</strong>을 받게 됩니다.
+          </p>
+        </div>
+
+        <!-- Step: Welfare Type -->
+        <div class="wizard-step" data-step="welfare">
+          <input type="hidden" id="dp-welfare" value="">
+          <div class="grid grid-cols-1 gap-3">
+            <button type="button" class="sel-card" data-dpfield="welfare" data-value="basic12">
+              <span class="text-4xl leading-none">🏥</span>
+              <span class="text-base font-bold text-slate-800">생계·의료급여 수급자</span>
+              <span class="text-sm text-slate-500">기초생활수급자 (1·2종)</span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="welfare" data-value="basic34">
+              <span class="text-4xl leading-none">🏠</span>
+              <span class="text-base font-bold text-slate-800">주거·교육급여 수급자</span>
+              <span class="text-sm text-slate-500">기초생활수급자 (3·4종)</span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="welfare" data-value="nearPoor">
+              <span class="text-4xl leading-none">📋</span>
+              <span class="text-base font-bold text-slate-800">차상위계층</span>
+              <span class="text-sm text-slate-500">차상위 확인서 보유</span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="welfare" data-value="nearPoorOver">
+              <span class="text-4xl leading-none">👥</span>
+              <span class="text-base font-bold text-slate-800">해당 없음 (일반)</span>
+              <span class="text-sm text-slate-500">차상위 초과자</span>
+            </button>
+          </div>
+          <p class="text-xs text-slate-500 mt-3 leading-relaxed">
+            복지 수급 유형에 따라 <strong>부가급여 금액</strong>이 달라집니다. 모르시면 "해당 없음"을 선택하세요.
+          </p>
+        </div>
+
+        <!-- Step: Area -->
+        <div class="wizard-step" data-step="area">
+          <input type="hidden" id="dp-area-value" value="">
+          <div class="grid grid-cols-3 gap-3">
+            <button type="button" class="sel-card" data-dpfield="area" data-value="big">
+              <span class="text-3xl leading-none">🏙️</span>
+              <span class="font-bold text-slate-800">대도시</span>
+              <span class="text-xs text-slate-500">특별시·광역시</span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="area" data-value="mid">
+              <span class="text-3xl leading-none">🏘️</span>
+              <span class="font-bold text-slate-800">중소도시</span>
+              <span class="text-xs text-slate-500">일반 시 지역</span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="area" data-value="rural">
+              <span class="text-3xl leading-none">🌾</span>
+              <span class="font-bold text-slate-800">농어촌</span>
+              <span class="text-xs text-slate-500">군 지역</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step: My Income -->
+        <div class="wizard-step" data-step="income">
+          <div class="space-y-4">
+            <div>
+              <label for="dp-income">근로소득 (월)</label>
+              <div class="flex gap-2">
+                <input type="text" id="dp-income" placeholder="예: 120만원" inputmode="text">
+                <button type="button" class="zero-btn" data-dptarget="dp-income">없어요</button>
+              </div>
+              <p class="amount-preview" id="dp-income-preview"></p>
+            </div>
+            <div>
+              <label for="dp-otherIncome">기타소득 (사업·연금·이자 등 월)</label>
+              <div class="flex gap-2">
+                <input type="text" id="dp-otherIncome" placeholder="예: 30만원" inputmode="text">
+                <button type="button" class="zero-btn" data-dptarget="dp-otherIncome">없어요</button>
+              </div>
+              <p class="amount-preview" id="dp-otherIncome-preview"></p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-3 leading-relaxed">근로소득은 기본공제(116만원) + 추가공제 30%가 자동 반영됩니다.<br>기타소득은 그대로 반영됩니다.</p>
+        </div>
+
+        <!-- Step: Spouse Income (couple only) -->
+        <div class="wizard-step" data-step="spouseIncome">
+          <div class="space-y-4">
+            <div>
+              <label for="dp-spouseIncome">배우자 근로소득 (월)</label>
+              <div class="flex gap-2">
+                <input type="text" id="dp-spouseIncome" placeholder="예: 80만원" inputmode="text">
+                <button type="button" class="zero-btn" data-dptarget="dp-spouseIncome">없어요</button>
+              </div>
+              <p class="amount-preview" id="dp-spouseIncome-preview"></p>
+            </div>
+            <div>
+              <label for="dp-spouseOtherIncome">배우자 기타소득 (월)</label>
+              <div class="flex gap-2">
+                <input type="text" id="dp-spouseOtherIncome" placeholder="예: 20만원" inputmode="text">
+                <button type="button" class="zero-btn" data-dptarget="dp-spouseOtherIncome">없어요</button>
+              </div>
+              <p class="amount-preview" id="dp-spouseOtherIncome-preview"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step: Property -->
+        <div class="wizard-step" data-step="property">
+          <div class="space-y-4">
+            <div>
+              <label for="dp-homeValue">주택/부동산 시가총액</label>
+              <div class="flex gap-2">
+                <input type="text" id="dp-homeValue" placeholder="예: 2억" inputmode="text">
+                <button type="button" class="zero-btn" data-dptarget="dp-homeValue">없어요</button>
+              </div>
+              <p class="amount-preview" id="dp-homeValue-preview"></p>
+            </div>
+            <div>
+              <label for="dp-deposit">전·월세 보증금 등</label>
+              <div class="flex gap-2">
+                <input type="text" id="dp-deposit" placeholder="예: 5000만원" inputmode="text">
+                <button type="button" class="zero-btn" data-dptarget="dp-deposit">없어요</button>
+              </div>
+              <p class="amount-preview" id="dp-deposit-preview"></p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-3">거주 지역에 따라 기본재산 공제액이 자동 반영됩니다.</p>
+        </div>
+
+        <!-- Step: Financial -->
+        <div class="wizard-step" data-step="financial">
+          <div class="space-y-4">
+            <div>
+              <label for="dp-savings">예금·적금 등 금융재산</label>
+              <div class="flex gap-2">
+                <input type="text" id="dp-savings" placeholder="예: 3000만원" inputmode="text">
+                <button type="button" class="zero-btn" data-dptarget="dp-savings">없어요</button>
+              </div>
+              <p class="amount-preview" id="dp-savings-preview"></p>
+            </div>
+            <div>
+              <label for="dp-stocks">주식·펀드·채권 등</label>
+              <div class="flex gap-2">
+                <input type="text" id="dp-stocks" placeholder="예: 1000만원" inputmode="text">
+                <button type="button" class="zero-btn" data-dptarget="dp-stocks">없어요</button>
+              </div>
+              <p class="amount-preview" id="dp-stocks-preview"></p>
+            </div>
+            <div>
+              <label for="dp-car">자동차 시가</label>
+              <div class="flex gap-2">
+                <input type="text" id="dp-car" placeholder="예: 1500만원" inputmode="text">
+                <button type="button" class="zero-btn" data-dptarget="dp-car">없어요</button>
+              </div>
+              <p class="amount-preview" id="dp-car-preview"></p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mt-3">금융재산에서 2,000만원이 자동 공제됩니다.</p>
+        </div>
+
+        <!-- Step: Debt -->
+        <div class="wizard-step" data-step="debt">
+          <div>
+            <label for="dp-debt">부채 (대출금 등)</label>
+            <div class="flex gap-2">
+              <input type="text" id="dp-debt" placeholder="예: 5000만원" inputmode="text">
+              <button type="button" class="zero-btn" data-dptarget="dp-debt">없어요</button>
+            </div>
+            <p class="amount-preview" id="dp-debt-preview"></p>
+          </div>
+          <p class="text-xs text-slate-500 mt-3">금융기관 대출, 임대보증금 등 공적으로 확인 가능한 부채를 입력해주세요.</p>
+        </div>
+
+        <!-- Wizard Navigation -->
+        <div class="wizard-actions">
+          <button type="button" id="dp-wizard-prev" class="wizard-btn prev" disabled>이전</button>
+          <button type="button" id="dp-wizard-next" class="wizard-btn next">다음</button>
+          <button type="submit" id="dp-wizard-submit" class="wizard-btn submit hidden">결과 확인하기</button>
+          <button type="button" id="dp-wizard-reset" class="wizard-btn reset hidden">처음부터 다시</button>
+        </div>
+      </form>
+
+      <!-- Result -->
+      <div id="dp-result" style="display:none;"></div>
+      <div id="dp-applyInfo" style="display:none;"></div>
+
+      <!-- Warning -->
+      <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+        <p class="text-sm text-amber-800 leading-relaxed">
+          <strong>주의:</strong> 본 계산은 2026년 1월 보건복지부 고시 기준의 <strong>모의 계산</strong>입니다.
+          실제 수급 여부는 국민연금공단·주민센터 심사를 통해 최종 결정됩니다.
+        </p>
+        <p class="text-xs text-amber-700 mt-2">
+          출처:
+          <a class="underline" href="https://www.mohw.go.kr/menu.es?mid=a10710030100" target="_blank" rel="noopener">보건복지부 장애인연금 안내</a>,
+          <a class="underline" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">복지로</a>
+        </p>
+      </div>
+
+      <!-- FAQ -->
+      <section class="mt-6">
+        <h2 class="text-xl font-bold text-slate-800 mb-3">자주 묻는 질문</h2>
+
+        <details class="faq-item">
+          <summary class="flex items-center gap-2"><span class="text-lg">❓</span> 장애인연금과 장애수당의 차이가 뭔가요?</summary>
+          <div class="mt-3 text-sm text-slate-700 space-y-2 leading-relaxed">
+            <p><strong>장애인연금</strong>은 만 18세 이상 <strong>중증장애인</strong>(장애의 정도가 심한 장애인)에게 지급되며, 기초급여(최대 34만 9,700원) + 부가급여로 구성됩니다.</p>
+            <p><strong>장애수당</strong>은 만 18세 이상 <strong>경증장애인</strong>(심하지 않은 장애인) 중 기초생활수급자·차상위에게 지급되며, 월 6만원 수준입니다.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="flex items-center gap-2"><span class="text-lg">🔄</span> 만 65세가 되면 장애인연금이 어떻게 바뀌나요?</summary>
+          <div class="mt-3 text-sm text-slate-700 space-y-2 leading-relaxed">
+            <p>만 65세가 되면 장애인연금 <strong>기초급여는 자동으로 기초연금으로 전환</strong>됩니다.</p>
+            <p>단, 장애인연금 <strong>부가급여는 계속 지급</strong>되므로, 65세 이후에는 "기초연금 + 장애인연금 부가급여"를 함께 받게 됩니다.</p>
+            <p>생계·의료급여 수급자의 경우 65세 이후 부가급여가 최대 43만 9,700원까지 인상됩니다.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="flex items-center gap-2"><span class="text-lg">💑</span> 부부가 모두 중증장애인이면 감액되나요?</summary>
+          <div class="mt-3 text-sm text-slate-700 space-y-2 leading-relaxed">
+            <p>네. 부부가 모두 장애인연금을 수급하는 경우 <strong>기초급여만 각자 20% 감액</strong>됩니다.</p>
+            <p>349,700원 × 80% = <strong>279,760원씩</strong> 지급됩니다. 부가급여는 감액되지 않습니다.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="flex items-center gap-2"><span class="text-lg">💰</span> 소득인정액은 어떻게 계산하나요?</summary>
+          <div class="mt-3 text-sm text-slate-700 space-y-2 leading-relaxed">
+            <p>기초연금과 동일한 방식으로 계산됩니다.</p>
+            <p><strong>소득인정액 = 소득평가액 + 재산의 소득환산액</strong></p>
+            <ul class="list-disc ml-5 space-y-1">
+              <li>소득평가액 = (근로소득 - 116만원) × 70% + 기타소득</li>
+              <li>재산의 소득환산액 = (일반재산 - 기본재산공제) + (금융재산 - 2,000만원) - 부채, 연 4%</li>
+              <li>기본재산공제: 대도시 1억 3,500만원 / 중소도시 8,500만원 / 농어촌 7,250만원</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="flex items-center gap-2"><span class="text-lg">📝</span> 어디서 신청하나요?</summary>
+          <div class="mt-3 text-sm text-slate-700 space-y-2 leading-relaxed">
+            <p>주소지 <strong>읍·면·동 주민센터</strong>에 직접 방문하거나 <strong>복지로(www.bokjiro.go.kr)</strong>에서 온라인 신청할 수 있습니다.</p>
+            <p>신청 시 장애인 등록증(복지카드), 신분증, 통장 사본, 소득·재산 증빙 서류 등이 필요합니다.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="flex items-center gap-2"><span class="text-lg">🏥</span> 국민연금과 장애인연금, 둘 다 받을 수 있나요?</summary>
+          <div class="mt-3 text-sm text-slate-700 space-y-2 leading-relaxed">
+            <p>네. <strong>국민연금, 장애연금, 유족연금 등 공적연금과 장애인연금은 중복 수급이 가능</strong>합니다.</p>
+            <p>다만 이러한 공적연금은 <strong>소득평가액에 포함</strong>되므로 선정기준액을 초과하지 않는지 확인해야 합니다.</p>
+          </div>
+        </details>
+      </section>
+
+      <button id="dp-back-bottom" class="w-full py-3.5 rounded-xl font-bold text-white mt-6 mb-8" style="background:linear-gradient(135deg,#4f46e5,#7c3aed); box-shadow:0 2px 10px rgba(79,70,229,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 기초연금 계산기로 돌아가기</button>
+    </main>
   </section>
 
   <!-- ===== Game Hub ===== -->
@@ -1350,7 +1759,7 @@
       const tabPension = document.getElementById('tab-pension');
       const tabGames = document.getElementById('tab-games');
 
-      if (sectionName === 'pension-container' || sectionName === 'fuel-support') {
+      if (sectionName === 'pension-container' || sectionName === 'fuel-support' || sectionName === 'disability-pension') {
         topNav.classList.add('hidden');
         floatingBtn.classList.add('hidden');
         if (sectionName === 'pension-container') floatingBtn.classList.remove('hidden');
@@ -2042,6 +2451,551 @@
         };
         img.onerror = () => { this.setMsg('QR 코드 생성에 실패했습니다. 링크를 대신 공유하세요.', true); };
         img.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}`;
+      }
+    };
+
+    /* ================================================
+       장애인연금 모의계산기 (2026년 기준)
+       근거: 보건복지부 2026.1월 고시
+       - 선정기준액: 단독 140만원 / 부부 224만원
+       - 기초급여: 월 349,700원 (부부 모두 수급시 각자 20% 감액 → 279,760원)
+       - 부가급여: 대상/연령별 차등 지급
+       ================================================ */
+    const disabilityApp = {
+      CONFIG: {
+        year: 2026,
+        // 선정기준액 (월)
+        incomeThreshold: { single: 1400000, couple: 2240000 },
+        // 기본재산 공제 (기초연금과 동일한 공식)
+        basicAsset: { big: 135000000, mid: 85000000, rural: 72500000 },
+        financialDeduction: 20000000,
+        // 기초급여 (18~64세 적용, 65세 이상은 기초연금으로 전환)
+        baseBenefit: 349700,
+        baseBenefitCouple: 279760, // 부부 모두 수급시 20% 감액
+        // 부가급여표 [웰페어유형][연령대]
+        // basic12: 생계·의료급여 수급자 / basic34: 주거·교육급여 / nearPoor: 차상위계층 / nearPoorOver: 차상위초과
+        extraBenefit: {
+          basic12:      { under65: 90000,  over65: 439700 }, // 65+: 기초연금+부가급여 합산 명목
+          basic34:      { under65: 80000,  over65: 80000  },
+          nearPoor:     { under65: 80000,  over65: 80000  },
+          nearPoorOver: { under65: 30000,  over65: 50000  }
+        },
+        // 근로소득 공제 (기초연금과 동일)
+        workIncomeDeduction: 1160000,
+        workIncomeAdditionalDeductionRate: 0.3,
+        assetConversionRate: 0.04 / 12
+      },
+      currentStepIndex: 0,
+      steps: [],
+      STEP_META: {
+        severity:      { title: '장애인 등록 상태를 알려주세요',        desc: '장애인연금은 장애의 정도가 심한 장애인(중증)만 해당됩니다.' },
+        birth:         { title: '생년월을 알려주세요',                 desc: '만 18세 이상인지 확인하고, 65세 전·후에 따른 급여 구조를 안내해드려요.' },
+        household:     { title: '가구 유형을 선택해주세요',            desc: '혼자 사시는지, 배우자와 함께 사시는지에 따라 기준이 달라요.' },
+        spouseSeverity:{ title: '배우자도 중증장애인이신가요?',         desc: '부부 모두 장애인연금 수급시 기초급여가 20% 감액됩니다.' },
+        welfare:       { title: '복지 수급 상태를 알려주세요',          desc: '수급 유형에 따라 부가급여 금액이 달라집니다.' },
+        area:          { title: '어디에 거주하고 계신가요?',            desc: '지역에 따라 기본재산 공제액이 달라져요.' },
+        income:        { title: '본인의 월 소득을 알려주세요',          desc: '근로소득과 기타소득을 입력해주세요. 없으면 "없어요"를 눌러주세요.' },
+        spouseIncome:  { title: '배우자분의 월 소득을 알려주세요',      desc: '배우자의 근로소득과 기타소득을 입력해주세요.' },
+        property:      { title: '부동산 정보를 알려주세요',             desc: '주택·토지 시가와 전월세 보증금을 입력해주세요.' },
+        financial:     { title: '금융재산과 자동차를 알려주세요',       desc: '예금, 주식, 자동차 가액을 입력해주세요. 없는 항목은 "없어요"를 눌러주세요.' },
+        debt:          { title: '부채(대출금)가 있으신가요?',          desc: '대출금 등 부채가 있으면 차감해서 계산해드려요.' }
+      },
+      lastResultContext: null,
+
+      init() {
+        if (!document.getElementById('dp-form')) return;
+        this.populateSelects();
+        this.steps = this.getStepFlow();
+        this.bindEvents();
+        this.updateStepUI();
+      },
+
+      populateSelects() {
+        const yearSel = document.getElementById('dp-birthYear');
+        const monthSel = document.getElementById('dp-birthMonth');
+        if (!yearSel || !monthSel) return;
+        const currentYear = new Date().getFullYear();
+        yearSel.innerHTML = '';
+        // 만 18세 이상 ~ 110세까지 표시
+        for (let y = currentYear - 18; y >= currentYear - 110; y--) {
+          const opt = document.createElement('option');
+          opt.value = y; opt.textContent = y + '년';
+          yearSel.appendChild(opt);
+        }
+        monthSel.innerHTML = '';
+        for (let m = 1; m <= 12; m++) {
+          const opt = document.createElement('option');
+          opt.value = m; opt.textContent = m + '월';
+          monthSel.appendChild(opt);
+        }
+      },
+
+      getStepFlow() {
+        const hh = document.getElementById('dp-household')?.value || 'single';
+        const steps = ['severity', 'birth', 'household'];
+        if (hh === 'couple') steps.push('spouseSeverity');
+        steps.push('welfare', 'area', 'income');
+        if (hh === 'couple') steps.push('spouseIncome');
+        steps.push('property', 'financial', 'debt');
+        return steps;
+      },
+
+      bindEvents() {
+        const form = document.getElementById('dp-form');
+        const prevBtn = document.getElementById('dp-wizard-prev');
+        const nextBtn = document.getElementById('dp-wizard-next');
+        const resetBtn = document.getElementById('dp-wizard-reset');
+        if (!form) return;
+
+        prevBtn?.addEventListener('click', () => this.prevStep());
+        nextBtn?.addEventListener('click', () => this.nextStep());
+        resetBtn?.addEventListener('click', () => this.resetWizard());
+
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (this.validateCurrentStep()) this.calculate();
+        });
+
+        form.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA') return;
+          e.preventDefault();
+          if (this.isLastStep()) { if (this.validateCurrentStep()) this.calculate(); }
+          else { this.nextStep(); }
+        });
+
+        // Card selections
+        document.querySelectorAll('#dp-form .sel-card[data-dpfield]').forEach(card => {
+          card.addEventListener('click', () => {
+            const field = card.dataset.dpfield;
+            const value = card.dataset.value;
+            card.parentElement.querySelectorAll('.sel-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            if (field === 'household') {
+              document.getElementById('dp-household').value = value;
+              this.handleHouseholdChange();
+            } else if (field === 'spouseSeverity') {
+              document.getElementById('dp-spouseSeverity').value = value;
+            } else if (field === 'welfare') {
+              document.getElementById('dp-welfare').value = value;
+            } else if (field === 'area') {
+              document.getElementById('dp-area-value').value = value;
+            } else if (field === 'severity') {
+              document.getElementById('dp-severity').value = value;
+            }
+          });
+        });
+
+        // Zero buttons
+        document.querySelectorAll('#dp-form .zero-btn[data-dptarget]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.dptarget);
+            if (input) { input.value = '0원'; this.updateAmountPreview(btn.dataset.dptarget); }
+          });
+        });
+
+        // Amount input previews
+        const amountFields = ['dp-income','dp-otherIncome','dp-spouseIncome','dp-spouseOtherIncome','dp-homeValue','dp-deposit','dp-savings','dp-stocks','dp-car','dp-debt'];
+        amountFields.forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('input', () => this.updateAmountPreview(id));
+            input.addEventListener('blur', () => this.updateAmountPreview(id));
+          }
+        });
+      },
+
+      updateAmountPreview(id) {
+        const input = document.getElementById(id);
+        const preview = document.getElementById(id + '-preview');
+        if (!input || !preview) return;
+        const val = input.value.trim();
+        if (!val || val === '0' || val === '0원') { preview.textContent = ''; return; }
+        const amount = this.parseAmount(val);
+        preview.textContent = amount > 0 ? '= ' + this.formatKRW(amount) : '';
+      },
+
+      handleHouseholdChange() {
+        const hh = document.getElementById('dp-household')?.value;
+        if (hh !== 'couple') {
+          ['dp-spouseIncome','dp-spouseOtherIncome'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+          });
+          document.getElementById('dp-spouseSeverity').value = 'no';
+        }
+        const curKey = this.steps[this.currentStepIndex];
+        this.steps = this.getStepFlow();
+        const idx = this.steps.indexOf(curKey);
+        this.currentStepIndex = idx >= 0 ? idx : Math.min(this.currentStepIndex, this.steps.length - 1);
+        this.updateStepUI();
+      },
+
+      isLastStep() { return this.currentStepIndex === this.steps.length - 1; },
+
+      validateCurrentStep() {
+        const step = this.steps[this.currentStepIndex];
+        if (step === 'severity') {
+          if (!document.getElementById('dp-severity').value) {
+            alert('장애인 등록 상태를 선택해주세요.');
+            return false;
+          }
+        }
+        if (step === 'welfare') {
+          if (!document.getElementById('dp-welfare').value) {
+            alert('복지 수급 유형을 선택해주세요.');
+            return false;
+          }
+        }
+        if (step === 'area') {
+          if (!document.getElementById('dp-area-value').value) {
+            alert('거주 지역을 선택해주세요.');
+            return false;
+          }
+        }
+        if (step === 'income') {
+          const val = document.getElementById('dp-income').value.trim();
+          if (!val) {
+            alert('근로소득을 입력해주세요. 없으시면 "없어요" 버튼을 눌러주세요.');
+            document.getElementById('dp-income').focus();
+            return false;
+          }
+        }
+        return true;
+      },
+
+      nextStep() {
+        if (!this.validateCurrentStep()) return;
+        if (this.isLastStep()) { this.calculate(); return; }
+        this.currentStepIndex++;
+        this.updateStepUI();
+      },
+
+      prevStep() {
+        if (this.currentStepIndex === 0) return;
+        this.currentStepIndex--;
+        this.updateStepUI();
+      },
+
+      resetWizard() {
+        const form = document.getElementById('dp-form');
+        const resultDiv = document.getElementById('dp-result');
+        const applyDiv = document.getElementById('dp-applyInfo');
+        if (form) form.reset();
+        if (resultDiv) { resultDiv.style.display = 'none'; resultDiv.innerHTML = ''; }
+        if (applyDiv) { applyDiv.style.display = 'none'; applyDiv.innerHTML = ''; }
+        document.querySelectorAll('#dp-form .sel-card').forEach(c => c.classList.remove('selected'));
+        document.querySelector('#dp-form .sel-card[data-dpfield="household"][data-value="single"]')?.classList.add('selected');
+        document.querySelector('#dp-form .sel-card[data-dpfield="spouseSeverity"][data-value="no"]')?.classList.add('selected');
+        document.getElementById('dp-household').value = 'single';
+        document.getElementById('dp-spouseSeverity').value = 'no';
+        document.getElementById('dp-severity').value = '';
+        document.getElementById('dp-welfare').value = '';
+        document.getElementById('dp-area-value').value = '';
+        document.querySelectorAll('#dp-form .amount-preview').forEach(p => p.textContent = '');
+        this.currentStepIndex = 0;
+        this.steps = this.getStepFlow();
+        this.updateStepUI();
+        form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      },
+
+      updateStepUI() {
+        this.steps = this.getStepFlow();
+        if (this.currentStepIndex >= this.steps.length) this.currentStepIndex = this.steps.length - 1;
+        const stepKey = this.steps[this.currentStepIndex];
+        document.querySelectorAll('#dp-form .wizard-step').forEach(el => el.classList.remove('active'));
+        const activeStep = document.querySelector(`#dp-form .wizard-step[data-step="${stepKey}"]`);
+        if (activeStep) activeStep.classList.add('active');
+
+        const meta = this.STEP_META[stepKey] || { title: '질문', desc: '' };
+        const stepText = document.getElementById('dp-wizard-step-text');
+        const titleEl = document.getElementById('dp-wizard-question-title');
+        const descEl = document.getElementById('dp-wizard-question-desc');
+        const fill = document.getElementById('dp-wizard-progress-fill');
+        const prevBtn = document.getElementById('dp-wizard-prev');
+        const nextBtn = document.getElementById('dp-wizard-next');
+        const submitBtn = document.getElementById('dp-wizard-submit');
+        const resetBtn = document.getElementById('dp-wizard-reset');
+
+        if (stepText) stepText.textContent = `${this.currentStepIndex + 1} / ${this.steps.length} 단계`;
+        if (titleEl) titleEl.textContent = meta.title;
+        if (descEl) descEl.textContent = meta.desc;
+        if (fill) fill.style.width = `${((this.currentStepIndex + 1) / this.steps.length) * 100}%`;
+        if (prevBtn) prevBtn.disabled = this.currentStepIndex === 0;
+
+        if (nextBtn && submitBtn && resetBtn) {
+          if (this.isLastStep()) {
+            nextBtn.classList.add('hidden');
+            submitBtn.classList.remove('hidden');
+            resetBtn.classList.remove('hidden');
+          } else {
+            nextBtn.classList.remove('hidden');
+            submitBtn.classList.add('hidden');
+            resetBtn.classList.add('hidden');
+          }
+        }
+      },
+
+      parseAmount(str) { return pensionApp.parseAmount(str); },
+      formatKRW(a) { return pensionApp.formatKRW(a); },
+      formatKRWNum(a) { return pensionApp.formatKRWNum(a); },
+
+      calculateAge(year, month) {
+        const today = new Date();
+        let age = today.getFullYear() - year;
+        if (month > today.getMonth() + 1) age--;
+        return age;
+      },
+
+      applyWorkIncomeDeduction(workIncome) {
+        const afterBase = Math.max(0, workIncome - this.CONFIG.workIncomeDeduction);
+        return Math.round(afterBase * (1 - this.CONFIG.workIncomeAdditionalDeductionRate));
+      },
+
+      calculate() {
+        const severity = document.getElementById('dp-severity').value;
+        const year = parseInt(document.getElementById('dp-birthYear').value);
+        const month = parseInt(document.getElementById('dp-birthMonth').value);
+        const household = document.getElementById('dp-household').value;
+        const spouseSeverity = document.getElementById('dp-spouseSeverity').value;
+        const welfare = document.getElementById('dp-welfare').value;
+        const area = document.getElementById('dp-area-value').value;
+
+        if (!area) { alert('거주 지역을 선택해주세요.'); return; }
+
+        const income = this.parseAmount(document.getElementById('dp-income').value);
+        const otherIncome = this.parseAmount(document.getElementById('dp-otherIncome').value);
+        const spouseIncome = this.parseAmount(document.getElementById('dp-spouseIncome').value);
+        const spouseOtherIncome = this.parseAmount(document.getElementById('dp-spouseOtherIncome').value);
+        const homeValue = this.parseAmount(document.getElementById('dp-homeValue').value);
+        const deposit = this.parseAmount(document.getElementById('dp-deposit').value);
+        const savings = this.parseAmount(document.getElementById('dp-savings').value);
+        const stocks = this.parseAmount(document.getElementById('dp-stocks').value);
+        const car = this.parseAmount(document.getElementById('dp-car').value);
+        const debt = this.parseAmount(document.getElementById('dp-debt').value);
+
+        const age = this.calculateAge(year, month);
+
+        // === 소득평가액 ===
+        const myWorkRecognized = this.applyWorkIncomeDeduction(income);
+        const spouseWorkRecognized = this.applyWorkIncomeDeduction(spouseIncome);
+        const totalWorkRecognized = myWorkRecognized + spouseWorkRecognized;
+        const totalOtherIncome = otherIncome + spouseOtherIncome;
+        const incomeEvaluation = totalWorkRecognized + totalOtherIncome;
+
+        // === 재산의 소득환산액 ===
+        const generalAssets = homeValue + deposit + car;
+        const financialAssets = savings + stocks;
+        const basicAssetAmount = this.CONFIG.basicAsset[area];
+        const netAssetTotal = (generalAssets - basicAssetAmount) + (financialAssets - this.CONFIG.financialDeduction) - debt;
+        const assetIncome = Math.max(0, netAssetTotal) * this.CONFIG.assetConversionRate;
+
+        const totalRecognizedIncome = incomeEvaluation + assetIncome;
+        const threshold = this.CONFIG.incomeThreshold[household];
+
+        // === 자격 판정 ===
+        const ageOK = age >= 18;
+        const severityOK = severity === 'severe';
+        const incomeOK = totalRecognizedIncome <= threshold;
+        const eligible = ageOK && severityOK && incomeOK;
+
+        // === 급여액 계산 ===
+        let baseBenefit = 0; // 기초급여
+        let extraBenefit = 0; // 부가급여
+        let baseBenefitLabel = '';
+        let extraBenefitLabel = '';
+
+        if (eligible) {
+          const over65 = age >= 65;
+          const bothDisabled = household === 'couple' && spouseSeverity === 'yes';
+
+          // 기초급여 (만 18~64세)
+          if (!over65) {
+            baseBenefit = bothDisabled ? this.CONFIG.baseBenefitCouple : this.CONFIG.baseBenefit;
+            baseBenefitLabel = bothDisabled ? '기초급여 (부부감액 20%)' : '기초급여';
+          } else {
+            baseBenefit = 0;
+            baseBenefitLabel = '기초급여 → 기초연금으로 전환';
+          }
+
+          // 부가급여
+          const ageKey = over65 ? 'over65' : 'under65';
+          const ext = this.CONFIG.extraBenefit[welfare];
+          if (ext) {
+            extraBenefit = ext[ageKey];
+            const welfareLabels = {
+              basic12: '생계·의료급여 수급자',
+              basic34: '주거·교육급여 수급자',
+              nearPoor: '차상위계층',
+              nearPoorOver: '차상위초과'
+            };
+            extraBenefitLabel = `부가급여 (${welfareLabels[welfare]})`;
+          }
+        }
+
+        const grossIncome = income + otherIncome + spouseIncome + spouseOtherIncome;
+
+        this.showResult({
+          age, ageOK, severityOK, incomeOK, severity,
+          totalRecognizedIncome, threshold, household, eligible,
+          baseBenefit, extraBenefit, baseBenefitLabel, extraBenefitLabel,
+          welfare, bothDisabled: household === 'couple' && spouseSeverity === 'yes',
+          over65: age >= 65,
+          bd: {
+            grossIncome, totalWorkRecognized, totalOtherIncome,
+            incomeEvaluation, generalAssets, financialAssets,
+            basicAssetAmount, netAssetTotal, assetIncome, debt
+          }
+        });
+      },
+
+      showResult(r) {
+        const resultDiv = document.getElementById('dp-result');
+        const applyDiv = document.getElementById('dp-applyInfo');
+        let html = '';
+        const totalBenefit = r.baseBenefit + r.extraBenefit;
+
+        if (r.eligible) {
+          html = `
+            <div class="dp-result-success">
+              <span class="result-emoji">🎉</span>
+              <p class="text-xl font-black text-indigo-900 mb-1">장애인연금 수급 가능성이 높습니다!</p>
+              <p class="text-indigo-800 mb-3">
+                ${r.over65 ? '만 65세 이상: 기초급여는 <strong>기초연금</strong>으로 자동 전환됩니다.' : '만 18~64세 기준 기초급여 + 부가급여가 함께 지급됩니다.'}
+              </p>
+
+              <div class="dp-benefit-total">
+                <span class="label">예상 월 수령액 ${r.over65 ? '(부가급여만, 기초연금 별도)' : '(기초급여 + 부가급여)'}</span>
+                <strong class="amount">${this.formatKRWNum(totalBenefit)}</strong>
+              </div>
+
+              <div class="result-breakdown">
+                <p class="font-bold text-sm text-indigo-900 mb-2">급여 구성</p>
+                <ul class="space-y-0.5">
+                  ${r.baseBenefit > 0 ? `<li>${r.baseBenefitLabel}: <strong>${this.formatKRWNum(r.baseBenefit)}</strong></li>` : `<li>${r.baseBenefitLabel}</li>`}
+                  ${r.extraBenefit > 0 ? `<li>${r.extraBenefitLabel}: <strong>${this.formatKRWNum(r.extraBenefit)}</strong></li>` : ''}
+                  ${r.over65 && r.welfare === 'basic12' ? `<li class="text-xs text-indigo-700">* 65세 이상 생계·의료급여 수급자의 부가급여는 기초연금액 포함 최대 43만 9,700원입니다.</li>` : ''}
+                </ul>
+              </div>
+
+              <div class="result-breakdown">
+                <p class="font-bold text-sm text-indigo-900 mb-2">소득인정액 산출 내역</p>
+                <ul class="space-y-0.5">
+                  <li>입력 월소득 합계: <strong>${this.formatKRWNum(r.bd.grossIncome)}</strong></li>
+                  <li>→ 근로소득 인정액 (공제 후): <strong>${this.formatKRWNum(r.bd.totalWorkRecognized)}</strong></li>
+                  <li>→ 기타소득 합계: <strong>${this.formatKRWNum(r.bd.totalOtherIncome)}</strong></li>
+                  <li>→ 소득평가액: <strong>${this.formatKRWNum(r.bd.incomeEvaluation)}</strong></li>
+                  <li class="pt-1 border-t border-indigo-200">일반재산 합계: ${this.formatKRW(r.bd.generalAssets)} (기본재산 공제: ${this.formatKRW(r.bd.basicAssetAmount)})</li>
+                  <li>금융재산 합계: ${this.formatKRW(r.bd.financialAssets)} (공제: 2,000만원)</li>
+                  <li>부채 차감: ${this.formatKRW(r.bd.debt)}</li>
+                  <li>→ 재산의 소득환산액: <strong>${this.formatKRWNum(Math.round(r.bd.assetIncome))}</strong></li>
+                  <li class="pt-1 border-t border-indigo-200 font-bold">총 소득인정액: ${this.formatKRWNum(Math.round(r.totalRecognizedIncome))}</li>
+                  <li class="font-bold">선정기준액: ${this.formatKRWNum(r.threshold)}</li>
+                </ul>
+              </div>
+
+              <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
+                <span>📤</span><span>결과 공유하기</span>
+              </button>
+            </div>`;
+        } else {
+          const reasons = [];
+          if (r.severity === 'mild') reasons.push(`<li><strong>경증(심하지 않은) 장애인</strong>은 장애인연금 대상이 아닙니다. <br><span class="text-xs">→ 장애수당(월 6만원, 기초수급자·차상위 기준)을 알아보세요.</span></li>`);
+          else if (r.severity === 'none') reasons.push(`<li><strong>장애인 등록이 필요합니다.</strong> <br><span class="text-xs">→ 주소지 읍·면·동 주민센터에서 장애 등록을 먼저 진행하세요.</span></li>`);
+          if (!r.ageOK) reasons.push(`<li>연령 미충족: 만 18세 이상 필요 (현재 만 ${r.age}세)</li>`);
+          if (r.severityOK && r.ageOK && !r.incomeOK) reasons.push(`
+            <li>소득인정액 초과
+              <ul class="ml-4 mt-1 space-y-0.5 text-sm">
+                <li>- 소득인정액: <strong>${this.formatKRWNum(Math.round(r.totalRecognizedIncome))}</strong></li>
+                <li>- 선정기준액: <strong>${this.formatKRWNum(r.threshold)}</strong></li>
+                <li>- 초과금액: <strong>${this.formatKRWNum(Math.round(r.totalRecognizedIncome - r.threshold))}</strong></li>
+              </ul>
+            </li>`);
+
+          html = `
+            <div class="dp-disqualify">
+              <span class="result-emoji">😔</span>
+              <p class="text-xl font-black text-red-800 mb-1">현재 기준으로는 수급이 어려울 수 있어요</p>
+              <p class="text-red-700 text-sm mb-3">아래 사유를 확인해주세요. 실제 심사 결과는 다를 수 있습니다.</p>
+              <div class="result-breakdown">
+                <p class="font-bold text-sm text-red-800 mb-2">미충족 사유</p>
+                <ul class="space-y-1 text-red-900">${reasons.join('')}</ul>
+              </div>
+              ${r.severityOK ? `<div class="result-breakdown mt-3">
+                <p class="font-bold text-sm text-red-800 mb-2">상세 산출 내역</p>
+                <ul class="space-y-0.5 text-red-900">
+                  <li>소득평가액: ${this.formatKRWNum(r.bd.incomeEvaluation)} (근로: ${this.formatKRWNum(r.bd.totalWorkRecognized)} + 기타: ${this.formatKRWNum(r.bd.totalOtherIncome)})</li>
+                  <li>재산의 소득환산액: ${this.formatKRWNum(Math.round(r.bd.assetIncome))}</li>
+                  <li class="font-bold">총 소득인정액: ${this.formatKRWNum(Math.round(r.totalRecognizedIncome))}</li>
+                </ul>
+              </div>` : ''}
+              <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
+                <span>📤</span><span>결과 공유하기</span>
+              </button>
+            </div>`;
+        }
+
+        this.lastResultContext = {
+          eligible: r.eligible,
+          totalIncome: Math.round(r.totalRecognizedIncome),
+          threshold: r.threshold,
+          totalBenefit,
+          baseBenefit: r.baseBenefit,
+          extraBenefit: r.extraBenefit,
+          age: r.age,
+          over65: r.over65
+        };
+
+        resultDiv.innerHTML = html;
+        resultDiv.style.display = 'block';
+
+        // 신청 방법 안내
+        applyDiv.innerHTML = `
+          <div class="mt-5 p-5 bg-indigo-50 rounded-xl border border-indigo-200">
+            <h3 class="text-lg font-bold mb-3 text-indigo-800">장애인연금 신청 방법</h3>
+            <ul class="list-none space-y-2 text-sm">
+              <li class="flex gap-2"><span class="text-lg">🏢</span><div><strong>방문 신청</strong><br>주소지 읍·면·동 주민센터</div></li>
+              <li class="flex gap-2"><span class="text-lg">💻</span><div><strong>온라인 신청</strong><br><a class="underline text-indigo-700" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">복지로(www.bokjiro.go.kr)</a></div></li>
+              <li class="flex gap-2"><span class="text-lg">📞</span><div><strong>전화 문의</strong><br>보건복지상담센터 129</div></li>
+              <li class="flex gap-2"><span class="text-lg">📄</span><div><strong>필요 서류</strong><br>장애인 등록증(복지카드), 신분증, 통장사본, 소득·재산 증빙</div></li>
+              <li class="flex gap-2"><span class="text-lg">👥</span><div><strong>대리 신청 가능</strong><br>배우자, 직계 혈족·형제자매, 장애인 거주시설장 등</div></li>
+            </ul>
+          </div>`;
+        applyDiv.style.display = 'block';
+
+        document.getElementById('dp-share-result-btn')?.addEventListener('click', () => this.shareResult());
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      },
+
+      scrollToCalculator() {
+        const form = document.getElementById('dp-form');
+        this.currentStepIndex = 0;
+        this.updateStepUI();
+        form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      },
+
+      sharePage() {
+        shareModal.open({
+          title: `${this.CONFIG.year} 장애인연금 자격 계산기`,
+          subtitle: '중증장애인과 가족에게 알려주세요',
+          previewTitle: `${this.CONFIG.year} 장애인연금 자격 계산기`,
+          previewText: `2026년 장애인연금 수급 가능성을 1분 안에 확인해보세요!\n본인·배우자의 소득·재산을 입력하면 자동 계산됩니다.`,
+          url: location.href
+        });
+      },
+
+      shareResult() {
+        const ctx = this.lastResultContext;
+        if (!ctx) { this.sharePage(); return; }
+        const summary = ctx.eligible
+          ? `🎉 장애인연금 수급 가능성 높음\n예상 월 수령액: ${this.formatKRWNum(ctx.totalBenefit)}${ctx.over65 ? ' (부가급여만)' : ''}\n소득인정액: ${this.formatKRWNum(ctx.totalIncome)} / 기준: ${this.formatKRWNum(ctx.threshold)}`
+          : `📋 현재 기준으로는 수급이 어려울 수 있어요\n소득인정액: ${this.formatKRWNum(ctx.totalIncome)} / 기준: ${this.formatKRWNum(ctx.threshold)}`;
+        shareModal.open({
+          title: '결과 공유하기',
+          subtitle: '계산 결과를 가족에게 알려드릴까요?',
+          previewTitle: `${this.CONFIG.year} 장애인연금 모의계산 결과`,
+          previewText: `${summary}\n\n직접 계산해보려면 링크를 방문하세요.`,
+          url: location.href
+        });
       }
     };
 
@@ -3169,6 +4123,13 @@
       document.getElementById('fuel-back-to-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
       document.getElementById('fuel-back-bottom')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
 
+      // 장애인연금 네비게이션
+      document.getElementById('goto-disability')?.addEventListener('click', () => { showSection('disability-pension'); window.scrollTo(0,0); });
+      document.getElementById('dp-back-to-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
+      document.getElementById('dp-back-bottom')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
+      document.getElementById('dp-jump-to-calc')?.addEventListener('click', () => disabilityApp.scrollToCalculator());
+      document.getElementById('dp-share-page-btn')?.addEventListener('click', () => disabilityApp.sharePage());
+
       document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', () => showSection('game-hub')));
       document.querySelectorAll('[data-game]').forEach(card => {
         card.addEventListener('click', () => {
@@ -3180,6 +4141,7 @@
 
       pensionApp.init();
       shareModal.init();
+      disabilityApp.init();
       omokApp.init();
       g2048App.init();
       snakeApp.init();
