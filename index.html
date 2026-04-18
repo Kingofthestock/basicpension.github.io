@@ -1105,25 +1105,42 @@
         <!-- Step: Severity (중증 여부) -->
         <div class="wizard-step" data-step="severity">
           <input type="hidden" id="dp-severity" value="">
+          <div class="p-3 mb-3 rounded-lg bg-amber-50 border border-amber-200">
+            <p class="text-xs text-amber-900 leading-relaxed">
+              <strong>⚠️ 주의:</strong> 장애인연금 대상은 <strong>구 1·2급 장애인</strong> 또는 <strong>3급이면서 중복 장애가 있는 경우</strong>만 해당됩니다.<br>
+              3급 단일 장애는 <strong>경증으로 분류</strong>되어 장애인연금 대상이 아닙니다 (민원 소지 有).
+            </p>
+          </div>
           <div class="grid grid-cols-1 gap-3">
-            <button type="button" class="sel-card" data-dpfield="severity" data-value="severe">
+            <button type="button" class="sel-card" data-dpfield="severity" data-value="grade12">
               <span class="text-4xl leading-none">♿</span>
-              <span class="text-base font-bold text-slate-800">네, 중증장애인이에요</span>
-              <span class="text-sm text-slate-500">장애의 정도가 심한 장애인 (구 1·2급, 3급 중복)</span>
+              <span class="text-base font-bold text-slate-800">1급 또는 2급 장애인</span>
+              <span class="text-sm text-slate-500">장애의 정도가 심한 장애인 · <strong class="text-indigo-600">장애인연금 대상</strong></span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="severity" data-value="grade3dup">
+              <span class="text-4xl leading-none">🔀</span>
+              <span class="text-base font-bold text-slate-800">3급 + 중복 장애</span>
+              <span class="text-sm text-slate-500">3급 장애인이면서 다른 장애가 추가로 있음 · <strong class="text-indigo-600">장애인연금 대상</strong></span>
+            </button>
+            <button type="button" class="sel-card" data-dpfield="severity" data-value="grade3single">
+              <span class="text-4xl leading-none">❌</span>
+              <span class="text-base font-bold text-slate-800">3급 단일 장애 (중복 없음)</span>
+              <span class="text-sm text-slate-500">3급 하나만 있음 · <strong class="text-red-600">경증으로 분류 · 장애인연금 대상 아님</strong></span>
             </button>
             <button type="button" class="sel-card" data-dpfield="severity" data-value="mild">
               <span class="text-4xl leading-none">🚶</span>
-              <span class="text-base font-bold text-slate-800">경증(심하지 않은) 장애인</span>
-              <span class="text-sm text-slate-500">장애수당 대상 · 장애인연금은 해당 없음</span>
+              <span class="text-base font-bold text-slate-800">4~6급 (심하지 않은) 장애인</span>
+              <span class="text-sm text-slate-500">경증장애 · <strong class="text-red-600">장애인연금 대상 아님</strong> (장애수당 대상)</span>
             </button>
             <button type="button" class="sel-card" data-dpfield="severity" data-value="none">
               <span class="text-4xl leading-none">❓</span>
               <span class="text-base font-bold text-slate-800">아직 장애 등록을 하지 않았어요</span>
-              <span class="text-sm text-slate-500">읍·면·동 주민센터에서 먼저 등록해야 합니다</span>
+              <span class="text-sm text-slate-500">읍·면·동 주민센터에서 먼저 장애 등록 필요</span>
             </button>
           </div>
           <p class="text-xs text-slate-500 mt-3 leading-relaxed">
-            <strong>장애인연금은 중증장애인만 신청 가능</strong>합니다. 경증장애인은 장애수당(월 6만원·기초수급자 기준) 대상입니다.
+            <strong>장애인연금은 "중증장애인"만 신청 가능</strong>합니다. 경증장애인은 장애수당(월 6만원·기초수급자 기준) 대상입니다.<br>
+            장애 등록증을 확인하시거나, 잘 모르시면 주민센터·복지센터(129)에 문의하세요.
           </p>
         </div>
 
@@ -2665,6 +2682,17 @@
 
       nextStep() {
         if (!this.validateCurrentStep()) return;
+
+        // severity 단계에서 자격 미달 옵션 선택 시 즉시 결과 표시
+        const curStep = this.steps[this.currentStepIndex];
+        if (curStep === 'severity') {
+          const sev = document.getElementById('dp-severity').value;
+          if (sev === 'grade3single' || sev === 'mild' || sev === 'none') {
+            this.showDisqualified(sev);
+            return;
+          }
+        }
+
         if (this.isLastStep()) { this.calculate(); return; }
         this.currentStepIndex++;
         this.updateStepUI();
@@ -2674,6 +2702,88 @@
         if (this.currentStepIndex === 0) return;
         this.currentStepIndex--;
         this.updateStepUI();
+      },
+
+      showDisqualified(reason) {
+        const resultDiv = document.getElementById('dp-result');
+        const applyDiv = document.getElementById('dp-applyInfo');
+
+        const reasonMap = {
+          grade3single: {
+            emoji: '⚠️',
+            title: '3급 단일 장애는 장애인연금 대상이 아닙니다',
+            msg: '3급 장애가 하나만 있는 경우 <strong>경증(심하지 않은 장애인)</strong>으로 분류되어 장애인연금 수급 대상이 아닙니다. <br>단, 기초생활수급자·차상위라면 <strong>장애수당(월 6만원)</strong> 대상이 될 수 있어요.',
+            guide: [
+              ['🏢', '장애수당 신청', '주소지 읍·면·동 주민센터에서 기초수급·차상위 자격과 함께 문의'],
+              ['📞', '보건복지상담센터', '국번없이 <strong>129</strong> (월~금 9~18시)'],
+              ['📄', '다른 장애 추가 등록', '시간이 지나면서 다른 신체/정신 장애가 생겼다면 중복 등록을 신청해 중증 전환 가능'],
+              ['💡', '장애 정도 재심사', '장애 상태가 악화된 경우 국민연금공단에 재심사를 신청해 등급 조정 가능']
+            ]
+          },
+          mild: {
+            emoji: '⚠️',
+            title: '경증(4~6급) 장애는 장애인연금 대상이 아닙니다',
+            msg: '장애인연금은 <strong>장애의 정도가 심한 장애인(중증)</strong>만 해당됩니다. <br>경증장애인은 대신 <strong>장애수당(월 6만원)</strong>을 받을 수 있으며, 기초생활수급자·차상위 계층에 한해 지급됩니다.',
+            guide: [
+              ['🏢', '장애수당 신청', '주소지 읍·면·동 주민센터에서 기초수급·차상위 자격과 함께 문의'],
+              ['📞', '보건복지상담센터', '국번없이 <strong>129</strong> (월~금 9~18시)'],
+              ['📄', '장애 재심사', '장애 상태가 악화된 경우 국민연금공단에 재심사를 신청해 등급 조정 가능'],
+              ['💡', '다른 복지제도', '기초연금(만 65세~), 기초생활보장 등 다른 복지혜택을 확인해보세요']
+            ]
+          },
+          none: {
+            emoji: '📋',
+            title: '먼저 장애인 등록이 필요합니다',
+            msg: '장애인연금을 신청하려면 <strong>장애인 등록(장애의 정도가 심한 장애인)</strong>이 먼저 완료되어야 합니다. <br>등록 후 중증(1·2급 또는 3급+중복)으로 판정받으면 장애인연금 대상이 됩니다.',
+            guide: [
+              ['🏥', '1단계: 병원 진료', '장애 유형별 지정 의료기관에서 진단 및 장애진단서 발급'],
+              ['🏢', '2단계: 주민센터 신청', '주소지 읍·면·동 주민센터에 장애 등록 서류 제출'],
+              ['🔍', '3단계: 장애정도 심사', '국민연금공단에서 장애의 정도 심사 (보통 30~60일 소요)'],
+              ['✅', '4단계: 등록증 발급', '심사 결과에 따라 장애인등록증(복지카드) 발급'],
+              ['📞', '문의', '보건복지상담센터 <strong>129</strong>']
+            ]
+          }
+        };
+
+        const info = reasonMap[reason] || reasonMap.mild;
+        const guideHtml = info.guide.map(([emoji, title, desc]) =>
+          `<li class="flex gap-2"><span class="text-lg">${emoji}</span><div><strong>${title}</strong><br>${desc}</div></li>`
+        ).join('');
+
+        this.lastResultContext = {
+          eligible: false,
+          disqualifyReason: reason,
+          totalBenefit: 0,
+          totalIncome: 0,
+          threshold: 0,
+          age: 0,
+          over65: false
+        };
+
+        resultDiv.innerHTML = `
+          <div class="dp-disqualify">
+            <span class="result-emoji">${info.emoji}</span>
+            <p class="text-xl font-black text-red-800 mb-1">${info.title}</p>
+            <p class="text-red-700 text-sm mb-3">${info.msg}</p>
+            <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
+              <span>📤</span><span>결과 공유하기</span>
+            </button>
+            <button type="button" id="dp-restart-btn" class="result-share-btn mt-2" style="background:#64748b;">
+              <span>🔄</span><span>처음부터 다시 계산</span>
+            </button>
+          </div>`;
+        resultDiv.style.display = 'block';
+
+        applyDiv.innerHTML = `
+          <div class="mt-5 p-5 bg-indigo-50 rounded-xl border border-indigo-200">
+            <h3 class="text-lg font-bold mb-3 text-indigo-800">이렇게 하시면 돼요</h3>
+            <ul class="list-none space-y-2 text-sm">${guideHtml}</ul>
+          </div>`;
+        applyDiv.style.display = 'block';
+
+        document.getElementById('dp-share-result-btn')?.addEventListener('click', () => this.shareResult());
+        document.getElementById('dp-restart-btn')?.addEventListener('click', () => this.resetWizard());
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
       },
 
       resetWizard() {
@@ -2794,7 +2904,8 @@
 
         // === 자격 판정 ===
         const ageOK = age >= 18;
-        const severityOK = severity === 'severe';
+        // 장애인연금 대상: 1·2급 또는 3급+중복장애만 중증으로 인정
+        const severityOK = severity === 'grade12' || severity === 'grade3dup';
         const incomeOK = totalRecognizedIncome <= threshold;
         const eligible = ageOK && severityOK && incomeOK;
 
@@ -2899,7 +3010,8 @@
             </div>`;
         } else {
           const reasons = [];
-          if (r.severity === 'mild') reasons.push(`<li><strong>경증(심하지 않은) 장애인</strong>은 장애인연금 대상이 아닙니다. <br><span class="text-xs">→ 장애수당(월 6만원, 기초수급자·차상위 기준)을 알아보세요.</span></li>`);
+          if (r.severity === 'grade3single') reasons.push(`<li><strong>3급 단일 장애는 경증으로 분류</strong>되어 장애인연금 대상이 아닙니다. <br><span class="text-xs">→ 기초수급·차상위라면 장애수당(월 6만원)을 알아보세요. 다른 장애가 추가로 생긴 경우 중복 등록으로 중증 전환 가능.</span></li>`);
+          else if (r.severity === 'mild') reasons.push(`<li><strong>경증(심하지 않은) 장애인</strong>은 장애인연금 대상이 아닙니다. <br><span class="text-xs">→ 장애수당(월 6만원, 기초수급자·차상위 기준)을 알아보세요.</span></li>`);
           else if (r.severity === 'none') reasons.push(`<li><strong>장애인 등록이 필요합니다.</strong> <br><span class="text-xs">→ 주소지 읍·면·동 주민센터에서 장애 등록을 먼저 진행하세요.</span></li>`);
           if (!r.ageOK) reasons.push(`<li>연령 미충족: 만 18세 이상 필요 (현재 만 ${r.age}세)</li>`);
           if (r.severityOK && r.ageOK && !r.incomeOK) reasons.push(`
