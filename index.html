@@ -379,6 +379,115 @@
     .home-footer { background: #1e293b; color: #cbd5e1; padding: 2rem 1rem; text-align: center; font-size: 0.85rem; line-height: 1.7; margin-top: 1rem; }
     .home-footer strong { color: #fff; }
 
+    /* ===== Welfare Info Page (공통) ===== */
+    .wf-section { min-height: 100vh; padding-bottom: 80px; background: #f8fafc; }
+    .wf-header { color: #fff; padding: 2.25rem 1.25rem 3rem; text-align: center; position: relative; overflow: hidden; }
+    .wf-header::after { content:''; position:absolute; bottom:-1px; left:0; right:0; height:32px; background:#f8fafc; border-radius:50% 50% 0 0/100% 100% 0 0; }
+    .wf-header-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+    .wf-back { display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: #fff; padding: 0.4rem 0.85rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all .2s; margin-bottom: 1.5rem; }
+    .wf-back:hover { background: rgba(255,255,255,.25); }
+    .wf-emoji { font-size: 3rem; margin-bottom: 0.75rem; display: block; }
+    .wf-title { font-size: 2rem; font-weight: 900; line-height: 1.25; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .wf-subtitle { font-size: 1rem; color: rgba(255,255,255,.85); line-height: 1.55; }
+
+    .wf-main { max-width: 720px; margin: -1.5rem auto 0; padding: 0 1rem; position: relative; z-index: 2; }
+    .wf-card { background: #fff; border-radius: 1rem; padding: 1.5rem 1.4rem; box-shadow: 0 2px 12px rgba(15,23,42,.05); margin-bottom: 1rem; border: 1px solid #e2e8f0; }
+    .wf-card-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 0.85rem; letter-spacing: -0.01em; }
+    .wf-bar { width: 4px; height: 22px; border-radius: 2px; }
+    .wf-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-top: 0.5rem; }
+    .wf-summary-item { padding: 1rem 0.85rem; border-radius: 0.75rem; text-align: center; border: 1px solid; }
+    .wf-summary-label { font-size: 0.78rem; color: #64748b; font-weight: 600; margin-bottom: 0.4rem; }
+    .wf-summary-value { font-size: 1.1rem; font-weight: 800; color: #0f172a; line-height: 1.3; }
+    .wf-summary-sub { font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem; }
+
+    .wf-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    .wf-table th, .wf-table td { padding: 0.7rem 0.6rem; border-bottom: 1px solid #e2e8f0; text-align: left; }
+    .wf-table th { background: #f8fafc; color: #334155; font-weight: 700; font-size: 0.85rem; }
+    .wf-table tr:last-child td { border-bottom: none; }
+    .wf-table .num { text-align: right; font-weight: 700; color: #0f172a; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    .wf-list { list-style: none; padding: 0; margin: 0; }
+    .wf-list li { padding: 0.6rem 0; border-bottom: 1px solid #f1f5f9; display: flex; gap: 0.6rem; align-items: flex-start; line-height: 1.55; font-size: 0.92rem; color: #334155; }
+    .wf-list li:last-child { border-bottom: none; }
+    .wf-list li strong { color: #0f172a; }
+    .wf-list-icon { font-size: 1rem; flex-shrink: 0; line-height: 1.55; }
+
+    .wf-callout { padding: 1rem 1.1rem; border-radius: 0.75rem; border-left: 4px solid; margin-top: 0.75rem; font-size: 0.88rem; line-height: 1.6; }
+    .wf-callout strong { display: block; margin-bottom: 0.25rem; font-weight: 700; }
+    .wf-callout.info { background: #eff6ff; border-color: #3b82f6; color: #1e3a8a; }
+    .wf-callout.warn { background: #fff7ed; border-color: #f97316; color: #9a3412; }
+    .wf-callout.danger { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+
+    .wf-faq { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; margin-bottom: 0.5rem; overflow: hidden; }
+    .wf-faq summary { padding: 0.95rem 1.1rem; cursor: pointer; font-weight: 700; color: #0f172a; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; list-style: none; }
+    .wf-faq summary::-webkit-details-marker { display: none; }
+    .wf-faq summary::after { content: '+'; margin-left: auto; font-size: 1.4rem; color: #94a3b8; transition: transform .2s; }
+    .wf-faq[open] summary::after { transform: rotate(45deg); color: #1e40af; }
+    .wf-faq[open] summary { border-bottom: 1px solid #e2e8f0; }
+    .wf-faq-body { padding: 0.95rem 1.1rem; font-size: 0.9rem; color: #475569; line-height: 1.65; }
+    .wf-faq-body p { margin-bottom: 0.5rem; }
+    .wf-faq-body p:last-child { margin-bottom: 0; }
+    .wf-faq-body strong { color: #0f172a; }
+
+    .wf-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .wf-contact-btn { padding: 0.85rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.6rem; text-decoration: none; color: #334155; font-weight: 600; font-size: 0.88rem; text-align: center; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+    .wf-contact-btn:hover { background: #eff6ff; border-color: #3b82f6; color: #1e40af; transform: translateY(-1px); }
+
+    .wf-related { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
+    .wf-related-card { padding: 0.95rem 0.85rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.6rem; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 0.5rem; }
+    .wf-related-card:hover { background: #eff6ff; border-color: #3b82f6; transform: translateY(-1px); }
+    .wf-related-icon { font-size: 1.5rem; }
+    .wf-related-text strong { display: block; font-size: 0.92rem; color: #0f172a; }
+    .wf-related-text span { font-size: 0.78rem; color: #64748b; }
+
+    /* 색상 토큰별 헤더 */
+    .wf-tone-teal .wf-header { background: linear-gradient(135deg, #134e4a 0%, #0f766e 50%, #14b8a6 100%); }
+    .wf-tone-teal .wf-bar, .wf-tone-teal .wf-summary-item { border-color: #5eead4; }
+    .wf-tone-teal .wf-summary-item { background: linear-gradient(135deg,#f0fdfa,#fff); }
+    .wf-tone-teal .wf-bar { background: #0f766e; }
+
+    .wf-tone-rose .wf-header { background: linear-gradient(135deg, #881337 0%, #be123c 50%, #f43f5e 100%); }
+    .wf-tone-rose .wf-bar { background: #be123c; }
+    .wf-tone-rose .wf-summary-item { border-color: #fda4af; background: linear-gradient(135deg,#fff1f2,#fff); }
+
+    .wf-tone-amber .wf-header { background: linear-gradient(135deg, #78350f 0%, #b45309 50%, #f59e0b 100%); }
+    .wf-tone-amber .wf-bar { background: #b45309; }
+    .wf-tone-amber .wf-summary-item { border-color: #fcd34d; background: linear-gradient(135deg,#fffbeb,#fff); }
+
+    .wf-tone-blue .wf-header { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%); }
+    .wf-tone-blue .wf-bar { background: #1e40af; }
+    .wf-tone-blue .wf-summary-item { border-color: #93c5fd; background: linear-gradient(135deg,#eff6ff,#fff); }
+
+    .wf-tone-pink .wf-header { background: linear-gradient(135deg, #831843 0%, #be185d 50%, #ec4899 100%); }
+    .wf-tone-pink .wf-bar { background: #be185d; }
+    .wf-tone-pink .wf-summary-item { border-color: #f9a8d4; background: linear-gradient(135deg,#fdf2f8,#fff); }
+
+    .wf-tone-violet .wf-header { background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #8b5cf6 100%); }
+    .wf-tone-violet .wf-bar { background: #6d28d9; }
+    .wf-tone-violet .wf-summary-item { border-color: #c4b5fd; background: linear-gradient(135deg,#f5f3ff,#fff); }
+
+    .wf-tone-red .wf-header { background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 50%, #ef4444 100%); }
+    .wf-tone-red .wf-bar { background: #b91c1c; }
+    .wf-tone-red .wf-summary-item { border-color: #fca5a5; background: linear-gradient(135deg,#fef2f2,#fff); }
+
+    .wf-tone-orange .wf-header { background: linear-gradient(135deg, #7c2d12 0%, #c2410c 50%, #f97316 100%); }
+    .wf-tone-orange .wf-bar { background: #c2410c; }
+    .wf-tone-orange .wf-summary-item { border-color: #fdba74; background: linear-gradient(135deg,#fff7ed,#fff); }
+
+    @media (max-width: 768px) {
+      .wf-header { padding: 1.75rem 1rem 2.5rem; }
+      .wf-emoji { font-size: 2.5rem; }
+      .wf-title { font-size: 1.5rem; }
+      .wf-subtitle { font-size: 0.9rem; }
+      .wf-main { padding: 0 0.85rem; margin-top: -1rem; }
+      .wf-card { padding: 1.2rem 1.05rem; }
+      .wf-card-title { font-size: 1.05rem; }
+      .wf-summary-grid { grid-template-columns: 1fr; }
+      .wf-summary-value { font-size: 1.05rem; }
+      .wf-table th, .wf-table td { padding: 0.55rem 0.4rem; font-size: 0.85rem; }
+      .wf-contact-grid, .wf-related { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 768px) {
       .home-hero { padding: 1.75rem 1rem 2.5rem; }
       .home-hero-title { font-size: 1.75rem; line-height: 1.25; }
@@ -563,45 +672,45 @@
             <div class="home-cat-name">고유가 피해지원금</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
-          <div class="home-cat-card">
+          <div class="home-cat-card active" data-go="welfare-basic-living" style="--tone:#0f766e;">
             <span class="home-cat-icon">📋</span>
             <div class="home-cat-name">기초생활보장</div>
-            <span class="home-cat-status">준비 중</span>
+            <span class="home-cat-status">정보 제공</span>
           </div>
-          <div class="home-cat-card">
+          <div class="home-cat-card active" data-go="welfare-medical" style="--tone:#be123c;">
             <span class="home-cat-icon">🏥</span>
             <div class="home-cat-name">의료급여</div>
-            <span class="home-cat-status">준비 중</span>
+            <span class="home-cat-status">정보 제공</span>
           </div>
-          <div class="home-cat-card">
+          <div class="home-cat-card active" data-go="welfare-housing" style="--tone:#b45309;">
             <span class="home-cat-icon">🏠</span>
             <div class="home-cat-name">주거급여</div>
-            <span class="home-cat-status">준비 중</span>
+            <span class="home-cat-status">정보 제공</span>
           </div>
-          <div class="home-cat-card">
+          <div class="home-cat-card active" data-go="welfare-education" style="--tone:#1e40af;">
             <span class="home-cat-icon">🎓</span>
             <div class="home-cat-name">교육급여</div>
-            <span class="home-cat-status">준비 중</span>
+            <span class="home-cat-status">정보 제공</span>
           </div>
-          <div class="home-cat-card">
+          <div class="home-cat-card active" data-go="welfare-childcare" style="--tone:#be185d;">
             <span class="home-cat-icon">👶</span>
             <div class="home-cat-name">아동·양육수당</div>
-            <span class="home-cat-status">준비 중</span>
+            <span class="home-cat-status">정보 제공</span>
           </div>
-          <div class="home-cat-card">
+          <div class="home-cat-card active" data-go="welfare-youth" style="--tone:#6d28d9;">
             <span class="home-cat-icon">💼</span>
             <div class="home-cat-name">청년·구직지원</div>
-            <span class="home-cat-status">준비 중</span>
+            <span class="home-cat-status">정보 제공</span>
           </div>
-          <div class="home-cat-card">
+          <div class="home-cat-card active" data-go="welfare-emergency" style="--tone:#b91c1c;">
             <span class="home-cat-icon">🆘</span>
             <div class="home-cat-name">긴급복지지원</div>
-            <span class="home-cat-status">준비 중</span>
+            <span class="home-cat-status">정보 제공</span>
           </div>
-          <div class="home-cat-card">
+          <div class="home-cat-card active" data-go="welfare-singleparent" style="--tone:#c2410c;">
             <span class="home-cat-icon">👨‍👩‍👧</span>
             <div class="home-cat-name">한부모·다자녀</div>
-            <span class="home-cat-status">준비 중</span>
+            <span class="home-cat-status">정보 제공</span>
           </div>
           <div class="home-cat-card active game-tone" data-go="game-hub">
             <span class="home-cat-icon">🎮</span>
@@ -1809,6 +1918,909 @@
     </main>
   </section>
 
+  <!-- ===== 기초생활보장 ===== -->
+  <section id="welfare-basic-living" class="wf-section wf-tone-teal hidden">
+    <header class="wf-header">
+      <div class="wf-header-inner">
+        <button class="wf-back" data-wf-back>← 홈으로</button>
+        <span class="wf-emoji">📋</span>
+        <h1 class="wf-title">기초생활보장 (생계급여)</h1>
+        <p class="wf-subtitle">생활이 어려운 분들의 최저생활을 보장하는<br>4대 급여(생계·의료·주거·교육) 제도입니다</p>
+      </div>
+    </header>
+    <main class="wf-main">
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>한눈에 보는 기초생활보장</div>
+        <div class="wf-summary-grid">
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">대상</div>
+            <div class="wf-summary-value">소득인정액<br>기준 이하</div>
+            <div class="wf-summary-sub">중위소득 32%~50%</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">4대 급여</div>
+            <div class="wf-summary-value">생계 · 의료<br>주거 · 교육</div>
+            <div class="wf-summary-sub">선정기준 다름</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">신청</div>
+            <div class="wf-summary-value">주민센터<br>상시 신청</div>
+            <div class="wf-summary-sub">복지로 온라인</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>2026년 급여별 선정기준 (소득인정액)</div>
+        <p class="text-sm text-slate-500 mb-3">기준 중위소득 대비 비율로 결정되며, 선정기준 이하면 부족분만큼 지원받습니다.</p>
+        <table class="wf-table">
+          <thead>
+            <tr><th>급여 종류</th><th>중위소득</th><th class="num">1인 가구</th><th class="num">4인 가구</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>생계급여</strong></td><td>32%</td><td class="num">약 81만원</td><td class="num">약 207만원</td></tr>
+            <tr><td><strong>의료급여</strong></td><td>40%</td><td class="num">약 102만원</td><td class="num">약 259만원</td></tr>
+            <tr><td><strong>주거급여</strong></td><td>48%</td><td class="num">약 122만원</td><td class="num">약 311만원</td></tr>
+            <tr><td><strong>교육급여</strong></td><td>50%</td><td class="num">약 127만원</td><td class="num">약 324만원</td></tr>
+          </tbody>
+        </table>
+        <div class="wf-callout warn"><strong>📌 안내</strong>2026년 정확한 금액은 보건복지부 고시에 따릅니다. 위 금액은 추정치이며, 실제 신청 시 주민센터(129)에서 확인하세요.</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>생계급여 — 지원 금액</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">💰</span><div><strong>생계급여 = 생계급여 선정기준액 − 소득인정액</strong><br>소득이 0원이라면 1인 약 81만원, 4인 약 207만원 전액 지원</div></li>
+          <li><span class="wf-list-icon">📅</span><div><strong>지급일:</strong> 매월 20일 (휴일이면 직전 영업일)</div></li>
+          <li><span class="wf-list-icon">🏦</span><div><strong>지급 방식:</strong> 본인 명의 계좌로 입금</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>신청 방법</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">🏢</span><div><strong>방문 신청</strong> · 주소지 읍·면·동 주민센터 (상시 접수)</div></li>
+          <li><span class="wf-list-icon">💻</span><div><strong>온라인 신청</strong> · 복지로(www.bokjiro.go.kr) → 서비스 신청 → 복지급여 신청</div></li>
+          <li><span class="wf-list-icon">📄</span><div><strong>제출 서류</strong> · 신분증, 통장사본, 소득·재산 신고서, 금융정보등 제공동의서, 임대차계약서(임차 시)</div></li>
+          <li><span class="wf-list-icon">⏱️</span><div><strong>처리 기간</strong> · 신청일로부터 30일(연장 시 60일) 이내 결정·통지</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>자주 묻는 질문</div>
+        <details class="wf-faq"><summary>❓ 부양의무자 기준은 어떻게 되나요?</summary><div class="wf-faq-body">
+          <p><strong>생계급여</strong>는 2021년부터 부양의무자 기준이 폐지되어, 본인 가구의 소득·재산만으로 판정합니다. 단, 부양의무자(1촌 직계혈족·배우자)가 연소득 1억원 또는 일반재산 9억원 초과 시 제외됩니다.</p>
+          <p><strong>의료급여</strong>는 부양의무자 기준이 일부 적용됩니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 근로소득이 있어도 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>네. 근로소득에서 일정 금액(30%)을 공제한 후 소득인정액이 산출되며, 자활근로·노인일자리 등 정부 일자리는 추가 공제가 적용됩니다.</p>
+          <p>일하면서 받을 수 있도록 설계되어 있어요.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 4가지 급여를 다 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>선정기준이 달라서 소득에 따라 받는 급여가 다릅니다.</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>중위소득 32% 이하 → 생계·의료·주거·교육 모두 가능</li>
+            <li>32~40% → 의료·주거·교육</li>
+            <li>40~48% → 주거·교육</li>
+            <li>48~50% → 교육만</li>
+          </ul>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 차상위계층은 무엇인가요?</summary><div class="wf-faq-body">
+          <p>기초생활수급자는 아니지만 중위소득 50% 이하인 저소득 가구를 말합니다. 자활근로, 의료비 본인부담 경감, 통신요금 감면 등 별도 혜택이 있습니다.</p>
+        </div></details>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>공식 사이트 · 문의</div>
+        <div class="wf-contact-grid">
+          <a class="wf-contact-btn" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">🌐 복지로</a>
+          <a class="wf-contact-btn" href="https://www.mohw.go.kr" target="_blank" rel="noopener">🌐 보건복지부</a>
+          <a class="wf-contact-btn" href="tel:129">📞 보건복지상담센터 129</a>
+          <a class="wf-contact-btn" href="https://www.bokjiro.go.kr/ssis-tbu/index.do" target="_blank" rel="noopener">🔍 복지로 자가진단</a>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>다른 복지 혜택도 확인해 보세요</div>
+        <div class="wf-related">
+          <div class="wf-related-card" data-wf-go="welfare-medical"><span class="wf-related-icon">🏥</span><div class="wf-related-text"><strong>의료급여</strong><span>의료비 본인부담 경감</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-housing"><span class="wf-related-icon">🏠</span><div class="wf-related-text"><strong>주거급여</strong><span>임차료·수선비 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-education"><span class="wf-related-icon">🎓</span><div class="wf-related-text"><strong>교육급여</strong><span>학습비 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-emergency"><span class="wf-related-icon">🆘</span><div class="wf-related-text"><strong>긴급복지지원</strong><span>위기 상황 일시 지원</span></div></div>
+        </div>
+      </div>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-4 mb-8" style="background:linear-gradient(135deg,#0f766e,#14b8a6); box-shadow:0 2px 10px rgba(15,118,110,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
+    </main>
+  </section>
+
+  <!-- ===== 의료급여 ===== -->
+  <section id="welfare-medical" class="wf-section wf-tone-rose hidden">
+    <header class="wf-header">
+      <div class="wf-header-inner">
+        <button class="wf-back" data-wf-back>← 홈으로</button>
+        <span class="wf-emoji">🏥</span>
+        <h1 class="wf-title">의료급여</h1>
+        <p class="wf-subtitle">저소득층의 의료비 본인부담을 국가가 지원하는 제도<br>건강보험과는 별개로 운영됩니다</p>
+      </div>
+    </header>
+    <main class="wf-main">
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>한눈에 보는 의료급여</div>
+        <div class="wf-summary-grid">
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">대상</div>
+            <div class="wf-summary-value">기초수급자<br>차상위 등</div>
+            <div class="wf-summary-sub">중위소득 40% 이하</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">구분</div>
+            <div class="wf-summary-value">1종 / 2종</div>
+            <div class="wf-summary-sub">근로능력 기준</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">본인부담</div>
+            <div class="wf-summary-value">거의 무료<br>~ 10%</div>
+            <div class="wf-summary-sub">건보 대비 큰 폭 경감</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>1종 / 2종 구분</div>
+        <table class="wf-table">
+          <thead><tr><th>구분</th><th>대상자</th><th>본인부담</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1종</strong></td><td>근로무능력 가구<br>(노인·장애인·중증질환·시설 등)</td><td>입원 무료<br>외래 1,000원~1,500원</td></tr>
+            <tr><td><strong>2종</strong></td><td>근로능력이 있는<br>일반 수급가구</td><td>입원 본인부담 10%<br>외래 1,000원~15%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>외래 진료 본인부담금 (1종 기준)</div>
+        <table class="wf-table">
+          <thead><tr><th>의료기관</th><th class="num">본인부담</th></tr></thead>
+          <tbody>
+            <tr><td>1차 (의원·보건소)</td><td class="num">1,000원</td></tr>
+            <tr><td>2차 (병원·종합병원)</td><td class="num">1,500원</td></tr>
+            <tr><td>3차 (상급종합병원)</td><td class="num">2,000원</td></tr>
+            <tr><td>약국</td><td class="num">500원</td></tr>
+          </tbody>
+        </table>
+        <div class="wf-callout info"><strong>💡 본인부담금 보상</strong>1종 수급권자가 매월 본인부담금이 2만원을 초과한 경우, 초과 금액의 50%를 환급받을 수 있습니다(본인부담금 보상제).</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>지원 대상</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">✅</span><div><strong>1종:</strong> 기초생활수급자 중 근로무능력 가구원, 시설수급자, 행려환자, 이재민, 의사상자, 입양아동(18세 미만), 국가유공자, 중증·희귀·중증난치질환자 등</div></li>
+          <li><span class="wf-list-icon">✅</span><div><strong>2종:</strong> 기초생활수급자 중 1종 외 가구</div></li>
+          <li><span class="wf-list-icon">✅</span><div><strong>차상위 본인부담경감</strong> · 차상위계층 중 만성질환자·18세 미만 아동도 의료급여 2종 수준 혜택</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>신청 방법</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">🏢</span><div><strong>주민센터 방문 신청</strong> · 의료급여는 기초생활보장 신청과 함께 진행</div></li>
+          <li><span class="wf-list-icon">📄</span><div><strong>구비 서류</strong> · 신분증, 의료급여 신청서, 진단서(중증질환자), 임대차계약서</div></li>
+          <li><span class="wf-list-icon">🩺</span><div><strong>병원 이용 시</strong> · 의료급여증 또는 의료급여증명서 제시</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>자주 묻는 질문</div>
+        <details class="wf-faq"><summary>❓ 의료급여와 건강보험의 차이는?</summary><div class="wf-faq-body">
+          <p><strong>건강보험</strong>은 보험료를 내고 의료비 일부(보통 30~60%)를 본인이 부담합니다.</p>
+          <p><strong>의료급여</strong>는 보험료 없이 국가가 의료비를 거의 전액 부담합니다(저소득층 대상).</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 의료급여 의뢰서가 무엇인가요?</summary><div class="wf-faq-body">
+          <p>의료급여 수급권자가 2차·3차 의료기관(병원·종합병원·상급종합병원)을 이용할 때는 1차 의료기관에서 발급한 <strong>의료급여 의뢰서</strong>가 필요합니다(응급상황 제외).</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 비급여 항목도 지원되나요?</summary><div class="wf-faq-body">
+          <p>건강보험 비급여 항목(상급병실료, 일부 약제, 미용·예방 등)은 의료급여에서도 본인이 부담합니다.</p>
+          <p>단, 재난적 의료비 지원제도를 통해 일부 비급여 항목도 지원받을 수 있습니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 본인부담 상한제도 적용되나요?</summary><div class="wf-faq-body">
+          <p>네. 1종은 매월 5만원, 2종은 매월 5만원(연 80만원) 등 본인부담 상한액을 초과하면 초과액을 환급받을 수 있습니다.</p>
+        </div></details>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>공식 사이트 · 문의</div>
+        <div class="wf-contact-grid">
+          <a class="wf-contact-btn" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">🌐 복지로</a>
+          <a class="wf-contact-btn" href="https://www.mohw.go.kr" target="_blank" rel="noopener">🌐 보건복지부</a>
+          <a class="wf-contact-btn" href="tel:129">📞 보건복지상담센터 129</a>
+          <a class="wf-contact-btn" href="tel:1577-1000">📞 의료급여 1577-1000</a>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>다른 복지 혜택도 확인해 보세요</div>
+        <div class="wf-related">
+          <div class="wf-related-card" data-wf-go="welfare-basic-living"><span class="wf-related-icon">📋</span><div class="wf-related-text"><strong>기초생활보장</strong><span>생계급여 등 4대 급여</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-housing"><span class="wf-related-icon">🏠</span><div class="wf-related-text"><strong>주거급여</strong><span>임차료·수선비 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-emergency"><span class="wf-related-icon">🆘</span><div class="wf-related-text"><strong>긴급복지지원</strong><span>의료비 긴급 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="disability-pension"><span class="wf-related-icon">♿</span><div class="wf-related-text"><strong>장애인연금</strong><span>중증장애인 대상</span></div></div>
+        </div>
+      </div>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-4 mb-8" style="background:linear-gradient(135deg,#be123c,#f43f5e); box-shadow:0 2px 10px rgba(190,18,60,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
+    </main>
+  </section>
+
+  <!-- ===== 주거급여 ===== -->
+  <section id="welfare-housing" class="wf-section wf-tone-amber hidden">
+    <header class="wf-header">
+      <div class="wf-header-inner">
+        <button class="wf-back" data-wf-back>← 홈으로</button>
+        <span class="wf-emoji">🏠</span>
+        <h1 class="wf-title">주거급여</h1>
+        <p class="wf-subtitle">임차가구에는 월 임차료를, 자가가구에는 주택 수선비를<br>지원하는 기초생활보장 급여 중 하나입니다</p>
+      </div>
+    </header>
+    <main class="wf-main">
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>한눈에 보는 주거급여</div>
+        <div class="wf-summary-grid">
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">대상</div>
+            <div class="wf-summary-value">소득인정액<br>중위소득 48% 이하</div>
+            <div class="wf-summary-sub">부양의무자 기준 폐지</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">임차가구</div>
+            <div class="wf-summary-value">월 임차료<br>지원</div>
+            <div class="wf-summary-sub">지역·가구원 수 기준</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">자가가구</div>
+            <div class="wf-summary-value">주택 수선비<br>지원</div>
+            <div class="wf-summary-sub">3~7년 주기</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>임차가구 — 월 임차료 지원 (참고 기준)</div>
+        <table class="wf-table">
+          <thead><tr><th>지역</th><th class="num">1인</th><th class="num">2인</th><th class="num">3인</th><th class="num">4인</th></tr></thead>
+          <tbody>
+            <tr><td>1급지 (서울)</td><td class="num">35만원대</td><td class="num">39만원대</td><td class="num">47만원대</td><td class="num">55만원대</td></tr>
+            <tr><td>2급지 (경기·인천)</td><td class="num">27만원대</td><td class="num">31만원대</td><td class="num">37만원대</td><td class="num">43만원대</td></tr>
+            <tr><td>3급지 (광역시·세종)</td><td class="num">21만원대</td><td class="num">24만원대</td><td class="num">29만원대</td><td class="num">35만원대</td></tr>
+            <tr><td>4급지 (그 외)</td><td class="num">18만원대</td><td class="num">21만원대</td><td class="num">25만원대</td><td class="num">29만원대</td></tr>
+          </tbody>
+        </table>
+        <div class="wf-callout warn"><strong>📌 안내</strong>위 금액은 2025년 기준 참고치입니다. 2026년 정확한 기준임대료는 국토교통부 고시에 따르며, 실제 임차료가 기준임대료보다 적으면 실 지급액으로 지원됩니다. 정확한 금액은 LH 마이홈콜센터(1600-1004) 확인.</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>자가가구 — 주택 수선비 지원</div>
+        <table class="wf-table">
+          <thead><tr><th>구분</th><th>지원 한도</th><th>주기</th></tr></thead>
+          <tbody>
+            <tr><td><strong>경보수</strong></td><td class="num">457만원</td><td>3년</td></tr>
+            <tr><td><strong>중보수</strong></td><td class="num">849만원</td><td>5년</td></tr>
+            <tr><td><strong>대보수</strong></td><td class="num">1,241만원</td><td>7년</td></tr>
+          </tbody>
+        </table>
+        <ul class="wf-list mt-2">
+          <li><span class="wf-list-icon">🔧</span><div><strong>경보수:</strong> 도배·장판·창호 등 마감재 개선</div></li>
+          <li><span class="wf-list-icon">🔨</span><div><strong>중보수:</strong> 창호·단열·난방 공사</div></li>
+          <li><span class="wf-list-icon">🏗️</span><div><strong>대보수:</strong> 지붕·욕실·주방 등 구조 개선</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>신청 방법</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">🏢</span><div><strong>방문 신청</strong> · 주소지 읍·면·동 주민센터 (상시)</div></li>
+          <li><span class="wf-list-icon">💻</span><div><strong>온라인 신청</strong> · 복지로(www.bokjiro.go.kr)</div></li>
+          <li><span class="wf-list-icon">📄</span><div><strong>제출 서류</strong> · 신청서, 신분증, 통장사본, 임대차계약서(임차 시), 사용대차확인서</div></li>
+          <li><span class="wf-list-icon">⏱️</span><div><strong>처리 기간</strong> · 신청 → 소득·재산 조사 → 주택조사(LH) → 결정·통지(약 30~60일)</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>자주 묻는 질문</div>
+        <details class="wf-faq"><summary>❓ 청년 단독 거주도 지원되나요?</summary><div class="wf-faq-body">
+          <p>네. 2021년부터 <strong>청년 주거급여 분리지급 제도</strong>가 시행되어, 부모와 떨어져 사는 만 19~30세 미혼 자녀(같은 시·군이 아닌 곳에 거주)도 별도로 주거급여를 받을 수 있습니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 부모님 집에 함께 살고 있는데 지원되나요?</summary><div class="wf-faq-body">
+          <p>임대차계약 없이 부모님 집에 거주하는 경우 임차가구 지원은 어렵습니다. 다만 부모님이 자가가구이면서 수급 자격이 되면 부모님 가구가 자가 수선비 지원을 받을 수 있습니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 보증금만 있고 월세가 없는데?</summary><div class="wf-faq-body">
+          <p>전세나 보증금만 있는 경우, 보증금에 일정 비율(연 4%)을 적용해 월세로 환산한 금액을 기준으로 지급됩니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ LH 임대주택에 살고 있어도 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>공공임대주택(영구·국민임대 등) 거주자는 임대료가 이미 저렴하기 때문에 별도 임대료를 추가 지원하지는 않으나, 일부 매입·전세임대는 주거급여를 받을 수 있습니다. 자세한 사항은 LH 마이홈콜센터(1600-1004)에 문의하세요.</p>
+        </div></details>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>공식 사이트 · 문의</div>
+        <div class="wf-contact-grid">
+          <a class="wf-contact-btn" href="https://www.myhome.go.kr" target="_blank" rel="noopener">🌐 마이홈포털</a>
+          <a class="wf-contact-btn" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">🌐 복지로</a>
+          <a class="wf-contact-btn" href="tel:1600-1004">📞 LH 마이홈 1600-1004</a>
+          <a class="wf-contact-btn" href="tel:129">📞 보건복지상담 129</a>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>다른 복지 혜택도 확인해 보세요</div>
+        <div class="wf-related">
+          <div class="wf-related-card" data-wf-go="welfare-basic-living"><span class="wf-related-icon">📋</span><div class="wf-related-text"><strong>기초생활보장</strong><span>생계·의료·교육 급여</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-youth"><span class="wf-related-icon">💼</span><div class="wf-related-text"><strong>청년 월세 지원</strong><span>월 20만원 최대 12개월</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-emergency"><span class="wf-related-icon">🆘</span><div class="wf-related-text"><strong>긴급복지지원</strong><span>주거비 일시 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-singleparent"><span class="wf-related-icon">👨‍👩‍👧</span><div class="wf-related-text"><strong>한부모·다자녀</strong><span>주거 지원 추가</span></div></div>
+        </div>
+      </div>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-4 mb-8" style="background:linear-gradient(135deg,#b45309,#f59e0b); box-shadow:0 2px 10px rgba(180,83,9,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
+    </main>
+  </section>
+
+  <!-- ===== 교육급여 ===== -->
+  <section id="welfare-education" class="wf-section wf-tone-blue hidden">
+    <header class="wf-header">
+      <div class="wf-header-inner">
+        <button class="wf-back" data-wf-back>← 홈으로</button>
+        <span class="wf-emoji">🎓</span>
+        <h1 class="wf-title">교육급여</h1>
+        <p class="wf-subtitle">초·중·고등학생에게 학업을 위한 학습비를 지원하는<br>기초생활보장 급여입니다</p>
+      </div>
+    </header>
+    <main class="wf-main">
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>한눈에 보는 교육급여</div>
+        <div class="wf-summary-grid">
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">대상</div>
+            <div class="wf-summary-value">중위소득<br>50% 이하</div>
+            <div class="wf-summary-sub">초·중·고 학생</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">지원 형태</div>
+            <div class="wf-summary-value">교육활동지원비<br>+ 입학금·수업료</div>
+            <div class="wf-summary-sub">교과서비·등</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">지급 시기</div>
+            <div class="wf-summary-value">매년 3~4월<br>일괄 지급</div>
+            <div class="wf-summary-sub">바우처·계좌 입금</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>2026년 교육급여 지원 단가 (참고)</div>
+        <table class="wf-table">
+          <thead><tr><th>학교급</th><th>교육활동지원비 (연 1회)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>초등학생</strong></td><td class="num">약 49만원</td></tr>
+            <tr><td><strong>중학생</strong></td><td class="num">약 68만원</td></tr>
+            <tr><td><strong>고등학생</strong></td><td class="num">약 77만원</td></tr>
+          </tbody>
+        </table>
+        <ul class="wf-list mt-3">
+          <li><span class="wf-list-icon">📚</span><div><strong>고등학생 추가 지원:</strong> 교과서비 (실비), 입학금 및 수업료 (학교에서 고지된 금액 전액)</div></li>
+          <li><span class="wf-list-icon">💳</span><div><strong>지급 방식:</strong> 학부모 계좌 입금 또는 카드 형태(바우처)</div></li>
+        </ul>
+        <div class="wf-callout warn"><strong>📌 안내</strong>위 금액은 2025년 기준 참고치입니다. 2026년 정확한 단가는 교육부 고시에 따릅니다.</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>지원 대상 자세히</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">✅</span><div><strong>소득인정액 기준:</strong> 가구 소득인정액이 기준 중위소득 50% 이하</div></li>
+          <li><span class="wf-list-icon">✅</span><div><strong>학생 자격:</strong> 초·중·고등학교 (특수학교, 각종학교 포함)에 재학 중인 학생</div></li>
+          <li><span class="wf-list-icon">✅</span><div><strong>중복 가능:</strong> 다른 기초생활보장 급여(생계·의료·주거)와 중복 수급 가능</div></li>
+          <li><span class="wf-list-icon">❌</span><div><strong>제외:</strong> 의무교육 대상자 중 외국인학교, 평생교육시설 등 일부 미인가 학교</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>신청 방법</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">📅</span><div><strong>집중 신청 기간:</strong> 매년 3월 (학기 시작 직전)</div></li>
+          <li><span class="wf-list-icon">🏫</span><div><strong>학교 통합 신청</strong> · 자녀가 다니는 학교에서 일괄 안내·접수 (가장 편리)</div></li>
+          <li><span class="wf-list-icon">🏢</span><div><strong>주민센터 방문</strong> · 주소지 읍·면·동 주민센터 (연중 상시)</div></li>
+          <li><span class="wf-list-icon">💻</span><div><strong>온라인 신청</strong> · 복지로(www.bokjiro.go.kr) 또는 교육비 원클릭 신청 시스템</div></li>
+          <li><span class="wf-list-icon">📄</span><div><strong>제출 서류</strong> · 신분증, 통장사본, 임대차계약서, 가족관계증명서</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>자주 묻는 질문</div>
+        <details class="wf-faq"><summary>❓ 교육비 지원과 교육급여는 다른 건가요?</summary><div class="wf-faq-body">
+          <p>네. <strong>교육급여</strong>는 기초생활보장의 한 종류로 중위소득 50% 이하 가구가 대상입니다.</p>
+          <p><strong>교육비 지원</strong>은 시·도교육청별로 운영되며 중위소득 50~80% 가구도 신청할 수 있고, 방과후학교 자유수강권·급식비·교과서비 등을 지원합니다.</p>
+          <p>두 제도는 한 번 신청으로 일괄 검토되므로 학교/주민센터에 함께 문의하시면 됩니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 어린이집·유치원생도 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>교육급여는 초·중·고 재학생만 대상입니다. 어린이집·유치원생은 별도의 누리과정 지원, 보육료·유아학비 지원을 받을 수 있어요.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 학교 입학 전에 미리 신청할 수 있나요?</summary><div class="wf-faq-body">
+          <p>네. 입학예정자는 입학 전(보통 1~2월)부터 신청 가능합니다. 신학기 시작 직후에 일괄 지급됩니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 사용처가 정해져 있나요?</summary><div class="wf-faq-body">
+          <p>교육활동지원비는 <strong>현금 입금되어 자유롭게 사용</strong>할 수 있습니다(교재·학용품·체험학습비 등 학습 관련 용도 권장).</p>
+          <p>고교 입학금·수업료·교과서비는 학교에 직접 납부 또는 청구되는 형태입니다.</p>
+        </div></details>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>공식 사이트 · 문의</div>
+        <div class="wf-contact-grid">
+          <a class="wf-contact-btn" href="https://oneclick.moe.go.kr" target="_blank" rel="noopener">🌐 교육비 원클릭</a>
+          <a class="wf-contact-btn" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">🌐 복지로</a>
+          <a class="wf-contact-btn" href="tel:129">📞 보건복지상담 129</a>
+          <a class="wf-contact-btn" href="tel:1544-9654">📞 교육비 지원 1544-9654</a>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>다른 복지 혜택도 확인해 보세요</div>
+        <div class="wf-related">
+          <div class="wf-related-card" data-wf-go="welfare-basic-living"><span class="wf-related-icon">📋</span><div class="wf-related-text"><strong>기초생활보장</strong><span>생계·의료·주거 급여</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-childcare"><span class="wf-related-icon">👶</span><div class="wf-related-text"><strong>아동·양육수당</strong><span>아동수당·부모급여</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-singleparent"><span class="wf-related-icon">👨‍👩‍👧</span><div class="wf-related-text"><strong>한부모·다자녀</strong><span>아동양육비 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-youth"><span class="wf-related-icon">💼</span><div class="wf-related-text"><strong>청년·구직지원</strong><span>장학금·취업지원</span></div></div>
+        </div>
+      </div>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-4 mb-8" style="background:linear-gradient(135deg,#1e40af,#3b82f6); box-shadow:0 2px 10px rgba(30,64,175,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
+    </main>
+  </section>
+
+  <!-- ===== 아동·양육수당 ===== -->
+  <section id="welfare-childcare" class="wf-section wf-tone-pink hidden">
+    <header class="wf-header">
+      <div class="wf-header-inner">
+        <button class="wf-back" data-wf-back>← 홈으로</button>
+        <span class="wf-emoji">👶</span>
+        <h1 class="wf-title">아동수당 · 부모급여</h1>
+        <p class="wf-subtitle">아이를 키우는 모든 가정에 지급되는<br>대표적인 보편적 양육 지원 제도입니다</p>
+      </div>
+    </header>
+    <main class="wf-main">
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>주요 양육 지원금 한눈에 보기</div>
+        <table class="wf-table">
+          <thead><tr><th>제도</th><th>대상 연령</th><th class="num">지원 금액</th></tr></thead>
+          <tbody>
+            <tr><td><strong>부모급여 (영아수당)</strong></td><td>만 0세 (0~11개월)</td><td class="num">월 100만원</td></tr>
+            <tr><td><strong>부모급여</strong></td><td>만 1세 (12~23개월)</td><td class="num">월 50만원</td></tr>
+            <tr><td><strong>아동수당</strong></td><td>0~만 8세 미만</td><td class="num">월 10만원</td></tr>
+            <tr><td><strong>가정양육수당</strong></td><td>만 2세~취학 전<br>(어린이집·유치원 미이용)</td><td class="num">월 10만원</td></tr>
+            <tr><td><strong>첫만남이용권</strong></td><td>출생 시 (1회)</td><td class="num">200만원<br>(둘째 이상 300만원)</td></tr>
+          </tbody>
+        </table>
+        <div class="wf-callout info"><strong>💡 소득 무관</strong>아동수당, 부모급여, 첫만남이용권은 <strong>모든 가정</strong>이 받을 수 있는 보편적 지원입니다. 소득·재산 기준이 없어요.</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>부모급여 자세히 보기</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">💰</span><div><strong>만 0세:</strong> 월 100만원 (어린이집 이용 시 보육료 차감 후 차액 지급)</div></li>
+          <li><span class="wf-list-icon">💰</span><div><strong>만 1세:</strong> 월 50만원 (어린이집 이용 시 보육료 차감 후 차액 지급)</div></li>
+          <li><span class="wf-list-icon">📅</span><div><strong>지급일:</strong> 매월 25일 (첫 신청 시 약 한 달 후 입금)</div></li>
+          <li><span class="wf-list-icon">⏰</span><div><strong>신청 시기:</strong> 출생 후 60일 이내 신청해야 출생일로 소급 지원</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>아동수당 자세히 보기</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">👶</span><div><strong>대상:</strong> 0세부터 만 8세 미만(95개월)까지 모든 아동</div></li>
+          <li><span class="wf-list-icon">💰</span><div><strong>금액:</strong> 매월 10만원, 본인 또는 부모 계좌 입금</div></li>
+          <li><span class="wf-list-icon">📅</span><div><strong>지급일:</strong> 매월 25일</div></li>
+          <li><span class="wf-list-icon">🌍</span><div><strong>해외 체류:</strong> 90일 이상 해외 체류 시 지급 정지(귀국 후 재신청)</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>첫만남이용권</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">🎁</span><div><strong>지급액:</strong> 첫째 200만원 / 둘째 이상 300만원 (2024년부터)</div></li>
+          <li><span class="wf-list-icon">💳</span><div><strong>지급 방식:</strong> 국민행복카드 형태의 바우처</div></li>
+          <li><span class="wf-list-icon">🛒</span><div><strong>사용처:</strong> 유흥업소·사행성업소·면세점 등 일부 업종 제외 거의 모든 곳</div></li>
+          <li><span class="wf-list-icon">⏰</span><div><strong>사용 기한:</strong> 아동 출생일로부터 1년 (만 1세 생일 전까지)</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>신청 방법</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">🏢</span><div><strong>주민센터 방문 신청</strong> · 주소지 관할 또는 어디서든 신청 가능 (행정복지센터)</div></li>
+          <li><span class="wf-list-icon">💻</span><div><strong>온라인 신청</strong> · 복지로(www.bokjiro.go.kr) 또는 정부24(www.gov.kr)</div></li>
+          <li><span class="wf-list-icon">📱</span><div><strong>모바일 앱</strong> · '복지로' 앱에서도 신청 가능</div></li>
+          <li><span class="wf-list-icon">📄</span><div><strong>제출 서류</strong> · 신청서, 신분증, 가족관계증명서, 통장사본 (출생신고 시 함께 신청 가능)</div></li>
+          <li><span class="wf-list-icon">🍼</span><div><strong>출생신고와 함께!</strong> · 출생신고 시 한 번에 4가지(부모급여·아동수당·첫만남·양육수당) 일괄 신청이 가능합니다</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>자주 묻는 질문</div>
+        <details class="wf-faq"><summary>❓ 어린이집을 보내면 부모급여가 줄어드나요?</summary><div class="wf-faq-body">
+          <p>네. 어린이집을 이용하면 보육료가 정부에서 어린이집으로 직접 지급되고, 부모급여는 보육료 차감 후 차액만 가정으로 입금됩니다.</p>
+          <p>예: 만 0세 보육료가 약 54만원이면, 부모급여 100만원 - 54만원 = 46만원이 부모 계좌로 입금</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 부모급여와 아동수당을 동시에 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>네. 부모급여(0~1세)와 아동수당(0~만 8세 미만)은 <strong>중복 수급 가능</strong>합니다. 만 0세 가정은 매달 110만원, 만 1세 가정은 60만원을 받게 됩니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 신청을 안 하면 자동으로 안 나오나요?</summary><div class="wf-faq-body">
+          <p>네, 반드시 신청해야 합니다. 출생 후 60일 이내에 신청하지 않으면 출생일로 소급 지원되지 않으니 가능한 빨리 신청하세요.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 가정양육수당 대상은?</summary><div class="wf-faq-body">
+          <p>만 2세 이후(부모급여 종료 후)부터 취학 전까지 어린이집·유치원·종일제 아이돌봄을 이용하지 않는 가정에 월 10만원이 지급됩니다.</p>
+          <p>어린이집 이용 시에는 보육료 지원, 유치원 이용 시에는 유아학비 지원으로 전환됩니다.</p>
+        </div></details>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>공식 사이트 · 문의</div>
+        <div class="wf-contact-grid">
+          <a class="wf-contact-btn" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">🌐 복지로</a>
+          <a class="wf-contact-btn" href="https://www.childcare.go.kr" target="_blank" rel="noopener">🌐 아이사랑</a>
+          <a class="wf-contact-btn" href="tel:129">📞 보건복지상담 129</a>
+          <a class="wf-contact-btn" href="tel:1566-0233">📞 아이사랑 1566-0233</a>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>다른 복지 혜택도 확인해 보세요</div>
+        <div class="wf-related">
+          <div class="wf-related-card" data-wf-go="welfare-singleparent"><span class="wf-related-icon">👨‍👩‍👧</span><div class="wf-related-text"><strong>한부모·다자녀</strong><span>아동양육비 추가</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-education"><span class="wf-related-icon">🎓</span><div class="wf-related-text"><strong>교육급여</strong><span>초·중·고 학습비</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-housing"><span class="wf-related-icon">🏠</span><div class="wf-related-text"><strong>주거급여</strong><span>임차료 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-emergency"><span class="wf-related-icon">🆘</span><div class="wf-related-text"><strong>긴급복지지원</strong><span>위기 가정 일시 지원</span></div></div>
+        </div>
+      </div>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-4 mb-8" style="background:linear-gradient(135deg,#be185d,#ec4899); box-shadow:0 2px 10px rgba(190,24,93,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
+    </main>
+  </section>
+
+  <!-- ===== 청년·구직지원 ===== -->
+  <section id="welfare-youth" class="wf-section wf-tone-violet hidden">
+    <header class="wf-header">
+      <div class="wf-header-inner">
+        <button class="wf-back" data-wf-back>← 홈으로</button>
+        <span class="wf-emoji">💼</span>
+        <h1 class="wf-title">청년 · 구직 지원</h1>
+        <p class="wf-subtitle">청년의 자립과 구직 활동을 돕는<br>주요 정부 지원 제도를 한곳에서 확인하세요</p>
+      </div>
+    </header>
+    <main class="wf-main">
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>주요 청년 지원 제도</div>
+        <table class="wf-table">
+          <thead><tr><th>제도</th><th>대상</th><th class="num">지원 내용</th></tr></thead>
+          <tbody>
+            <tr><td><strong>청년도약계좌</strong></td><td>만 19~34세<br>총급여 7,500만원 이하</td><td class="num">5년 만기<br>최대 5,000만원</td></tr>
+            <tr><td><strong>청년월세 특별지원</strong></td><td>만 19~34세<br>독립가구 청년</td><td class="num">월 20만원<br>최대 12개월</td></tr>
+            <tr><td><strong>국민취업지원제도 1유형</strong></td><td>저소득 구직자</td><td class="num">월 50만원 × 6개월<br>+ 취업지원</td></tr>
+            <tr><td><strong>국민취업지원제도 2유형</strong></td><td>일반 구직자<br>(청년 포함)</td><td class="num">취업활동비<br>최대 195만원</td></tr>
+            <tr><td><strong>청년내일채움공제</strong></td><td>중소기업 정규직 청년</td><td class="num">2년 1,200만원<br>(본인+기업+정부)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>청년도약계좌 (자산 형성)</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">👤</span><div><strong>가입 대상:</strong> 만 19~34세, 총급여 7,500만원(또는 종합소득 6,300만원) 이하, 가구 중위소득 250% 이하</div></li>
+          <li><span class="wf-list-icon">💵</span><div><strong>납입:</strong> 월 1,000원 ~ 70만원 자유 적립 (5년)</div></li>
+          <li><span class="wf-list-icon">🏛️</span><div><strong>정부 기여금:</strong> 소득에 따라 월 최대 3.3만원 (연 최대 약 40만원) + 비과세</div></li>
+          <li><span class="wf-list-icon">🏦</span><div><strong>가입처:</strong> 11개 시중·인터넷은행 (KB·신한·우리·하나·농협·기업·부산·대구·경남·광주·전북)</div></li>
+          <li><span class="wf-list-icon">📅</span><div><strong>가입 신청:</strong> 매달 초 일정 기간, 서민금융진흥원 사이트에서 자격 확인 후 은행 앱에서 개설</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>청년월세 특별지원</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">👤</span><div><strong>대상:</strong> 만 19~34세 무주택 청년, 부모와 별도 거주 (부모 가구 중위 100% 이하 + 본인 가구 중위 60% 이하)</div></li>
+          <li><span class="wf-list-icon">🏠</span><div><strong>주택 조건:</strong> 보증금 5,000만원 이하 + 월세 70만원 이하</div></li>
+          <li><span class="wf-list-icon">💰</span><div><strong>지원 금액:</strong> 월 최대 20만원 (실제 월세 한도 내), 최대 12개월</div></li>
+          <li><span class="wf-list-icon">💻</span><div><strong>신청:</strong> 복지로 또는 주민센터, 분기별 모집</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>국민취업지원제도</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">1️⃣</span><div><strong>1유형 (구직촉진수당):</strong> 저소득 구직자에게 월 50만원 × 6개월 + 취업활동지원</div></li>
+          <li><span class="wf-list-icon">2️⃣</span><div><strong>2유형 (취업활동비):</strong> 청년·중장년 구직자에게 직업훈련 참여 시 수당 지원</div></li>
+          <li><span class="wf-list-icon">🎯</span><div><strong>청년 우대:</strong> 만 15~34세 청년은 소득 기준이 더 완화됨 (가구 중위 120% 이하)</div></li>
+          <li><span class="wf-list-icon">💻</span><div><strong>신청:</strong> 워크넷(www.work.go.kr) 또는 고용센터 방문</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>자주 묻는 질문</div>
+        <details class="wf-faq"><summary>❓ 청년도약계좌와 청년희망적금을 둘 다 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>청년희망적금(2022년 출시)은 만기·해지로 종료되었으며, 도약계좌는 별도 신규 가입 가능합니다. 희망적금 만기 수령자도 도약계좌에 일시납입(최대 3,840만원)으로 갈아탈 수 있습니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 부모님과 따로 살아야만 청년월세 지원을 받나요?</summary><div class="wf-faq-body">
+          <p>네. 청년월세는 <strong>부모와 별도 세대를 구성</strong>하고 본인 명의로 임대차계약을 한 청년이 대상입니다. 단, 군 입대·결혼 등으로 자연스럽게 분가한 경우도 인정됩니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 국민취업지원제도와 실업급여, 둘 다 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>중복 수급은 불가능합니다. 실업급여 수급 종료 후 또는 실업급여 미해당자가 국민취업지원제도에 신청할 수 있습니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 지자체별 청년 지원도 따로 있나요?</summary><div class="wf-faq-body">
+          <p>네. 서울 청년수당, 경기 청년기본소득 등 지자체별 다양한 청년 지원사업이 있어 거주지 시·구청 청년정책과나 청년정책포털(youth.go.kr)에서 추가 확인하세요.</p>
+        </div></details>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>공식 사이트 · 문의</div>
+        <div class="wf-contact-grid">
+          <a class="wf-contact-btn" href="https://www.youth.go.kr" target="_blank" rel="noopener">🌐 청년정책포털</a>
+          <a class="wf-contact-btn" href="https://www.work.go.kr" target="_blank" rel="noopener">🌐 워크넷</a>
+          <a class="wf-contact-btn" href="https://ylaccount.kinfa.or.kr" target="_blank" rel="noopener">🌐 청년도약계좌</a>
+          <a class="wf-contact-btn" href="tel:1350">📞 고용노동부 1350</a>
+          <a class="wf-contact-btn" href="tel:1397">📞 서민금융 1397</a>
+          <a class="wf-contact-btn" href="tel:1599-0001">📞 청년월세 1599-0001</a>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>다른 복지 혜택도 확인해 보세요</div>
+        <div class="wf-related">
+          <div class="wf-related-card" data-wf-go="welfare-housing"><span class="wf-related-icon">🏠</span><div class="wf-related-text"><strong>주거급여</strong><span>분리지급 청년 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-basic-living"><span class="wf-related-icon">📋</span><div class="wf-related-text"><strong>기초생활보장</strong><span>저소득 청년 대상</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-education"><span class="wf-related-icon">🎓</span><div class="wf-related-text"><strong>교육급여</strong><span>중·고생 학습비</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-emergency"><span class="wf-related-icon">🆘</span><div class="wf-related-text"><strong>긴급복지지원</strong><span>실직·휴업 등 위기</span></div></div>
+        </div>
+      </div>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-4 mb-8" style="background:linear-gradient(135deg,#6d28d9,#8b5cf6); box-shadow:0 2px 10px rgba(109,40,217,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
+    </main>
+  </section>
+
+  <!-- ===== 긴급복지지원 ===== -->
+  <section id="welfare-emergency" class="wf-section wf-tone-red hidden">
+    <header class="wf-header">
+      <div class="wf-header-inner">
+        <button class="wf-back" data-wf-back>← 홈으로</button>
+        <span class="wf-emoji">🆘</span>
+        <h1 class="wf-title">긴급복지지원</h1>
+        <p class="wf-subtitle">갑작스러운 위기로 생계가 어려운 가구에<br>일시적으로 신속하게 지원하는 제도입니다</p>
+      </div>
+    </header>
+    <main class="wf-main">
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>한눈에 보는 긴급복지지원</div>
+        <div class="wf-summary-grid">
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">대상</div>
+            <div class="wf-summary-value">위기상황<br>발생 가구</div>
+            <div class="wf-summary-sub">12가지 위기 사유</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">처리 기간</div>
+            <div class="wf-summary-value">선지원<br>후심사</div>
+            <div class="wf-summary-sub">신청 후 신속 결정</div>
+          </div>
+          <div class="wf-summary-item">
+            <div class="wf-summary-label">지원 횟수</div>
+            <div class="wf-summary-value">최대 6개월<br>(일시 지원)</div>
+            <div class="wf-summary-sub">연장 시 12개월까지</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>위기 상황 (12가지)</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">💔</span><div>주소득자의 사망·가출·행방불명·구금시설 수용</div></li>
+          <li><span class="wf-list-icon">💼</span><div>휴·폐업, 실직, 사업 실패</div></li>
+          <li><span class="wf-list-icon">🏥</span><div>중한 질병 또는 부상으로 의료비 부담</div></li>
+          <li><span class="wf-list-icon">🚫</span><div>가구 구성원의 가정폭력, 성폭력 피해</div></li>
+          <li><span class="wf-list-icon">🔥</span><div>화재·자연재해 등으로 거주지 상실</div></li>
+          <li><span class="wf-list-icon">🏚️</span><div>주거지 임차료를 6개월 이상 연체하여 거주 불안정</div></li>
+          <li><span class="wf-list-icon">⚠️</span><div>전기·가스 등 단전·단수 위기</div></li>
+          <li><span class="wf-list-icon">📋</span><div>그밖에 시·군·구청장이 인정하는 위기상황</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>지원 내용 (참고 금액)</div>
+        <table class="wf-table">
+          <thead><tr><th>지원 종류</th><th>내용</th><th class="num">지원금</th></tr></thead>
+          <tbody>
+            <tr><td><strong>생계지원</strong></td><td>식료품·의복비 등<br>(4인 가구 기준)</td><td class="num">월 약 187만원<br>(최대 6개월)</td></tr>
+            <tr><td><strong>의료지원</strong></td><td>중한 질병·부상<br>본인부담금</td><td class="num">회당 최대 300만원<br>(최대 2회)</td></tr>
+            <tr><td><strong>주거지원</strong></td><td>임시 거처·임차료<br>(서울 4인 기준)</td><td class="num">월 약 66만원<br>(최대 12개월)</td></tr>
+            <tr><td><strong>사회복지시설</strong></td><td>일시 보호 비용</td><td class="num">월 약 173만원<br>(최대 6개월)</td></tr>
+            <tr><td><strong>교육지원</strong></td><td>초·중·고 학생<br>학용품·수업료</td><td class="num">초 12만원<br>중 19만원<br>고 21만원+α</td></tr>
+            <tr><td><strong>그 밖의 지원</strong></td><td>연료비·해산비·장제비·전기요금</td><td class="num">사안별 지원</td></tr>
+          </tbody>
+        </table>
+        <div class="wf-callout warn"><strong>📌 안내</strong>금액은 2025년 기준 참고치로 가구원 수·지역·연도에 따라 달라집니다. 정확한 지원액은 주민센터 또는 129에 확인하세요.</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>소득·재산 기준</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">💰</span><div><strong>소득:</strong> 기준 중위소득 75% 이하 (4인 약 458만원 이하)</div></li>
+          <li><span class="wf-list-icon">🏠</span><div><strong>일반재산:</strong> 대도시 2.41억, 중소도시 1.52억, 농어촌 1.30억 이하 (2025년)</div></li>
+          <li><span class="wf-list-icon">💵</span><div><strong>금융재산:</strong> 가구당 600만원 이하 (주거지원의 경우 800만원)</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>신청 방법 (선지원 후심사)</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">📞</span><div><strong>1단계 — 신고:</strong> 보건복지상담센터 <strong>129</strong> 또는 주소지 시·군·구청에 신고</div></li>
+          <li><span class="wf-list-icon">🚀</span><div><strong>2단계 — 현장 확인:</strong> 시·군·구청 담당자가 신속히 현장 확인 후 1차 지원 결정 (보통 1~3일 이내)</div></li>
+          <li><span class="wf-list-icon">💸</span><div><strong>3단계 — 선지원:</strong> 위기 상황이 인정되면 우선 지원 후 사후 조사</div></li>
+          <li><span class="wf-list-icon">✅</span><div><strong>4단계 — 사후심사:</strong> 소득·재산 등 적정성 조사 후 부적정 시 환수 가능</div></li>
+        </ul>
+        <div class="wf-callout danger"><strong>🚨 응급 상황</strong>생계가 위기인 분, 주변 위기 가구를 알게 된 분은 즉시 <strong>129</strong>로 신고하세요. 24시간 운영, 무료 상담 가능합니다.</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>자주 묻는 질문</div>
+        <details class="wf-faq"><summary>❓ 기초수급자도 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>긴급복지지원은 일반적으로 <strong>다른 법령에 따른 지원을 받지 못하는 경우</strong> 적용됩니다. 기초수급자가 받는 지원과 중복되는 항목은 제외되며, 의료비·주거 단전 등 별도 위기 상황은 추가 지원받을 수 있습니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 외국인도 신청할 수 있나요?</summary><div class="wf-faq-body">
+          <p>대한민국 국민의 배우자, 난민 인정자, 영주권자 등 일정 요건을 갖춘 외국인은 신청 가능합니다. 자세한 사항은 주민센터에 문의하세요.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 지원받은 후 환수당할 수도 있나요?</summary><div class="wf-faq-body">
+          <p>네. 사후 심사에서 소득·재산이 기준을 초과하거나 거짓·부정 신청이 확인되면 지원금이 환수될 수 있습니다. 신청 시 정확하게 신고하는 것이 중요합니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 지자체 자체 긴급지원도 있나요?</summary><div class="wf-faq-body">
+          <p>네. 서울형 긴급복지, 경기 긴급복지지원 등 시·도 자체 사업도 있어, 국가 긴급지원 대상이 아닐 때 추가로 신청해볼 수 있습니다. 시·구청 또는 129에 문의하세요.</p>
+        </div></details>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>공식 사이트 · 문의</div>
+        <div class="wf-contact-grid">
+          <a class="wf-contact-btn" href="tel:129">📞 보건복지상담 129</a>
+          <a class="wf-contact-btn" href="tel:1577-1389">📞 자살예방상담 1393</a>
+          <a class="wf-contact-btn" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">🌐 복지로</a>
+          <a class="wf-contact-btn" href="https://www.mohw.go.kr" target="_blank" rel="noopener">🌐 보건복지부</a>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>다른 복지 혜택도 확인해 보세요</div>
+        <div class="wf-related">
+          <div class="wf-related-card" data-wf-go="welfare-basic-living"><span class="wf-related-icon">📋</span><div class="wf-related-text"><strong>기초생활보장</strong><span>장기 지원이 필요할 때</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-medical"><span class="wf-related-icon">🏥</span><div class="wf-related-text"><strong>의료급여</strong><span>지속적인 의료비 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-housing"><span class="wf-related-icon">🏠</span><div class="wf-related-text"><strong>주거급여</strong><span>월세·수선비 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-singleparent"><span class="wf-related-icon">👨‍👩‍👧</span><div class="wf-related-text"><strong>한부모·다자녀</strong><span>한부모 가족 지원</span></div></div>
+        </div>
+      </div>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-4 mb-8" style="background:linear-gradient(135deg,#b91c1c,#ef4444); box-shadow:0 2px 10px rgba(185,28,28,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
+    </main>
+  </section>
+
+  <!-- ===== 한부모·다자녀 ===== -->
+  <section id="welfare-singleparent" class="wf-section wf-tone-orange hidden">
+    <header class="wf-header">
+      <div class="wf-header-inner">
+        <button class="wf-back" data-wf-back>← 홈으로</button>
+        <span class="wf-emoji">👨‍👩‍👧</span>
+        <h1 class="wf-title">한부모 · 다자녀 가족 지원</h1>
+        <p class="wf-subtitle">한부모·조손·청소년한부모 가족과<br>다자녀 가구를 위한 통합 지원 안내</p>
+      </div>
+    </header>
+    <main class="wf-main">
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>한부모가족 지원 한눈에 보기</div>
+        <table class="wf-table">
+          <thead><tr><th>구분</th><th>대상</th><th class="num">지원금</th></tr></thead>
+          <tbody>
+            <tr><td><strong>아동양육비</strong></td><td>만 18세 미만 자녀<br>중위소득 63% 이하</td><td class="num">월 21만원</td></tr>
+            <tr><td><strong>추가아동양육비</strong></td><td>조손가족·만 25세 이상 미혼 한부모 (5세 이하 자녀)</td><td class="num">월 5만원</td></tr>
+            <tr><td><strong>청소년한부모<br>아동양육비</strong></td><td>만 24세 이하 한부모<br>중위소득 65% 이하</td><td class="num">월 35만원</td></tr>
+            <tr><td><strong>청소년한부모<br>자립지원</strong></td><td>학업·자립 지원</td><td class="num">검정고시 154만원<br>고교생 학용품 9.3만원</td></tr>
+            <tr><td><strong>한부모 가족<br>복지시설 지원</strong></td><td>모자·부자·미혼모자<br>가족시설 입소자</td><td class="num">시설 운영비<br>+ 자립 지원</td></tr>
+          </tbody>
+        </table>
+        <div class="wf-callout warn"><strong>📌 안내</strong>금액·소득기준은 2025년 기준 참고치이며, 2026년에는 변동될 수 있습니다. 정확한 금액은 한부모가족지원 콜센터(1644-6621) 확인 권장.</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>한부모가족 자격 요건</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">👨‍👩‍👧</span><div><strong>한부모가족:</strong> 부 또는 모와 만 18세 미만 자녀(취학 시 만 22세 미만)로 구성된 가족</div></li>
+          <li><span class="wf-list-icon">👵</span><div><strong>조손가족:</strong> 부모의 사망·실종·복역·질병 등으로 조부모가 만 18세 미만 손자녀를 양육하는 가족</div></li>
+          <li><span class="wf-list-icon">👶</span><div><strong>청소년한부모:</strong> 만 24세 이하의 한부모</div></li>
+          <li><span class="wf-list-icon">💰</span><div><strong>소득기준:</strong> 가구 소득인정액 기준 중위소득 63%(청소년한부모 65%) 이하</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>다자녀 가구 주요 혜택</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">🚗</span><div><strong>다자녀 우대카드 (아이맘카드 등):</strong> 자녀 2명 이상 가구 대상, 공공시설 할인·주차요금 감면 등 (지자체별 운영)</div></li>
+          <li><span class="wf-list-icon">💡</span><div><strong>전기·가스요금 할인:</strong> 자녀 3명 이상 가구 월 1.6만원 한도 전기요금 할인, 도시가스 요금 할인</div></li>
+          <li><span class="wf-list-icon">🏠</span><div><strong>주택 특별공급:</strong> 미성년 자녀 3명 이상 가구는 공공·민간 분양 특별공급 대상</div></li>
+          <li><span class="wf-list-icon">🚄</span><div><strong>KTX·SRT 할인:</strong> 만 25세 미만 자녀 2명 이상 동반 시 어른 30%, 자녀 50% 할인</div></li>
+          <li><span class="wf-list-icon">🏥</span><div><strong>국민연금 출산크레딧:</strong> 둘째 12개월, 셋째부터 18개월씩 가입기간 추가 (최대 50개월)</div></li>
+          <li><span class="wf-list-icon">🎓</span><div><strong>대학 장학금:</strong> 셋째 이상 자녀 대학교 등록금 지원 (소득 8구간 이하)</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>지자체별 추가 지원</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">🏙️</span><div><strong>서울:</strong> 다둥이 행복카드, 한부모가족 자녀양육비 추가 지원</div></li>
+          <li><span class="wf-list-icon">🏞️</span><div><strong>경기:</strong> 출산·다자녀 가정 축하 지원, 산후조리비</div></li>
+          <li><span class="wf-list-icon">🌊</span><div><strong>부산·인천 등 광역시:</strong> 출산장려금, 다자녀 양육비 추가</div></li>
+          <li><span class="wf-list-icon">🌄</span><div><strong>군 단위 지자체:</strong> 첫째부터 출산장려금 100만원~수천만원 지급하는 지역 다수</div></li>
+        </ul>
+        <div class="wf-callout info"><strong>💡 우리 지역 확인</strong>거주지 시·군·구청 가족정책과 또는 지자체 홈페이지에서 추가 지원 내역을 꼭 확인하세요. 임신·출산 종합포털(www.allmom.go.kr)에서도 안내합니다.</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>신청 방법</div>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">🏢</span><div><strong>한부모가족 증명서 발급:</strong> 주민센터 또는 정부24에서 신청 → 자격 인정 후 각종 지원 신청 가능</div></li>
+          <li><span class="wf-list-icon">💻</span><div><strong>온라인 신청:</strong> 복지로(www.bokjiro.go.kr), 정부24(www.gov.kr)</div></li>
+          <li><span class="wf-list-icon">📄</span><div><strong>제출 서류:</strong> 신분증, 가족관계증명서, 주민등록등본, 임대차계약서, 소득·재산 증빙</div></li>
+          <li><span class="wf-list-icon">📞</span><div><strong>전화 상담:</strong> 한부모가족 상담전화 1644-6621 (평일 9~18시)</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>자주 묻는 질문</div>
+        <details class="wf-faq"><summary>❓ 미혼모(부)도 한부모 지원을 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>네. 결혼 여부와 관계없이 만 18세 미만 자녀를 양육하는 미혼모·미혼부도 한부모가족으로 인정되어 지원 대상입니다. 출생신고 후 한부모가족 증명서를 발급받아 신청하세요.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 양육비 미지급된 경우 지원받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>네. <strong>양육비이행관리원(1644-6621)</strong>을 통해 양육비 청구·이행 지원을 받을 수 있고, 일시적으로 받지 못하는 경우 한시적 양육비 긴급지원도 신청 가능합니다.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 다자녀 기준은 어떻게 되나요?</summary><div class="wf-faq-body">
+          <p>제도별로 다릅니다.</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>일반적으로 <strong>2자녀 이상</strong> 또는 <strong>3자녀 이상</strong>으로 기준이 다름</li>
+            <li>전기·가스요금 할인: 만 18세 미만 자녀 3명 이상</li>
+            <li>주택 특별공급: 만 19세 미만 자녀 3명 이상</li>
+            <li>지자체 다둥이카드: 보통 2자녀 이상</li>
+          </ul>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 한부모와 기초생활수급, 둘 다 받을 수 있나요?</summary><div class="wf-faq-body">
+          <p>중복 가능합니다. 한부모가족 아동양육비는 별도 지원이며, 기초생활수급 자격이 되면 생계·의료·주거·교육 급여를 함께 받을 수 있습니다.</p>
+        </div></details>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>공식 사이트 · 문의</div>
+        <div class="wf-contact-grid">
+          <a class="wf-contact-btn" href="https://www.mogef.go.kr" target="_blank" rel="noopener">🌐 여성가족부</a>
+          <a class="wf-contact-btn" href="https://www.allmom.go.kr" target="_blank" rel="noopener">🌐 임신·출산 포털</a>
+          <a class="wf-contact-btn" href="tel:1644-6621">📞 한부모상담 1644-6621</a>
+          <a class="wf-contact-btn" href="tel:129">📞 보건복지상담 129</a>
+        </div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>다른 복지 혜택도 확인해 보세요</div>
+        <div class="wf-related">
+          <div class="wf-related-card" data-wf-go="welfare-childcare"><span class="wf-related-icon">👶</span><div class="wf-related-text"><strong>아동·양육수당</strong><span>부모급여·아동수당</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-education"><span class="wf-related-icon">🎓</span><div class="wf-related-text"><strong>교육급여</strong><span>학습비 지원</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-housing"><span class="wf-related-icon">🏠</span><div class="wf-related-text"><strong>주거급여</strong><span>임차료·수선비</span></div></div>
+          <div class="wf-related-card" data-wf-go="welfare-emergency"><span class="wf-related-icon">🆘</span><div class="wf-related-text"><strong>긴급복지지원</strong><span>위기 가구 일시 지원</span></div></div>
+        </div>
+      </div>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-4 mb-8" style="background:linear-gradient(135deg,#c2410c,#f97316); box-shadow:0 2px 10px rgba(194,65,12,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
+    </main>
+  </section>
+
   <!-- ===== Game Hub ===== -->
   <section id="game-hub" class="hidden min-h-screen py-8">
     <div class="max-w-6xl mx-auto px-4">
@@ -2138,7 +3150,7 @@
         // 홈페이지: 상단 nav 숨김, 플로팅 게임 버튼만 표시
         topNav.classList.add('hidden');
         floatingBtn.classList.remove('hidden');
-      } else if (sectionName === 'pension-container' || sectionName === 'fuel-support' || sectionName === 'disability-pension') {
+      } else if (sectionName === 'pension-container' || sectionName === 'fuel-support' || sectionName === 'disability-pension' || sectionName.startsWith('welfare-')) {
         topNav.classList.add('hidden');
         floatingBtn.classList.add('hidden');
         if (sectionName === 'pension-container') floatingBtn.classList.remove('hidden');
@@ -4624,21 +5636,33 @@
         });
       });
 
+      // ===== 복지 페이지 공통 핸들러 (← 홈으로, 관련 복지 카드) =====
+      document.querySelectorAll('[data-wf-back]').forEach(btn => {
+        btn.addEventListener('click', () => { showSection('home'); window.scrollTo(0,0); });
+      });
+      document.querySelectorAll('[data-wf-go]').forEach(card => {
+        card.addEventListener('click', () => {
+          const target = card.dataset.wfGo;
+          if (target) { showSection(target); window.scrollTo(0,0); }
+        });
+      });
+
       // ===== 홈페이지 검색 기능 =====
       const homeSearchData = [
         { keywords: ['기초연금', '연금', '노령연금', '노인연금', '65세'], target: 'pension-container', label: '기초연금', desc: '만 65세 이상 노령층 대상' },
         { keywords: ['장애인연금', '장애', '장애인', '중증장애', '장애수당'], target: 'disability-pension', label: '장애인연금', desc: '만 18세 이상 중증장애인 대상' },
         { keywords: ['고유가', '피해지원금', '민생지원금', '에너지', '유류', '3차'], target: 'fuel-support', label: '고유가 피해지원금', desc: '소득 하위 70% 대상 1인 10~60만원' },
+        { keywords: ['기초생활', '생계급여', '수급자', '중위소득'], target: 'welfare-basic-living', label: '기초생활보장', desc: '생계·의료·주거·교육 4대 급여' },
+        { keywords: ['의료급여', '병원비', '진료', '입원'], target: 'welfare-medical', label: '의료급여', desc: '저소득층 의료비 본인부담 경감' },
+        { keywords: ['주거급여', '월세', '임차', '전세', '주택수선'], target: 'welfare-housing', label: '주거급여', desc: '임차료·주택수선비 지원' },
+        { keywords: ['교육급여', '학비', '학용품', '교과서', '수업료'], target: 'welfare-education', label: '교육급여', desc: '초·중·고 학생 학습비' },
+        { keywords: ['아동수당', '부모급여', '양육수당', '영아수당', '첫만남이용권', '아이'], target: 'welfare-childcare', label: '아동·양육수당', desc: '부모급여·아동수당·첫만남이용권' },
+        { keywords: ['청년', '구직', '취업', '청년도약계좌', '청년월세', '국민취업지원'], target: 'welfare-youth', label: '청년·구직지원', desc: '청년도약계좌·월세 지원·취업지원' },
+        { keywords: ['긴급복지', '긴급지원', '위기', '실직', '폐업'], target: 'welfare-emergency', label: '긴급복지지원', desc: '위기상황 일시 지원 (선지원 후심사)' },
+        { keywords: ['한부모', '다자녀', '미혼모', '미혼부', '조손', '청소년한부모'], target: 'welfare-singleparent', label: '한부모·다자녀', desc: '아동양육비·다자녀 혜택' },
         { keywords: ['게임', '오목', '테트리스', '스도쿠', '벽돌깨기'], target: 'game-hub', label: '추억의 게임', desc: '기분 전환용 클래식 게임' }
       ];
-      const upcomingMap = {
-        '의료급여': '의료급여 (준비 중)', '주거급여': '주거급여 (준비 중)',
-        '기초생활보장': '기초생활보장 (준비 중)', '기초생활': '기초생활보장 (준비 중)',
-        '교육급여': '교육급여 (준비 중)', '아동수당': '아동·양육수당 (준비 중)',
-        '양육수당': '아동·양육수당 (준비 중)', '청년': '청년·구직지원 (준비 중)',
-        '구직': '청년·구직지원 (준비 중)', '긴급복지': '긴급복지지원 (준비 중)',
-        '한부모': '한부모·다자녀 (준비 중)', '다자녀': '한부모·다자녀 (준비 중)'
-      };
+      const upcomingMap = {};
 
       function homeSearch(q) {
         const resultDiv = document.getElementById('home-search-result');
