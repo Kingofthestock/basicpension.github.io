@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026 기초연금 · 장애인연금 자격 계산기 | 1분 모의계산 + 게임 허브</title>
-  <meta name="description" content="2026년 기초연금·장애인연금 선정기준액을 반영한 자격 확인 계산기. 단독/부부 소득인정액과 예상 수령액을 1분 안에 확인하고 신청 방법까지 바로 확인하세요.">
-  <meta name="keywords" content="2026 기초연금, 기초연금 계산기, 장애인연금 계산기, 장애인연금 2026, 기초연금 수급자격, 소득인정액, 단독가구, 부부가구, 복지로 신청, 중증장애인, 부가급여">
+  <title>2026 복지 도우미 | 내가 받을 수 있는 복지 혜택 1분 확인</title>
+  <meta name="description" content="기초연금·장애인연금·고유가 피해지원금부터 의료·주거·교육급여까지. 2026년 정부 복지 혜택의 자격 조건과 신청 방법을 한곳에서 1분 안에 확인하세요.">
+  <meta name="keywords" content="2026 복지, 복지 혜택, 복지 도우미, 기초연금 계산기, 장애인연금 계산기, 고유가 피해지원금, 민생지원금, 기초생활보장, 의료급여, 주거급여, 복지로, 정부지원금, 복지 자격 확인">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
-  <meta property="og:title" content="2026 기초연금 자격 계산기">
-  <meta property="og:description" content="2026년 기준으로 기초연금 수급 가능성을 빠르게 확인해보세요.">
+  <meta property="og:title" content="2026 복지 도우미 - 내가 받을 수 있는 복지 혜택 확인">
+  <meta property="og:description" content="기초연금·장애인연금·민생지원금 등 2026년 정부 복지 혜택을 한곳에서 확인하세요.">
   <meta name="twitter:card" content="summary">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
@@ -296,6 +296,107 @@
       .g2048-cell { height: 60px; font-size: 1.1rem; }
       .sel-card { padding: 1rem .6rem; }
     }
+
+    /* ===== Home (Welfare Portal) ===== */
+    #home { background: #f8fafc; min-height: 100vh; padding-bottom: 0; }
+    .home-header { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%); color: #fff; position: relative; overflow: hidden; }
+    .home-header::before { content:''; position:absolute; top:-50%; right:-10%; width:500px; height:500px; background:radial-gradient(circle, rgba(255,255,255,.08) 0%, transparent 70%); pointer-events:none; }
+    .home-header::after { content:''; position:absolute; bottom:-1px; left:0; right:0; height:32px; background:#f8fafc; border-radius:50% 50% 0 0/100% 100% 0 0; }
+    .home-header-inner { max-width: 1100px; margin: 0 auto; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+    .home-logo { display: flex; align-items: center; gap: 0.6rem; font-weight: 800; font-size: 1.1rem; color: #fff; }
+    .home-logo-mark { width: 38px; height: 38px; border-radius: 10px; background: #fff; color: #1e40af; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.15rem; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+    .home-nav-btn { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.18); padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all .2s; backdrop-filter: blur(8px); }
+    .home-nav-btn:hover { background: rgba(255,255,255,.22); }
+    .home-hero { padding: 2.5rem 1.25rem 3.5rem; text-align: center; max-width: 920px; margin: 0 auto; position: relative; z-index: 1; }
+    .home-hero-tag { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,.14); padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.85rem; margin-bottom: 1.25rem; border: 1px solid rgba(255,255,255,.22); font-weight: 500; }
+    .home-hero-title { font-size: 2.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.025em; }
+    .home-hero-subtitle { font-size: 1.05rem; color: rgba(255,255,255,.88); line-height: 1.65; max-width: 580px; margin: 0 auto 1.75rem; }
+    .home-search { max-width: 560px; margin: 0 auto; position: relative; background: #fff; border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,.16); padding: 0.45rem 0.45rem 0.45rem 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .home-search-icon { font-size: 1.15rem; color: #94a3b8; flex-shrink: 0; }
+    .home-search input { flex: 1; border: none; outline: none; font-size: 1rem; padding: 0.55rem 0.25rem; background: transparent; color: #0f172a; font-family: inherit; }
+    .home-search input::placeholder { color: #94a3b8; }
+    .home-search-btn { background: #1e40af; color: #fff; border: none; padding: 0.6rem 1.4rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background .2s; font-family: inherit; font-size: 0.95rem; }
+    .home-search-btn:hover { background: #1e3a8a; }
+    .home-search-hint { margin-top: 0.85rem; font-size: 0.8rem; color: rgba(255,255,255,.7); }
+    .home-search-hint strong { color: #fff; font-weight: 600; }
+
+    .home-main { max-width: 1100px; margin: -1.5rem auto 0; padding: 0 1rem; position: relative; z-index: 2; }
+    .home-card-section { background: #fff; border-radius: 1rem; padding: 1.75rem 1.5rem; box-shadow: 0 2px 12px rgba(15,23,42,.04); margin-bottom: 1.25rem; border: 1px solid #e2e8f0; }
+    .home-section-title { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.35rem; letter-spacing: -0.01em; }
+    .home-section-title-bar { width: 4px; height: 22px; background: linear-gradient(180deg,#1e40af,#2563eb); border-radius: 2px; }
+    .home-section-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 1.25rem; line-height: 1.55; }
+
+    .home-quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .home-quick-card { padding: 1.5rem 1.25rem 1.25rem; border-radius: 0.9rem; cursor: pointer; transition: all .25s; text-align: left; position: relative; overflow: hidden; border: 1.5px solid; background: #fff; display: flex; flex-direction: column; gap: 0.5rem; min-height: 200px; }
+    .home-quick-card:hover { transform: translateY(-4px); }
+    .home-quick-card.pension { border-color: #bfdbfe; background: linear-gradient(165deg, #eff6ff 0%, #fff 60%); }
+    .home-quick-card.pension:hover { border-color: #3b82f6; box-shadow: 0 12px 28px rgba(37,99,235,.18); }
+    .home-quick-card.disability { border-color: #ddd6fe; background: linear-gradient(165deg, #f5f3ff 0%, #fff 60%); }
+    .home-quick-card.disability:hover { border-color: #8b5cf6; box-shadow: 0 12px 28px rgba(124,58,237,.18); }
+    .home-quick-card.fuel { border-color: #fed7aa; background: linear-gradient(165deg, #fff7ed 0%, #fff 60%); }
+    .home-quick-card.fuel:hover { border-color: #f97316; box-shadow: 0 12px 28px rgba(234,88,12,.18); }
+    .home-quick-card-icon { font-size: 2.4rem; line-height: 1; }
+    .home-quick-card-title { font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 0.15rem; }
+    .home-quick-card-desc { font-size: 0.85rem; color: #475569; line-height: 1.55; flex-grow: 1; }
+    .home-quick-card-cta { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.88rem; font-weight: 700; padding: 0.45rem 0.95rem; border-radius: 999px; background: #fff; align-self: flex-start; transition: all .2s; }
+    .home-quick-card.pension .home-quick-card-cta { color: #1e40af; border: 1px solid #bfdbfe; }
+    .home-quick-card.disability .home-quick-card-cta { color: #6d28d9; border: 1px solid #ddd6fe; }
+    .home-quick-card.fuel .home-quick-card-cta { color: #c2410c; border: 1px solid #fed7aa; }
+    .home-quick-card:hover .home-quick-card-cta { transform: translateX(4px); }
+
+    .home-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+    .home-cat-card { padding: 1.25rem 0.75rem; border-radius: 0.75rem; text-align: center; background: #f8fafc; border: 1px solid #e2e8f0; transition: all .2s; position: relative; }
+    .home-cat-card.active { cursor: pointer; background: #fff; }
+    .home-cat-card.active:hover { background: #eff6ff; border-color: #3b82f6; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(30,64,175,.12); }
+    .home-cat-card.active.pension-tone:hover { background:#eff6ff; border-color:#3b82f6; }
+    .home-cat-card.active.disability-tone:hover { background:#f5f3ff; border-color:#8b5cf6; }
+    .home-cat-card.active.fuel-tone:hover { background:#fff7ed; border-color:#f97316; }
+    .home-cat-card.active.game-tone:hover { background:#f0fdf4; border-color:#22c55e; }
+    .home-cat-icon { font-size: 1.85rem; display: block; margin-bottom: 0.5rem; }
+    .home-cat-name { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 0.4rem; line-height: 1.3; }
+    .home-cat-status { font-size: 0.7rem; padding: 0.18rem 0.6rem; border-radius: 999px; display: inline-block; font-weight: 600; letter-spacing: -0.01em; }
+    .home-cat-card.active .home-cat-status { background: #dbeafe; color: #1e40af; }
+    .home-cat-card:not(.active) .home-cat-status { background: #f1f5f9; color: #94a3b8; }
+    .home-cat-card.active.disability-tone .home-cat-status { background: #ede9fe; color: #6d28d9; }
+    .home-cat-card.active.fuel-tone .home-cat-status { background: #ffedd5; color: #c2410c; }
+    .home-cat-card.active.game-tone .home-cat-status { background: #dcfce7; color: #15803d; }
+
+    .home-info-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    .home-info-item { display: flex; gap: 0.85rem; padding: 1rem 1.1rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; align-items: flex-start; }
+    .home-info-icon { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,#1e40af,#2563eb); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; font-weight: 800; }
+    .home-info-text strong { display: block; font-size: 0.95rem; color: #0f172a; margin-bottom: 0.2rem; font-weight: 700; }
+    .home-info-text span { font-size: 0.85rem; color: #64748b; line-height: 1.55; }
+
+    .home-link-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .home-link-btn { padding: 0.85rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.6rem; text-decoration: none; color: #334155; font-weight: 600; font-size: 0.9rem; text-align: center; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+    .home-link-btn:hover { background: #eff6ff; border-color: #3b82f6; color: #1e40af; transform: translateY(-1px); }
+
+    .home-search-result { margin-top: 1rem; padding: 0.85rem 1.1rem; background: rgba(255,255,255,.95); border-radius: 12px; color: #0f172a; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,.1); display: none; max-width: 560px; margin-left: auto; margin-right: auto; text-align: left; }
+    .home-search-result.visible { display: block; }
+    .home-search-result a { color: #1e40af; font-weight: 700; text-decoration: underline; cursor: pointer; }
+    .home-search-result .no-result { color: #64748b; }
+
+    .home-footer { background: #1e293b; color: #cbd5e1; padding: 2rem 1rem; text-align: center; font-size: 0.85rem; line-height: 1.7; margin-top: 1rem; }
+    .home-footer strong { color: #fff; }
+
+    @media (max-width: 768px) {
+      .home-hero { padding: 1.75rem 1rem 2.5rem; }
+      .home-hero-title { font-size: 1.75rem; line-height: 1.25; }
+      .home-hero-subtitle { font-size: 0.95rem; }
+      .home-quick-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+      .home-quick-card { min-height: auto; }
+      .home-cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .home-info-row { grid-template-columns: 1fr; }
+      .home-link-row { grid-template-columns: 1fr; }
+      .home-search-btn { padding: 0.55rem 0.9rem; font-size: 0.88rem; }
+      .home-search input { font-size: 0.95rem; }
+      .home-main { margin-top: -0.75rem; padding: 0 0.85rem; }
+      .home-card-section { padding: 1.4rem 1.1rem; border-radius: 0.85rem; }
+      .home-section-title { font-size: 1.1rem; }
+      .home-logo { font-size: 1rem; }
+      .home-logo-mark { width: 34px; height: 34px; font-size: 1rem; }
+      .home-header-inner { padding: 0.85rem 1rem; }
+    }
   </style>
 </head>
 <body class="bg-slate-50">
@@ -303,9 +404,9 @@
   <!-- ===== Navigation ===== -->
   <nav id="top-nav" class="top-nav hidden">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <h1 class="text-lg font-bold text-slate-800">2026 복지 도우미</h1>
+      <h1 class="text-lg font-bold text-slate-800 cursor-pointer" id="top-nav-home">🏠 2026 복지 도우미</h1>
       <div class="flex gap-2">
-        <button id="tab-pension" class="tab-btn tab-active">기초연금</button>
+        <button id="tab-pension" class="tab-btn tab-active">홈</button>
         <button id="tab-games" class="tab-btn tab-inactive">게임 허브</button>
       </div>
     </div>
@@ -379,6 +480,187 @@
       </div>
     </div>
   </div>
+
+  <!-- ===== Home (Welfare Portal) ===== -->
+  <section id="home">
+    <header class="home-header">
+      <div class="home-header-inner">
+        <div class="home-logo">
+          <div class="home-logo-mark">복</div>
+          <span>2026 복지 도우미</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="home-nav-btn" id="home-nav-game">🎮 게임</button>
+        </div>
+      </div>
+      <div class="home-hero">
+        <span class="home-hero-tag">📅 2026년 4월 기준 · 정부 발표 정책 반영</span>
+        <h1 class="home-hero-title">내가 받을 수 있는<br>복지 혜택, 1분 안에 확인하세요</h1>
+        <p class="home-hero-subtitle">기초연금 · 장애인연금 · 민생지원금부터 의료급여까지<br class="hidden sm:block">자격 조건과 신청 방법을 한곳에서 빠르게 확인하실 수 있어요.</p>
+        <form class="home-search" onsubmit="return false;">
+          <span class="home-search-icon">🔎</span>
+          <input id="home-search-input" type="text" placeholder="복지 혜택 이름이나 키워드를 검색해 보세요" autocomplete="off">
+          <button type="button" id="home-search-btn" class="home-search-btn">검색</button>
+        </form>
+        <div class="home-search-hint">
+          <strong>인기 검색어:</strong>
+          <button type="button" class="home-search-tag underline ml-1" data-q="기초연금">기초연금</button>
+          ·
+          <button type="button" class="home-search-tag underline" data-q="장애인">장애인연금</button>
+          ·
+          <button type="button" class="home-search-tag underline" data-q="민생지원금">민생지원금</button>
+          ·
+          <button type="button" class="home-search-tag underline" data-q="의료급여">의료급여</button>
+        </div>
+        <div id="home-search-result" class="home-search-result"></div>
+      </div>
+    </header>
+
+    <main class="home-main">
+      <!-- 빠른 자격 확인 (활성 서비스) -->
+      <section class="home-card-section">
+        <div class="home-section-title"><span class="home-section-title-bar"></span>지금 바로 확인 가능한 복지 혜택</div>
+        <p class="home-section-desc">소득·재산 정보만 입력하면 1분 안에 수급 가능성을 확인할 수 있어요</p>
+        <div class="home-quick-grid">
+          <button type="button" class="home-quick-card pension" id="home-go-pension">
+            <span class="home-quick-card-icon">💰</span>
+            <h3 class="home-quick-card-title">기초연금</h3>
+            <p class="home-quick-card-desc">만 65세 이상 소득 하위 70%<br><strong>최대 월 34만원</strong> · 단독 247만원 / 부부 395만원 이하</p>
+            <span class="home-quick-card-cta">자격 계산하기 →</span>
+          </button>
+          <button type="button" class="home-quick-card disability" id="home-go-disability">
+            <span class="home-quick-card-icon">♿</span>
+            <h3 class="home-quick-card-title">장애인연금</h3>
+            <p class="home-quick-card-desc">만 18세 이상 중증장애인<br><strong>최대 월 43만 9,700원</strong> · 1·2급 또는 3급+중복장애</p>
+            <span class="home-quick-card-cta">자격 계산하기 →</span>
+          </button>
+          <button type="button" class="home-quick-card fuel" id="home-go-fuel">
+            <span class="home-quick-card-icon">⛽</span>
+            <h3 class="home-quick-card-title">고유가 피해지원금</h3>
+            <p class="home-quick-card-desc">소득 하위 70% (3,577만 명)<br><strong>1인 10~60만원</strong> · 4월 27일부터 지급 시작</p>
+            <span class="home-quick-card-cta">정보 확인하기 →</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 분야별 복지 혜택 -->
+      <section class="home-card-section">
+        <div class="home-section-title"><span class="home-section-title-bar"></span>분야별 복지 혜택</div>
+        <p class="home-section-desc">관심 있는 복지 분야를 선택해보세요. 활성화된 항목은 자격 확인이 가능합니다.</p>
+        <div class="home-cat-grid">
+          <div class="home-cat-card active pension-tone" data-go="pension-container">
+            <span class="home-cat-icon">💰</span>
+            <div class="home-cat-name">기초연금</div>
+            <span class="home-cat-status">계산 가능</span>
+          </div>
+          <div class="home-cat-card active disability-tone" data-go="disability-pension">
+            <span class="home-cat-icon">♿</span>
+            <div class="home-cat-name">장애인연금</div>
+            <span class="home-cat-status">계산 가능</span>
+          </div>
+          <div class="home-cat-card active fuel-tone" data-go="fuel-support">
+            <span class="home-cat-icon">⛽</span>
+            <div class="home-cat-name">고유가 피해지원금</div>
+            <span class="home-cat-status">정보 제공</span>
+          </div>
+          <div class="home-cat-card">
+            <span class="home-cat-icon">📋</span>
+            <div class="home-cat-name">기초생활보장</div>
+            <span class="home-cat-status">준비 중</span>
+          </div>
+          <div class="home-cat-card">
+            <span class="home-cat-icon">🏥</span>
+            <div class="home-cat-name">의료급여</div>
+            <span class="home-cat-status">준비 중</span>
+          </div>
+          <div class="home-cat-card">
+            <span class="home-cat-icon">🏠</span>
+            <div class="home-cat-name">주거급여</div>
+            <span class="home-cat-status">준비 중</span>
+          </div>
+          <div class="home-cat-card">
+            <span class="home-cat-icon">🎓</span>
+            <div class="home-cat-name">교육급여</div>
+            <span class="home-cat-status">준비 중</span>
+          </div>
+          <div class="home-cat-card">
+            <span class="home-cat-icon">👶</span>
+            <div class="home-cat-name">아동·양육수당</div>
+            <span class="home-cat-status">준비 중</span>
+          </div>
+          <div class="home-cat-card">
+            <span class="home-cat-icon">💼</span>
+            <div class="home-cat-name">청년·구직지원</div>
+            <span class="home-cat-status">준비 중</span>
+          </div>
+          <div class="home-cat-card">
+            <span class="home-cat-icon">🆘</span>
+            <div class="home-cat-name">긴급복지지원</div>
+            <span class="home-cat-status">준비 중</span>
+          </div>
+          <div class="home-cat-card">
+            <span class="home-cat-icon">👨‍👩‍👧</span>
+            <div class="home-cat-name">한부모·다자녀</div>
+            <span class="home-cat-status">준비 중</span>
+          </div>
+          <div class="home-cat-card active game-tone" data-go="game-hub">
+            <span class="home-cat-icon">🎮</span>
+            <div class="home-cat-name">추억의 게임</div>
+            <span class="home-cat-status">바로 가기</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 복지 신청 절차 안내 -->
+      <section class="home-card-section">
+        <div class="home-section-title"><span class="home-section-title-bar"></span>복지 신청, 이렇게 하시면 돼요</div>
+        <p class="home-section-desc">처음 신청하시는 분들을 위한 3단계 안내</p>
+        <div class="home-info-row">
+          <div class="home-info-item">
+            <div class="home-info-icon">1</div>
+            <div class="home-info-text">
+              <strong>자격 확인하기</strong>
+              <span>본인의 소득·재산을 기준으로 받을 수 있는 혜택부터 확인하세요</span>
+            </div>
+          </div>
+          <div class="home-info-item">
+            <div class="home-info-icon">2</div>
+            <div class="home-info-text">
+              <strong>서류 준비하기</strong>
+              <span>신분증, 통장사본, 소득·재산 증빙서류를 미리 준비하세요</span>
+            </div>
+          </div>
+          <div class="home-info-item">
+            <div class="home-info-icon">3</div>
+            <div class="home-info-text">
+              <strong>신청·접수하기</strong>
+              <span>주민센터 방문 또는 복지로(bokjiro.go.kr)에서 온라인 신청</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 공식 사이트 / 문의처 -->
+      <section class="home-card-section">
+        <div class="home-section-title"><span class="home-section-title-bar"></span>공식 사이트 · 상담 문의처</div>
+        <p class="home-section-desc">정확한 정보는 공식 사이트나 상담 콜센터를 통해 확인해주세요</p>
+        <div class="home-link-row">
+          <a class="home-link-btn" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">🌐 복지로 (정부 종합 복지)</a>
+          <a class="home-link-btn" href="https://www.gov.kr" target="_blank" rel="noopener">🌐 정부24</a>
+          <a class="home-link-btn" href="https://www.mohw.go.kr" target="_blank" rel="noopener">🌐 보건복지부</a>
+          <a class="home-link-btn" href="tel:129">📞 보건복지상담센터 129</a>
+          <a class="home-link-btn" href="tel:1355">📞 국민연금공단 1355</a>
+          <a class="home-link-btn" href="tel:15331300">📞 민생지원금 1533-1300</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="home-footer">
+      <p><strong>본 사이트는 정부 공식 사이트가 아닌 정보 안내 목적의 홈페이지입니다.</strong></p>
+      <p class="mt-1">최종 자격 판정 및 지급 결정은 관할 기관의 심사를 통해 이루어집니다.</p>
+      <p class="mt-1 opacity-70">© 2026 복지 도우미 · 본 사이트의 정보는 2026년 4월 기준 정부 발표 내용을 반영하였습니다.</p>
+    </footer>
+  </section>
 
   <!-- ===== Pension Section ===== -->
   <section id="pension-container">
@@ -846,7 +1128,7 @@
             <span class="block text-sm font-black text-orange-600 mt-0.5">4월 27일~</span>
           </div>
         </div>
-        <button id="fuel-back-to-pension" class="mt-4 w-full py-3 rounded-xl font-bold text-white" style="background:linear-gradient(135deg,#ea580c,#f97316); box-shadow:0 2px 10px rgba(249,115,22,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 기초연금 계산기로 돌아가기</button>
+        <button id="fuel-back-to-pension" class="mt-4 w-full py-3 rounded-xl font-bold text-white" style="background:linear-gradient(135deg,#ea580c,#f97316); box-shadow:0 2px 10px rgba(249,115,22,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
       </div>
 
       <!-- 지급 금액 상세 -->
@@ -1088,7 +1370,7 @@
         </div>
       </section>
 
-      <button id="fuel-back-bottom" class="w-full py-3.5 rounded-xl font-bold text-white mb-8" style="background:linear-gradient(135deg,#ea580c,#f97316); box-shadow:0 2px 10px rgba(249,115,22,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 기초연금 계산기로 돌아가기</button>
+      <button id="fuel-back-bottom" class="w-full py-3.5 rounded-xl font-bold text-white mb-8" style="background:linear-gradient(135deg,#ea580c,#f97316); box-shadow:0 2px 10px rgba(249,115,22,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
     </div>
   </section>
 
@@ -1102,7 +1384,7 @@
 
     <main>
       <!-- 상단 복귀 -->
-      <button id="dp-back-to-pension" type="button" class="quick-btn ghost" style="margin-top:1rem;">← 기초연금 계산기로 돌아가기</button>
+      <button id="dp-back-to-pension" type="button" class="quick-btn ghost" style="margin-top:1rem;">← 홈으로 돌아가기</button>
 
       <!-- KPI Cards -->
       <section class="mb-6 mt-3 p-5 rounded-2xl bg-white border border-indigo-100 shadow-sm relative z-10">
@@ -1523,7 +1805,7 @@
         </div>
       </section>
 
-      <button id="dp-back-bottom" class="w-full py-3.5 rounded-xl font-bold text-white mt-6 mb-8" style="background:linear-gradient(135deg,#4f46e5,#7c3aed); box-shadow:0 2px 10px rgba(79,70,229,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 기초연금 계산기로 돌아가기</button>
+      <button id="dp-back-bottom" class="w-full py-3.5 rounded-xl font-bold text-white mt-6 mb-8" style="background:linear-gradient(135deg,#4f46e5,#7c3aed); box-shadow:0 2px 10px rgba(79,70,229,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
     </main>
   </section>
 
@@ -1852,7 +2134,11 @@
       const tabPension = document.getElementById('tab-pension');
       const tabGames = document.getElementById('tab-games');
 
-      if (sectionName === 'pension-container' || sectionName === 'fuel-support' || sectionName === 'disability-pension') {
+      if (sectionName === 'home') {
+        // 홈페이지: 상단 nav 숨김, 플로팅 게임 버튼만 표시
+        topNav.classList.add('hidden');
+        floatingBtn.classList.remove('hidden');
+      } else if (sectionName === 'pension-container' || sectionName === 'fuel-support' || sectionName === 'disability-pension') {
         topNav.classList.add('hidden');
         floatingBtn.classList.add('hidden');
         if (sectionName === 'pension-container') floatingBtn.classList.remove('hidden');
@@ -4303,26 +4589,107 @@
        ================================================ */
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('floating-game-btn').addEventListener('click', () => showSection('game-hub'));
-      document.getElementById('tab-pension').addEventListener('click', () => showSection('pension-container'));
+      document.getElementById('tab-pension').addEventListener('click', () => { showSection('home'); window.scrollTo(0,0); });
       document.getElementById('tab-games').addEventListener('click', () => showSection('game-hub'));
+      document.getElementById('top-nav-home')?.addEventListener('click', () => { showSection('home'); window.scrollTo(0,0); });
       document.getElementById('jump-to-calc')?.addEventListener('click', () => pensionApp.scrollToCalculator());
       document.getElementById('share-page-btn')?.addEventListener('click', () => pensionApp.sharePage());
       document.getElementById('goto-fuel')?.addEventListener('click', () => { showSection('fuel-support'); window.scrollTo(0,0); });
-      document.getElementById('fuel-back-to-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
-      document.getElementById('fuel-back-bottom')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
+      document.getElementById('fuel-back-to-pension')?.addEventListener('click', () => { showSection('home'); window.scrollTo(0,0); });
+      document.getElementById('fuel-back-bottom')?.addEventListener('click', () => { showSection('home'); window.scrollTo(0,0); });
       // 고유가 페이지 → 다른 복지 혜택 카드
       document.getElementById('fuel-goto-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
       document.getElementById('fuel-goto-disability')?.addEventListener('click', () => { showSection('disability-pension'); window.scrollTo(0,0); });
 
       // 장애인연금 네비게이션
       document.getElementById('goto-disability')?.addEventListener('click', () => { showSection('disability-pension'); window.scrollTo(0,0); });
-      document.getElementById('dp-back-to-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
-      document.getElementById('dp-back-bottom')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
+      document.getElementById('dp-back-to-pension')?.addEventListener('click', () => { showSection('home'); window.scrollTo(0,0); });
+      document.getElementById('dp-back-bottom')?.addEventListener('click', () => { showSection('home'); window.scrollTo(0,0); });
       document.getElementById('dp-jump-to-calc')?.addEventListener('click', () => disabilityApp.scrollToCalculator());
       document.getElementById('dp-share-page-btn')?.addEventListener('click', () => disabilityApp.sharePage());
       // 장애인연금 페이지 → 다른 복지 혜택 카드
       document.getElementById('dp-goto-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
       document.getElementById('dp-goto-fuel')?.addEventListener('click', () => { showSection('fuel-support'); window.scrollTo(0,0); });
+
+      // ===== 홈페이지 네비게이션 =====
+      document.getElementById('home-nav-game')?.addEventListener('click', () => showSection('game-hub'));
+      document.getElementById('home-go-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
+      document.getElementById('home-go-disability')?.addEventListener('click', () => { showSection('disability-pension'); window.scrollTo(0,0); });
+      document.getElementById('home-go-fuel')?.addEventListener('click', () => { showSection('fuel-support'); window.scrollTo(0,0); });
+      // 분야별 카테고리 카드 (active 항목만)
+      document.querySelectorAll('#home .home-cat-card.active').forEach(card => {
+        card.addEventListener('click', () => {
+          const target = card.dataset.go;
+          if (target) { showSection(target); window.scrollTo(0,0); }
+        });
+      });
+
+      // ===== 홈페이지 검색 기능 =====
+      const homeSearchData = [
+        { keywords: ['기초연금', '연금', '노령연금', '노인연금', '65세'], target: 'pension-container', label: '기초연금', desc: '만 65세 이상 노령층 대상' },
+        { keywords: ['장애인연금', '장애', '장애인', '중증장애', '장애수당'], target: 'disability-pension', label: '장애인연금', desc: '만 18세 이상 중증장애인 대상' },
+        { keywords: ['고유가', '피해지원금', '민생지원금', '에너지', '유류', '3차'], target: 'fuel-support', label: '고유가 피해지원금', desc: '소득 하위 70% 대상 1인 10~60만원' },
+        { keywords: ['게임', '오목', '테트리스', '스도쿠', '벽돌깨기'], target: 'game-hub', label: '추억의 게임', desc: '기분 전환용 클래식 게임' }
+      ];
+      const upcomingMap = {
+        '의료급여': '의료급여 (준비 중)', '주거급여': '주거급여 (준비 중)',
+        '기초생활보장': '기초생활보장 (준비 중)', '기초생활': '기초생활보장 (준비 중)',
+        '교육급여': '교육급여 (준비 중)', '아동수당': '아동·양육수당 (준비 중)',
+        '양육수당': '아동·양육수당 (준비 중)', '청년': '청년·구직지원 (준비 중)',
+        '구직': '청년·구직지원 (준비 중)', '긴급복지': '긴급복지지원 (준비 중)',
+        '한부모': '한부모·다자녀 (준비 중)', '다자녀': '한부모·다자녀 (준비 중)'
+      };
+
+      function homeSearch(q) {
+        const resultDiv = document.getElementById('home-search-result');
+        const query = (q || '').trim();
+        if (!query) { resultDiv.classList.remove('visible'); resultDiv.innerHTML = ''; return; }
+
+        const matches = homeSearchData.filter(item =>
+          item.keywords.some(k => k.includes(query) || query.includes(k))
+        );
+
+        let upcomingMatch = null;
+        for (const [k, v] of Object.entries(upcomingMap)) {
+          if (k.includes(query) || query.includes(k)) { upcomingMatch = v; break; }
+        }
+
+        if (matches.length > 0) {
+          let html = '<div style="font-weight:700; margin-bottom:0.4rem;">🔎 검색 결과 (' + matches.length + '건)</div>';
+          html += '<ul style="list-style:none; padding:0; margin:0;">';
+          matches.forEach(m => {
+            html += `<li style="padding:0.5rem 0; border-bottom:1px solid #e2e8f0;">
+              <a data-target="${m.target}"><strong>${m.label}</strong></a>
+              <div style="font-size:0.8rem; color:#64748b; margin-top:0.15rem;">${m.desc}</div>
+            </li>`;
+          });
+          html += '</ul>';
+          resultDiv.innerHTML = html;
+          resultDiv.classList.add('visible');
+          resultDiv.querySelectorAll('a[data-target]').forEach(a => {
+            a.addEventListener('click', () => { showSection(a.dataset.target); window.scrollTo(0,0); });
+          });
+        } else if (upcomingMatch) {
+          resultDiv.innerHTML = `<div class="no-result"><strong>${upcomingMatch}</strong><br>해당 복지 혜택은 곧 자격 확인 기능이 추가될 예정입니다.</div>`;
+          resultDiv.classList.add('visible');
+        } else {
+          resultDiv.innerHTML = '<div class="no-result">"' + query + '"에 대한 결과를 찾을 수 없습니다. 인기 검색어를 클릭해보세요.</div>';
+          resultDiv.classList.add('visible');
+        }
+      }
+      document.getElementById('home-search-btn')?.addEventListener('click', () => {
+        homeSearch(document.getElementById('home-search-input').value);
+      });
+      document.getElementById('home-search-input')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') homeSearch(e.target.value);
+      });
+      document.querySelectorAll('.home-search-tag').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const q = btn.dataset.q;
+          document.getElementById('home-search-input').value = q;
+          homeSearch(q);
+        });
+      });
 
       document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', () => showSection('game-hub')));
       document.querySelectorAll('[data-game]').forEach(card => {
@@ -4345,7 +4712,7 @@
       minesweeperApp.init();
       memoryApp.init();
       sudokuApp.init();
-      showSection('pension-container');
+      showSection('home');
     });
   </script>
 </body>
