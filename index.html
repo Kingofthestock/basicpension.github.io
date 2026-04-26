@@ -379,36 +379,81 @@
     .home-footer { background: #1e293b; color: #cbd5e1; padding: 2rem 1rem; text-align: center; font-size: 0.85rem; line-height: 1.7; margin-top: 1rem; }
     .home-footer strong { color: #fff; }
 
-    /* ===== Welfare Finder (홈페이지 통합 모의계산기) ===== */
+    /* ===== Welfare Finder (홈페이지 통합 모의계산기 — 위저드 형식) ===== */
     .wff-card { background: #fff; border-radius: 1rem; padding: 1.75rem 1.5rem; box-shadow: 0 4px 16px rgba(15,23,42,.06); margin-bottom: 1.25rem; border: 1px solid #e2e8f0; position: relative; overflow: hidden; }
     .wff-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg,#1e40af,#3b82f6,#06b6d4); }
     .wff-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
     .wff-title-icon { font-size: 1.5rem; }
     .wff-desc { font-size: 0.92rem; color: #64748b; margin-bottom: 1.25rem; line-height: 1.55; }
-    .wff-row { margin-bottom: 1.1rem; }
-    .wff-row:last-child { margin-bottom: 0; }
-    .wff-label { display: block; font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
-    .wff-label .wff-hint { color: #94a3b8; font-weight: 500; font-size: 0.82rem; margin-left: 0.4rem; }
-    .wff-select { width: 100%; padding: 0.75rem 0.9rem; border: 1.5px solid #e2e8f0; border-radius: 0.6rem; font-size: 0.95rem; color: #0f172a; background: #fff; transition: all .2s; font-family: inherit; cursor: pointer; }
-    .wff-select:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30,64,175,.12); }
-    .wff-input { width: 100%; padding: 0.75rem 0.9rem; border: 1.5px solid #e2e8f0; border-radius: 0.6rem; font-size: 0.95rem; color: #0f172a; background: #fff; transition: all .2s; font-family: inherit; }
-    .wff-input:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30,64,175,.12); }
-    .wff-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-    .wff-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .wff-pill { padding: 0.6rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 999px; font-size: 0.9rem; font-weight: 600; color: #475569; background: #fff; cursor: pointer; transition: all .15s; font-family: inherit; }
-    .wff-pill:hover { border-color: #93c5fd; background: #eff6ff; }
-    .wff-pill.selected { border-color: #1e40af; background: #1e40af; color: #fff; }
-    .wff-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-    .wff-check { padding: 0.7rem 0.9rem; border: 1.5px solid #e2e8f0; border-radius: 0.5rem; font-size: 0.88rem; font-weight: 600; color: #475569; background: #fff; cursor: pointer; transition: all .15s; font-family: inherit; text-align: left; display: flex; align-items: center; gap: 0.5rem; }
-    .wff-check:hover { border-color: #93c5fd; }
+
+    /* Intro 화면 */
+    .wff-intro { text-align: center; padding: 1.5rem 0 1rem; }
+    .wff-intro-emoji { font-size: 3.2rem; margin-bottom: 0.75rem; line-height: 1; }
+    .wff-intro-text { font-size: 1.05rem; color: #0f172a; line-height: 1.6; margin-bottom: 1.4rem; font-weight: 600; }
+    .wff-intro-list { list-style: none; padding: 0; margin: 0 auto 1.6rem; display: flex; flex-direction: column; gap: 0.45rem; max-width: 320px; }
+    .wff-intro-list li { padding: 0.65rem 1rem; background: #f1f5f9; border-radius: 0.6rem; font-size: 0.9rem; color: #334155; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+    .wff-intro-list li .ic { font-size: 1.1rem; }
+
+    /* 진행률 */
+    .wff-progress { margin-bottom: 1.5rem; }
+    .wff-progress-text { font-size: 0.85rem; color: #64748b; font-weight: 600; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .wff-progress-text .current { color: #1e40af; font-weight: 800; font-size: 0.95rem; }
+    .wff-progress-text .step-name { color: #0f172a; font-weight: 700; }
+    .wff-progress-bar { height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+    .wff-progress-fill { height: 100%; background: linear-gradient(90deg,#1e40af,#3b82f6,#06b6d4); border-radius: 999px; transition: width .35s cubic-bezier(.4,0,.2,1); }
+
+    /* 단계별 컨테이너 */
+    .wff-step { display: none; min-height: 240px; }
+    .wff-step.active { display: block; animation: wffFade .25s ease; }
+    @keyframes wffFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .wff-step-num { display: inline-block; padding: 0.25rem 0.7rem; background: #eff6ff; color: #1e40af; border-radius: 999px; font-size: 0.78rem; font-weight: 800; margin-bottom: 0.6rem; }
+    .wff-step-question { font-size: 1.3rem; font-weight: 800; color: #0f172a; line-height: 1.45; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+    .wff-step-help { font-size: 0.88rem; color: #64748b; margin-bottom: 1.25rem; line-height: 1.55; }
+    .wff-step-help strong { color: #475569; }
+
+    /* 입력 폼 (위저드용) */
+    .wff-select { width: 100%; padding: 0.95rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; font-size: 1rem; color: #0f172a; background: #fff; transition: all .2s; font-family: inherit; cursor: pointer; font-weight: 600; }
+    .wff-select:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 4px rgba(30,64,175,.12); }
+    .wff-input { width: 100%; padding: 1rem 1.1rem; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; font-size: 1.15rem; color: #0f172a; background: #fff; transition: all .2s; font-family: inherit; font-weight: 700; text-align: center; }
+    .wff-input:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 4px rgba(30,64,175,.12); }
+    .wff-sub-label { font-size: 0.85rem; color: #64748b; font-weight: 600; margin: 1.1rem 0 0.5rem; }
+
+    /* 옵션 버튼 (큼지막한 버전) */
+    .wff-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .wff-pill { padding: 0.95rem 0.85rem; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.95rem; font-weight: 700; color: #334155; background: #fff; cursor: pointer; transition: all .15s; font-family: inherit; text-align: center; line-height: 1.35; }
+    .wff-pill:hover { border-color: #93c5fd; background: #f0f7ff; }
+    .wff-pill.selected { border-color: #1e40af; background: linear-gradient(135deg,#1e40af,#2563eb); color: #fff; box-shadow: 0 4px 10px rgba(30,64,175,.25); }
+    .wff-checks { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+    .wff-check { padding: 0.85rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; font-size: 0.95rem; font-weight: 600; color: #334155; background: #fff; cursor: pointer; transition: all .15s; font-family: inherit; text-align: left; display: flex; align-items: center; gap: 0.65rem; }
+    .wff-check:hover { border-color: #93c5fd; background: #fafbff; }
     .wff-check.selected { border-color: #1e40af; background: #eff6ff; color: #1e3a8a; }
-    .wff-check::before { content: '☐'; font-size: 1.1rem; color: #94a3b8; }
+    .wff-check::before { content: '☐'; font-size: 1.25rem; color: #94a3b8; flex-shrink: 0; }
     .wff-check.selected::before { content: '✓'; color: #1e40af; font-weight: 800; }
-    .wff-submit { width: 100%; padding: 1rem; background: linear-gradient(135deg,#1e40af,#2563eb); color: #fff; border: none; border-radius: 0.75rem; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: all .2s; font-family: inherit; box-shadow: 0 4px 12px rgba(30,64,175,.3); margin-top: 0.5rem; }
+    .wff-skip-tip { display: inline-block; margin-top: 0.85rem; padding: 0.4rem 0.85rem; background: #f1f5f9; color: #64748b; font-size: 0.82rem; border-radius: 999px; font-weight: 600; }
+
+    .wff-submit { width: 100%; padding: 1rem; background: linear-gradient(135deg,#1e40af,#2563eb); color: #fff; border: none; border-radius: 0.75rem; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: all .2s; font-family: inherit; box-shadow: 0 4px 12px rgba(30,64,175,.3); }
     .wff-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(30,64,175,.4); }
     .wff-reset { background: transparent; color: #64748b; border: none; font-size: 0.85rem; padding: 0.5rem; cursor: pointer; text-decoration: underline; font-family: inherit; }
 
-    .wff-result { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px dashed #e2e8f0; }
+    /* 네비게이션 (이전 / 다음) */
+    .wff-nav { display: flex; gap: 0.6rem; margin-top: 1.5rem; }
+    .wff-nav button { padding: 0.95rem 1rem; border: 1.5px solid; border-radius: 0.75rem; font-size: 1rem; font-weight: 800; cursor: pointer; transition: all .15s; font-family: inherit; }
+    .wff-nav .prev { flex: 0 0 38%; background: #fff; border-color: #e2e8f0; color: #64748b; }
+    .wff-nav .prev:hover { border-color: #cbd5e1; background: #f8fafc; color: #334155; }
+    .wff-nav .prev.hidden { visibility: hidden; }
+    .wff-nav .next { flex: 1; background: linear-gradient(135deg,#1e40af,#2563eb); border-color: transparent; color: #fff; box-shadow: 0 4px 12px rgba(30,64,175,.3); }
+    .wff-nav .next:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(30,64,175,.4); }
+    .wff-nav .next.finish { background: linear-gradient(135deg,#059669,#10b981); box-shadow: 0 4px 12px rgba(5,150,105,.3); }
+    .wff-nav .next.finish:hover { box-shadow: 0 6px 18px rgba(5,150,105,.4); }
+
+    .wff-error { color: #b91c1c; font-size: 0.88rem; margin-top: 0.85rem; padding: 0.65rem 0.9rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 0.6rem; display: none; font-weight: 600; }
+    .wff-error.show { display: block; animation: wffShake .35s; }
+    @keyframes wffShake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-4px);} 75%{transform:translateX(4px);} }
+
+    .wff-summary-mini { margin-top: 1rem; padding: 0.85rem 1rem; background: #f8fafc; border-radius: 0.65rem; font-size: 0.82rem; color: #64748b; line-height: 1.55; }
+    .wff-summary-mini strong { color: #0f172a; }
+
+    .wff-result { padding-top: 0.5rem; }
     .wff-result-header { text-align: center; margin-bottom: 1.25rem; }
     .wff-result-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
     .wff-result-title { font-size: 1.3rem; font-weight: 900; color: #0f172a; margin-bottom: 0.25rem; }
@@ -440,9 +485,12 @@
     @media (max-width: 768px) {
       .wff-card { padding: 1.4rem 1.1rem; }
       .wff-title { font-size: 1.1rem; }
-      .wff-row-grid { grid-template-columns: 1fr; }
-      .wff-checks { grid-template-columns: 1fr; }
+      .wff-step-question { font-size: 1.15rem; }
+      .wff-pills { grid-template-columns: 1fr; }
+      .wff-step { min-height: 200px; }
+      .wff-nav button { font-size: 0.95rem; padding: 0.85rem 0.7rem; }
       .wff-submit { font-size: 1rem; padding: 0.9rem; }
+      .wff-intro-emoji { font-size: 2.8rem; }
     }
 
     /* ===== Welfare Info Page (공통) ===== */
@@ -692,85 +740,128 @@
     </header>
 
     <main class="home-main">
-      <!-- 통합 복지 매칭 모의계산기 -->
+      <!-- 통합 복지 매칭 모의계산기 (위저드 형식) -->
       <section class="wff-card">
         <h2 class="wff-title"><span class="wff-title-icon">🎯</span>나에게 맞는 복지 혜택 찾기</h2>
-        <p class="wff-desc">기본 정보를 입력하시면 받을 수 있는 정부·지자체 복지 혜택을 한눈에 확인할 수 있어요.<br><strong class="text-slate-700">소득·재산 정보는 저장되지 않으며, 결과는 참고용입니다.</strong></p>
 
-        <div class="wff-row">
-          <label class="wff-label">📍 거주 지역</label>
-          <div class="wff-row-grid">
-            <select id="wff-sido" class="wff-select">
-              <option value="">시·도 선택</option>
-              <option value="서울">서울특별시</option>
-              <option value="부산">부산광역시</option>
-              <option value="대구">대구광역시</option>
-              <option value="인천">인천광역시</option>
-              <option value="광주">광주광역시</option>
-              <option value="대전">대전광역시</option>
-              <option value="울산">울산광역시</option>
-              <option value="세종">세종특별자치시</option>
-              <option value="경기">경기도</option>
-              <option value="강원">강원특별자치도</option>
-              <option value="충북">충청북도</option>
-              <option value="충남">충청남도</option>
-              <option value="전북">전북특별자치도</option>
-              <option value="전남">전라남도</option>
-              <option value="경북">경상북도</option>
-              <option value="경남">경상남도</option>
-              <option value="제주">제주특별자치도</option>
-            </select>
-            <select id="wff-area" class="wff-select">
-              <option value="">지역 유형 (선택)</option>
-              <option value="metro">대도시 (특별·광역시)</option>
-              <option value="city">중소도시 (시 단위)</option>
-              <option value="rural">농어촌 (군 단위)</option>
-            </select>
+        <!-- 진행률 (시작 후 표시) -->
+        <div class="wff-progress" id="wff-progress" style="display:none;">
+          <div class="wff-progress-text">
+            <span><span class="current" id="wff-step-current">1</span> / <span id="wff-step-total">8</span> 단계</span>
+            <span class="step-name" id="wff-step-name">거주 지역</span>
           </div>
+          <div class="wff-progress-bar"><div class="wff-progress-fill" id="wff-progress-fill" style="width:12.5%;"></div></div>
         </div>
 
-        <div class="wff-row">
-          <label class="wff-label">🎂 출생 연도 <span class="wff-hint">서기 4자리</span></label>
-          <input type="number" id="wff-birth" class="wff-input" placeholder="예: 1958" min="1900" max="2026" inputmode="numeric">
+        <!-- Intro 화면 -->
+        <div class="wff-intro" id="wff-intro">
+          <div class="wff-intro-emoji">🎯</div>
+          <p class="wff-intro-text">간단한 질문 8개에 답해보세요.<br>받을 수 있는 정부·지자체 복지 혜택을<br>한눈에 알려드릴게요.</p>
+          <ul class="wff-intro-list">
+            <li><span class="ic">⏱️</span> 약 1~2분 소요</li>
+            <li><span class="ic">🔒</span> 개인정보는 저장되지 않습니다</li>
+            <li><span class="ic">🎯</span> 정부·지자체 혜택 동시 매칭</li>
+          </ul>
+          <button type="button" id="wff-start-btn" class="wff-submit">시작하기 →</button>
         </div>
 
-        <div class="wff-row">
-          <label class="wff-label">👨‍👩‍👧 가구 형태</label>
+        <!-- Step 1: 거주 지역 -->
+        <div class="wff-step" data-step="1">
+          <span class="wff-step-num">STEP 1</span>
+          <div class="wff-step-question">📍 현재 어느 지역에 거주하시나요?</div>
+          <div class="wff-step-help">지자체별 추가 혜택(예: 강원 육아기본수당, 서울 청년수당)을 안내해드릴 때 사용합니다.</div>
+          <select id="wff-sido" class="wff-select">
+            <option value="">시·도를 선택해주세요</option>
+            <option value="서울">서울특별시</option>
+            <option value="부산">부산광역시</option>
+            <option value="대구">대구광역시</option>
+            <option value="인천">인천광역시</option>
+            <option value="광주">광주광역시</option>
+            <option value="대전">대전광역시</option>
+            <option value="울산">울산광역시</option>
+            <option value="세종">세종특별자치시</option>
+            <option value="경기">경기도</option>
+            <option value="강원">강원특별자치도</option>
+            <option value="충북">충청북도</option>
+            <option value="충남">충청남도</option>
+            <option value="전북">전북특별자치도</option>
+            <option value="전남">전라남도</option>
+            <option value="경북">경상북도</option>
+            <option value="경남">경상남도</option>
+            <option value="제주">제주특별자치도</option>
+          </select>
+          <div class="wff-sub-label">지역 유형 <span style="color:#94a3b8; font-weight:500;">(선택 — 농어촌 출산장려금 안내용)</span></div>
+          <div class="wff-pills">
+            <button type="button" class="wff-pill" data-wff-field="area" data-value="metro">대도시<br><span style="font-size:.8rem; opacity:.85;">특별·광역시</span></button>
+            <button type="button" class="wff-pill" data-wff-field="area" data-value="city">중소도시<br><span style="font-size:.8rem; opacity:.85;">시 단위</span></button>
+            <button type="button" class="wff-pill" data-wff-field="area" data-value="rural">농어촌<br><span style="font-size:.8rem; opacity:.85;">군 단위</span></button>
+            <button type="button" class="wff-pill" data-wff-field="area" data-value="skip">잘 모름</button>
+          </div>
+          <div class="wff-error" id="wff-error-1">시·도를 선택해주세요.</div>
+        </div>
+
+        <!-- Step 2: 출생 연도 -->
+        <div class="wff-step" data-step="2">
+          <span class="wff-step-num">STEP 2</span>
+          <div class="wff-step-question">🎂 출생 연도를 알려주세요</div>
+          <div class="wff-step-help">서기 <strong>4자리 숫자</strong>로 입력해주세요. (예: 1958, 1990, 2020)</div>
+          <input type="number" id="wff-birth" class="wff-input" placeholder="예: 1958" min="1900" max="2026" inputmode="numeric" autocomplete="off">
+          <div class="wff-error" id="wff-error-2">출생 연도를 1900~2026 사이의 4자리 숫자로 입력해주세요.</div>
+        </div>
+
+        <!-- Step 3: 가구 형태 -->
+        <div class="wff-step" data-step="3">
+          <span class="wff-step-num">STEP 3</span>
+          <div class="wff-step-question">👨‍👩‍👧 어떤 가구에 속하시나요?</div>
+          <div class="wff-step-help">현재 함께 사는 가족 구성에 가장 가까운 것을 선택해주세요.</div>
           <div class="wff-pills">
             <button type="button" class="wff-pill" data-wff-field="household" data-value="single">1인 가구</button>
             <button type="button" class="wff-pill" data-wff-field="household" data-value="couple">부부 (2인)</button>
             <button type="button" class="wff-pill" data-wff-field="household" data-value="family">자녀 있는 가구</button>
             <button type="button" class="wff-pill" data-wff-field="household" data-value="single-parent">한부모 가구</button>
             <button type="button" class="wff-pill" data-wff-field="household" data-value="grandparent">조손 가구</button>
+            <button type="button" class="wff-pill" data-wff-field="household" data-value="other">기타</button>
           </div>
+          <div class="wff-error" id="wff-error-3">가구 형태를 선택해주세요.</div>
         </div>
 
-        <div class="wff-row" id="wff-children-row" style="display:none;">
-          <label class="wff-label">👶 자녀 정보 <span class="wff-hint">해당하는 항목 모두 선택</span></label>
+        <!-- Step 4: 자녀 정보 (조건부) -->
+        <div class="wff-step" data-step="4">
+          <span class="wff-step-num">STEP 4</span>
+          <div class="wff-step-question">👶 자녀에 대해 알려주세요</div>
+          <div class="wff-step-help"><strong>해당하는 항목을 모두 선택</strong>해주세요. 부모급여·아동수당·다자녀 혜택 등을 매칭합니다.</div>
           <div class="wff-checks">
-            <button type="button" class="wff-check" data-wff-toggle="child0">만 0세 (0~11개월) 영아</button>
-            <button type="button" class="wff-check" data-wff-toggle="child1">만 1세 (12~23개월)</button>
-            <button type="button" class="wff-check" data-wff-toggle="child2to7">만 2~7세 (미취학)</button>
-            <button type="button" class="wff-check" data-wff-toggle="childElem">초등학생 (8~13세)</button>
-            <button type="button" class="wff-check" data-wff-toggle="childMid">중학생 (14~16세)</button>
-            <button type="button" class="wff-check" data-wff-toggle="childHigh">고등학생 (17~19세)</button>
+            <button type="button" class="wff-check" data-wff-toggle="child0">만 0세 자녀 (0~11개월)</button>
+            <button type="button" class="wff-check" data-wff-toggle="child1">만 1세 자녀 (12~23개월)</button>
+            <button type="button" class="wff-check" data-wff-toggle="child2to7">만 2~7세 미취학 자녀</button>
+            <button type="button" class="wff-check" data-wff-toggle="childElem">초등학생 자녀 (8~13세)</button>
+            <button type="button" class="wff-check" data-wff-toggle="childMid">중학생 자녀 (14~16세)</button>
+            <button type="button" class="wff-check" data-wff-toggle="childHigh">고등학생 자녀 (17~19세)</button>
             <button type="button" class="wff-check" data-wff-toggle="multiChild">자녀 2명 이상 (다자녀)</button>
             <button type="button" class="wff-check" data-wff-toggle="newborn">최근 12개월 내 출산</button>
           </div>
+          <div class="wff-skip-tip">💡 해당 없으면 그냥 다음으로 넘어가세요</div>
         </div>
 
-        <div class="wff-row">
-          <label class="wff-label">♿ 장애·임신 등 특수 상황 <span class="wff-hint">해당 시 선택</span></label>
+        <!-- Step 5: 특수 상황 -->
+        <div class="wff-step" data-step="5">
+          <span class="wff-step-num">STEP 5</span>
+          <div class="wff-step-question">♿ 특수한 상황이 있으신가요?</div>
+          <div class="wff-step-help"><strong>해당하는 항목을 모두 선택</strong>해주세요. 장애인연금·임신출산 진료비·긴급복지 등을 매칭합니다.</div>
           <div class="wff-checks">
             <button type="button" class="wff-check" data-wff-toggle="disability">중증장애 (1·2급 또는 3급+중복)</button>
             <button type="button" class="wff-check" data-wff-toggle="mildDisability">경증장애 (4~6급)</button>
-            <button type="button" class="wff-check" data-wff-toggle="pregnant">임신 중</button>
-            <button type="button" class="wff-check" data-wff-toggle="emergency">최근 위기상황 (실직·질병 등)</button>
+            <button type="button" class="wff-check" data-wff-toggle="pregnant">현재 임신 중</button>
+            <button type="button" class="wff-check" data-wff-toggle="emergency">최근 위기상황 (실직·질병·사고 등)</button>
           </div>
+          <div class="wff-skip-tip">💡 해당 없으면 그냥 다음으로 넘어가세요</div>
         </div>
 
-        <div class="wff-row">
-          <label class="wff-label">💰 소득·재산 수준 <span class="wff-hint">대략적인 기준</span></label>
+        <!-- Step 6: 소득·재산 -->
+        <div class="wff-step" data-step="6">
+          <span class="wff-step-num">STEP 6</span>
+          <div class="wff-step-question">💰 가구 소득·재산 수준은 어느 정도인가요?</div>
+          <div class="wff-step-help">대략적인 수준을 선택하세요. 정확하지 않아도 괜찮아요. <strong>잘 모르겠어요</strong>를 선택해도 됩니다.</div>
           <div class="wff-pills">
             <button type="button" class="wff-pill" data-wff-field="income" data-value="basic">기초생활수급자</button>
             <button type="button" class="wff-pill" data-wff-field="income" data-value="nearpoor">차상위계층</button>
@@ -779,30 +870,49 @@
             <button type="button" class="wff-pill" data-wff-field="income" data-value="high">중위소득 70% 초과</button>
             <button type="button" class="wff-pill" data-wff-field="income" data-value="unknown">잘 모르겠어요</button>
           </div>
+          <div class="wff-error" id="wff-error-6">소득 수준을 선택해주세요. (정확한 금액 몰라도 됨)</div>
         </div>
 
-        <div class="wff-row">
-          <label class="wff-label">🏠 거주 형태</label>
+        <!-- Step 7: 거주 형태 -->
+        <div class="wff-step" data-step="7">
+          <span class="wff-step-num">STEP 7</span>
+          <div class="wff-step-question">🏠 현재 거주 형태는 어떻게 되시나요?</div>
+          <div class="wff-step-help">주거급여·청년월세 지원 등을 안내해드리는 데 사용합니다.</div>
           <div class="wff-pills">
             <button type="button" class="wff-pill" data-wff-field="housing" data-value="own">자가</button>
             <button type="button" class="wff-pill" data-wff-field="housing" data-value="jeonse">전세</button>
-            <button type="button" class="wff-pill" data-wff-field="housing" data-value="monthly">월세 (보증부 월세 포함)</button>
-            <button type="button" class="wff-pill" data-wff-field="housing" data-value="other">기타 (사용대차·기숙 등)</button>
+            <button type="button" class="wff-pill" data-wff-field="housing" data-value="monthly">월세<br><span style="font-size:.8rem; opacity:.85;">(보증부 월세 포함)</span></button>
+            <button type="button" class="wff-pill" data-wff-field="housing" data-value="other">기타<br><span style="font-size:.8rem; opacity:.85;">사용대차·기숙</span></button>
           </div>
+          <div class="wff-error" id="wff-error-7">거주 형태를 선택해주세요.</div>
         </div>
 
-        <div class="wff-row">
-          <label class="wff-label">🔍 구직·자립 상태 <span class="wff-hint">해당 시 선택</span></label>
+        <!-- Step 8: 청년 (만 19~34세만 표시) -->
+        <div class="wff-step" data-step="8">
+          <span class="wff-step-num">STEP 8</span>
+          <div class="wff-step-question">🔍 구직·자립 상태는 어떠신가요?</div>
+          <div class="wff-step-help"><strong>청년(만 19~34세)</strong>을 위한 추가 혜택 안내를 위해 여쭤봅니다. 해당 항목을 모두 선택해주세요.</div>
           <div class="wff-checks">
             <button type="button" class="wff-check" data-wff-toggle="jobSeeking">현재 구직 중 (취업 준비)</button>
             <button type="button" class="wff-check" data-wff-toggle="youthMoving">독립 거주 청년 (부모와 별거)</button>
           </div>
+          <div class="wff-skip-tip">💡 해당 없으면 그냥 결과 확인하기를 누르세요</div>
         </div>
 
-        <button type="button" id="wff-submit-btn" class="wff-submit">받을 수 있는 복지 혜택 보기 →</button>
-        <div class="text-center mt-2"><button type="button" id="wff-reset-btn" class="wff-reset">처음부터 다시 입력</button></div>
+        <!-- 결과 화면 -->
+        <div class="wff-step" data-step="result" id="wff-result-step">
+          <div id="wff-result" class="wff-result"></div>
+        </div>
 
-        <div id="wff-result" class="wff-result" style="display:none;"></div>
+        <!-- 네비게이션 (이전 / 다음) -->
+        <div class="wff-nav" id="wff-nav" style="display:none;">
+          <button type="button" id="wff-prev-btn" class="prev">← 이전</button>
+          <button type="button" id="wff-next-btn" class="next">다음 →</button>
+        </div>
+
+        <div class="text-center mt-3" id="wff-restart-wrap" style="display:none;">
+          <button type="button" id="wff-reset-btn" class="wff-reset">처음부터 다시 시작</button>
+        </div>
       </section>
 
       <!-- 빠른 자격 확인 (활성 서비스) -->
@@ -5894,11 +6004,27 @@
         });
       });
 
-      // ===== 복지 매칭 모의계산기 (Welfare Finder) =====
+      // ===== 복지 매칭 모의계산기 (Welfare Finder — 위저드 형식) =====
       const wff = {
-        state: { household: '', income: '', housing: '', toggles: {} },
+        state: { step: 1, sido: '', area: '', birthYear: 0, household: '', income: '', housing: '', toggles: {} },
+        totalSteps: 8,
+        stepNames: { 1: '거주 지역', 2: '출생 연도', 3: '가구 형태', 4: '자녀 정보', 5: '특수 상황', 6: '소득·재산', 7: '거주 형태', 8: '청년·구직' },
 
         init() {
+          // 시작 버튼
+          const startBtn = document.getElementById('wff-start-btn');
+          if (startBtn) startBtn.addEventListener('click', () => this.start());
+
+          // 이전 / 다음
+          const nextBtn = document.getElementById('wff-next-btn');
+          const prevBtn = document.getElementById('wff-prev-btn');
+          if (nextBtn) nextBtn.addEventListener('click', () => this.next());
+          if (prevBtn) prevBtn.addEventListener('click', () => this.prev());
+
+          // 다시 시작
+          const resetBtn = document.getElementById('wff-reset-btn');
+          if (resetBtn) resetBtn.addEventListener('click', () => this.restart());
+
           // pill 버튼 (단일 선택)
           document.querySelectorAll('.wff-pill[data-wff-field]').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -5907,16 +6033,10 @@
               document.querySelectorAll(`.wff-pill[data-wff-field="${field}"]`).forEach(b => b.classList.remove('selected'));
               btn.classList.add('selected');
               this.state[field] = value;
-              if (field === 'household') {
-                const childRow = document.getElementById('wff-children-row');
-                if (value === 'family' || value === 'single-parent' || value === 'grandparent') {
-                  childRow.style.display = 'block';
-                } else {
-                  childRow.style.display = 'none';
-                }
-              }
+              this.hideError(this.state.step);
             });
           });
+
           // check 버튼 (다중 토글)
           document.querySelectorAll('.wff-check[data-wff-toggle]').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -5925,20 +6045,176 @@
               this.state.toggles[key] = btn.classList.contains('selected');
             });
           });
-          document.getElementById('wff-submit-btn').addEventListener('click', () => this.calculate());
-          document.getElementById('wff-reset-btn').addEventListener('click', () => this.reset());
+
+          // 시·도 select
+          const sidoSel = document.getElementById('wff-sido');
+          if (sidoSel) sidoSel.addEventListener('change', () => {
+            this.state.sido = sidoSel.value;
+            this.hideError(1);
+          });
+
+          // 출생연도 input
+          const birthIn = document.getElementById('wff-birth');
+          if (birthIn) {
+            birthIn.addEventListener('input', () => {
+              this.state.birthYear = parseInt(birthIn.value) || 0;
+              this.hideError(2);
+            });
+            birthIn.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter') { e.preventDefault(); this.next(); }
+            });
+          }
         },
 
-        reset() {
-          document.getElementById('wff-sido').value = '';
-          document.getElementById('wff-area').value = '';
-          document.getElementById('wff-birth').value = '';
-          document.querySelectorAll('.wff-pill').forEach(b => b.classList.remove('selected'));
-          document.querySelectorAll('.wff-check').forEach(b => b.classList.remove('selected'));
-          document.getElementById('wff-children-row').style.display = 'none';
-          document.getElementById('wff-result').style.display = 'none';
+        start() {
+          document.getElementById('wff-intro').style.display = 'none';
+          document.getElementById('wff-progress').style.display = 'block';
+          document.getElementById('wff-nav').style.display = 'flex';
+          this.state.step = 1;
+          this.render();
+        },
+
+        restart() {
+          // 상태 초기화
+          this.state = { step: 1, sido: '', area: '', birthYear: 0, household: '', income: '', housing: '', toggles: {} };
+          // UI 초기화
+          document.querySelectorAll('.wff-pill.selected, .wff-check.selected').forEach(b => b.classList.remove('selected'));
+          const sidoSel = document.getElementById('wff-sido');
+          if (sidoSel) sidoSel.value = '';
+          const birthIn = document.getElementById('wff-birth');
+          if (birthIn) birthIn.value = '';
+          document.querySelectorAll('.wff-error').forEach(e => e.classList.remove('show'));
+          // intro 화면으로
+          document.querySelectorAll('.wff-step').forEach(s => s.classList.remove('active'));
+          document.getElementById('wff-intro').style.display = 'block';
+          document.getElementById('wff-progress').style.display = 'none';
+          document.getElementById('wff-nav').style.display = 'none';
+          document.getElementById('wff-restart-wrap').style.display = 'none';
+          // 결과 영역 초기화
           document.getElementById('wff-result').innerHTML = '';
-          this.state = { household: '', income: '', housing: '', toggles: {} };
+          document.querySelector('.wff-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        },
+
+        // 조건부 스킵 — 자녀 step은 가족 가구만, 청년 step은 만19-34세만
+        shouldSkip(step) {
+          if (step === 4) {
+            const h = this.state.household;
+            return !(h === 'family' || h === 'single-parent' || h === 'grandparent');
+          }
+          if (step === 8) {
+            if (!this.state.birthYear) return true;
+            const age = this.getAge(this.state.birthYear);
+            return !(age >= 19 && age <= 34);
+          }
+          return false;
+        },
+
+        // 활성 단계 목록 (스킵된 단계 제외)
+        getActiveSteps() {
+          const arr = [];
+          for (let i = 1; i <= this.totalSteps; i++) {
+            if (!this.shouldSkip(i)) arr.push(i);
+          }
+          return arr;
+        },
+
+        validateStep(step) {
+          if (step === 1) {
+            if (!this.state.sido) { this.showError(1); return false; }
+          }
+          if (step === 2) {
+            const y = this.state.birthYear;
+            if (!y || y < 1900 || y > 2026) { this.showError(2); return false; }
+          }
+          if (step === 3) {
+            if (!this.state.household) { this.showError(3); return false; }
+          }
+          if (step === 6) {
+            if (!this.state.income) { this.showError(6); return false; }
+          }
+          if (step === 7) {
+            if (!this.state.housing) { this.showError(7); return false; }
+          }
+          return true;
+        },
+
+        showError(step) {
+          const e = document.getElementById(`wff-error-${step}`);
+          if (e) e.classList.add('show');
+        },
+        hideError(step) {
+          const e = document.getElementById(`wff-error-${step}`);
+          if (e) e.classList.remove('show');
+        },
+
+        next() {
+          if (!this.validateStep(this.state.step)) return;
+          let nextStep = this.state.step + 1;
+          while (nextStep <= this.totalSteps && this.shouldSkip(nextStep)) nextStep++;
+          if (nextStep > this.totalSteps) {
+            this.finish();
+            return;
+          }
+          this.state.step = nextStep;
+          this.render();
+        },
+
+        prev() {
+          let prevStep = this.state.step - 1;
+          while (prevStep >= 1 && this.shouldSkip(prevStep)) prevStep--;
+          if (prevStep < 1) return;
+          this.state.step = prevStep;
+          this.render();
+        },
+
+        render() {
+          // 모든 step 숨기기
+          document.querySelectorAll('.wff-step').forEach(s => s.classList.remove('active'));
+          // 현재 step 활성화
+          const step = this.state.step;
+          const el = document.querySelector(`.wff-step[data-step="${step}"]`);
+          if (el) el.classList.add('active');
+
+          // 진행률 업데이트
+          const activeSteps = this.getActiveSteps();
+          const currentIdx = activeSteps.indexOf(step) + 1;
+          const total = activeSteps.length;
+          const pct = (currentIdx / total) * 100;
+
+          document.getElementById('wff-step-current').textContent = currentIdx;
+          document.getElementById('wff-step-total').textContent = total;
+          document.getElementById('wff-step-name').textContent = this.stepNames[step] || '';
+          document.getElementById('wff-progress-fill').style.width = pct + '%';
+
+          // 이전 버튼: 첫 단계면 숨김
+          const prevBtn = document.getElementById('wff-prev-btn');
+          const isFirst = activeSteps[0] === step;
+          if (prevBtn) prevBtn.classList.toggle('hidden', isFirst);
+
+          // 다음 버튼: 마지막 단계면 "결과 확인하기"로
+          const nextBtn = document.getElementById('wff-next-btn');
+          const isLast = activeSteps[activeSteps.length - 1] === step;
+          if (nextBtn) {
+            nextBtn.textContent = isLast ? '결과 확인하기 ✨' : '다음 →';
+            nextBtn.classList.toggle('finish', isLast);
+          }
+
+          // 카드 상단으로 부드럽게 스크롤
+          document.querySelector('.wff-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        },
+
+        finish() {
+          // 모든 step 숨김
+          document.querySelectorAll('.wff-step').forEach(s => s.classList.remove('active'));
+          // 결과 step 활성
+          const resultStep = document.getElementById('wff-result-step');
+          if (resultStep) resultStep.classList.add('active');
+          // 진행률·네비 숨김, 다시시작 표시
+          document.getElementById('wff-nav').style.display = 'none';
+          document.getElementById('wff-progress').style.display = 'none';
+          document.getElementById('wff-restart-wrap').style.display = 'block';
+          // 계산
+          this.calculate();
           document.querySelector('.wff-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
         },
 
@@ -6005,23 +6281,13 @@
         },
 
         calculate() {
-          const sido = document.getElementById('wff-sido').value;
-          const birthVal = document.getElementById('wff-birth').value;
+          const sido = this.state.sido;
+          const birthVal = this.state.birthYear;
           const age = this.getAge(birthVal);
           const t = this.state.toggles;
           const income = this.state.income;
           const household = this.state.household;
           const housing = this.state.housing;
-
-          // 최소 입력 검증
-          if (!birthVal || !household) {
-            alert('거주 지역, 출생연도, 가구 형태는 꼭 선택해주세요.');
-            return;
-          }
-          if (age === null || age < 0 || age > 120) {
-            alert('출생연도를 다시 확인해주세요. (예: 1958)');
-            return;
-          }
 
           const high = []; // 자격 가능성 높음
           const review = []; // 조건 확인 필요
