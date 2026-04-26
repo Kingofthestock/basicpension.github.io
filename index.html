@@ -379,6 +379,72 @@
     .home-footer { background: #1e293b; color: #cbd5e1; padding: 2rem 1rem; text-align: center; font-size: 0.85rem; line-height: 1.7; margin-top: 1rem; }
     .home-footer strong { color: #fff; }
 
+    /* ===== Welfare Finder (홈페이지 통합 모의계산기) ===== */
+    .wff-card { background: #fff; border-radius: 1rem; padding: 1.75rem 1.5rem; box-shadow: 0 4px 16px rgba(15,23,42,.06); margin-bottom: 1.25rem; border: 1px solid #e2e8f0; position: relative; overflow: hidden; }
+    .wff-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg,#1e40af,#3b82f6,#06b6d4); }
+    .wff-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+    .wff-title-icon { font-size: 1.5rem; }
+    .wff-desc { font-size: 0.92rem; color: #64748b; margin-bottom: 1.25rem; line-height: 1.55; }
+    .wff-row { margin-bottom: 1.1rem; }
+    .wff-row:last-child { margin-bottom: 0; }
+    .wff-label { display: block; font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
+    .wff-label .wff-hint { color: #94a3b8; font-weight: 500; font-size: 0.82rem; margin-left: 0.4rem; }
+    .wff-select { width: 100%; padding: 0.75rem 0.9rem; border: 1.5px solid #e2e8f0; border-radius: 0.6rem; font-size: 0.95rem; color: #0f172a; background: #fff; transition: all .2s; font-family: inherit; cursor: pointer; }
+    .wff-select:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30,64,175,.12); }
+    .wff-input { width: 100%; padding: 0.75rem 0.9rem; border: 1.5px solid #e2e8f0; border-radius: 0.6rem; font-size: 0.95rem; color: #0f172a; background: #fff; transition: all .2s; font-family: inherit; }
+    .wff-input:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30,64,175,.12); }
+    .wff-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .wff-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .wff-pill { padding: 0.6rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 999px; font-size: 0.9rem; font-weight: 600; color: #475569; background: #fff; cursor: pointer; transition: all .15s; font-family: inherit; }
+    .wff-pill:hover { border-color: #93c5fd; background: #eff6ff; }
+    .wff-pill.selected { border-color: #1e40af; background: #1e40af; color: #fff; }
+    .wff-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .wff-check { padding: 0.7rem 0.9rem; border: 1.5px solid #e2e8f0; border-radius: 0.5rem; font-size: 0.88rem; font-weight: 600; color: #475569; background: #fff; cursor: pointer; transition: all .15s; font-family: inherit; text-align: left; display: flex; align-items: center; gap: 0.5rem; }
+    .wff-check:hover { border-color: #93c5fd; }
+    .wff-check.selected { border-color: #1e40af; background: #eff6ff; color: #1e3a8a; }
+    .wff-check::before { content: '☐'; font-size: 1.1rem; color: #94a3b8; }
+    .wff-check.selected::before { content: '✓'; color: #1e40af; font-weight: 800; }
+    .wff-submit { width: 100%; padding: 1rem; background: linear-gradient(135deg,#1e40af,#2563eb); color: #fff; border: none; border-radius: 0.75rem; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: all .2s; font-family: inherit; box-shadow: 0 4px 12px rgba(30,64,175,.3); margin-top: 0.5rem; }
+    .wff-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(30,64,175,.4); }
+    .wff-reset { background: transparent; color: #64748b; border: none; font-size: 0.85rem; padding: 0.5rem; cursor: pointer; text-decoration: underline; font-family: inherit; }
+
+    .wff-result { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px dashed #e2e8f0; }
+    .wff-result-header { text-align: center; margin-bottom: 1.25rem; }
+    .wff-result-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+    .wff-result-title { font-size: 1.3rem; font-weight: 900; color: #0f172a; margin-bottom: 0.25rem; }
+    .wff-result-subtitle { font-size: 0.9rem; color: #64748b; }
+    .wff-result-section-title { font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 1.25rem 0 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
+    .wff-result-section-title::before { content: ''; width: 4px; height: 16px; background: #1e40af; border-radius: 2px; }
+    .wff-result-grid { display: grid; grid-template-columns: 1fr; gap: 0.6rem; }
+    .wff-result-card { padding: 1rem 1.1rem; border-radius: 0.75rem; border: 1.5px solid; cursor: pointer; transition: all .2s; display: flex; gap: 0.85rem; align-items: flex-start; }
+    .wff-result-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.08); }
+    .wff-result-card.high { background: linear-gradient(135deg,#dbeafe,#eff6ff); border-color: #3b82f6; }
+    .wff-result-card.review { background: linear-gradient(135deg,#fef3c7,#fffbeb); border-color: #f59e0b; }
+    .wff-result-card.local { background: linear-gradient(135deg,#f3e8ff,#faf5ff); border-color: #a855f7; }
+    .wff-result-card.info { background: #f8fafc; border-color: #cbd5e1; cursor: default; }
+    .wff-result-card.info:hover { transform: none; box-shadow: none; }
+    .wff-result-icon { font-size: 1.6rem; flex-shrink: 0; line-height: 1; }
+    .wff-result-body { flex: 1; min-width: 0; }
+    .wff-result-name { font-size: 1rem; font-weight: 800; color: #0f172a; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .wff-result-badge { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 700; }
+    .wff-result-card.high .wff-result-badge { background: #1e40af; color: #fff; }
+    .wff-result-card.review .wff-result-badge { background: #b45309; color: #fff; }
+    .wff-result-card.local .wff-result-badge { background: #7c3aed; color: #fff; }
+    .wff-result-detail { font-size: 0.85rem; color: #475569; line-height: 1.55; margin-bottom: 0.4rem; }
+    .wff-result-cta { font-size: 0.82rem; font-weight: 700; color: #1e40af; }
+    .wff-result-card.review .wff-result-cta { color: #b45309; }
+    .wff-result-card.local .wff-result-cta { color: #7c3aed; }
+    .wff-result-warn { margin-top: 1.1rem; padding: 0.85rem 1rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 0.6rem; font-size: 0.83rem; color: #991b1b; line-height: 1.55; }
+    .wff-result-warn strong { display: block; margin-bottom: 0.2rem; }
+
+    @media (max-width: 768px) {
+      .wff-card { padding: 1.4rem 1.1rem; }
+      .wff-title { font-size: 1.1rem; }
+      .wff-row-grid { grid-template-columns: 1fr; }
+      .wff-checks { grid-template-columns: 1fr; }
+      .wff-submit { font-size: 1rem; padding: 0.9rem; }
+    }
+
     /* ===== Welfare Info Page (공통) ===== */
     .wf-section { min-height: 100vh; padding-bottom: 80px; background: #f8fafc; }
     .wf-header { color: #fff; padding: 2.25rem 1.25rem 3rem; text-align: center; position: relative; overflow: hidden; }
@@ -626,6 +692,119 @@
     </header>
 
     <main class="home-main">
+      <!-- 통합 복지 매칭 모의계산기 -->
+      <section class="wff-card">
+        <h2 class="wff-title"><span class="wff-title-icon">🎯</span>나에게 맞는 복지 혜택 찾기</h2>
+        <p class="wff-desc">기본 정보를 입력하시면 받을 수 있는 정부·지자체 복지 혜택을 한눈에 확인할 수 있어요.<br><strong class="text-slate-700">소득·재산 정보는 저장되지 않으며, 결과는 참고용입니다.</strong></p>
+
+        <div class="wff-row">
+          <label class="wff-label">📍 거주 지역</label>
+          <div class="wff-row-grid">
+            <select id="wff-sido" class="wff-select">
+              <option value="">시·도 선택</option>
+              <option value="서울">서울특별시</option>
+              <option value="부산">부산광역시</option>
+              <option value="대구">대구광역시</option>
+              <option value="인천">인천광역시</option>
+              <option value="광주">광주광역시</option>
+              <option value="대전">대전광역시</option>
+              <option value="울산">울산광역시</option>
+              <option value="세종">세종특별자치시</option>
+              <option value="경기">경기도</option>
+              <option value="강원">강원특별자치도</option>
+              <option value="충북">충청북도</option>
+              <option value="충남">충청남도</option>
+              <option value="전북">전북특별자치도</option>
+              <option value="전남">전라남도</option>
+              <option value="경북">경상북도</option>
+              <option value="경남">경상남도</option>
+              <option value="제주">제주특별자치도</option>
+            </select>
+            <select id="wff-area" class="wff-select">
+              <option value="">지역 유형 (선택)</option>
+              <option value="metro">대도시 (특별·광역시)</option>
+              <option value="city">중소도시 (시 단위)</option>
+              <option value="rural">농어촌 (군 단위)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="wff-row">
+          <label class="wff-label">🎂 출생 연도 <span class="wff-hint">서기 4자리</span></label>
+          <input type="number" id="wff-birth" class="wff-input" placeholder="예: 1958" min="1900" max="2026" inputmode="numeric">
+        </div>
+
+        <div class="wff-row">
+          <label class="wff-label">👨‍👩‍👧 가구 형태</label>
+          <div class="wff-pills">
+            <button type="button" class="wff-pill" data-wff-field="household" data-value="single">1인 가구</button>
+            <button type="button" class="wff-pill" data-wff-field="household" data-value="couple">부부 (2인)</button>
+            <button type="button" class="wff-pill" data-wff-field="household" data-value="family">자녀 있는 가구</button>
+            <button type="button" class="wff-pill" data-wff-field="household" data-value="single-parent">한부모 가구</button>
+            <button type="button" class="wff-pill" data-wff-field="household" data-value="grandparent">조손 가구</button>
+          </div>
+        </div>
+
+        <div class="wff-row" id="wff-children-row" style="display:none;">
+          <label class="wff-label">👶 자녀 정보 <span class="wff-hint">해당하는 항목 모두 선택</span></label>
+          <div class="wff-checks">
+            <button type="button" class="wff-check" data-wff-toggle="child0">만 0세 (0~11개월) 영아</button>
+            <button type="button" class="wff-check" data-wff-toggle="child1">만 1세 (12~23개월)</button>
+            <button type="button" class="wff-check" data-wff-toggle="child2to7">만 2~7세 (미취학)</button>
+            <button type="button" class="wff-check" data-wff-toggle="childElem">초등학생 (8~13세)</button>
+            <button type="button" class="wff-check" data-wff-toggle="childMid">중학생 (14~16세)</button>
+            <button type="button" class="wff-check" data-wff-toggle="childHigh">고등학생 (17~19세)</button>
+            <button type="button" class="wff-check" data-wff-toggle="multiChild">자녀 2명 이상 (다자녀)</button>
+            <button type="button" class="wff-check" data-wff-toggle="newborn">최근 12개월 내 출산</button>
+          </div>
+        </div>
+
+        <div class="wff-row">
+          <label class="wff-label">♿ 장애·임신 등 특수 상황 <span class="wff-hint">해당 시 선택</span></label>
+          <div class="wff-checks">
+            <button type="button" class="wff-check" data-wff-toggle="disability">중증장애 (1·2급 또는 3급+중복)</button>
+            <button type="button" class="wff-check" data-wff-toggle="mildDisability">경증장애 (4~6급)</button>
+            <button type="button" class="wff-check" data-wff-toggle="pregnant">임신 중</button>
+            <button type="button" class="wff-check" data-wff-toggle="emergency">최근 위기상황 (실직·질병 등)</button>
+          </div>
+        </div>
+
+        <div class="wff-row">
+          <label class="wff-label">💰 소득·재산 수준 <span class="wff-hint">대략적인 기준</span></label>
+          <div class="wff-pills">
+            <button type="button" class="wff-pill" data-wff-field="income" data-value="basic">기초생활수급자</button>
+            <button type="button" class="wff-pill" data-wff-field="income" data-value="nearpoor">차상위계층</button>
+            <button type="button" class="wff-pill" data-wff-field="income" data-value="low">중위소득 50% 이하</button>
+            <button type="button" class="wff-pill" data-wff-field="income" data-value="mid">중위소득 70% 이하</button>
+            <button type="button" class="wff-pill" data-wff-field="income" data-value="high">중위소득 70% 초과</button>
+            <button type="button" class="wff-pill" data-wff-field="income" data-value="unknown">잘 모르겠어요</button>
+          </div>
+        </div>
+
+        <div class="wff-row">
+          <label class="wff-label">🏠 거주 형태</label>
+          <div class="wff-pills">
+            <button type="button" class="wff-pill" data-wff-field="housing" data-value="own">자가</button>
+            <button type="button" class="wff-pill" data-wff-field="housing" data-value="jeonse">전세</button>
+            <button type="button" class="wff-pill" data-wff-field="housing" data-value="monthly">월세 (보증부 월세 포함)</button>
+            <button type="button" class="wff-pill" data-wff-field="housing" data-value="other">기타 (사용대차·기숙 등)</button>
+          </div>
+        </div>
+
+        <div class="wff-row">
+          <label class="wff-label">🔍 구직·자립 상태 <span class="wff-hint">해당 시 선택</span></label>
+          <div class="wff-checks">
+            <button type="button" class="wff-check" data-wff-toggle="jobSeeking">현재 구직 중 (취업 준비)</button>
+            <button type="button" class="wff-check" data-wff-toggle="youthMoving">독립 거주 청년 (부모와 별거)</button>
+          </div>
+        </div>
+
+        <button type="button" id="wff-submit-btn" class="wff-submit">받을 수 있는 복지 혜택 보기 →</button>
+        <div class="text-center mt-2"><button type="button" id="wff-reset-btn" class="wff-reset">처음부터 다시 입력</button></div>
+
+        <div id="wff-result" class="wff-result" style="display:none;"></div>
+      </section>
+
       <!-- 빠른 자격 확인 (활성 서비스) -->
       <section class="home-card-section">
         <div class="home-section-title"><span class="home-section-title-bar"></span>지금 바로 확인 가능한 복지 혜택</div>
@@ -5714,6 +5893,469 @@
           homeSearch(q);
         });
       });
+
+      // ===== 복지 매칭 모의계산기 (Welfare Finder) =====
+      const wff = {
+        state: { household: '', income: '', housing: '', toggles: {} },
+
+        init() {
+          // pill 버튼 (단일 선택)
+          document.querySelectorAll('.wff-pill[data-wff-field]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const field = btn.dataset.wffField;
+              const value = btn.dataset.value;
+              document.querySelectorAll(`.wff-pill[data-wff-field="${field}"]`).forEach(b => b.classList.remove('selected'));
+              btn.classList.add('selected');
+              this.state[field] = value;
+              if (field === 'household') {
+                const childRow = document.getElementById('wff-children-row');
+                if (value === 'family' || value === 'single-parent' || value === 'grandparent') {
+                  childRow.style.display = 'block';
+                } else {
+                  childRow.style.display = 'none';
+                }
+              }
+            });
+          });
+          // check 버튼 (다중 토글)
+          document.querySelectorAll('.wff-check[data-wff-toggle]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const key = btn.dataset.wffToggle;
+              btn.classList.toggle('selected');
+              this.state.toggles[key] = btn.classList.contains('selected');
+            });
+          });
+          document.getElementById('wff-submit-btn').addEventListener('click', () => this.calculate());
+          document.getElementById('wff-reset-btn').addEventListener('click', () => this.reset());
+        },
+
+        reset() {
+          document.getElementById('wff-sido').value = '';
+          document.getElementById('wff-area').value = '';
+          document.getElementById('wff-birth').value = '';
+          document.querySelectorAll('.wff-pill').forEach(b => b.classList.remove('selected'));
+          document.querySelectorAll('.wff-check').forEach(b => b.classList.remove('selected'));
+          document.getElementById('wff-children-row').style.display = 'none';
+          document.getElementById('wff-result').style.display = 'none';
+          document.getElementById('wff-result').innerHTML = '';
+          this.state = { household: '', income: '', housing: '', toggles: {} };
+          document.querySelector('.wff-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        },
+
+        getAge(birthYear) {
+          if (!birthYear) return null;
+          return 2026 - parseInt(birthYear);
+        },
+
+        // 자녀 정보 정리
+        hasChild(key) { return !!this.state.toggles[key]; },
+
+        // 지자체별 추가 혜택 (대표적·안정적인 정보만)
+        getLocalBenefits(sido, age, t) {
+          const benefits = [];
+          // 강원 — 육아기본수당 (출생~96개월 자녀 1인당 매월 50만원, 2024 기준)
+          if (sido === '강원' && (t.child0 || t.child1 || t.child2to7)) {
+            benefits.push({
+              name: '강원특별자치도 육아기본수당',
+              detail: '출생부터 만 96개월(8세)까지 자녀 1인당 매월 50만원 지급 (소득 무관). 부모급여·아동수당과 별도 추가 지원.',
+              cta: '강원도청 또는 거주지 시·군청 가족정책과 문의'
+            });
+          }
+          // 서울 — 청년수당
+          if (sido === '서울' && age && age >= 19 && age <= 34 && t.jobSeeking) {
+            benefits.push({
+              name: '서울시 청년수당',
+              detail: '만 19~34세 미취업 청년에게 월 50만원 × 최대 6개월 지원. 서울 거주 + 졸업 후 2년 이상 + 미취업 조건.',
+              cta: '서울청년포털(youth.seoul.go.kr) 분기별 모집'
+            });
+          }
+          // 경기 — 청년기본소득
+          if (sido === '경기' && age === 24) {
+            benefits.push({
+              name: '경기도 청년기본소득',
+              detail: '만 24세 경기도 청년에게 분기별 25만원(연 100만원, 지역화폐) 지급. 신청한 분기부터 4분기까지 지급.',
+              cta: '경기도 일자리재단(www.gjf.or.kr) 신청'
+            });
+          }
+          // 다자녀 가구 (지자체별 다둥이 카드)
+          if (t.multiChild) {
+            const cardName = {
+              '서울':'서울 다둥이 행복카드','부산':'부산 다둥이맘카드','대구':'대구 아이조아카드',
+              '인천':'아이로움카드','광주':'아이키움카드','대전':'한가족 사랑카드','울산':'울산 아이맘카드',
+              '경기':'경기 아이플러스카드','강원':'강원 다자녀카드','충북':'충북행복카드','충남':'충남 아이키움카드',
+              '전북':'전북 아이사랑카드','전남':'전남 아이키움카드','경북':'경북 다자녀행복카드','경남':'경남 다자녀카드','제주':'제주 다둥이카드','세종':'세종 아이행복카드'
+            }[sido];
+            if (cardName) {
+              benefits.push({
+                name: cardName + ' (다자녀 우대)',
+                detail: '거주지 지자체에서 다자녀 가구(보통 2자녀 이상)에 발급하는 우대카드. 공공시설 할인·주차요금 감면·체험 프로그램 우대 등.',
+                cta: '거주지 시·군·구청 가족정책과 또는 주민센터 문의'
+              });
+            }
+          }
+          // 농어촌 출산장려금 (군 단위 지자체)
+          if (t.newborn) {
+            benefits.push({
+              name: '거주지 출산장려금',
+              detail: '대부분 지자체에서 출산 시 축하금을 지급합니다. 군 단위 농어촌은 첫째 100만원~수천만원까지 다양 (서울·광역시는 보통 100만원 이내).',
+              cta: '거주지 시·군·구청 출산정책 담당부서 확인 권장'
+            });
+          }
+          return benefits;
+        },
+
+        calculate() {
+          const sido = document.getElementById('wff-sido').value;
+          const birthVal = document.getElementById('wff-birth').value;
+          const age = this.getAge(birthVal);
+          const t = this.state.toggles;
+          const income = this.state.income;
+          const household = this.state.household;
+          const housing = this.state.housing;
+
+          // 최소 입력 검증
+          if (!birthVal || !household) {
+            alert('거주 지역, 출생연도, 가구 형태는 꼭 선택해주세요.');
+            return;
+          }
+          if (age === null || age < 0 || age > 120) {
+            alert('출생연도를 다시 확인해주세요. (예: 1958)');
+            return;
+          }
+
+          const high = []; // 자격 가능성 높음
+          const review = []; // 조건 확인 필요
+
+          // === 노령 ===
+          if (age >= 65) {
+            const isHigh = (income === 'basic' || income === 'nearpoor' || income === 'low' || income === 'mid');
+            (isHigh ? high : review).push({
+              icon: '💰', name: '기초연금', target: 'pension-container',
+              detail: '만 65세 이상 + 소득 하위 70% 대상. 단독 247만원/부부 395만원(소득인정액) 이하면 최대 월 34만원 수령.',
+              cta: '기초연금 모의계산 →'
+            });
+          } else if (age >= 60) {
+            review.push({
+              icon: '💰', name: '기초연금 (5년 이내 대상)', target: 'pension-container',
+              detail: `만 65세부터 신청 가능합니다. 현재 만 ${age}세이므로 ${65 - age}년 후 대상이 될 수 있어요.`,
+              cta: '미리 모의계산해보기 →'
+            });
+          }
+
+          // === 장애 ===
+          if (t.disability && age >= 18) {
+            high.push({
+              icon: '♿', name: '장애인연금', target: 'disability-pension',
+              detail: '만 18세 이상 중증장애인 (1·2급 또는 3급+중복) 대상. 기초급여 최대 34.97만원 + 부가급여 최대 43.97만원(생계·의료급여 65세 이상).',
+              cta: '장애인연금 모의계산 →'
+            });
+          } else if (t.mildDisability && (income === 'basic' || income === 'nearpoor')) {
+            high.push({
+              icon: '♿', name: '장애수당', target: 'disability-pension',
+              detail: '경증장애인(4~6급) 중 기초생활수급자·차상위계층에 월 6만원 지급. 장애인연금이 아닌 별도 제도.',
+              cta: '관련 정보 보기 →'
+            });
+          }
+
+          // === 기초생활보장 ===
+          if (income === 'basic') {
+            high.push({
+              icon: '📋', name: '기초생활보장', target: 'welfare-basic-living',
+              detail: '이미 기초생활수급자라면 생계·의료·주거·교육 4대 급여를 모두 받고 계실 수 있어요. 자격 변동 시 재신청·변경 신청 필요.',
+              cta: '기초생활보장 안내 →'
+            });
+          } else if (income === 'low' || income === 'nearpoor') {
+            high.push({
+              icon: '📋', name: '기초생활보장 (4대 급여)', target: 'welfare-basic-living',
+              detail: '소득인정액이 중위소득 32~50% 이하라면 생계·의료·주거·교육 급여를 받을 수 있습니다. 부양의무자 기준 폐지(생계급여).',
+              cta: '기초생활보장 자세히 보기 →'
+            });
+          } else if (income === 'unknown') {
+            review.push({
+              icon: '📋', name: '기초생활보장 자격 확인', target: 'welfare-basic-living',
+              detail: '소득·재산 기준이 정확하지 않아 자격 여부를 확인해보시는 것이 좋습니다. 복지로 자가진단 또는 주민센터 상담을 추천드려요.',
+              cta: '기초생활보장 안내 →'
+            });
+          }
+
+          // === 의료급여 ===
+          if (income === 'basic') {
+            high.push({
+              icon: '🏥', name: '의료급여', target: 'welfare-medical',
+              detail: '기초생활수급자라면 1종 또는 2종 의료급여 대상입니다. 외래 1,000~2,000원, 약국 500원의 본인부담만으로 진료 가능.',
+              cta: '의료급여 자세히 보기 →'
+            });
+          } else if (income === 'nearpoor') {
+            high.push({
+              icon: '🏥', name: '차상위 본인부담경감 (의료)', target: 'welfare-medical',
+              detail: '차상위계층 중 만성질환자·18세 미만 아동은 의료급여 2종 수준의 본인부담 경감을 받을 수 있습니다.',
+              cta: '의료급여 안내 →'
+            });
+          }
+
+          // === 주거급여 ===
+          if ((income === 'basic' || income === 'nearpoor' || income === 'low') && (housing === 'jeonse' || housing === 'monthly')) {
+            high.push({
+              icon: '🏠', name: '주거급여 (임차가구)', target: 'welfare-housing',
+              detail: '중위소득 48% 이하 임차가구에 지역·가구원수별 월 임차료 지원. 서울 1인 약 35만원, 4인 약 55만원 한도.',
+              cta: '주거급여 자세히 보기 →'
+            });
+          } else if ((income === 'basic' || income === 'nearpoor' || income === 'low') && housing === 'own') {
+            high.push({
+              icon: '🏠', name: '주거급여 (자가가구 수선)', target: 'welfare-housing',
+              detail: '중위소득 48% 이하 자가가구는 주택 수선비 지원. 경보수 457만/중보수 849만/대보수 1,241만원 (3·5·7년 주기).',
+              cta: '주거급여 안내 →'
+            });
+          }
+
+          // === 교육급여 ===
+          const hasSchoolChild = t.childElem || t.childMid || t.childHigh;
+          if (hasSchoolChild && (income === 'basic' || income === 'nearpoor' || income === 'low')) {
+            high.push({
+              icon: '🎓', name: '교육급여', target: 'welfare-education',
+              detail: '중위소득 50% 이하 가구의 초·중·고 학생에게 학습비 지원. 초 약 49만원/중 68만원/고 77만원(연 1회) + 고교 입학금·수업료.',
+              cta: '교육급여 자세히 보기 →'
+            });
+          } else if (hasSchoolChild && income === 'mid') {
+            review.push({
+              icon: '🎓', name: '교육비 지원 (시·도교육청)', target: 'welfare-education',
+              detail: '중위소득 50~80% 가구도 시·도교육청 교육비 지원으로 방과후학교 자유수강권·급식비·교과서비 등을 지원받을 수 있습니다.',
+              cta: '교육급여 안내 →'
+            });
+          }
+
+          // === 고유가 피해지원금 (민생지원금) ===
+          if (income !== 'high') {
+            high.push({
+              icon: '⛽', name: '고유가 피해지원금 (3차 민생지원금)', target: 'fuel-support',
+              detail: '소득 하위 70%(약 3,577만 명) 대상 1인당 10~60만원 지원. 4월 27일(취약계층)/5월 18일(일반)부터 지급.',
+              cta: '민생지원금 정보 보기 →'
+            });
+          }
+
+          // === 부모급여 ===
+          if (t.child0) {
+            high.push({
+              icon: '👶', name: '부모급여 (만 0세)', target: 'welfare-childcare',
+              detail: '만 0세 자녀에게 매월 100만원 지급 (소득 무관). 어린이집 이용 시 보육료 차감 후 차액 지급. 매월 25일 입금.',
+              cta: '부모급여 자세히 보기 →'
+            });
+          }
+          if (t.child1) {
+            high.push({
+              icon: '👶', name: '부모급여 (만 1세)', target: 'welfare-childcare',
+              detail: '만 1세 자녀에게 매월 50만원 지급 (소득 무관). 어린이집 이용 시 보육료 차감 후 차액 지급.',
+              cta: '부모급여 자세히 보기 →'
+            });
+          }
+
+          // === 아동수당 ===
+          if (t.child0 || t.child1 || t.child2to7 || t.childElem) {
+            high.push({
+              icon: '👶', name: '아동수당', target: 'welfare-childcare',
+              detail: '만 8세 미만 모든 아동에게 매월 10만원 지급 (소득 무관). 부모급여와 중복 수급 가능.',
+              cta: '아동수당 자세히 보기 →'
+            });
+          }
+
+          // === 첫만남이용권 ===
+          if (t.newborn) {
+            high.push({
+              icon: '🎁', name: '첫만남이용권', target: 'welfare-childcare',
+              detail: '출생 시 첫째 200만원/둘째 이상 300만원의 국민행복카드 바우처 지급 (소득 무관). 출생일로부터 1년 사용.',
+              cta: '첫만남이용권 자세히 보기 →'
+            });
+          }
+
+          // === 가정양육수당 ===
+          if (t.child2to7) {
+            review.push({
+              icon: '🍼', name: '가정양육수당', target: 'welfare-childcare',
+              detail: '만 2세 이후 어린이집·유치원 미이용 가정에 매월 10만원 지급. 어린이집 이용 시 보육료, 유치원 이용 시 유아학비로 자동 전환.',
+              cta: '양육수당 안내 →'
+            });
+          }
+
+          // === 청년 ===
+          if (age >= 19 && age <= 34) {
+            high.push({
+              icon: '💼', name: '청년도약계좌', target: 'welfare-youth',
+              detail: '만 19~34세, 총급여 7,500만원 이하 청년의 자산 형성 적금. 5년간 월 70만원 한도 적립 + 정부 기여금 + 비과세.',
+              cta: '청년 지원 자세히 보기 →'
+            });
+            if (t.youthMoving && (housing === 'monthly' || housing === 'jeonse')) {
+              high.push({
+                icon: '🏠', name: '청년월세 특별지원', target: 'welfare-youth',
+                detail: '만 19~34세 부모와 별도 거주 청년 (보증금 5천만/월세 70만원 이하)에 월 20만원 × 최대 12개월 지원.',
+                cta: '청년월세 자세히 보기 →'
+              });
+            }
+            if (t.jobSeeking) {
+              high.push({
+                icon: '💼', name: '국민취업지원제도', target: 'welfare-youth',
+                detail: '구직 중인 청년에게 1유형(월 50만원 × 6개월) 또는 2유형(취업활동비 195만원) 지원 + 직업훈련·취업알선.',
+                cta: '취업지원 자세히 보기 →'
+              });
+            }
+          }
+
+          // === 한부모 ===
+          if (household === 'single-parent' && (t.childElem || t.childMid || t.childHigh || t.child0 || t.child1 || t.child2to7)) {
+            const isYoungParent = age && age <= 24;
+            if (isYoungParent) {
+              high.push({
+                icon: '👨‍👩‍👧', name: '청소년한부모 아동양육비', target: 'welfare-singleparent',
+                detail: '만 24세 이하 한부모, 중위소득 65% 이하 자녀당 월 35만원 지급 + 학업·자립 지원금 추가.',
+                cta: '한부모 지원 자세히 보기 →'
+              });
+            } else if (income === 'basic' || income === 'nearpoor' || income === 'low' || income === 'mid') {
+              high.push({
+                icon: '👨‍👩‍👧', name: '한부모가족 아동양육비', target: 'welfare-singleparent',
+                detail: '중위소득 63% 이하 한부모 가구의 만 18세 미만 자녀 1인당 월 21만원 지급 (조손가족도 포함).',
+                cta: '한부모 지원 자세히 보기 →'
+              });
+            } else {
+              review.push({
+                icon: '👨‍👩‍👧', name: '한부모가족 증명서', target: 'welfare-singleparent',
+                detail: '한부모가족 증명서를 발급받으면 소득에 따라 다양한 우대 혜택(주거·교육·세제 등)을 받을 수 있습니다.',
+                cta: '한부모 정보 보기 →'
+              });
+            }
+          }
+
+          // === 다자녀 ===
+          if (t.multiChild) {
+            high.push({
+              icon: '👨‍👩‍👧', name: '다자녀 가구 우대 혜택', target: 'welfare-singleparent',
+              detail: '전기·가스요금 할인 (자녀 3명 이상), KTX/SRT 할인, 국민연금 출산크레딧, 주택 특별공급, 지자체 다둥이카드 등.',
+              cta: '다자녀 혜택 자세히 보기 →'
+            });
+          }
+
+          // === 임신 ===
+          if (t.pregnant) {
+            high.push({
+              icon: '🤰', name: '임신·출산 진료비 지원 (국민행복카드)', target: 'welfare-childcare',
+              detail: '임신 1회당 100만원(다태아 140만원) 진료비 바우처 지급. 출산 후 첫만남이용권(200/300만원)도 함께 신청 가능.',
+              cta: '아동·양육수당 안내 →'
+            });
+          }
+
+          // === 긴급복지지원 ===
+          if (t.emergency) {
+            high.push({
+              icon: '🆘', name: '긴급복지지원', target: 'welfare-emergency',
+              detail: '실직·질병·화재 등 위기상황에 일시 지원. 생계 약 187만원/의료 회당 300만원/주거 약 66만원 등 (선지원 후심사).',
+              cta: '긴급복지지원 자세히 보기 → (즉시 129 신고 가능)'
+            });
+          }
+
+          // 지자체별 추가 혜택
+          const localBenefits = this.getLocalBenefits(sido, age, t);
+
+          this.showResult({ high, review, localBenefits, age, sido });
+        },
+
+        showResult(r) {
+          const div = document.getElementById('wff-result');
+          const totalCount = r.high.length + r.review.length + r.localBenefits.length;
+          let html = `
+            <div class="wff-result-header">
+              <span class="wff-result-emoji">${totalCount > 0 ? '🎉' : '💡'}</span>
+              <p class="wff-result-title">${totalCount > 0 ? `${totalCount}개의 복지 혜택을 확인할 수 있어요` : '직접 매칭된 혜택은 적지만, 더 확인해보세요'}</p>
+              <p class="wff-result-subtitle">만 ${r.age}세 · ${r.sido || '거주 지역 미입력'} 기준 · 결과는 참고용이며 실제는 신청 시 심사로 결정됩니다</p>
+            </div>`;
+
+          // 자격 가능성 높음
+          if (r.high.length > 0) {
+            html += `<div class="wff-result-section-title">✅ 받을 수 있을 가능성이 높은 혜택 (${r.high.length})</div>`;
+            html += `<div class="wff-result-grid">`;
+            r.high.forEach(item => {
+              html += `
+                <div class="wff-result-card high" data-go="${item.target}">
+                  <span class="wff-result-icon">${item.icon}</span>
+                  <div class="wff-result-body">
+                    <div class="wff-result-name">${item.name} <span class="wff-result-badge">대상 가능성</span></div>
+                    <div class="wff-result-detail">${item.detail}</div>
+                    <div class="wff-result-cta">${item.cta}</div>
+                  </div>
+                </div>`;
+            });
+            html += `</div>`;
+          }
+
+          // 검토 필요
+          if (r.review.length > 0) {
+            html += `<div class="wff-result-section-title">🔎 조건 확인이 필요한 혜택 (${r.review.length})</div>`;
+            html += `<div class="wff-result-grid">`;
+            r.review.forEach(item => {
+              html += `
+                <div class="wff-result-card review" data-go="${item.target}">
+                  <span class="wff-result-icon">${item.icon}</span>
+                  <div class="wff-result-body">
+                    <div class="wff-result-name">${item.name} <span class="wff-result-badge">조건 확인</span></div>
+                    <div class="wff-result-detail">${item.detail}</div>
+                    <div class="wff-result-cta">${item.cta}</div>
+                  </div>
+                </div>`;
+            });
+            html += `</div>`;
+          }
+
+          // 지자체 혜택
+          if (r.localBenefits.length > 0) {
+            html += `<div class="wff-result-section-title">🗺️ 거주 지역(${r.sido}) 지자체 추가 혜택 (${r.localBenefits.length})</div>`;
+            html += `<div class="wff-result-grid">`;
+            r.localBenefits.forEach(item => {
+              html += `
+                <div class="wff-result-card local info">
+                  <span class="wff-result-icon">📍</span>
+                  <div class="wff-result-body">
+                    <div class="wff-result-name">${item.name} <span class="wff-result-badge">지자체</span></div>
+                    <div class="wff-result-detail">${item.detail}</div>
+                    <div class="wff-result-cta">${item.cta}</div>
+                  </div>
+                </div>`;
+            });
+            html += `</div>`;
+          }
+
+          // 결과 없을 때
+          if (totalCount === 0) {
+            html += `
+              <div class="wff-result-card info">
+                <span class="wff-result-icon">📞</span>
+                <div class="wff-result-body">
+                  <div class="wff-result-name">주민센터 또는 보건복지상담센터(129)에 문의해보세요</div>
+                  <div class="wff-result-detail">입력 정보로는 직접 매칭된 혜택이 적지만, 가구 상황에 따라 받을 수 있는 다른 혜택(예: 차상위 통신비 감면, 에너지 바우처 등)이 있을 수 있습니다.</div>
+                </div>
+              </div>`;
+          }
+
+          // 안내문
+          html += `
+            <div class="wff-result-warn">
+              <strong>📌 결과 안내</strong>
+              본 결과는 입력하신 정보를 기반으로 한 <strong>예상 매칭 결과</strong>이며, 실제 자격 판정 및 지급 여부는 관할 기관(주민센터·국민연금공단·시·군·구청)의 심사를 통해 결정됩니다. 정확한 자격 확인은 <strong>복지로 자가진단(www.bokjiro.go.kr)</strong> 또는 <strong>보건복지상담센터 ☎ 129</strong>에서 받아보세요.
+              ${r.sido ? `<br>지자체별 혜택은 변경될 수 있어 <strong>${r.sido} 거주지 시·군·구청</strong>에 직접 확인하시는 것을 권장드립니다.` : ''}
+            </div>`;
+
+          div.innerHTML = html;
+          div.style.display = 'block';
+
+          // 결과 카드 클릭 → 해당 페이지로 이동
+          div.querySelectorAll('.wff-result-card[data-go]').forEach(card => {
+            card.addEventListener('click', () => {
+              const target = card.dataset.go;
+              if (target) { showSection(target); window.scrollTo(0,0); }
+            });
+          });
+
+          // 결과 영역으로 스크롤
+          setTimeout(() => div.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+      };
+      wff.init();
 
       document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', () => showSection('game-hub')));
       document.querySelectorAll('[data-game]').forEach(card => {
