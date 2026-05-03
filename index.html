@@ -596,6 +596,86 @@
     .wf-tone-emerald .wf-bar { background: #047857; }
     .wf-tone-emerald .wf-summary-item { border-color: #6ee7b7; background: linear-gradient(135deg,#ecfdf5,#fff); }
 
+    .wf-tone-slate .wf-header { background: linear-gradient(135deg, #0f172a 0%, #334155 50%, #64748b 100%); }
+    .wf-tone-slate .wf-bar { background: #334155; }
+    .wf-tone-slate .wf-summary-item { border-color: #cbd5e1; background: linear-gradient(135deg,#f8fafc,#fff); }
+
+    /* ===== 커뮤니티 게시판 ===== */
+    .cb-toolbar { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
+    .cb-write-btn { padding: 0.7rem 1.1rem; background: linear-gradient(135deg,#1e40af,#3b82f6); color: #fff; border: none; border-radius: 0.65rem; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 0.92rem; box-shadow: 0 3px 8px rgba(30,64,175,.25); display: inline-flex; align-items: center; gap: 0.4rem; }
+    .cb-write-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(30,64,175,.35); }
+    .cb-admin-btn { padding: 0.55rem 0.85rem; background: #fff; color: #b91c1c; border: 1.5px solid #fecaca; border-radius: 0.6rem; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 0.82rem; }
+    .cb-admin-btn.on { background: #b91c1c; color: #fff; border-color: #b91c1c; }
+    .cb-cat-tabs { display: flex; gap: 0.4rem; margin-bottom: 0.85rem; flex-wrap: wrap; }
+    .cb-cat-tab { padding: 0.45rem 0.85rem; border: 1.5px solid #e2e8f0; border-radius: 999px; font-size: 0.85rem; font-weight: 700; color: #475569; background: #fff; cursor: pointer; font-family: inherit; transition: all .15s; }
+    .cb-cat-tab:hover { border-color: #93c5fd; }
+    .cb-cat-tab.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+    .cb-empty { padding: 3rem 1.5rem; text-align: center; color: #94a3b8; font-size: 0.95rem; background: #f8fafc; border-radius: 0.85rem; }
+    .cb-empty .em { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+
+    .cb-post { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.85rem; padding: 1rem 1.1rem; margin-bottom: 0.65rem; transition: all .15s; }
+    .cb-post:hover { border-color: #93c5fd; box-shadow: 0 4px 14px rgba(30,64,175,.08); }
+    .cb-post.notice { background: linear-gradient(135deg,#fef3c7,#fffbeb); border-color: #fbbf24; border-left: 4px solid #d97706; }
+    .cb-post.notice .cb-post-cat-badge { background: #d97706; color: #fff; }
+    .cb-post-head { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.45rem; flex-wrap: wrap; }
+    .cb-post-cat-badge { padding: 0.18rem 0.55rem; background: #eff6ff; color: #1e40af; font-size: 0.72rem; font-weight: 800; border-radius: 999px; }
+    .cb-post-cat-badge.game { background: #dcfce7; color: #166534; }
+    .cb-post-cat-badge.calc { background: #fce7f3; color: #9d174d; }
+    .cb-post-cat-badge.free { background: #e0e7ff; color: #3730a3; }
+    .cb-post-author { font-weight: 700; color: #0f172a; font-size: 0.88rem; }
+    .cb-post-author.admin { color: #b91c1c; }
+    .cb-post-author.admin::after { content: ' 👑'; }
+    .cb-post-time { font-size: 0.75rem; color: #94a3b8; margin-left: auto; }
+    .cb-post-title { font-size: 1.05rem; font-weight: 800; color: #0f172a; line-height: 1.4; margin-bottom: 0.3rem; cursor: pointer; }
+    .cb-post-title:hover { color: #1e40af; }
+    .cb-post-preview { font-size: 0.88rem; color: #475569; line-height: 1.55; max-height: 3.2em; overflow: hidden; }
+    .cb-post-actions { display: flex; gap: 0.4rem; margin-top: 0.6rem; flex-wrap: wrap; }
+    .cb-post-action { padding: 0.35rem 0.7rem; border: 1px solid #e2e8f0; border-radius: 0.4rem; font-size: 0.78rem; font-weight: 600; color: #475569; background: #fff; cursor: pointer; font-family: inherit; }
+    .cb-post-action:hover { border-color: #94a3b8; background: #f8fafc; }
+    .cb-post-action.danger { color: #b91c1c; border-color: #fecaca; }
+    .cb-post-action.danger:hover { background: #fef2f2; }
+    .cb-post-action.primary { color: #1e40af; border-color: #bfdbfe; }
+    .cb-post-action.primary:hover { background: #eff6ff; }
+
+    /* 글 상세 보기 */
+    .cb-detail { background: #fff; border-radius: 0.85rem; padding: 1.5rem 1.4rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; }
+    .cb-detail-head { padding-bottom: 0.85rem; border-bottom: 2px dashed #e2e8f0; margin-bottom: 1rem; }
+    .cb-detail-title { font-size: 1.4rem; font-weight: 900; color: #0f172a; line-height: 1.4; margin: 0.35rem 0 0.45rem; }
+    .cb-detail-meta { display: flex; gap: 0.5rem; align-items: center; font-size: 0.82rem; color: #64748b; flex-wrap: wrap; }
+    .cb-detail-body { font-size: 0.96rem; color: #1e293b; line-height: 1.75; white-space: pre-wrap; word-break: break-word; min-height: 120px; }
+    .cb-detail-body strong { color: #0f172a; }
+    .cb-attached-result { margin-top: 1rem; padding: 0.95rem 1rem; background: linear-gradient(135deg,#f0fdf4,#fff); border-left: 4px solid #10b981; border-radius: 0.55rem; font-size: 0.85rem; color: #064e3b; }
+    .cb-attached-result strong { display: block; margin-bottom: 0.3rem; color: #047857; }
+
+    /* 글쓰기 모달 */
+    .cb-modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 9999; align-items: center; justify-content: center; padding: 1rem; }
+    .cb-modal.show { display: flex; }
+    .cb-modal-box { background: #fff; border-radius: 1rem; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 1.5rem 1.4rem; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+    .cb-modal-title { font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.4rem; }
+    .cb-modal-row { margin-bottom: 0.85rem; }
+    .cb-modal-label { display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem; }
+    .cb-modal-input, .cb-modal-textarea, .cb-modal-select { width: 100%; padding: 0.75rem 0.9rem; border: 1.5px solid #e2e8f0; border-radius: 0.55rem; font-size: 0.95rem; font-family: inherit; color: #0f172a; }
+    .cb-modal-input:focus, .cb-modal-textarea:focus, .cb-modal-select:focus { outline: none; border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30,64,175,.12); }
+    .cb-modal-textarea { min-height: 180px; resize: vertical; line-height: 1.6; }
+    .cb-modal-help { font-size: 0.78rem; color: #94a3b8; margin-top: 0.25rem; }
+    .cb-modal-actions { display: flex; gap: 0.5rem; margin-top: 1.2rem; }
+    .cb-modal-actions button { flex: 1; padding: 0.85rem; border: none; border-radius: 0.6rem; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 0.95rem; }
+    .cb-modal-actions .cancel { background: #f1f5f9; color: #475569; }
+    .cb-modal-actions .submit { background: linear-gradient(135deg,#1e40af,#3b82f6); color: #fff; }
+    .cb-modal-actions .submit:hover { transform: translateY(-1px); }
+    .cb-modal-error { color: #b91c1c; font-size: 0.85rem; padding: 0.55rem 0.8rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 0.5rem; margin-top: 0.6rem; display: none; }
+    .cb-modal-error.show { display: block; }
+
+    .cb-info-callout { padding: 0.85rem 1rem; background: #eff6ff; border-radius: 0.6rem; font-size: 0.83rem; color: #1e3a8a; margin-bottom: 1rem; line-height: 1.55; }
+    .cb-info-callout strong { color: #1e40af; }
+
+    @media (max-width: 768px) {
+      .cb-detail { padding: 1.1rem 1rem; }
+      .cb-detail-title { font-size: 1.15rem; }
+      .cb-modal-box { padding: 1.2rem 1rem; }
+      .cb-post-time { margin-left: 0; }
+    }
+
     /* 세금 도우미 전용 */
     .tx-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
     .tx-tab { padding: 0.95rem 0.85rem; border: 2px solid #e2e8f0; border-radius: 0.85rem; font-size: 1rem; font-weight: 800; color: #475569; background: #fff; cursor: pointer; transition: all .15s; font-family: inherit; text-align: center; line-height: 1.3; }
@@ -1059,6 +1139,11 @@
             <span class="home-cat-icon">💰</span>
             <div class="home-cat-name">세금 도우미</div>
             <span class="home-cat-status">연말정산·종소세</span>
+          </div>
+          <div class="home-cat-card active" data-go="community-board" style="--tone:#334155;">
+            <span class="home-cat-icon">💬</span>
+            <div class="home-cat-name">커뮤니티</div>
+            <span class="home-cat-status">자유 게시판</span>
           </div>
           <div class="home-cat-card active game-tone" data-go="game-hub">
             <span class="home-cat-icon">🎮</span>
@@ -3404,6 +3489,102 @@
     </main>
   </section>
 
+  <!-- ===== 커뮤니티 게시판 ===== -->
+  <section id="community-board" class="wf-section wf-tone-slate hidden">
+    <header class="wf-header">
+      <div class="wf-header-inner">
+        <button data-wf-back class="wf-back">← 홈으로</button>
+        <span class="wf-emoji">💬</span>
+        <h1 class="wf-title">커뮤니티</h1>
+        <p class="wf-subtitle">자유롭게 글을 쓰고 게임 점수·모의계산 결과를 공유하세요<br>회원가입 없이 글마다 비밀번호를 설정합니다</p>
+      </div>
+    </header>
+
+    <main class="wf-main">
+
+      <div class="cb-info-callout">
+        <strong>📌 이용 안내</strong> 누구나 글을 쓸 수 있어요. 글을 작성할 때 입력한 <strong>비밀번호</strong>로만 본인 글을 수정·삭제할 수 있습니다. 공지(👑 관리자)는 변경할 수 없어요.<br>
+        <span style="color:#64748b;">※ 현재 글은 이 브라우저(localStorage)에만 저장됩니다. 진짜 다중 사용자 게시판으로 키우려면 Firebase 연동이 필요해요.</span>
+      </div>
+
+      <div class="cb-toolbar">
+        <button type="button" id="cb-write-btn" class="cb-write-btn">✏️ 글쓰기</button>
+        <button type="button" id="cb-admin-btn" class="cb-admin-btn">🔑 관리자 로그인</button>
+        <span style="margin-left:auto; font-size:0.82rem; color:#64748b;">총 <strong id="cb-count" style="color:#1e40af;">0</strong>개 글</span>
+      </div>
+
+      <div class="cb-cat-tabs" id="cb-cat-tabs">
+        <button type="button" class="cb-cat-tab active" data-cb-cat="all">전체</button>
+        <button type="button" class="cb-cat-tab" data-cb-cat="notice">📢 공지</button>
+        <button type="button" class="cb-cat-tab" data-cb-cat="free">💬 자유</button>
+        <button type="button" class="cb-cat-tab" data-cb-cat="game">🎮 게임 결과</button>
+        <button type="button" class="cb-cat-tab" data-cb-cat="calc">🧮 모의계산 결과</button>
+      </div>
+
+      <!-- 글 목록 -->
+      <div id="cb-list"></div>
+
+      <!-- 글 상세 보기 (목록 클릭 시 여기로 채워짐) -->
+      <div id="cb-detail-wrap" style="display:none;"></div>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-6 mb-8" style="background:linear-gradient(135deg,#334155,#64748b); box-shadow:0 2px 10px rgba(15,23,42,.25); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
+    </main>
+  </section>
+
+  <!-- 글쓰기 / 수정 모달 -->
+  <div id="cb-modal" class="cb-modal" role="dialog" aria-modal="true">
+    <div class="cb-modal-box">
+      <h3 class="cb-modal-title" id="cb-modal-title">✏️ 글쓰기</h3>
+      <div class="cb-modal-row">
+        <label class="cb-modal-label">카테고리</label>
+        <select id="cb-modal-category" class="cb-modal-select">
+          <option value="free">💬 자유</option>
+          <option value="game">🎮 게임 결과 공유</option>
+          <option value="calc">🧮 모의계산 결과 공유</option>
+          <option value="notice" id="cb-modal-notice-opt" disabled>📢 공지 (관리자 전용)</option>
+        </select>
+      </div>
+      <div class="cb-modal-row">
+        <label class="cb-modal-label">닉네임</label>
+        <input type="text" id="cb-modal-author" class="cb-modal-input" maxlength="20" placeholder="예: 김복지" />
+      </div>
+      <div class="cb-modal-row">
+        <label class="cb-modal-label">제목</label>
+        <input type="text" id="cb-modal-title-input" class="cb-modal-input" maxlength="80" placeholder="제목을 입력하세요" />
+      </div>
+      <div class="cb-modal-row">
+        <label class="cb-modal-label">내용</label>
+        <textarea id="cb-modal-body" class="cb-modal-textarea" maxlength="3000" placeholder="자유롭게 작성하세요. 게임 점수나 모의계산 결과를 공유하셔도 좋아요!"></textarea>
+      </div>
+      <div class="cb-modal-row" id="cb-modal-pw-row">
+        <label class="cb-modal-label">비밀번호 <span style="color:#94a3b8; font-weight:500;">(글 수정·삭제 시 필요)</span></label>
+        <input type="password" id="cb-modal-pw" class="cb-modal-input" maxlength="32" placeholder="4자 이상" autocomplete="new-password" />
+        <p class="cb-modal-help">⚠️ 잊으면 본인 글도 수정·삭제 못 해요. 메모해두세요.</p>
+      </div>
+      <div class="cb-modal-error" id="cb-modal-error"></div>
+      <div class="cb-modal-actions">
+        <button type="button" class="cancel" id="cb-modal-cancel">취소</button>
+        <button type="button" class="submit" id="cb-modal-submit">등록</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 비밀번호 확인 모달 (수정/삭제 시) -->
+  <div id="cb-pw-modal" class="cb-modal" role="dialog" aria-modal="true">
+    <div class="cb-modal-box" style="max-width:400px;">
+      <h3 class="cb-modal-title" id="cb-pw-modal-title">🔒 비밀번호 확인</h3>
+      <div class="cb-modal-row">
+        <label class="cb-modal-label" id="cb-pw-modal-label">글 작성 시 입력한 비밀번호</label>
+        <input type="password" id="cb-pw-modal-input" class="cb-modal-input" autocomplete="off" />
+      </div>
+      <div class="cb-modal-error" id="cb-pw-modal-error"></div>
+      <div class="cb-modal-actions">
+        <button type="button" class="cancel" id="cb-pw-modal-cancel">취소</button>
+        <button type="button" class="submit" id="cb-pw-modal-confirm">확인</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== Game Hub ===== -->
   <section id="game-hub" class="hidden min-h-screen py-8">
     <div class="max-w-6xl mx-auto px-4">
@@ -3632,9 +3813,12 @@
           </div>
         </div>
         <div class="flex justify-center">
-          <canvas id="flappy-canvas" width="480" height="640" style="background:linear-gradient(to bottom,#4EC0CA 0%,#7FD6E1 50%,#9FE6F1 100%);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.2);"></canvas>
+          <canvas id="flappy-canvas" width="480" height="640" style="background:linear-gradient(to bottom,#4EC0CA 0%,#7FD6E1 50%,#9FE6F1 100%);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.2); max-width:100%;"></canvas>
         </div>
-        <p class="text-sm text-gray-600 mt-3">Space 또는 클릭/터치로 점프</p>
+        <p class="text-sm text-gray-600 mt-3 text-center">Space / 위쪽 화살표 / 클릭·터치로 점프 · 🟢🔴⚙️🟣 4종 파이프</p>
+        <div class="flex gap-2 mt-3">
+          <button id="flappy-share" class="flex-1 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-bold">📤 점수 공유하기</button>
+        </div>
       </div>
     </div>
   </section>
@@ -3734,7 +3918,7 @@
         // 홈페이지: 상단 nav 숨김, 플로팅 게임 버튼만 표시
         topNav.classList.add('hidden');
         floatingBtn.classList.remove('hidden');
-      } else if (sectionName === 'pension-container' || sectionName === 'fuel-support' || sectionName === 'disability-pension' || sectionName === 'tax-helper' || sectionName.startsWith('welfare-')) {
+      } else if (sectionName === 'pension-container' || sectionName === 'fuel-support' || sectionName === 'disability-pension' || sectionName === 'tax-helper' || sectionName === 'community-board' || sectionName.startsWith('welfare-')) {
         topNav.classList.add('hidden');
         floatingBtn.classList.add('hidden');
         if (sectionName === 'pension-container') floatingBtn.classList.remove('hidden');
@@ -5910,67 +6094,459 @@
     };
 
     /* ================================================
-       FLAPPY BIRD
+       FLAPPY BIRD — 개선판 (캐릭터·다양한 장애물·랜덤 간격)
        ================================================ */
     const flappyApp = {
-      canvas:null,ctx:null,bird:null,pipes:[],score:0,bestScore:0,gameState:'ready',
+      canvas:null, ctx:null, bird:null, pipes:[], clouds:[], particles:[],
+      score:0, bestScore:0, gameState:'ready', frame:0, groundOffset:0,
+
+      // 파이프 타입 (시각적 다양성 + 동작 다양성)
+      PIPE_TYPES: [
+        { name:'green',   color:'#2E8B2E', cap:'#1F5E1F', moving:false, weight:50 },
+        { name:'red',     color:'#C0392B', cap:'#922B21', moving:false, weight:25 },
+        { name:'metal',   color:'#7F8C8D', cap:'#34495E', moving:false, weight:15 },
+        { name:'mover',   color:'#8E44AD', cap:'#5B2C6F', moving:true,  weight:10 }, // 위아래로 움직임
+      ],
 
       init() {
-        this.canvas=document.getElementById('flappy-canvas');
-        if(this.canvas){this.ctx=this.canvas.getContext('2d');
-        document.getElementById('flappy-best')&&(document.getElementById('flappy-best').textContent=0);
-        document.getElementById('flappy-new')?.addEventListener('click',()=>this.newGame());
-        this.canvas.addEventListener('click',()=>this.jump());
-        document.addEventListener('keydown',(e)=>{if(activeGame==='flappy'&&e.key===' '){e.preventDefault();this.jump();}});
-        this.newGame();}
+        this.canvas = document.getElementById('flappy-canvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        const bestEl = document.getElementById('flappy-best');
+        // 로컬스토리지에서 최고점 불러오기
+        try { this.bestScore = parseInt(localStorage.getItem('flappyBest') || '0'); } catch(e) { this.bestScore = 0; }
+        if (bestEl) bestEl.textContent = this.bestScore;
+        document.getElementById('flappy-new')?.addEventListener('click', () => this.newGame());
+        document.getElementById('flappy-share')?.addEventListener('click', () => {
+          const sc = this.score, best = this.bestScore;
+          if (typeof window.shareToCommunity === 'function') {
+            window.shareToCommunity('🐤 플래피 새 게임', `이번 점수: ${sc}점\n최고 점수: ${best}점\n${sc === best && sc > 0 ? '🎉 새 기록 달성!' : ''}`);
+          }
+        });
+        this.canvas.addEventListener('click', () => this.jump());
+        this.canvas.addEventListener('touchstart', (e) => { e.preventDefault(); this.jump(); }, {passive:false});
+        document.addEventListener('keydown', (e) => {
+          if (activeGame === 'flappy' && (e.key === ' ' || e.key === 'ArrowUp')) { e.preventDefault(); this.jump(); }
+        });
+        this.newGame();
       },
 
       newGame() {
-        this.bird={x:100,y:this.canvas.height/2,vy:0,size:20,gravity:0.5,jumpPower:-8};
-        this.pipes=[];this.score=0;this.gameState='ready';
-        const el=document.getElementById('flappy-score');if(el)el.textContent=0;
+        this.bird = {
+          x: 100, y: this.canvas.height / 2, vy: 0, size: 18,
+          gravity: 0.45, jumpPower: -8, rotation: 0, wingPhase: 0, alive: true
+        };
+        this.pipes = [];
+        this.clouds = this.createClouds();
+        this.particles = [];
+        this.score = 0;
+        this.frame = 0;
+        this.groundOffset = 0;
+        this.gameState = 'ready';
+        const el = document.getElementById('flappy-score');
+        if (el) el.textContent = 0;
         this.gameLoop();
       },
 
-      jump() { if(this.gameState==='ready')this.gameState='playing'; if(this.gameState==='playing')this.bird.vy=this.bird.jumpPower; },
+      createClouds() {
+        const arr = [];
+        for (let i = 0; i < 4; i++) {
+          arr.push({
+            x: Math.random() * this.canvas.width,
+            y: 30 + Math.random() * 180,
+            size: 18 + Math.random() * 22,
+            speed: 0.3 + Math.random() * 0.4
+          });
+        }
+        return arr;
+      },
+
+      jump() {
+        if (this.gameState === 'ready') this.gameState = 'playing';
+        if (this.gameState === 'playing') {
+          this.bird.vy = this.bird.jumpPower;
+          this.bird.wingPhase = 0; // 점프 시 날개 활성화
+          // 점프 파티클
+          for (let i = 0; i < 4; i++) {
+            this.particles.push({
+              x: this.bird.x - 8, y: this.bird.y + 4,
+              vx: -1 - Math.random() * 1.5, vy: Math.random() * 1 - 0.5,
+              life: 18, color: '#fff'
+            });
+          }
+        }
+        if (this.gameState === 'over') this.newGame();
+      },
+
+      // 가중치 기반 랜덤 파이프 타입 선택
+      pickPipeType() {
+        const total = this.PIPE_TYPES.reduce((s, t) => s + t.weight, 0);
+        let r = Math.random() * total;
+        for (const t of this.PIPE_TYPES) { r -= t.weight; if (r <= 0) return t; }
+        return this.PIPE_TYPES[0];
+      },
 
       update() {
-        if(this.gameState!=='playing')return;
-        this.bird.vy+=this.bird.gravity;this.bird.y+=this.bird.vy;
-        if(this.bird.y<0||this.bird.y+this.bird.size>this.canvas.height)this.gameOverFn();
+        this.frame++;
+        // 구름은 항상 흐름
+        this.clouds.forEach(c => {
+          c.x -= c.speed;
+          if (c.x + c.size < 0) { c.x = this.canvas.width + 20; c.y = 30 + Math.random() * 180; }
+        });
+        // 바닥 스크롤
+        if (this.gameState === 'playing') this.groundOffset = (this.groundOffset + 3) % 24;
 
-        if(this.pipes.length===0||this.pipes[this.pipes.length-1].x<this.canvas.width-200){
-          const gap=150,minH=50,maxH=this.canvas.height-gap-minH,h=Math.random()*(maxH-minH)+minH;
-          this.pipes.push({x:this.canvas.width,topHeight:h,bottomY:h+gap,width:50,passed:false});
+        if (this.gameState !== 'playing') return;
+
+        // 새 물리
+        this.bird.vy += this.bird.gravity;
+        this.bird.y += this.bird.vy;
+        this.bird.rotation = Math.max(-0.4, Math.min(1.2, this.bird.vy * 0.08));
+        this.bird.wingPhase += 0.35;
+
+        // 바닥/천장
+        const groundY = this.canvas.height - 40;
+        if (this.bird.y - this.bird.size < 0) { this.bird.y = this.bird.size; this.bird.vy = 0; }
+        if (this.bird.y + this.bird.size > groundY) this.gameOverFn();
+
+        // 파이프 생성 — 간격 랜덤화 (140~260px)
+        const lastPipe = this.pipes[this.pipes.length - 1];
+        const nextSpacing = 160 + Math.random() * 110;
+        if (!lastPipe || lastPipe.x < this.canvas.width - nextSpacing) {
+          const gap = 130 + Math.random() * 50;  // 130~180 갭 랜덤
+          const minH = 40;
+          const maxH = groundY - gap - minH;
+          const h = Math.random() * (maxH - minH) + minH;
+          const type = this.pickPipeType();
+          this.pipes.push({
+            x: this.canvas.width,
+            baseTopHeight: h,
+            topHeight: h,
+            bottomY: h + gap,
+            gap: gap,
+            width: 56,
+            passed: false,
+            type: type,
+            // 움직이는 파이프용
+            moveAmp: type.moving ? (30 + Math.random() * 40) : 0,
+            movePhase: Math.random() * Math.PI * 2,
+            moveSpeed: 0.025 + Math.random() * 0.02
+          });
         }
 
-        this.pipes.forEach((pipe,i)=>{
-          pipe.x-=3;if(pipe.x+pipe.width<0)this.pipes.splice(i,1);
-          if(this.bird.x+this.bird.size>pipe.x&&this.bird.x<pipe.x+pipe.width)
-            if(this.bird.y<pipe.topHeight||this.bird.y+this.bird.size>pipe.bottomY)this.gameOverFn();
-          if(!pipe.passed&&pipe.x+pipe.width<this.bird.x){pipe.passed=true;this.score++;const el=document.getElementById('flappy-score');if(el)el.textContent=this.score;}
+        // 파이프 이동·충돌 검사
+        this.pipes = this.pipes.filter(p => {
+          p.x -= 3;
+          // 움직이는 파이프: 위아래 진동
+          if (p.type.moving) {
+            p.movePhase += p.moveSpeed;
+            const offset = Math.sin(p.movePhase) * p.moveAmp;
+            p.topHeight = Math.max(20, p.baseTopHeight + offset);
+            p.bottomY = p.topHeight + p.gap;
+          }
+          // 충돌
+          if (this.bird.x + this.bird.size > p.x && this.bird.x - this.bird.size < p.x + p.width) {
+            if (this.bird.y - this.bird.size < p.topHeight || this.bird.y + this.bird.size > p.bottomY) {
+              this.gameOverFn();
+            }
+          }
+          // 통과
+          if (!p.passed && p.x + p.width < this.bird.x) {
+            p.passed = true;
+            this.score++;
+            const el = document.getElementById('flappy-score');
+            if (el) el.textContent = this.score;
+            // 통과 점수 파티클
+            for (let i = 0; i < 6; i++) {
+              this.particles.push({
+                x: this.bird.x, y: this.bird.y,
+                vx: (Math.random() - 0.5) * 3, vy: (Math.random() - 0.5) * 3,
+                life: 24, color: '#FFD700'
+              });
+            }
+          }
+          return p.x + p.width > 0;
+        });
+
+        // 파티클 업데이트
+        this.particles = this.particles.filter(p => {
+          p.x += p.vx; p.y += p.vy; p.life--;
+          return p.life > 0;
         });
       },
 
       draw() {
-        if(!this.ctx)return;
-        const g=this.ctx.createLinearGradient(0,0,0,this.canvas.height);g.addColorStop(0,'#4EC0CA');g.addColorStop(0.5,'#7FD6E1');g.addColorStop(1,'#9FE6F1');
-        this.ctx.fillStyle=g;this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-        this.ctx.fillStyle='#228B22';this.pipes.forEach(p=>{this.ctx.fillRect(p.x,0,p.width,p.topHeight);this.ctx.fillRect(p.x,p.bottomY,p.width,this.canvas.height-p.bottomY);});
-        this.ctx.fillStyle='#FFD700';this.ctx.beginPath();this.ctx.arc(this.bird.x,this.bird.y,this.bird.size,0,Math.PI*2);this.ctx.fill();
-        if(this.gameState==='ready'){this.ctx.fillStyle='rgba(0,0,0,0.5)';this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);this.ctx.fillStyle='#fff';this.ctx.font='bold 24px Arial';this.ctx.textAlign='center';this.ctx.fillText('클릭 또는 Space로 시작',this.canvas.width/2,this.canvas.height/2);}
+        if (!this.ctx) return;
+        const c = this.ctx, W = this.canvas.width, H = this.canvas.height, groundY = H - 40;
+
+        // 하늘 그라디언트
+        const sky = c.createLinearGradient(0, 0, 0, H);
+        sky.addColorStop(0, '#4EC0CA');
+        sky.addColorStop(0.5, '#7FD6E1');
+        sky.addColorStop(1, '#C8EAF0');
+        c.fillStyle = sky;
+        c.fillRect(0, 0, W, H);
+
+        // 구름
+        c.fillStyle = 'rgba(255,255,255,0.85)';
+        this.clouds.forEach(cl => {
+          c.beginPath();
+          c.arc(cl.x, cl.y, cl.size, 0, Math.PI * 2);
+          c.arc(cl.x + cl.size * 0.7, cl.y + 4, cl.size * 0.8, 0, Math.PI * 2);
+          c.arc(cl.x - cl.size * 0.6, cl.y + 6, cl.size * 0.7, 0, Math.PI * 2);
+          c.fill();
+        });
+
+        // 파이프 (타입별)
+        this.pipes.forEach(p => this.drawPipe(p, groundY));
+
+        // 바닥
+        c.fillStyle = '#DED895';
+        c.fillRect(0, groundY, W, 40);
+        c.fillStyle = '#8B7355';
+        for (let i = -1; i < W / 24 + 2; i++) {
+          c.fillRect(i * 24 - this.groundOffset, groundY, 12, 6);
+        }
+        c.strokeStyle = '#5D4E37';
+        c.lineWidth = 2;
+        c.beginPath(); c.moveTo(0, groundY); c.lineTo(W, groundY); c.stroke();
+
+        // 파티클
+        this.particles.forEach(p => {
+          c.fillStyle = p.color;
+          c.globalAlpha = p.life / 24;
+          c.beginPath();
+          c.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          c.fill();
+          c.globalAlpha = 1;
+        });
+
+        // 새 캐릭터
+        this.drawBird();
+
+        // 점수 (큰 숫자, 화면 위)
+        if (this.gameState === 'playing' || this.gameState === 'over') {
+          c.font = 'bold 48px Arial';
+          c.textAlign = 'center';
+          c.lineWidth = 4;
+          c.strokeStyle = '#000';
+          c.fillStyle = '#fff';
+          c.strokeText(this.score, W / 2, 70);
+          c.fillText(this.score, W / 2, 70);
+        }
+
+        // 시작 안내
+        if (this.gameState === 'ready') {
+          c.fillStyle = 'rgba(0,0,0,0.45)';
+          c.fillRect(0, 0, W, H);
+          c.fillStyle = '#fff';
+          c.font = 'bold 26px Arial';
+          c.textAlign = 'center';
+          c.fillText('🐤 플래피 새', W / 2, H / 2 - 60);
+          c.font = 'bold 18px Arial';
+          c.fillText('클릭 / 스페이스 / 위쪽 화살표로 점프', W / 2, H / 2 - 20);
+          c.font = '15px Arial';
+          c.fillText('🟢 일반  🔴 빨강  ⚙️ 금속  🟣 움직이는 파이프', W / 2, H / 2 + 12);
+          c.fillText('파이프 사이를 통과하세요!', W / 2, H / 2 + 36);
+          c.font = 'bold 17px Arial';
+          c.fillStyle = '#FFD700';
+          c.fillText(`최고 점수: ${this.bestScore}`, W / 2, H / 2 + 80);
+        }
+
+        // 게임오버 화면
+        if (this.gameState === 'over') {
+          c.fillStyle = 'rgba(0,0,0,0.55)';
+          c.fillRect(0, 0, W, H);
+          c.fillStyle = '#fff';
+          c.font = 'bold 36px Arial';
+          c.textAlign = 'center';
+          c.fillText('💥 GAME OVER', W / 2, H / 2 - 40);
+          c.font = 'bold 22px Arial';
+          c.fillText(`점수: ${this.score}`, W / 2, H / 2);
+          c.fillStyle = '#FFD700';
+          c.font = 'bold 18px Arial';
+          c.fillText(`최고 점수: ${this.bestScore}`, W / 2, H / 2 + 30);
+          if (this.score === this.bestScore && this.score > 0) {
+            c.fillStyle = '#FF6B6B';
+            c.font = 'bold 16px Arial';
+            c.fillText('🎉 새 기록!', W / 2, H / 2 + 55);
+          }
+          c.fillStyle = '#fff';
+          c.font = '15px Arial';
+          c.fillText('클릭 또는 스페이스로 다시 시작', W / 2, H / 2 + 90);
+        }
+      },
+
+      drawBird() {
+        const c = this.ctx, b = this.bird;
+        c.save();
+        c.translate(b.x, b.y);
+        c.rotate(b.rotation);
+
+        // 몸통 (노란색)
+        const bodyG = c.createRadialGradient(-3, -3, 2, 0, 0, b.size);
+        bodyG.addColorStop(0, '#FFE56B');
+        bodyG.addColorStop(1, '#F4A623');
+        c.fillStyle = bodyG;
+        c.beginPath();
+        c.ellipse(0, 0, b.size, b.size * 0.85, 0, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = '#8B6914';
+        c.lineWidth = 1.5;
+        c.stroke();
+
+        // 배 (밝은 색)
+        c.fillStyle = '#FFF4B8';
+        c.beginPath();
+        c.ellipse(0, 4, b.size * 0.7, b.size * 0.55, 0, 0, Math.PI * 2);
+        c.fill();
+
+        // 날개 (퍼덕임 애니메이션)
+        const wingY = Math.sin(b.wingPhase) * 6;
+        c.fillStyle = '#E89710';
+        c.beginPath();
+        c.ellipse(-3, 2 + wingY, b.size * 0.6, b.size * 0.4, -0.3, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = '#8B6914';
+        c.lineWidth = 1;
+        c.stroke();
+
+        // 부리 (주황 삼각)
+        c.fillStyle = '#FF7F00';
+        c.beginPath();
+        c.moveTo(b.size * 0.85, -2);
+        c.lineTo(b.size * 1.4, 0);
+        c.lineTo(b.size * 0.85, 4);
+        c.closePath();
+        c.fill();
+        c.strokeStyle = '#8B4500';
+        c.lineWidth = 1;
+        c.stroke();
+        // 부리 분리선
+        c.beginPath();
+        c.moveTo(b.size * 0.85, 1);
+        c.lineTo(b.size * 1.4, 0);
+        c.stroke();
+
+        // 눈 (흰자)
+        c.fillStyle = '#fff';
+        c.beginPath();
+        c.arc(b.size * 0.4, -b.size * 0.4, b.size * 0.32, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = '#000';
+        c.lineWidth = 1;
+        c.stroke();
+        // 눈동자
+        c.fillStyle = '#000';
+        c.beginPath();
+        c.arc(b.size * 0.5, -b.size * 0.4, b.size * 0.16, 0, Math.PI * 2);
+        c.fill();
+        // 눈 하이라이트
+        c.fillStyle = '#fff';
+        c.beginPath();
+        c.arc(b.size * 0.55, -b.size * 0.45, b.size * 0.06, 0, Math.PI * 2);
+        c.fill();
+
+        // 볼 (분홍)
+        c.fillStyle = 'rgba(255, 105, 130, 0.55)';
+        c.beginPath();
+        c.arc(b.size * 0.25, b.size * 0.25, b.size * 0.18, 0, Math.PI * 2);
+        c.fill();
+
+        c.restore();
+      },
+
+      drawPipe(p, groundY) {
+        const c = this.ctx;
+        const capH = 26;
+        const capExtra = 6;
+
+        // 본체 그라디언트
+        const bodyG = c.createLinearGradient(p.x, 0, p.x + p.width, 0);
+        bodyG.addColorStop(0, p.type.color);
+        bodyG.addColorStop(0.5, this.lighten(p.type.color, 30));
+        bodyG.addColorStop(1, p.type.color);
+
+        // 위쪽 파이프
+        c.fillStyle = bodyG;
+        c.fillRect(p.x, 0, p.width, p.topHeight);
+        c.strokeStyle = p.type.cap;
+        c.lineWidth = 2;
+        c.strokeRect(p.x, 0, p.width, p.topHeight);
+        // 캡
+        c.fillStyle = p.type.cap;
+        c.fillRect(p.x - capExtra, p.topHeight - capH, p.width + capExtra * 2, capH);
+        c.fillStyle = bodyG;
+        c.fillRect(p.x - capExtra + 3, p.topHeight - capH + 3, p.width + capExtra * 2 - 6, capH - 6);
+
+        // 아래쪽 파이프
+        c.fillStyle = bodyG;
+        c.fillRect(p.x, p.bottomY, p.width, groundY - p.bottomY);
+        c.strokeStyle = p.type.cap;
+        c.strokeRect(p.x, p.bottomY, p.width, groundY - p.bottomY);
+        // 캡
+        c.fillStyle = p.type.cap;
+        c.fillRect(p.x - capExtra, p.bottomY, p.width + capExtra * 2, capH);
+        c.fillStyle = bodyG;
+        c.fillRect(p.x - capExtra + 3, p.bottomY + 3, p.width + capExtra * 2 - 6, capH - 6);
+
+        // 금속 파이프: 볼트 무늬
+        if (p.type.name === 'metal') {
+          c.fillStyle = p.type.cap;
+          for (let y = 30; y < p.topHeight - capH - 10; y += 30) {
+            c.beginPath(); c.arc(p.x + 10, y, 2, 0, Math.PI * 2); c.fill();
+            c.beginPath(); c.arc(p.x + p.width - 10, y, 2, 0, Math.PI * 2); c.fill();
+          }
+          for (let y = p.bottomY + capH + 20; y < groundY - 10; y += 30) {
+            c.beginPath(); c.arc(p.x + 10, y, 2, 0, Math.PI * 2); c.fill();
+            c.beginPath(); c.arc(p.x + p.width - 10, y, 2, 0, Math.PI * 2); c.fill();
+          }
+        }
+        // 움직이는 파이프: 화살표 표시
+        if (p.type.moving) {
+          c.fillStyle = '#FFD700';
+          c.font = 'bold 16px Arial';
+          c.textAlign = 'center';
+          c.fillText('↕', p.x + p.width / 2, p.topHeight - capH / 2 + 5);
+          c.fillText('↕', p.x + p.width / 2, p.bottomY + capH / 2 + 5);
+        }
+      },
+
+      // 색상 밝게
+      lighten(hex, amt) {
+        const n = parseInt(hex.slice(1), 16);
+        const r = Math.min(255, ((n >> 16) & 0xff) + amt);
+        const g = Math.min(255, ((n >> 8) & 0xff) + amt);
+        const b = Math.min(255, (n & 0xff) + amt);
+        return `rgb(${r},${g},${b})`;
       },
 
       gameLoop() {
-        if(activeGame!=='flappy')return;
-        this.update();this.draw();
-        if(this.gameState!=='over')requestAnimationFrame(()=>this.gameLoop());
+        if (activeGame !== 'flappy') return;
+        this.update();
+        this.draw();
+        if (this.gameState !== 'over') requestAnimationFrame(() => this.gameLoop());
       },
 
       gameOverFn() {
-        this.gameState='over';
-        if(this.score>this.bestScore){this.bestScore=this.score;const el=document.getElementById('flappy-best');if(el)el.textContent=this.bestScore;}
-        alert('게임 종료! 점수: '+this.score);
+        if (this.gameState === 'over') return;
+        this.gameState = 'over';
+        // 폭발 파티클
+        for (let i = 0; i < 20; i++) {
+          this.particles.push({
+            x: this.bird.x, y: this.bird.y,
+            vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 6,
+            life: 30, color: ['#FF6B6B', '#FFD700', '#fff'][Math.floor(Math.random() * 3)]
+          });
+        }
+        if (this.score > this.bestScore) {
+          this.bestScore = this.score;
+          try { localStorage.setItem('flappyBest', this.bestScore); } catch(e){}
+          const el = document.getElementById('flappy-best');
+          if (el) el.textContent = this.bestScore;
+        }
+        // 마지막 화면 한 번 그리고 게시판 공유 안내 (alert 대신 캔버스에 표시)
+        this.draw();
       }
     };
 
@@ -6277,6 +6853,7 @@
         { keywords: ['긴급복지', '긴급지원', '위기', '실직', '폐업'], target: 'welfare-emergency', label: '긴급복지지원', desc: '위기상황 일시 지원 (선지원 후심사)' },
         { keywords: ['한부모', '다자녀', '미혼모', '미혼부', '조손', '청소년한부모'], target: 'welfare-singleparent', label: '한부모·다자녀', desc: '아동양육비·다자녀 혜택' },
         { keywords: ['세금', '연말정산', '종합소득세', '종소세', '환급', '13월의 월급', '프리랜서', '3.3', '홈택스', '국세청', '소득공제', '세액공제', '월세공제'], target: 'tax-helper', label: '세금 도우미', desc: '연말정산·종소세 꿀팁과 환급 가이드' },
+        { keywords: ['게시판', '커뮤니티', '글쓰기', '공유', '결과', '소통'], target: 'community-board', label: '커뮤니티', desc: '자유게시판·게임결과·모의계산 공유' },
         { keywords: ['게임', '오목', '테트리스', '스도쿠', '벽돌깨기'], target: 'game-hub', label: '추억의 게임', desc: '기분 전환용 클래식 게임' }
       ];
       const upcomingMap = {};
@@ -6932,7 +7509,10 @@
               <strong>📌 결과 안내</strong>
               본 결과는 입력하신 정보를 기반으로 한 <strong>예상 매칭 결과</strong>이며, 실제 자격 판정 및 지급 여부는 관할 기관(주민센터·국민연금공단·시·군·구청)의 심사를 통해 결정됩니다. 정확한 자격 확인은 <strong>복지로 자가진단(www.bokjiro.go.kr)</strong> 또는 <strong>보건복지상담센터 ☎ 129</strong>에서 받아보세요.
               ${r.sido ? `<br>지자체별 혜택은 변경될 수 있어 <strong>${r.sido} 거주지 시·군·구청</strong>에 직접 확인하시는 것을 권장드립니다.` : ''}
-            </div>`;
+            </div>
+            <button type="button" id="wff-share-btn" style="width:100%; padding:0.95rem; margin-top:0.85rem; background:linear-gradient(135deg,#334155,#64748b); color:#fff; border:none; border-radius:0.7rem; font-size:0.95rem; font-weight:800; cursor:pointer; font-family:inherit; box-shadow:0 3px 10px rgba(15,23,42,.2);">
+              💬 커뮤니티에 결과 공유하기
+            </button>`;
 
           div.innerHTML = html;
           div.style.display = 'block';
@@ -6945,11 +7525,446 @@
             });
           });
 
+          // 커뮤니티 공유 버튼
+          document.getElementById('wff-share-btn')?.addEventListener('click', () => {
+            if (typeof window.shareToCommunity !== 'function') return;
+            const summary = `📍 거주: ${r.sido || '미입력'} · 만 ${r.age}세\n` +
+              `✅ 자격 가능성 높음 (${r.high.length}): ${r.high.map(x=>x.name).join(', ') || '없음'}\n` +
+              `🔎 조건 확인 필요 (${r.review.length}): ${r.review.map(x=>x.name).join(', ') || '없음'}\n` +
+              `🗺️ 지자체 추가 (${r.localBenefits.length}): ${r.localBenefits.map(x=>x.name).join(', ') || '없음'}`;
+            window.shareToCommunity('🧮 모의계산', summary);
+          });
+
           // 결과 영역으로 스크롤
           setTimeout(() => div.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
         }
       };
       wff.init();
+
+      /* ================================================
+         커뮤니티 게시판 (localStorage 기반, 비번 hash)
+         ================================================ */
+      const community = {
+        STORAGE_KEY: 'welfareCommunityPosts_v1',
+        // ⚠️ 마스터 비번 hash (현재: admin1234) — 변경하려면 SHA-256 해시값 교체
+        // 새 비번을 정한 뒤 https://emn178.github.io/online-tools/sha256.html 등에서 해시 생성
+        ADMIN_HASH: '7f5b2d2f8ebca7b9b25c4e62a6e09e7d4c66a6dc1e56e5ebb9d4d1d8e93b2e7f', // 자리표시자
+        ADMIN_FALLBACK_PW: 'admin1234', // 위 hash가 임의값일 때 비교용 (즉시 사용 가능)
+        adminMode: false,
+        currentCategory: 'all',
+        editTargetId: null,
+        pendingAction: null, // {type: 'edit'|'delete', postId}
+
+        async sha256(text) {
+          if (!window.crypto?.subtle) {
+            // fallback: 단순 해시 (보안용 아님)
+            let h = 0;
+            for (let i = 0; i < text.length; i++) { h = ((h << 5) - h) + text.charCodeAt(i); h |= 0; }
+            return 'fb_' + Math.abs(h).toString(16);
+          }
+          const buf = new TextEncoder().encode(text);
+          const hash = await crypto.subtle.digest('SHA-256', buf);
+          return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+        },
+
+        load() {
+          try {
+            const raw = localStorage.getItem(this.STORAGE_KEY);
+            return raw ? JSON.parse(raw) : [];
+          } catch (e) { return []; }
+        },
+        save(posts) {
+          try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(posts)); }
+          catch (e) { alert('저장 실패: 저장공간이 부족합니다.'); }
+        },
+
+        formatTime(ts) {
+          const d = new Date(ts);
+          const now = new Date();
+          const diff = (now - d) / 1000;
+          if (diff < 60) return '방금 전';
+          if (diff < 3600) return Math.floor(diff/60) + '분 전';
+          if (diff < 86400) return Math.floor(diff/3600) + '시간 전';
+          if (diff < 86400 * 7) return Math.floor(diff/86400) + '일 전';
+          return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+        },
+
+        catLabel(cat) {
+          return ({notice:'📢 공지', free:'💬 자유', game:'🎮 게임 결과', calc:'🧮 모의계산'})[cat] || cat;
+        },
+        catClass(cat) {
+          return ({notice:'notice', free:'free', game:'game', calc:'calc'})[cat] || 'free';
+        },
+
+        renderList() {
+          const all = this.load();
+          // 공지를 항상 위에, 그 다음 최신순
+          const filtered = this.currentCategory === 'all'
+            ? all
+            : all.filter(p => p.category === this.currentCategory);
+          const sorted = [...filtered].sort((a, b) => {
+            if (a.category === 'notice' && b.category !== 'notice') return -1;
+            if (a.category !== 'notice' && b.category === 'notice') return 1;
+            return b.createdAt - a.createdAt;
+          });
+
+          const list = document.getElementById('cb-list');
+          const cnt = document.getElementById('cb-count');
+          if (cnt) cnt.textContent = all.length;
+          if (!list) return;
+
+          if (sorted.length === 0) {
+            list.innerHTML = `<div class="cb-empty"><span class="em">📭</span>아직 글이 없어요.<br>첫 번째 글을 남겨보세요!</div>`;
+            return;
+          }
+
+          list.innerHTML = sorted.map(p => {
+            const isNotice = p.category === 'notice';
+            const isAdminPost = p.adminPost;
+            const preview = (p.body || '').slice(0, 100).replace(/</g,'&lt;') + (p.body && p.body.length > 100 ? '...' : '');
+            return `
+              <div class="cb-post ${isNotice ? 'notice' : ''}" data-post-id="${p.id}">
+                <div class="cb-post-head">
+                  <span class="cb-post-cat-badge ${this.catClass(p.category)}">${this.catLabel(p.category)}</span>
+                  <span class="cb-post-author ${isAdminPost ? 'admin' : ''}">${this.escape(p.author || '익명')}</span>
+                  <span class="cb-post-time">${this.formatTime(p.createdAt)}${p.updatedAt ? ' (수정됨)' : ''}</span>
+                </div>
+                <div class="cb-post-title" data-cb-view="${p.id}">${this.escape(p.title)}</div>
+                <div class="cb-post-preview">${preview || '<em style="color:#94a3b8;">(내용 없음)</em>'}</div>
+                ${p.attachedResult ? `<div style="margin-top:0.5rem; font-size:0.8rem; color:#047857; font-weight:700;">📎 결과 첨부됨</div>` : ''}
+                <div class="cb-post-actions">
+                  <button class="cb-post-action primary" data-cb-view="${p.id}">자세히 보기</button>
+                  <button class="cb-post-action" data-cb-edit="${p.id}">수정</button>
+                  <button class="cb-post-action danger" data-cb-delete="${p.id}">삭제</button>
+                </div>
+              </div>`;
+          }).join('');
+
+          // 이벤트 바인딩
+          list.querySelectorAll('[data-cb-view]').forEach(el => {
+            el.addEventListener('click', () => this.viewPost(el.dataset.cbView));
+          });
+          list.querySelectorAll('[data-cb-edit]').forEach(el => {
+            el.addEventListener('click', () => this.requestEdit(el.dataset.cbEdit));
+          });
+          list.querySelectorAll('[data-cb-delete]').forEach(el => {
+            el.addEventListener('click', () => this.requestDelete(el.dataset.cbDelete));
+          });
+
+          document.getElementById('cb-detail-wrap').style.display = 'none';
+          document.getElementById('cb-list').style.display = 'block';
+        },
+
+        viewPost(id) {
+          const all = this.load();
+          const p = all.find(x => x.id === id);
+          if (!p) return;
+          const wrap = document.getElementById('cb-detail-wrap');
+          wrap.innerHTML = `
+            <div class="cb-detail">
+              <div class="cb-detail-head">
+                <span class="cb-post-cat-badge ${this.catClass(p.category)}">${this.catLabel(p.category)}</span>
+                <h2 class="cb-detail-title">${this.escape(p.title)}</h2>
+                <div class="cb-detail-meta">
+                  <span class="cb-post-author ${p.adminPost ? 'admin' : ''}">${this.escape(p.author || '익명')}</span>
+                  <span>·</span>
+                  <span>${this.formatTime(p.createdAt)}${p.updatedAt ? ' (수정됨)' : ''}</span>
+                </div>
+              </div>
+              <div class="cb-detail-body">${this.escape(p.body || '')}</div>
+              ${p.attachedResult ? `<div class="cb-attached-result"><strong>📎 첨부된 결과</strong>${this.escape(p.attachedResult)}</div>` : ''}
+              <div class="cb-post-actions" style="margin-top:1.2rem;">
+                <button class="cb-post-action primary" id="cb-back-list">← 목록</button>
+                <button class="cb-post-action" data-cb-edit="${p.id}">수정</button>
+                <button class="cb-post-action danger" data-cb-delete="${p.id}">삭제</button>
+              </div>
+            </div>`;
+          wrap.style.display = 'block';
+          document.getElementById('cb-list').style.display = 'none';
+          document.getElementById('cb-back-list').addEventListener('click', () => this.renderList());
+          wrap.querySelectorAll('[data-cb-edit]').forEach(el => {
+            el.addEventListener('click', () => this.requestEdit(el.dataset.cbEdit));
+          });
+          wrap.querySelectorAll('[data-cb-delete]').forEach(el => {
+            el.addEventListener('click', () => this.requestDelete(el.dataset.cbDelete));
+          });
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+
+        escape(s) {
+          return String(s || '').replace(/[<>&"']/g, m => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]));
+        },
+
+        openWriteModal(editPost) {
+          const modal = document.getElementById('cb-modal');
+          const titleH = document.getElementById('cb-modal-title');
+          const noticeOpt = document.getElementById('cb-modal-notice-opt');
+          const pwRow = document.getElementById('cb-modal-pw-row');
+          const pwInput = document.getElementById('cb-modal-pw');
+          const errEl = document.getElementById('cb-modal-error');
+          errEl.classList.remove('show');
+
+          // 관리자: 공지 작성 가능
+          noticeOpt.disabled = !this.adminMode;
+
+          if (editPost) {
+            titleH.textContent = '✏️ 글 수정';
+            this.editTargetId = editPost.id;
+            document.getElementById('cb-modal-category').value = editPost.category;
+            document.getElementById('cb-modal-author').value = editPost.author || '';
+            document.getElementById('cb-modal-title-input').value = editPost.title || '';
+            document.getElementById('cb-modal-body').value = editPost.body || '';
+            // 수정 시 비번 재입력 안 받음 (이미 인증됨)
+            pwRow.style.display = 'none';
+          } else {
+            titleH.textContent = '✏️ 글쓰기';
+            this.editTargetId = null;
+            document.getElementById('cb-modal-category').value = 'free';
+            document.getElementById('cb-modal-author').value = this.adminMode ? '관리자' : '';
+            document.getElementById('cb-modal-title-input').value = '';
+            document.getElementById('cb-modal-body').value = '';
+            pwInput.value = '';
+            pwRow.style.display = this.adminMode ? 'none' : 'block';
+          }
+          modal.classList.add('show');
+          setTimeout(() => document.getElementById('cb-modal-title-input').focus(), 50);
+        },
+
+        closeWriteModal() {
+          document.getElementById('cb-modal').classList.remove('show');
+        },
+
+        async submitPost() {
+          const category = document.getElementById('cb-modal-category').value;
+          const author = document.getElementById('cb-modal-author').value.trim() || '익명';
+          const title = document.getElementById('cb-modal-title-input').value.trim();
+          const body = document.getElementById('cb-modal-body').value.trim();
+          const pw = document.getElementById('cb-modal-pw').value;
+          const errEl = document.getElementById('cb-modal-error');
+
+          if (!title) { errEl.textContent = '제목을 입력해주세요.'; errEl.classList.add('show'); return; }
+          if (!body) { errEl.textContent = '내용을 입력해주세요.'; errEl.classList.add('show'); return; }
+          if (category === 'notice' && !this.adminMode) {
+            errEl.textContent = '공지는 관리자만 작성할 수 있어요.'; errEl.classList.add('show'); return;
+          }
+
+          const all = this.load();
+          if (this.editTargetId) {
+            // 수정
+            const p = all.find(x => x.id === this.editTargetId);
+            if (!p) { this.closeWriteModal(); return; }
+            p.category = category;
+            p.author = author;
+            p.title = title;
+            p.body = body;
+            p.updatedAt = Date.now();
+            this.save(all);
+          } else {
+            // 새 글
+            if (!this.adminMode) {
+              if (!pw || pw.length < 4) {
+                errEl.textContent = '비밀번호는 4자 이상으로 설정해주세요.'; errEl.classList.add('show'); return;
+              }
+            }
+            const post = {
+              id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+              category, author, title, body,
+              pwHash: this.adminMode ? null : await this.sha256(pw),
+              adminPost: this.adminMode,
+              createdAt: Date.now(),
+              updatedAt: null,
+              attachedResult: window._cbPendingResult || null
+            };
+            window._cbPendingResult = null; // 첨부 결과 사용 후 초기화
+            all.push(post);
+            this.save(all);
+          }
+          this.closeWriteModal();
+          this.renderList();
+        },
+
+        requestEdit(id) {
+          const all = this.load();
+          const p = all.find(x => x.id === id);
+          if (!p) return;
+          if (this.adminMode || p.adminPost === false && !p.pwHash) {
+            this.openWriteModal(p);
+            return;
+          }
+          if (this.adminMode) {
+            this.openWriteModal(p);
+            return;
+          }
+          // 비번 확인
+          this.pendingAction = { type: 'edit', postId: id };
+          this.openPwModal(p.adminPost ? '관리자 글은 관리자만 수정할 수 있어요.' : '글 작성 시 입력한 비밀번호');
+        },
+
+        requestDelete(id) {
+          const all = this.load();
+          const p = all.find(x => x.id === id);
+          if (!p) return;
+          if (this.adminMode) {
+            if (confirm('관리자 권한으로 이 글을 삭제하시겠습니까?')) {
+              this.deletePost(id);
+            }
+            return;
+          }
+          this.pendingAction = { type: 'delete', postId: id };
+          this.openPwModal(p.adminPost ? '관리자 글은 관리자만 삭제할 수 있어요.' : '글 작성 시 입력한 비밀번호');
+        },
+
+        deletePost(id) {
+          const all = this.load();
+          const next = all.filter(x => x.id !== id);
+          this.save(next);
+          this.renderList();
+        },
+
+        openPwModal(label) {
+          const modal = document.getElementById('cb-pw-modal');
+          document.getElementById('cb-pw-modal-label').textContent = label;
+          document.getElementById('cb-pw-modal-input').value = '';
+          document.getElementById('cb-pw-modal-error').classList.remove('show');
+          modal.classList.add('show');
+          setTimeout(() => document.getElementById('cb-pw-modal-input').focus(), 50);
+        },
+
+        closePwModal() {
+          document.getElementById('cb-pw-modal').classList.remove('show');
+          this.pendingAction = null;
+        },
+
+        async confirmPw() {
+          const pw = document.getElementById('cb-pw-modal-input').value;
+          const errEl = document.getElementById('cb-pw-modal-error');
+          if (!pw) { errEl.textContent = '비밀번호를 입력해주세요.'; errEl.classList.add('show'); return; }
+          if (!this.pendingAction) { this.closePwModal(); return; }
+
+          const all = this.load();
+          const p = all.find(x => x.id === this.pendingAction.postId);
+          if (!p) { this.closePwModal(); return; }
+
+          const inputHash = await this.sha256(pw);
+          if (p.adminPost) {
+            // 관리자 글은 관리자만
+            if (inputHash === this.ADMIN_HASH || pw === this.ADMIN_FALLBACK_PW) {
+              this.adminMode = true;
+              this.updateAdminBtn();
+            } else {
+              errEl.textContent = '관리자 비밀번호가 아니거나 일치하지 않아요.'; errEl.classList.add('show'); return;
+            }
+          } else {
+            if (inputHash !== p.pwHash) {
+              errEl.textContent = '비밀번호가 일치하지 않습니다.'; errEl.classList.add('show'); return;
+            }
+          }
+
+          // 인증 성공
+          const action = this.pendingAction;
+          this.closePwModal();
+          if (action.type === 'edit') this.openWriteModal(p);
+          if (action.type === 'delete') {
+            if (confirm('정말 이 글을 삭제하시겠습니까?')) this.deletePost(action.postId);
+          }
+        },
+
+        async toggleAdmin() {
+          if (this.adminMode) {
+            this.adminMode = false;
+            this.updateAdminBtn();
+            return;
+          }
+          const pw = prompt('🔑 관리자 비밀번호를 입력하세요\n(기본: admin1234 — 코드에서 변경 가능)');
+          if (pw === null) return;
+          const hash = await this.sha256(pw);
+          if (hash === this.ADMIN_HASH || pw === this.ADMIN_FALLBACK_PW) {
+            this.adminMode = true;
+            this.updateAdminBtn();
+            alert('✅ 관리자 모드 ON\n공지글 작성·모든 글 수정/삭제가 가능합니다.');
+          } else {
+            alert('❌ 관리자 비밀번호가 아닙니다.');
+          }
+        },
+
+        updateAdminBtn() {
+          const btn = document.getElementById('cb-admin-btn');
+          if (!btn) return;
+          if (this.adminMode) {
+            btn.classList.add('on');
+            btn.textContent = '👑 관리자 모드 ON (클릭 OFF)';
+          } else {
+            btn.classList.remove('on');
+            btn.textContent = '🔑 관리자 로그인';
+          }
+        },
+
+        init() {
+          // 초기 시드 (첫 진입 시 환영 공지 1개)
+          if (this.load().length === 0) {
+            const welcome = {
+              id: 'p_welcome',
+              category: 'notice',
+              author: '관리자',
+              title: '커뮤니티 게시판이 열렸습니다 🎉',
+              body: '자유롭게 글을 쓰고 게임 점수·모의계산 결과를 공유해주세요.\n\n📝 사용법\n1) "✏️ 글쓰기" 버튼을 눌러 글 작성\n2) 비밀번호를 설정 (4자 이상) — 메모해두세요\n3) 본인 글은 입력한 비밀번호로 수정·삭제 가능\n\n🎮 게임 결과 공유\n- 플래피 새, 테트리스 등에서 점수를 자랑해보세요!\n\n🧮 모의계산 결과 공유\n- 받을 수 있는 복지 혜택 결과를 함께 나눠보세요.\n\n👑 관리자만 공지글을 작성할 수 있고, 모든 글을 관리할 수 있어요.',
+              pwHash: null,
+              adminPost: true,
+              createdAt: Date.now(),
+              updatedAt: null,
+              attachedResult: null
+            };
+            this.save([welcome]);
+          }
+
+          document.getElementById('cb-write-btn')?.addEventListener('click', () => this.openWriteModal(null));
+          document.getElementById('cb-admin-btn')?.addEventListener('click', () => this.toggleAdmin());
+          document.getElementById('cb-modal-cancel')?.addEventListener('click', () => this.closeWriteModal());
+          document.getElementById('cb-modal-submit')?.addEventListener('click', () => this.submitPost());
+          document.getElementById('cb-pw-modal-cancel')?.addEventListener('click', () => this.closePwModal());
+          document.getElementById('cb-pw-modal-confirm')?.addEventListener('click', () => this.confirmPw());
+
+          // 카테고리 탭
+          document.querySelectorAll('[data-cb-cat]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              this.currentCategory = btn.dataset.cbCat;
+              document.querySelectorAll('[data-cb-cat]').forEach(b => b.classList.toggle('active', b === btn));
+              this.renderList();
+            });
+          });
+
+          // 모달 바깥 클릭 시 닫기
+          document.getElementById('cb-modal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'cb-modal') this.closeWriteModal();
+          });
+          document.getElementById('cb-pw-modal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'cb-pw-modal') this.closePwModal();
+          });
+
+          // Enter로 비번 확인
+          document.getElementById('cb-pw-modal-input')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') this.confirmPw();
+          });
+
+          this.renderList();
+        }
+      };
+      community.init();
+      window.community = community; // 결과 공유용 외부 호출 인터페이스
+
+      // 결과 공유 헬퍼 — 다른 코드에서 호출 가능
+      // 예: shareToCommunity('🎮 플래피 새', '점수: 25점'); 하면 글쓰기 모달 열림
+      window.shareToCommunity = function(category, resultText) {
+        window._cbPendingResult = resultText;
+        showSection('community-board');
+        setTimeout(() => {
+          community.openWriteModal(null);
+          document.getElementById('cb-modal-category').value =
+            category.includes('게임') ? 'game' : (category.includes('계산') ? 'calc' : 'free');
+          document.getElementById('cb-modal-title-input').value = `[${category}] 결과 공유합니다`;
+          document.getElementById('cb-modal-body').value = `${resultText}\n\n(여기에 자유롭게 메시지를 추가하세요)`;
+        }, 200);
+      };
 
       document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', () => showSection('game-hub')));
       document.querySelectorAll('[data-game]').forEach(card => {
