@@ -15,6 +15,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <!-- Firebase SDK (게시판 다중 사용자 동기화용) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -600,6 +603,71 @@
     .wf-tone-slate .wf-bar { background: #334155; }
     .wf-tone-slate .wf-summary-item { border-color: #cbd5e1; background: linear-gradient(135deg,#f8fafc,#fff); }
 
+    /* ===== 통합 검색 (강화판, 홈 맨 아래) ===== */
+    .hs-section { background: linear-gradient(135deg, #1e293b, #334155); border-radius: 1.1rem; padding: 1.75rem 1.5rem; margin: 1.25rem 0; box-shadow: 0 8px 24px rgba(15,23,42,.18); position: relative; }
+    .hs-title { color: #fff; font-size: 1.3rem; font-weight: 800; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
+    .hs-desc { color: rgba(255,255,255,.78); font-size: 0.88rem; margin-bottom: 1.1rem; line-height: 1.55; }
+    .hs-input-wrap { position: relative; background: #fff; border-radius: 0.85rem; padding: 0.5rem 0.5rem 0.5rem 1.1rem; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
+    .hs-input-wrap.focused { box-shadow: 0 0 0 4px rgba(96,165,250,.35), 0 4px 14px rgba(0,0,0,.12); }
+    .hs-icon { font-size: 1.1rem; color: #94a3b8; flex-shrink: 0; }
+    .hs-input { flex: 1; border: none; outline: none; font-size: 1rem; padding: 0.65rem 0.25rem; background: transparent; color: #0f172a; font-family: inherit; }
+    .hs-input::placeholder { color: #94a3b8; }
+    .hs-clear { display: none; background: #f1f5f9; color: #64748b; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 0.9rem; flex-shrink: 0; }
+    .hs-clear:hover { background: #e2e8f0; }
+    .hs-clear.show { display: flex; align-items: center; justify-content: center; }
+    .hs-go { background: linear-gradient(135deg,#1e40af,#3b82f6); color: #fff; border: none; padding: 0.7rem 1.4rem; border-radius: 0.65rem; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 0.95rem; flex-shrink: 0; }
+    .hs-go:hover { background: linear-gradient(135deg,#1e3a8a,#2563eb); }
+
+    /* 자동완성 드롭다운 */
+    .hs-suggest { background: #fff; border-radius: 0.65rem; margin-top: 0.4rem; max-height: 320px; overflow-y: auto; box-shadow: 0 8px 24px rgba(0,0,0,.18); display: none; }
+    .hs-suggest.show { display: block; }
+    .hs-suggest-item { padding: 0.7rem 1rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background .12s; display: flex; gap: 0.65rem; align-items: flex-start; }
+    .hs-suggest-item:last-child { border-bottom: none; }
+    .hs-suggest-item:hover, .hs-suggest-item.active { background: #eff6ff; }
+    .hs-suggest-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .hs-suggest-body { flex: 1; min-width: 0; }
+    .hs-suggest-name { font-weight: 800; color: #0f172a; font-size: 0.92rem; margin-bottom: 0.18rem; }
+    .hs-suggest-name mark { background: #fef08a; padding: 0 2px; border-radius: 2px; color: #713f12; }
+    .hs-suggest-desc { font-size: 0.78rem; color: #64748b; line-height: 1.45; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .hs-suggest-desc mark { background: #fef08a; color: #713f12; }
+    .hs-suggest-empty { padding: 1.5rem; text-align: center; color: #94a3b8; font-size: 0.9rem; }
+
+    /* 인기/최근 검색어 */
+    .hs-tags-row { margin-top: 0.85rem; display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
+    .hs-tags-label { font-size: 0.78rem; color: rgba(255,255,255,.75); font-weight: 700; margin-right: 0.2rem; }
+    .hs-tag { padding: 0.32rem 0.75rem; background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .15s; }
+    .hs-tag:hover { background: rgba(255,255,255,.22); transform: translateY(-1px); }
+    .hs-tag.recent { background: rgba(251,191,36,.15); border-color: rgba(251,191,36,.4); color: #fef3c7; }
+    .hs-tag .x { margin-left: 0.3rem; opacity: 0.6; }
+
+    /* 검색 결과 (Enter 시 표시) */
+    .hs-results { background: #fff; border-radius: 0.85rem; padding: 1rem 0; margin-top: 0.85rem; display: none; box-shadow: 0 8px 24px rgba(0,0,0,.18); max-height: 60vh; overflow-y: auto; }
+    .hs-results.show { display: block; }
+    .hs-results-head { padding: 0 1.1rem 0.65rem; font-size: 0.85rem; color: #64748b; font-weight: 700; border-bottom: 1px solid #e2e8f0; }
+    .hs-results-head strong { color: #1e40af; }
+    .hs-result-card { padding: 0.85rem 1.1rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background .15s; }
+    .hs-result-card:last-child { border-bottom: none; }
+    .hs-result-card:hover { background: #f8fafc; }
+    .hs-result-row1 { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.25rem; }
+    .hs-result-icon { font-size: 1.4rem; }
+    .hs-result-name { font-weight: 800; color: #0f172a; font-size: 1rem; }
+    .hs-result-name mark { background: #fef08a; color: #713f12; padding: 0 2px; border-radius: 2px; }
+    .hs-result-score { margin-left: auto; font-size: 0.72rem; color: #94a3b8; font-weight: 600; }
+    .hs-result-desc { font-size: 0.83rem; color: #475569; line-height: 1.55; padding-left: 1.9rem; }
+    .hs-result-desc mark { background: #fef08a; color: #713f12; }
+    .hs-result-tags { padding: 0.35rem 0 0 1.9rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .hs-result-tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; background: #eff6ff; color: #1e40af; border-radius: 999px; font-weight: 700; }
+    .hs-no-result { padding: 2.5rem 1.5rem; text-align: center; color: #64748b; }
+    .hs-no-result em { display: block; font-size: 2.5rem; margin-bottom: 0.4rem; font-style: normal; }
+    .hs-no-result-suggest { margin-top: 0.85rem; display: flex; gap: 0.4rem; justify-content: center; flex-wrap: wrap; }
+    .hs-no-result-suggest button { padding: 0.4rem 0.85rem; background: #1e40af; color: #fff; border: none; border-radius: 999px; font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+    @media (max-width: 768px) {
+      .hs-section { padding: 1.4rem 1.1rem; }
+      .hs-title { font-size: 1.15rem; }
+      .hs-go { padding: 0.6rem 1rem; font-size: 0.88rem; }
+    }
+
     /* ===== 커뮤니티 게시판 ===== */
     .cb-toolbar { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
     .cb-write-btn { padding: 0.7rem 1.1rem; background: linear-gradient(135deg,#1e40af,#3b82f6); color: #fff; border: none; border-radius: 0.65rem; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 0.92rem; box-shadow: 0 3px 8px rgba(30,64,175,.25); display: inline-flex; align-items: center; gap: 0.4rem; }
@@ -847,22 +915,9 @@
         <span class="home-hero-tag">📅 2026년 4월 기준 · 정부 발표 정책 반영</span>
         <h1 class="home-hero-title">내가 받을 수 있는<br>복지 혜택, 1분 안에 확인하세요</h1>
         <p class="home-hero-subtitle">기초연금 · 장애인연금 · 민생지원금부터 의료급여까지<br class="hidden sm:block">자격 조건과 신청 방법을 한곳에서 빠르게 확인하실 수 있어요.</p>
-        <form class="home-search" onsubmit="return false;">
-          <span class="home-search-icon">🔎</span>
-          <input id="home-search-input" type="text" placeholder="복지 혜택 이름이나 키워드를 검색해 보세요" autocomplete="off">
-          <button type="button" id="home-search-btn" class="home-search-btn">검색</button>
-        </form>
-        <div class="home-search-hint">
-          <strong>인기 검색어:</strong>
-          <button type="button" class="home-search-tag underline ml-1" data-q="기초연금">기초연금</button>
-          ·
-          <button type="button" class="home-search-tag underline" data-q="장애인">장애인연금</button>
-          ·
-          <button type="button" class="home-search-tag underline" data-q="민생지원금">민생지원금</button>
-          ·
-          <button type="button" class="home-search-tag underline" data-q="의료급여">의료급여</button>
-        </div>
-        <div id="home-search-result" class="home-search-result"></div>
+        <p style="margin-top:1.25rem; font-size:0.92rem; color:rgba(255,255,255,.85);">
+          ⬇️ 아래 모의계산기로 시작하거나, <strong style="color:#fff;">맨 아래 통합 검색</strong>으로 원하는 혜택을 찾아보세요
+        </p>
       </div>
     </header>
 
@@ -1194,6 +1249,40 @@
           <a class="home-link-btn" href="tel:1355">📞 국민연금공단 1355</a>
           <a class="home-link-btn" href="tel:15331300">📞 민생지원금 1533-1300</a>
         </div>
+      </section>
+
+      <!-- ===== 통합 검색 (강화판, 맨 아래) ===== -->
+      <section class="hs-section" id="home-search-section">
+        <h2 class="hs-title">🔎 통합 검색</h2>
+        <p class="hs-desc">복지 혜택 이름·금액·연령·키워드로 자유롭게 검색하세요. <strong style="color:#fef08a;">한글 초성</strong>도 검색됩니다 (예: ㄱㅊㅇㄱ → 기초연금)</p>
+
+        <div class="hs-input-wrap" id="hs-input-wrap">
+          <span class="hs-icon">🔎</span>
+          <input id="hs-input" type="text" class="hs-input" placeholder="예: 기초연금, 65세, 월 100만원, ㅈㅇㅇㅇㄱ, 전세 월세..." autocomplete="off" />
+          <button type="button" id="hs-clear" class="hs-clear" title="지우기">✕</button>
+          <button type="button" id="hs-go" class="hs-go">검색</button>
+        </div>
+
+        <!-- 자동완성 -->
+        <div id="hs-suggest" class="hs-suggest"></div>
+
+        <!-- 인기/최근 검색어 -->
+        <div class="hs-tags-row">
+          <span class="hs-tags-label">🔥 인기:</span>
+          <button type="button" class="hs-tag" data-q="기초연금">기초연금</button>
+          <button type="button" class="hs-tag" data-q="장애인연금">장애인연금</button>
+          <button type="button" class="hs-tag" data-q="민생지원금">민생지원금</button>
+          <button type="button" class="hs-tag" data-q="청년월세">청년월세</button>
+          <button type="button" class="hs-tag" data-q="65세">65세 이상</button>
+          <button type="button" class="hs-tag" data-q="연말정산">연말정산</button>
+        </div>
+        <div class="hs-tags-row" id="hs-recent-row" style="display:none;">
+          <span class="hs-tags-label">🕘 최근:</span>
+          <span id="hs-recent-tags"></span>
+        </div>
+
+        <!-- 검색 결과 -->
+        <div id="hs-results" class="hs-results"></div>
       </section>
     </main>
 
@@ -3502,14 +3591,15 @@
 
     <main class="wf-main">
 
-      <div class="cb-info-callout">
+      <div class="cb-info-callout" id="cb-info-callout">
         <strong>📌 이용 안내</strong> 누구나 글을 쓸 수 있어요. 글을 작성할 때 입력한 <strong>비밀번호</strong>로만 본인 글을 수정·삭제할 수 있습니다. 공지(👑 관리자)는 변경할 수 없어요.<br>
-        <span style="color:#64748b;">※ 현재 글은 이 브라우저(localStorage)에만 저장됩니다. 진짜 다중 사용자 게시판으로 키우려면 Firebase 연동이 필요해요.</span>
+        <span id="cb-storage-mode" style="color:#64748b;">※ 저장 방식 확인 중...</span>
       </div>
 
       <div class="cb-toolbar">
         <button type="button" id="cb-write-btn" class="cb-write-btn">✏️ 글쓰기</button>
         <button type="button" id="cb-admin-btn" class="cb-admin-btn">🔑 관리자 로그인</button>
+        <button type="button" id="cb-fb-btn" class="cb-admin-btn" style="color:#047857; border-color:#a7f3d0;">🔥 Firebase 설정</button>
         <span style="margin-left:auto; font-size:0.82rem; color:#64748b;">총 <strong id="cb-count" style="color:#1e40af;">0</strong>개 글</span>
       </div>
 
@@ -3565,6 +3655,46 @@
       <div class="cb-modal-actions">
         <button type="button" class="cancel" id="cb-modal-cancel">취소</button>
         <button type="button" class="submit" id="cb-modal-submit">등록</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase 설정 모달 -->
+  <div id="cb-fb-modal" class="cb-modal" role="dialog" aria-modal="true">
+    <div class="cb-modal-box">
+      <h3 class="cb-modal-title">🔥 Firebase 연동 설정</h3>
+      <p style="font-size:0.85rem; color:#475569; line-height:1.6; margin-bottom:0.85rem;">
+        Firebase Realtime Database를 연동하면 <strong>모든 사용자가 같은 게시판을 공유</strong>할 수 있어요.<br>
+        <strong>설정 방법:</strong>
+      </p>
+      <ol style="font-size:0.83rem; color:#475569; line-height:1.7; padding-left:1.3rem; margin-bottom:0.85rem;">
+        <li><a href="https://console.firebase.google.com" target="_blank" style="color:#1e40af; font-weight:700;">Firebase Console</a> 접속 → 본인 프로젝트 선택</li>
+        <li>왼쪽 메뉴 <strong>"Realtime Database"</strong> 만들기 (테스트 모드로 시작)</li>
+        <li>프로젝트 설정(⚙️) → 내 앱(웹 앱 추가) → <strong>firebaseConfig</strong> 객체 복사</li>
+        <li>아래 입력란에 <strong>전체 객체를 그대로 붙여넣기</strong></li>
+      </ol>
+      <div class="cb-modal-row">
+        <label class="cb-modal-label">firebaseConfig 객체 (JSON 형식)</label>
+        <textarea id="cb-fb-config" class="cb-modal-textarea" placeholder='{
+  "apiKey": "AIza...",
+  "authDomain": "your-project.firebaseapp.com",
+  "databaseURL": "https://your-project-default-rtdb.firebaseio.com",
+  "projectId": "your-project",
+  "storageBucket": "your-project.appspot.com",
+  "messagingSenderId": "123...",
+  "appId": "1:..."
+}' style="font-family:monospace; font-size:0.82rem; min-height:200px;"></textarea>
+        <p class="cb-modal-help">⚠️ <strong>databaseURL</strong>이 꼭 포함되어야 해요. Realtime Database 활성화 후 주소 확인.</p>
+      </div>
+      <div class="cb-info-callout" style="margin:0.85rem 0;">
+        <strong>🔒 보안 규칙</strong> Firebase Console → Realtime Database → 규칙 탭에서 아래로 설정:<br>
+        <code style="display:block; background:#0f172a; color:#a7f3d0; padding:0.6rem; border-radius:0.4rem; margin-top:0.4rem; font-size:0.78rem;">{<br>&nbsp;&nbsp;"rules": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"posts": { ".read": true, ".write": true }<br>&nbsp;&nbsp;}<br>}</code>
+      </div>
+      <div class="cb-modal-error" id="cb-fb-error"></div>
+      <div class="cb-modal-actions">
+        <button type="button" class="cancel" id="cb-fb-cancel">닫기</button>
+        <button type="button" class="cancel" id="cb-fb-disconnect" style="background:#fee2e2; color:#b91c1c;">연결 해제</button>
+        <button type="button" class="submit" id="cb-fb-save">연동하기</button>
       </div>
     </div>
   </div>
@@ -6840,74 +6970,419 @@
       });
 
       // ===== 홈페이지 검색 기능 =====
+      // ===== 통합 검색 데이터 (강화: 본문 핵심 정보·금액·연령 포함) =====
       const homeSearchData = [
-        { keywords: ['기초연금', '연금', '노령연금', '노인연금', '65세'], target: 'pension-container', label: '기초연금', desc: '만 65세 이상 노령층 대상' },
-        { keywords: ['장애인연금', '장애', '장애인', '중증장애', '장애수당'], target: 'disability-pension', label: '장애인연금', desc: '만 18세 이상 중증장애인 대상' },
-        { keywords: ['고유가', '피해지원금', '민생지원금', '에너지', '유류', '3차'], target: 'fuel-support', label: '고유가 피해지원금', desc: '소득 하위 70% 대상 1인 10~60만원' },
-        { keywords: ['기초생활', '생계급여', '수급자', '중위소득'], target: 'welfare-basic-living', label: '기초생활보장', desc: '생계·의료·주거·교육 4대 급여' },
-        { keywords: ['의료급여', '병원비', '진료', '입원'], target: 'welfare-medical', label: '의료급여', desc: '저소득층 의료비 본인부담 경감' },
-        { keywords: ['주거급여', '월세', '임차', '전세', '주택수선'], target: 'welfare-housing', label: '주거급여', desc: '임차료·주택수선비 지원' },
-        { keywords: ['교육급여', '학비', '학용품', '교과서', '수업료'], target: 'welfare-education', label: '교육급여', desc: '초·중·고 학생 학습비' },
-        { keywords: ['아동수당', '부모급여', '양육수당', '영아수당', '첫만남이용권', '아이'], target: 'welfare-childcare', label: '아동·양육수당', desc: '부모급여·아동수당·첫만남이용권' },
-        { keywords: ['청년', '구직', '취업', '청년도약계좌', '청년월세', '국민취업지원'], target: 'welfare-youth', label: '청년·구직지원', desc: '청년도약계좌·월세 지원·취업지원' },
-        { keywords: ['긴급복지', '긴급지원', '위기', '실직', '폐업'], target: 'welfare-emergency', label: '긴급복지지원', desc: '위기상황 일시 지원 (선지원 후심사)' },
-        { keywords: ['한부모', '다자녀', '미혼모', '미혼부', '조손', '청소년한부모'], target: 'welfare-singleparent', label: '한부모·다자녀', desc: '아동양육비·다자녀 혜택' },
-        { keywords: ['세금', '연말정산', '종합소득세', '종소세', '환급', '13월의 월급', '프리랜서', '3.3', '홈택스', '국세청', '소득공제', '세액공제', '월세공제'], target: 'tax-helper', label: '세금 도우미', desc: '연말정산·종소세 꿀팁과 환급 가이드' },
-        { keywords: ['게시판', '커뮤니티', '글쓰기', '공유', '결과', '소통'], target: 'community-board', label: '커뮤니티', desc: '자유게시판·게임결과·모의계산 공유' },
-        { keywords: ['게임', '오목', '테트리스', '스도쿠', '벽돌깨기'], target: 'game-hub', label: '추억의 게임', desc: '기분 전환용 클래식 게임' }
+        {
+          target: 'pension-container', label: '기초연금', icon: '💰',
+          desc: '만 65세 이상 소득 하위 70% 대상 · 단독 247만/부부 395만 이하 · 월 최대 34만 9,700원',
+          keywords: ['기초연금', '연금', '노령연금', '노인연금', '65세', '65세이상', '247만', '395만', '34만', '34만9700', '349700', '단독가구', '부부가구', '소득하위70'],
+          tags: ['65세+', '월 34만원', '소득하위 70%']
+        },
+        {
+          target: 'disability-pension', label: '장애인연금', icon: '♿',
+          desc: '만 18세 이상 중증장애인 대상 · 1·2급 또는 3급+중복장애 · 월 최대 43만 9,700원',
+          keywords: ['장애인연금', '장애', '장애인', '중증장애', '1급', '2급', '3급', '43만', '43만9700', '439700', '34만9700', '349700', '기초급여', '부가급여', '18세'],
+          tags: ['18세+', '중증장애', '월 최대 44만원']
+        },
+        {
+          target: 'disability-pension', label: '장애수당', icon: '♿',
+          desc: '경증장애(4~6급) 기초수급자 월 11만원 · 차상위 월 4만원 (2026년 인상)',
+          keywords: ['장애수당', '경증장애', '4급', '5급', '6급', '11만', '4만', '기초수급자', '차상위'],
+          tags: ['경증', '월 4~11만원']
+        },
+        {
+          target: 'fuel-support', label: '고유가 피해지원금', icon: '⛽',
+          desc: '3차 민생지원금 · 소득 하위 70% (약 3,200만 명) · 1인 10~60만원 · 4월 27일~ 지급',
+          keywords: ['고유가', '피해지원금', '민생지원금', '에너지', '유류', '3차', '60만원', '10만원', '취약계층', '바우처', '민생회복'],
+          tags: ['1인 10~60만원', '4월 27일']
+        },
+        {
+          target: 'welfare-basic-living', label: '기초생활보장 (4대 급여)', icon: '📋',
+          desc: '생계 32% / 의료 40% / 주거 48% / 교육 50% · 부양의무자 폐지(생계급여)',
+          keywords: ['기초생활', '기초생활수급', '생계급여', '수급자', '중위소득', '32%', '40%', '48%', '50%', '4대급여', '부양의무자', '저소득'],
+          tags: ['생계급여', '중위 32~50%']
+        },
+        {
+          target: 'welfare-medical', label: '의료급여', icon: '🏥',
+          desc: '기초생활수급자 1·2종 · 외래 1,000~2,000원, 약국 500원 · 차상위 본인부담경감',
+          keywords: ['의료급여', '병원비', '진료', '입원', '약국', '본인부담', '의료비', '1종', '2종', '차상위본인부담경감', '만성질환', '아동의료'],
+          tags: ['외래 1~2천원', '약국 500원']
+        },
+        {
+          target: 'welfare-housing', label: '주거급여', icon: '🏠',
+          desc: '중위 48% 이하 · 임차가구 서울 1인 약 37만원 · 자가가구 수선 최대 1,241만원',
+          keywords: ['주거급여', '월세', '임차', '전세', '주택수선', '37만', '55만', '1241만', '849만', '457만', '경보수', '중보수', '대보수', '기준임대료', 'lh'],
+          tags: ['임차료', '주택 수선']
+        },
+        {
+          target: 'welfare-education', label: '교육급여', icon: '🎓',
+          desc: '중위 50% 이하 초·중·고 학생 · 초 50만/중 70만/고 86만원 (2026 6% 인상)',
+          keywords: ['교육급여', '학비', '학용품', '교과서', '수업료', '초등학생', '중학생', '고등학생', '50만', '70만', '86만', '교육활동지원비', '입학금'],
+          tags: ['초·중·고', '연 50~86만원']
+        },
+        {
+          target: 'welfare-childcare', label: '아동·양육수당', icon: '👶',
+          desc: '부모급여(0세 100만/1세 50만) · 아동수당(만 9세 미만 월 10만) · 첫만남이용권(200/300만)',
+          keywords: ['아동수당', '부모급여', '양육수당', '영아수당', '첫만남이용권', '아이', '영아', '유아', '100만원', '50만원', '10만원', '200만원', '300만원', '0세', '1세', '8세', '9세', '국민행복카드', '임신', '출산', '바우처'],
+          tags: ['0세 100만', '1세 50만', '아동 월 10만']
+        },
+        {
+          target: 'welfare-youth', label: '청년·구직지원', icon: '💼',
+          desc: '청년도약계좌(19~34세 5년 70만) · 청년월세(월 20만 24개월) · 국민취업지원(월 60만 6개월)',
+          keywords: ['청년', '구직', '취업', '청년도약계좌', '청년월세', '국민취업지원', '19세', '34세', '구직촉진수당', '20만', '60만', '24개월', '8000만', '월세60만', '독립청년', '취업준비'],
+          tags: ['19~34세', '월 20~60만']
+        },
+        {
+          target: 'welfare-emergency', label: '긴급복지지원', icon: '🆘',
+          desc: '위기상황 일시 지원 · 생계 199만(4인)/의료 회당 300만/주거 75만 (선지원 후심사)',
+          keywords: ['긴급복지', '긴급지원', '위기', '실직', '폐업', '화재', '질병', '199만', '300만', '75만', '129', '선지원후심사', '주거지원', '의료지원', '생계지원'],
+          tags: ['생계 199만', '의료 300만']
+        },
+        {
+          target: 'welfare-singleparent', label: '한부모·다자녀', icon: '👨‍👩‍👧',
+          desc: '한부모 양육비 월 23만(중위 65%) · 청소년한부모 월 37만 · 다자녀 우대카드',
+          keywords: ['한부모', '다자녀', '미혼모', '미혼부', '조손', '청소년한부모', '23만', '37만', '40만', '아동양육비', '추가양육비', '다둥이카드', '국민연금출산크레딧', '두자녀', '세자녀'],
+          tags: ['한부모 월 23만', '다자녀 우대']
+        },
+        {
+          target: 'tax-helper', label: '세금 도우미 (연말정산·종소세)', icon: '💰',
+          desc: '연말정산 꿀팁 + 종합소득세 신고 (5월 1일~6월 1일) · 3.3% 프리랜서 환급 가이드',
+          keywords: ['세금', '연말정산', '종합소득세', '종소세', '환급', '13월의월급', '프리랜서', '3.3', '3.3%', '홈택스', '국세청', '소득공제', '세액공제', '월세공제', '연금저축', 'irp', '의료비공제', '신용카드공제', '체크카드', '인적공제', '부양가족', '혼인공제', '모두채움', '경비율'],
+          tags: ['연말정산', '종소세 5월', '환급']
+        },
+        {
+          target: 'community-board', label: '커뮤니티 게시판', icon: '💬',
+          desc: '회원가입 없이 글쓰기 · 게임 점수·모의계산 결과 공유 · 비밀번호로 본인 글 관리',
+          keywords: ['게시판', '커뮤니티', '글쓰기', '공유', '결과', '소통', '게시글', '댓글', '자유게시판', '공지', '관리자', '비밀번호'],
+          tags: ['자유 게시판', '결과 공유']
+        },
+        {
+          target: 'game-hub', label: '추억의 게임', icon: '🎮',
+          desc: '오목, 2048, 스네이크, 테트리스, 플래피 새, 지뢰찾기, 메모리, 스도쿠, 벽돌깨기',
+          keywords: ['게임', '오목', '테트리스', '스도쿠', '벽돌깨기', '2048', '스네이크', '뱀', '플래피', '지뢰찾기', '메모리', '카드맞추기', '아케이드', '퍼즐'],
+          tags: ['9개 게임', '바로가기']
+        }
       ];
-      const upcomingMap = {};
 
-      function homeSearch(q) {
-        const resultDiv = document.getElementById('home-search-result');
-        const query = (q || '').trim();
-        if (!query) { resultDiv.classList.remove('visible'); resultDiv.innerHTML = ''; return; }
+      // ===== 검색 엔진: 한글 초성 검색 + 점수 기반 랭킹 =====
+      const searchEngine = {
+        // 한글 초성 추출
+        CHO: ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'],
+        getCho(text) {
+          let result = '';
+          for (const ch of text) {
+            const code = ch.charCodeAt(0);
+            if (code >= 0xAC00 && code <= 0xD7A3) {
+              const idx = Math.floor((code - 0xAC00) / 588);
+              result += this.CHO[idx];
+            } else {
+              result += ch;
+            }
+          }
+          return result;
+        },
+        // 입력이 한글 초성만으로 구성됐는지
+        isAllCho(text) {
+          return /^[ㄱ-ㅎ\s]+$/.test(text);
+        },
+        // 정규화
+        normalize(s) {
+          return String(s || '').toLowerCase().replace(/\s+/g, '').replace(/[,·\-]/g, '');
+        },
+        // 단일 항목 점수 계산 (0~100)
+        scoreItem(item, query) {
+          const q = this.normalize(query);
+          if (!q) return 0;
+          const isCho = this.isAllCho(query.replace(/\s/g, ''));
 
-        const matches = homeSearchData.filter(item =>
-          item.keywords.some(k => k.includes(query) || query.includes(k))
-        );
+          let score = 0;
+          const label = this.normalize(item.label);
+          const desc = this.normalize(item.desc);
+          const keywords = item.keywords.map(k => this.normalize(k));
 
-        let upcomingMatch = null;
-        for (const [k, v] of Object.entries(upcomingMap)) {
-          if (k.includes(query) || query.includes(k)) { upcomingMatch = v; break; }
+          // 1) 라벨 정확히 일치
+          if (label === q) score += 100;
+          // 2) 라벨 시작 일치
+          else if (label.startsWith(q)) score += 70;
+          // 3) 라벨 포함
+          else if (label.includes(q)) score += 50;
+
+          // 4) 키워드 정확/부분 일치
+          for (const k of keywords) {
+            if (k === q) { score += 60; break; }
+            if (k.startsWith(q)) score += 35;
+            else if (k.includes(q) || q.includes(k)) score += 20;
+          }
+
+          // 5) 설명 포함
+          if (desc.includes(q)) score += 15;
+
+          // 6) 초성 검색
+          if (isCho) {
+            const labelCho = this.normalize(this.getCho(item.label));
+            const kwCho = item.keywords.map(k => this.normalize(this.getCho(k)));
+            if (labelCho.startsWith(q)) score += 50;
+            else if (labelCho.includes(q)) score += 30;
+            for (const kc of kwCho) {
+              if (kc.includes(q)) { score += 15; break; }
+            }
+          }
+
+          // 7) 다중 단어 (공백 분리) — 모두 포함되면 보너스
+          const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+          if (tokens.length > 1) {
+            const allText = (item.label + ' ' + item.desc + ' ' + item.keywords.join(' ')).toLowerCase();
+            const allMatch = tokens.every(t => allText.includes(t));
+            if (allMatch) score += 40;
+          }
+          return score;
+        },
+        // 전체 검색
+        search(query, opts = {}) {
+          const limit = opts.limit || 10;
+          const minScore = opts.minScore || 10;
+          const scored = homeSearchData
+            .map(item => ({ item, score: this.scoreItem(item, query) }))
+            .filter(x => x.score >= minScore)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, limit);
+          return scored;
+        },
+        // 검색어 하이라이트
+        highlight(text, query) {
+          if (!text || !query) return this.escape(text);
+          const q = query.trim();
+          if (!q) return this.escape(text);
+          // 단순 case-insensitive 하이라이트 (초성 검색 시는 무시)
+          if (this.isAllCho(q.replace(/\s/g, ''))) return this.escape(text);
+          const escaped = this.escape(text);
+          const escQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          try {
+            return escaped.replace(new RegExp(escQ, 'gi'), m => `<mark>${m}</mark>`);
+          } catch (e) { return escaped; }
+        },
+        escape(s) {
+          return String(s || '').replace(/[<>&"']/g, m => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]));
         }
+      };
 
-        if (matches.length > 0) {
-          let html = '<div style="font-weight:700; margin-bottom:0.4rem;">🔎 검색 결과 (' + matches.length + '건)</div>';
-          html += '<ul style="list-style:none; padding:0; margin:0;">';
-          matches.forEach(m => {
-            html += `<li style="padding:0.5rem 0; border-bottom:1px solid #e2e8f0;">
-              <a data-target="${m.target}"><strong>${m.label}</strong></a>
-              <div style="font-size:0.8rem; color:#64748b; margin-top:0.15rem;">${m.desc}</div>
-            </li>`;
-          });
-          html += '</ul>';
-          resultDiv.innerHTML = html;
-          resultDiv.classList.add('visible');
-          resultDiv.querySelectorAll('a[data-target]').forEach(a => {
-            a.addEventListener('click', () => { showSection(a.dataset.target); window.scrollTo(0,0); });
-          });
-        } else if (upcomingMatch) {
-          resultDiv.innerHTML = `<div class="no-result"><strong>${upcomingMatch}</strong><br>해당 복지 혜택은 곧 자격 확인 기능이 추가될 예정입니다.</div>`;
-          resultDiv.classList.add('visible');
-        } else {
-          resultDiv.innerHTML = '<div class="no-result">"' + query + '"에 대한 결과를 찾을 수 없습니다. 인기 검색어를 클릭해보세요.</div>';
-          resultDiv.classList.add('visible');
+      // ===== 최근 검색어 (localStorage) =====
+      const recentSearch = {
+        KEY: 'recentSearch_v1',
+        MAX: 6,
+        list() { try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); } catch(e) { return []; } },
+        add(q) {
+          q = q.trim();
+          if (!q) return;
+          let arr = this.list().filter(x => x !== q);
+          arr.unshift(q);
+          arr = arr.slice(0, this.MAX);
+          try { localStorage.setItem(this.KEY, JSON.stringify(arr)); } catch(e){}
+        },
+        remove(q) {
+          const arr = this.list().filter(x => x !== q);
+          try { localStorage.setItem(this.KEY, JSON.stringify(arr)); } catch(e){}
         }
-      }
-      document.getElementById('home-search-btn')?.addEventListener('click', () => {
-        homeSearch(document.getElementById('home-search-input').value);
-      });
-      document.getElementById('home-search-input')?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') homeSearch(e.target.value);
-      });
-      document.querySelectorAll('.home-search-tag').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const q = btn.dataset.q;
-          document.getElementById('home-search-input').value = q;
-          homeSearch(q);
-        });
-      });
+      };
+
+      // ===== 검색 UI 컨트롤러 =====
+      const homeSearchUI = {
+        suggestActive: -1,
+        suggestList: [],
+
+        init() {
+          const input = document.getElementById('hs-input');
+          const clear = document.getElementById('hs-clear');
+          const wrap = document.getElementById('hs-input-wrap');
+          const goBtn = document.getElementById('hs-go');
+          if (!input) return;
+
+          let timer;
+          input.addEventListener('input', () => {
+            const v = input.value;
+            clear.classList.toggle('show', !!v);
+            clearTimeout(timer);
+            timer = setTimeout(() => this.showSuggest(v), 120);
+          });
+
+          input.addEventListener('focus', () => {
+            wrap.classList.add('focused');
+            if (input.value) this.showSuggest(input.value);
+          });
+          input.addEventListener('blur', () => {
+            wrap.classList.remove('focused');
+            // 클릭 처리 시간 확보
+            setTimeout(() => this.hideSuggest(), 150);
+          });
+
+          input.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown') { e.preventDefault(); this.moveSuggest(1); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); this.moveSuggest(-1); }
+            else if (e.key === 'Enter') {
+              e.preventDefault();
+              if (this.suggestActive >= 0 && this.suggestList[this.suggestActive]) {
+                this.goToTarget(this.suggestList[this.suggestActive].item.target, input.value);
+              } else {
+                this.runSearch(input.value);
+              }
+            } else if (e.key === 'Escape') {
+              this.hideSuggest();
+            }
+          });
+
+          clear.addEventListener('click', () => {
+            input.value = '';
+            clear.classList.remove('show');
+            this.hideSuggest();
+            this.hideResults();
+            input.focus();
+          });
+
+          goBtn.addEventListener('click', () => this.runSearch(input.value));
+
+          // 인기 검색어 태그
+          document.querySelectorAll('.hs-tag[data-q]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              input.value = btn.dataset.q;
+              clear.classList.add('show');
+              this.runSearch(btn.dataset.q);
+            });
+          });
+
+          // 최근 검색어 표시
+          this.renderRecent();
+        },
+
+        showSuggest(query) {
+          const box = document.getElementById('hs-suggest');
+          if (!query.trim()) { this.hideSuggest(); return; }
+          const matches = searchEngine.search(query, { limit: 6, minScore: 10 });
+          this.suggestList = matches;
+          this.suggestActive = -1;
+          if (matches.length === 0) {
+            box.innerHTML = '<div class="hs-suggest-empty">일치하는 항목이 없습니다. <strong>Enter</strong>로 전체 검색해보세요.</div>';
+            box.classList.add('show');
+            return;
+          }
+          box.innerHTML = matches.map((m, i) => `
+            <div class="hs-suggest-item" data-idx="${i}">
+              <span class="hs-suggest-icon">${m.item.icon}</span>
+              <div class="hs-suggest-body">
+                <div class="hs-suggest-name">${searchEngine.highlight(m.item.label, query)}</div>
+                <div class="hs-suggest-desc">${searchEngine.highlight(m.item.desc, query)}</div>
+              </div>
+            </div>
+          `).join('');
+          box.classList.add('show');
+          box.querySelectorAll('.hs-suggest-item').forEach(el => {
+            el.addEventListener('mousedown', (e) => {
+              e.preventDefault();
+              const idx = parseInt(el.dataset.idx);
+              this.goToTarget(matches[idx].item.target, query);
+            });
+          });
+        },
+        hideSuggest() {
+          document.getElementById('hs-suggest')?.classList.remove('show');
+          this.suggestActive = -1;
+        },
+        moveSuggest(delta) {
+          if (this.suggestList.length === 0) return;
+          this.suggestActive = (this.suggestActive + delta + this.suggestList.length) % this.suggestList.length;
+          document.querySelectorAll('.hs-suggest-item').forEach((el, i) => {
+            el.classList.toggle('active', i === this.suggestActive);
+          });
+        },
+
+        runSearch(query) {
+          query = query.trim();
+          if (!query) return;
+          recentSearch.add(query);
+          this.renderRecent();
+          this.hideSuggest();
+
+          const results = searchEngine.search(query, { limit: 20, minScore: 10 });
+          const box = document.getElementById('hs-results');
+
+          if (results.length === 0) {
+            const popular = ['기초연금', '의료급여', '청년월세', '연말정산'];
+            box.innerHTML = `
+              <div class="hs-no-result">
+                <em>🔍</em>
+                "<strong>${searchEngine.escape(query)}</strong>"에 대한 결과를 찾을 수 없습니다.
+                <div class="hs-no-result-suggest">
+                  ${popular.map(p => `<button data-q="${p}">${p}</button>`).join('')}
+                </div>
+              </div>`;
+            box.classList.add('show');
+            box.querySelectorAll('button[data-q]').forEach(b => {
+              b.addEventListener('click', () => {
+                document.getElementById('hs-input').value = b.dataset.q;
+                this.runSearch(b.dataset.q);
+              });
+            });
+            return;
+          }
+
+          let html = `<div class="hs-results-head">🔎 "<strong>${searchEngine.escape(query)}</strong>" 검색 결과 — 총 ${results.length}건</div>`;
+          results.forEach(r => {
+            html += `
+              <div class="hs-result-card" data-target="${r.item.target}">
+                <div class="hs-result-row1">
+                  <span class="hs-result-icon">${r.item.icon}</span>
+                  <span class="hs-result-name">${searchEngine.highlight(r.item.label, query)}</span>
+                  <span class="hs-result-score">매칭도 ${r.score}</span>
+                </div>
+                <div class="hs-result-desc">${searchEngine.highlight(r.item.desc, query)}</div>
+                <div class="hs-result-tags">
+                  ${(r.item.tags || []).map(t => `<span class="hs-result-tag">${t}</span>`).join('')}
+                </div>
+              </div>`;
+          });
+          box.innerHTML = html;
+          box.classList.add('show');
+          box.querySelectorAll('.hs-result-card[data-target]').forEach(card => {
+            card.addEventListener('click', () => this.goToTarget(card.dataset.target, query));
+          });
+          // 결과 영역으로 부드럽게 스크롤
+          setTimeout(() => box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+        },
+        hideResults() {
+          document.getElementById('hs-results')?.classList.remove('show');
+        },
+
+        goToTarget(target, query) {
+          if (query) recentSearch.add(query);
+          showSection(target);
+          window.scrollTo(0, 0);
+        },
+
+        renderRecent() {
+          const list = recentSearch.list();
+          const row = document.getElementById('hs-recent-row');
+          const tags = document.getElementById('hs-recent-tags');
+          if (!row || !tags) return;
+          if (list.length === 0) { row.style.display = 'none'; return; }
+          row.style.display = 'flex';
+          tags.innerHTML = list.map(q => `
+            <button type="button" class="hs-tag recent" data-q="${searchEngine.escape(q)}">
+              ${searchEngine.escape(q)}<span class="x" data-x="${searchEngine.escape(q)}">×</span>
+            </button>
+          `).join('');
+          tags.querySelectorAll('.hs-tag.recent').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              if (e.target.classList.contains('x')) {
+                recentSearch.remove(e.target.dataset.x);
+                this.renderRecent();
+                return;
+              }
+              document.getElementById('hs-input').value = btn.dataset.q;
+              this.runSearch(btn.dataset.q);
+            });
+          });
+        }
+      };
+      homeSearchUI.init();
 
       // ===== 복지 매칭 모의계산기 (Welfare Finder — 위저드 형식) =====
       const wff = {
@@ -7546,14 +8021,19 @@
          ================================================ */
       const community = {
         STORAGE_KEY: 'welfareCommunityPosts_v1',
-        // ⚠️ 마스터 비번 hash (현재: admin1234) — 변경하려면 SHA-256 해시값 교체
-        // 새 비번을 정한 뒤 https://emn178.github.io/online-tools/sha256.html 등에서 해시 생성
-        ADMIN_HASH: '7f5b2d2f8ebca7b9b25c4e62a6e09e7d4c66a6dc1e56e5ebb9d4d1d8e93b2e7f', // 자리표시자
-        ADMIN_FALLBACK_PW: 'admin1234', // 위 hash가 임의값일 때 비교용 (즉시 사용 가능)
+        FB_CONFIG_KEY: 'welfareCommunityFirebaseConfig_v1',
+        ADMIN_HASH: '7f5b2d2f8ebca7b9b25c4e62a6e09e7d4c66a6dc1e56e5ebb9d4d1d8e93b2e7f',
+        ADMIN_FALLBACK_PW: 'admin1234',
         adminMode: false,
         currentCategory: 'all',
         editTargetId: null,
-        pendingAction: null, // {type: 'edit'|'delete', postId}
+        pendingAction: null,
+        // Firebase 상태
+        fbApp: null,
+        fbDb: null,
+        fbReady: false,
+        fbCache: [], // Firebase에서 받은 최신 글 목록
+        fbUnsub: null,
 
         async sha256(text) {
           if (!window.crypto?.subtle) {
@@ -7567,15 +8047,103 @@
           return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
         },
 
+        // ===== Firebase 모드 =====
+        async initFirebase() {
+          let cfgRaw;
+          try { cfgRaw = localStorage.getItem(this.FB_CONFIG_KEY); } catch(e) { cfgRaw = null; }
+          if (!cfgRaw) return false;
+          let cfg;
+          try { cfg = JSON.parse(cfgRaw); } catch(e) { return false; }
+          if (!cfg.databaseURL) return false;
+          if (typeof firebase === 'undefined') {
+            console.warn('Firebase SDK 로드 실패');
+            return false;
+          }
+          try {
+            // 이미 초기화된 앱이 있으면 재사용
+            if (firebase.apps && firebase.apps.length > 0) {
+              this.fbApp = firebase.app();
+            } else {
+              this.fbApp = firebase.initializeApp(cfg);
+            }
+            this.fbDb = firebase.database();
+            this.fbReady = true;
+            // 실시간 리스너
+            this.fbUnsub = this.fbDb.ref('posts').on('value', (snap) => {
+              const obj = snap.val() || {};
+              this.fbCache = Object.keys(obj).map(k => ({ ...obj[k], id: k }));
+              if (document.getElementById('community-board') && !document.getElementById('community-board').classList.contains('hidden')) {
+                this.renderList();
+              }
+            });
+            return true;
+          } catch (e) {
+            console.error('Firebase 초기화 실패:', e);
+            this.fbReady = false;
+            return false;
+          }
+        },
+
+        disconnectFirebase() {
+          if (this.fbUnsub && this.fbDb) {
+            this.fbDb.ref('posts').off('value', this.fbUnsub);
+          }
+          this.fbReady = false;
+          this.fbApp = null;
+          this.fbDb = null;
+          this.fbCache = [];
+          try { localStorage.removeItem(this.FB_CONFIG_KEY); } catch(e){}
+          this.updateStorageMode();
+          this.renderList();
+        },
+
+        // ===== 데이터 로드/저장 (모드별 분기) =====
         load() {
+          if (this.fbReady) return [...this.fbCache];
           try {
             const raw = localStorage.getItem(this.STORAGE_KEY);
             return raw ? JSON.parse(raw) : [];
           } catch (e) { return []; }
         },
+
+        // localStorage 모드용 저장 (Firebase 모드는 직접 ref 사용)
         save(posts) {
+          if (this.fbReady) return; // Firebase 모드에선 사용 안 함
           try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(posts)); }
           catch (e) { alert('저장 실패: 저장공간이 부족합니다.'); }
+        },
+
+        async fbAddPost(post) {
+          if (!this.fbReady) return false;
+          try {
+            const ref = this.fbDb.ref('posts').push();
+            post.id = ref.key;
+            await ref.set(post);
+            return true;
+          } catch (e) {
+            alert('Firebase 저장 실패: ' + e.message);
+            return false;
+          }
+        },
+        async fbUpdatePost(id, updates) {
+          if (!this.fbReady) return false;
+          try { await this.fbDb.ref('posts/' + id).update(updates); return true; }
+          catch (e) { alert('수정 실패: ' + e.message); return false; }
+        },
+        async fbDeletePost(id) {
+          if (!this.fbReady) return false;
+          try { await this.fbDb.ref('posts/' + id).remove(); return true; }
+          catch (e) { alert('삭제 실패: ' + e.message); return false; }
+        },
+
+        updateStorageMode() {
+          const el = document.getElementById('cb-storage-mode');
+          if (!el) return;
+          if (this.fbReady) {
+            el.innerHTML = '🔥 <strong style="color:#047857;">Firebase 연동됨</strong> — 모든 사용자의 글이 실시간으로 동기화됩니다.';
+          } else {
+            el.innerHTML = '※ 현재 글은 이 브라우저(localStorage)에만 저장됩니다. <strong>🔥 Firebase 설정</strong> 버튼을 눌러 다중 사용자 모드를 활성화하세요.';
+          }
         },
 
         formatTime(ts) {
@@ -7748,17 +8316,21 @@
             errEl.textContent = '공지는 관리자만 작성할 수 있어요.'; errEl.classList.add('show'); return;
           }
 
-          const all = this.load();
           if (this.editTargetId) {
             // 수정
-            const p = all.find(x => x.id === this.editTargetId);
-            if (!p) { this.closeWriteModal(); return; }
-            p.category = category;
-            p.author = author;
-            p.title = title;
-            p.body = body;
-            p.updatedAt = Date.now();
-            this.save(all);
+            const updates = {
+              category, author, title, body, updatedAt: Date.now()
+            };
+            if (this.fbReady) {
+              const ok = await this.fbUpdatePost(this.editTargetId, updates);
+              if (!ok) return;
+            } else {
+              const all = this.load();
+              const p = all.find(x => x.id === this.editTargetId);
+              if (!p) { this.closeWriteModal(); return; }
+              Object.assign(p, updates);
+              this.save(all);
+            }
           } else {
             // 새 글
             if (!this.adminMode) {
@@ -7767,7 +8339,6 @@
               }
             }
             const post = {
-              id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
               category, author, title, body,
               pwHash: this.adminMode ? null : await this.sha256(pw),
               adminPost: this.adminMode,
@@ -7775,9 +8346,16 @@
               updatedAt: null,
               attachedResult: window._cbPendingResult || null
             };
-            window._cbPendingResult = null; // 첨부 결과 사용 후 초기화
-            all.push(post);
-            this.save(all);
+            window._cbPendingResult = null;
+            if (this.fbReady) {
+              const ok = await this.fbAddPost(post);
+              if (!ok) return;
+            } else {
+              post.id = 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+              const all = this.load();
+              all.push(post);
+              this.save(all);
+            }
           }
           this.closeWriteModal();
           this.renderList();
@@ -7814,10 +8392,14 @@
           this.openPwModal(p.adminPost ? '관리자 글은 관리자만 삭제할 수 있어요.' : '글 작성 시 입력한 비밀번호');
         },
 
-        deletePost(id) {
-          const all = this.load();
-          const next = all.filter(x => x.id !== id);
-          this.save(next);
+        async deletePost(id) {
+          if (this.fbReady) {
+            await this.fbDeletePost(id);
+          } else {
+            const all = this.load();
+            const next = all.filter(x => x.id !== id);
+            this.save(next);
+          }
           this.renderList();
         },
 
@@ -7899,15 +8481,19 @@
           }
         },
 
-        init() {
-          // 초기 시드 (첫 진입 시 환영 공지 1개)
-          if (this.load().length === 0) {
+        async init() {
+          // Firebase 시도 (저장된 config 있으면)
+          await this.initFirebase();
+          this.updateStorageMode();
+
+          // 초기 시드 (localStorage 모드일 때만, 첫 진입 시 환영 공지)
+          if (!this.fbReady && this.load().length === 0) {
             const welcome = {
               id: 'p_welcome',
               category: 'notice',
               author: '관리자',
               title: '커뮤니티 게시판이 열렸습니다 🎉',
-              body: '자유롭게 글을 쓰고 게임 점수·모의계산 결과를 공유해주세요.\n\n📝 사용법\n1) "✏️ 글쓰기" 버튼을 눌러 글 작성\n2) 비밀번호를 설정 (4자 이상) — 메모해두세요\n3) 본인 글은 입력한 비밀번호로 수정·삭제 가능\n\n🎮 게임 결과 공유\n- 플래피 새, 테트리스 등에서 점수를 자랑해보세요!\n\n🧮 모의계산 결과 공유\n- 받을 수 있는 복지 혜택 결과를 함께 나눠보세요.\n\n👑 관리자만 공지글을 작성할 수 있고, 모든 글을 관리할 수 있어요.',
+              body: '자유롭게 글을 쓰고 게임 점수·모의계산 결과를 공유해주세요.\n\n📝 사용법\n1) "✏️ 글쓰기" 버튼을 눌러 글 작성\n2) 비밀번호를 설정 (4자 이상) — 메모해두세요\n3) 본인 글은 입력한 비밀번호로 수정·삭제 가능\n\n🎮 게임 결과 공유\n- 플래피 새, 테트리스 등에서 점수를 자랑해보세요!\n\n🧮 모의계산 결과 공유\n- 받을 수 있는 복지 혜택 결과를 함께 나눠보세요.\n\n🔥 Firebase 연동 시 모든 방문자가 같은 게시판을 공유합니다 (우상단 "Firebase 설정" 버튼).\n\n👑 관리자만 공지글을 작성할 수 있고, 모든 글을 관리할 수 있어요.',
               pwHash: null,
               adminPost: true,
               createdAt: Date.now(),
@@ -7919,10 +8505,21 @@
 
           document.getElementById('cb-write-btn')?.addEventListener('click', () => this.openWriteModal(null));
           document.getElementById('cb-admin-btn')?.addEventListener('click', () => this.toggleAdmin());
+          document.getElementById('cb-fb-btn')?.addEventListener('click', () => this.openFbModal());
           document.getElementById('cb-modal-cancel')?.addEventListener('click', () => this.closeWriteModal());
           document.getElementById('cb-modal-submit')?.addEventListener('click', () => this.submitPost());
           document.getElementById('cb-pw-modal-cancel')?.addEventListener('click', () => this.closePwModal());
           document.getElementById('cb-pw-modal-confirm')?.addEventListener('click', () => this.confirmPw());
+
+          // Firebase 모달 핸들러
+          document.getElementById('cb-fb-cancel')?.addEventListener('click', () => this.closeFbModal());
+          document.getElementById('cb-fb-save')?.addEventListener('click', () => this.saveFbConfig());
+          document.getElementById('cb-fb-disconnect')?.addEventListener('click', () => {
+            if (confirm('Firebase 연결을 해제하면 글이 다시 이 브라우저(localStorage)에서만 보입니다. 계속하시겠습니까?')) {
+              this.disconnectFirebase();
+              this.closeFbModal();
+            }
+          });
 
           // 카테고리 탭
           document.querySelectorAll('[data-cb-cat]').forEach(btn => {
@@ -7940,13 +8537,78 @@
           document.getElementById('cb-pw-modal')?.addEventListener('click', (e) => {
             if (e.target.id === 'cb-pw-modal') this.closePwModal();
           });
+          document.getElementById('cb-fb-modal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'cb-fb-modal') this.closeFbModal();
+          });
 
-          // Enter로 비번 확인
           document.getElementById('cb-pw-modal-input')?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') this.confirmPw();
           });
 
           this.renderList();
+        },
+
+        openFbModal() {
+          const modal = document.getElementById('cb-fb-modal');
+          const ta = document.getElementById('cb-fb-config');
+          const err = document.getElementById('cb-fb-error');
+          err.classList.remove('show');
+          // 기존 config 표시
+          try {
+            const raw = localStorage.getItem(this.FB_CONFIG_KEY);
+            ta.value = raw ? JSON.stringify(JSON.parse(raw), null, 2) : '';
+          } catch (e) { ta.value = ''; }
+          modal.classList.add('show');
+        },
+        closeFbModal() {
+          document.getElementById('cb-fb-modal').classList.remove('show');
+        },
+        async saveFbConfig() {
+          const ta = document.getElementById('cb-fb-config');
+          const err = document.getElementById('cb-fb-error');
+          err.classList.remove('show');
+          let cfg;
+          try {
+            // const firebaseConfig = {...} 형태 / 그냥 JSON 두 케이스 모두 허용
+            let raw = ta.value.trim();
+            // const firebaseConfig = { ... }; 형태 처리
+            const m = raw.match(/=\s*({[\s\S]*})/);
+            if (m) raw = m[1];
+            // 끝의 세미콜론 제거
+            raw = raw.replace(/;\s*$/, '').trim();
+            // JSON.parse는 키가 따옴표 없는 경우 실패 → 따옴표 처리
+            // JS 객체 리터럴을 JSON으로 변환 (간단)
+            raw = raw.replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g, '$1"$2":');
+            raw = raw.replace(/'/g, '"');
+            cfg = JSON.parse(raw);
+          } catch (e) {
+            err.textContent = '❌ 잘못된 형식이에요. firebaseConfig 객체 전체를 복사해서 붙여넣어 주세요.';
+            err.classList.add('show');
+            return;
+          }
+          if (!cfg.databaseURL) {
+            err.textContent = '❌ databaseURL이 없어요. Realtime Database를 활성화하고 주소를 포함해주세요.';
+            err.classList.add('show');
+            return;
+          }
+          try { localStorage.setItem(this.FB_CONFIG_KEY, JSON.stringify(cfg)); } catch(e) {}
+
+          // 기존 리스너 정리 후 재초기화
+          if (this.fbUnsub && this.fbDb) {
+            try { this.fbDb.ref('posts').off('value', this.fbUnsub); } catch(e){}
+          }
+          this.fbReady = false; this.fbApp = null; this.fbDb = null;
+
+          const ok = await this.initFirebase();
+          if (ok) {
+            this.updateStorageMode();
+            this.closeFbModal();
+            alert('🔥 Firebase 연동 완료!\n이제 모든 사용자가 같은 게시판을 공유합니다.\n\n페이지를 새로고침하면 더 안정적으로 동작해요.');
+            this.renderList();
+          } else {
+            err.textContent = '❌ 연동 실패. config가 올바른지, Realtime Database가 활성화되었는지, 보안 규칙이 허용되는지 확인해주세요.';
+            err.classList.add('show');
+          }
         }
       };
       community.init();
