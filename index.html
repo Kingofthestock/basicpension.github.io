@@ -3425,10 +3425,11 @@
     let activeGame = null;
     let currentSection = 'pension';
 
-    function showSection(sectionName) {
+    function showSection(sectionName, pushHistory = true) {
       document.querySelectorAll('body > section').forEach(s => s.classList.add('hidden'));
       const target = document.getElementById(sectionName);
       if (target) { target.classList.remove('hidden'); currentSection = sectionName; }
+      else { sectionName = 'home'; document.getElementById('home')?.classList.remove('hidden'); currentSection = 'home'; }
 
       const topNav = document.getElementById('top-nav');
       const floatingBtn = document.getElementById('floating-game-btn');
@@ -3455,7 +3456,26 @@
       if (sectionName === 'omok-game') { activeGame = 'omok'; if (window.omokApp) omokApp.resizeCanvas(); }
       else if (sectionName.startsWith('game-')) { activeGame = sectionName.replace('game-', ''); }
       else { activeGame = null; }
+
+      // 브라우저 history에 추가 (뒤로가기 버튼 지원)
+      if (pushHistory) {
+        try {
+          const hash = sectionName === 'home' ? ' ' : '#' + sectionName;
+          if (history.state && history.state.section === sectionName) {
+            // 이미 같은 섹션이면 push 안 함 (중복 방지)
+          } else {
+            history.pushState({ section: sectionName }, '', hash);
+          }
+        } catch (e) {}
+      }
     }
+
+    // 브라우저 뒤로가기 / 앞으로가기 처리
+    window.addEventListener('popstate', (e) => {
+      const section = (e.state && e.state.section) || (location.hash ? location.hash.replace('#','') : 'home');
+      showSection(section, false);
+      window.scrollTo(0, 0);
+    });
 
     /* ================================================
        PENSION CALCULATOR (2026 기준 - 수정된 산정식)
@@ -6644,7 +6664,15 @@
       minesweeperApp.init();
       memoryApp.init();
       sudokuApp.init();
-      showSection('home');
+
+      // 초기 섹션 결정: URL hash가 있으면 해당 섹션, 없으면 home
+      const initHash = (location.hash || '').replace('#','').trim();
+      const initSection = (initHash && document.getElementById(initHash)) ? initHash : 'home';
+      showSection(initSection, false);
+      // 첫 history 항목을 명시적으로 설정 (뒤로가기 시 home 표시 가능)
+      try {
+        history.replaceState({ section: initSection }, '', initSection === 'home' ? location.pathname : '#' + initSection);
+      } catch (e) {}
     });
   </script>
 </body>
