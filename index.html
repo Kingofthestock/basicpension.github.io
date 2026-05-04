@@ -18,6 +18,9 @@
   <!-- Firebase SDK (게시판 다중 사용자 동기화용) -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+  <!-- PDF 다운로드 / 인쇄용 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -53,8 +56,186 @@
   </script>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; touch-action: manipulation; }
+    /* ===== 글자 크기 변수 (접근성) ===== */
+    :root { --font-scale: 1; }
+    html[data-font-scale="0.9"] { --font-scale: 0.9; }
+    html[data-font-scale="1"]   { --font-scale: 1; }
+    html[data-font-scale="1.15"] { --font-scale: 1.15; }
+    html[data-font-scale="1.3"]  { --font-scale: 1.3; }
+    body { font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; touch-action: manipulation; font-size: calc(1rem * var(--font-scale)); }
+    body, p, span, div, button, input, textarea, select, label, li, td, th, a, h1, h2, h3, h4, h5, h6 { font-size: inherit; }
+    h1 { font-size: calc(2rem * var(--font-scale)); }
+    h2 { font-size: calc(1.5rem * var(--font-scale)); }
+    h3 { font-size: calc(1.15rem * var(--font-scale)); }
     .hidden { display: none !important; }
+
+    /* ===== 고대비 모드 ===== */
+    body.high-contrast { background: #000 !important; color: #fff !important; }
+    body.high-contrast .home-card-section, body.high-contrast .wf-card, body.high-contrast .wff-card,
+    body.high-contrast .home-quick-card, body.high-contrast .home-cat-card,
+    body.high-contrast .cb-list-wrap, body.high-contrast .cb-detail,
+    body.high-contrast .home-search-card { background: #000 !important; color: #fff !important; border-color: #fff !important; }
+    body.high-contrast h1, body.high-contrast h2, body.high-contrast h3,
+    body.high-contrast strong, body.high-contrast .home-section-title,
+    body.high-contrast .home-quick-card-title, body.high-contrast .home-cat-name,
+    body.high-contrast .cb-detail-title { color: #ffeb3b !important; }
+    body.high-contrast a, body.high-contrast .text-blue-700, body.high-contrast .text-blue-600 { color: #00e5ff !important; text-decoration: underline !important; }
+    body.high-contrast button:not(.disabled) { border: 2px solid #fff !important; }
+    body.high-contrast .home-quick-card-cta, body.high-contrast .home-cat-status { color: #ffeb3b !important; }
+    body.high-contrast .text-slate-500, body.high-contrast .text-slate-600, body.high-contrast .text-slate-700 { color: #fff !important; }
+    body.high-contrast .bg-orange-50, body.high-contrast .bg-blue-50, body.high-contrast .bg-emerald-50,
+    body.high-contrast .bg-amber-50, body.high-contrast .bg-red-50, body.high-contrast .bg-slate-50 { background: #1a1a1a !important; }
+
+    /* ===== 색약 친화 모드 (명도 차이 기반) ===== */
+    body.color-friendly .home-quick-card.pension { background: linear-gradient(165deg,#f5f5f5,#fff 60%) !important; border-color: #1a1a1a !important; }
+    body.color-friendly .home-quick-card.disability { background: linear-gradient(165deg,#d4d4d4,#fff 60%) !important; border-color: #404040 !important; }
+    body.color-friendly .home-quick-card.fuel { background: linear-gradient(165deg,#a8a8a8,#fff 60%) !important; border-color: #525252 !important; }
+    body.color-friendly .home-quick-card.tax { background: linear-gradient(165deg,#737373,#fff 60%) !important; border-color: #1a1a1a !important; }
+    body.color-friendly .wf-tone-teal .wf-header, body.color-friendly .wf-tone-rose .wf-header,
+    body.color-friendly .wf-tone-amber .wf-header, body.color-friendly .wf-tone-blue .wf-header,
+    body.color-friendly .wf-tone-pink .wf-header, body.color-friendly .wf-tone-violet .wf-header,
+    body.color-friendly .wf-tone-red .wf-header, body.color-friendly .wf-tone-orange .wf-header,
+    body.color-friendly .wf-tone-emerald .wf-header, body.color-friendly .wf-tone-slate .wf-header {
+      background: linear-gradient(135deg, #1a1a1a 0%, #525252 50%, #a8a8a8 100%) !important;
+    }
+    body.color-friendly .home-cat-card { border-width: 2px !important; }
+    body.color-friendly .cb-post-row-cat { border: 2px solid #000 !important; }
+
+    /* ===== 접근성 도구 바 ===== */
+    .a11y-bar { position: fixed; top: 0.6rem; right: 0.6rem; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border: 1px solid #e2e8f0; border-radius: 0.7rem; box-shadow: 0 4px 14px rgba(15,23,42,.12); display: flex; align-items: center; gap: 0.3rem; padding: 0.35rem; }
+    .a11y-bar.collapsed .a11y-items { display: none; }
+    .a11y-bar.collapsed { padding: 0.3rem; }
+    .a11y-toggle { width: 36px; height: 36px; border: none; background: transparent; border-radius: 0.5rem; cursor: pointer; font-size: 1.1rem; display: inline-flex; align-items: center; justify-content: center; }
+    .a11y-toggle:hover { background: #f1f5f9; }
+    .a11y-items { display: flex; gap: 0.25rem; align-items: center; }
+    .a11y-btn { padding: 0.4rem 0.65rem; border: 1.5px solid #e2e8f0; background: #fff; border-radius: 0.5rem; font-size: 0.78rem; font-weight: 700; color: #475569; cursor: pointer; font-family: inherit; transition: all .15s; display: inline-flex; align-items: center; gap: 0.25rem; }
+    .a11y-btn:hover { border-color: #93c5fd; background: #eff6ff; }
+    .a11y-btn.active { background: #1e40af; color: #fff; border-color: #1e40af; }
+    .a11y-btn .ic { font-size: 0.95rem; }
+    .a11y-divider { width: 1px; height: 22px; background: #e2e8f0; margin: 0 0.15rem; }
+    body.high-contrast .a11y-bar { background: #1a1a1a !important; border-color: #fff !important; }
+    body.high-contrast .a11y-btn { background: #1a1a1a !important; color: #fff !important; border-color: #fff !important; }
+    body.high-contrast .a11y-btn.active { background: #ffeb3b !important; color: #000 !important; }
+    @media (max-width: 640px) {
+      .a11y-bar { top: 0.4rem; right: 0.4rem; padding: 0.3rem; }
+      .a11y-bar:not(.expanded) .a11y-items { display: none; }
+      .a11y-bar.expanded { flex-direction: column; align-items: stretch; max-width: 90vw; }
+      .a11y-bar.expanded .a11y-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.3rem; margin-top: 0.3rem; }
+      .a11y-bar.expanded .a11y-divider { display: none; }
+      .a11y-btn { font-size: 0.75rem; }
+    }
+
+    /* ===== 사각지대 자가진단 카드 ===== */
+    .gap-check-card { background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 50%, #fff 100%); border: 2px solid #fbbf24; border-radius: 1.1rem; padding: 1.5rem 1.4rem; margin-bottom: 1.25rem; position: relative; box-shadow: 0 6px 18px rgba(245,158,11,.15); }
+    .gap-check-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem; font-weight: 800; color: #78350f; margin-bottom: 0.3rem; }
+    .gap-check-desc { font-size: 0.9rem; color: #92400e; margin-bottom: 1.1rem; line-height: 1.55; }
+    .gap-check-q { background: #fff; border: 1.5px solid #fde68a; border-radius: 0.65rem; padding: 0.9rem 1rem; margin-bottom: 0.5rem; display: flex; gap: 0.6rem; align-items: center; }
+    .gap-check-q-text { flex: 1; font-size: 0.92rem; color: #1e293b; line-height: 1.5; font-weight: 600; }
+    .gap-check-q-text .num { color: #d97706; font-weight: 800; margin-right: 0.4rem; }
+    .gap-check-yn { display: flex; gap: 0.25rem; flex-shrink: 0; }
+    .gap-check-yn button { padding: 0.4rem 0.85rem; border: 1.5px solid #e2e8f0; background: #fff; border-radius: 0.5rem; font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .12s; min-width: 50px; }
+    .gap-check-yn button:hover { border-color: #fbbf24; background: #fffbeb; }
+    .gap-check-yn button.yes.on { background: linear-gradient(135deg,#d97706,#f59e0b); color: #fff; border-color: #d97706; }
+    .gap-check-yn button.no.on { background: #475569; color: #fff; border-color: #475569; }
+    .gap-check-actions { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+    .gap-check-go { flex: 1; padding: 0.9rem; background: linear-gradient(135deg,#d97706,#f59e0b); color: #fff; border: none; border-radius: 0.7rem; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 1rem; box-shadow: 0 4px 12px rgba(217,119,6,.3); }
+    .gap-check-go:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(217,119,6,.4); }
+    .gap-check-reset { padding: 0.9rem 1.1rem; background: #fff; color: #92400e; border: 1.5px solid #fde68a; border-radius: 0.7rem; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 0.9rem; }
+
+    .gap-check-result { margin-top: 1.1rem; padding: 1rem 1.1rem; background: #fff; border: 2px solid #fbbf24; border-radius: 0.8rem; display: none; }
+    .gap-check-result.show { display: block; animation: gapFade .3s ease; }
+    @keyframes gapFade { from {opacity:0; transform:translateY(8px);} to {opacity:1; transform:translateY(0);} }
+    .gap-check-result-head { font-weight: 800; color: #78350f; font-size: 1rem; margin-bottom: 0.65rem; display: flex; align-items: center; gap: 0.4rem; }
+    .gap-rec-card { padding: 0.85rem 1rem; background: linear-gradient(135deg,#fef3c7,#fffbeb); border-left: 4px solid #d97706; border-radius: 0.55rem; margin-bottom: 0.5rem; cursor: pointer; transition: all .15s; }
+    .gap-rec-card:hover { transform: translateX(4px); box-shadow: 0 3px 10px rgba(217,119,6,.15); }
+    .gap-rec-card-title { font-weight: 800; color: #0f172a; margin-bottom: 0.2rem; font-size: 0.95rem; }
+    .gap-rec-card-desc { font-size: 0.82rem; color: #475569; line-height: 1.5; }
+    .gap-rec-card-cta { font-size: 0.78rem; font-weight: 700; color: #d97706; margin-top: 0.35rem; }
+
+    /* ===== 신청 준비 체크리스트 ===== */
+    .prep-card { background: linear-gradient(135deg,#eff6ff,#fff); border: 2px solid #bfdbfe; border-radius: 1rem; padding: 1.4rem 1.3rem; margin-top: 1.2rem; }
+    .prep-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; font-weight: 800; color: #1e3a8a; margin-bottom: 0.35rem; }
+    .prep-desc { font-size: 0.85rem; color: #475569; margin-bottom: 0.9rem; line-height: 1.55; }
+    .prep-progress-wrap { background: #e2e8f0; height: 8px; border-radius: 999px; overflow: hidden; margin-bottom: 0.4rem; }
+    .prep-progress-bar { height: 100%; background: linear-gradient(90deg,#1e40af,#3b82f6,#10b981); transition: width .3s; }
+    .prep-progress-text { font-size: 0.8rem; color: #64748b; font-weight: 700; margin-bottom: 0.85rem; text-align: right; }
+    .prep-progress-text.done { color: #047857; }
+    .prep-item { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 0.6rem; padding: 0.75rem 0.95rem; margin-bottom: 0.45rem; display: flex; gap: 0.6rem; align-items: flex-start; transition: all .15s; }
+    .prep-item.checked { background: #f0fdf4; border-color: #86efac; }
+    .prep-item-cb { width: 22px; height: 22px; flex-shrink: 0; cursor: pointer; appearance: none; -webkit-appearance: none; border: 2px solid #cbd5e1; border-radius: 0.3rem; position: relative; transition: all .15s; margin-top: 1px; }
+    .prep-item-cb:hover { border-color: #3b82f6; }
+    .prep-item-cb:checked { background: #047857; border-color: #047857; }
+    .prep-item-cb:checked::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-weight: 800; font-size: 14px; }
+    .prep-item-body { flex: 1; min-width: 0; }
+    .prep-item-name { font-weight: 700; color: #0f172a; font-size: 0.92rem; margin-bottom: 0.15rem; }
+    .prep-item-where { font-size: 0.78rem; color: #64748b; }
+    .prep-item-where a { color: #1e40af; font-weight: 700; text-decoration: underline; }
+    .prep-item.checked .prep-item-name { color: #047857; text-decoration: line-through; opacity: 0.7; }
+    .prep-done-msg { display: none; padding: 0.95rem; background: linear-gradient(135deg,#10b981,#059669); color: #fff; border-radius: 0.65rem; text-align: center; font-weight: 800; margin-top: 0.5rem; }
+    .prep-done-msg.show { display: block; animation: gapFade .3s; }
+
+    /* ===== PDF/인쇄 버튼 ===== */
+    .doc-actions { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+    .doc-action-btn { flex: 1; min-width: 130px; padding: 0.85rem 1rem; border: 1.5px solid; border-radius: 0.7rem; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 0.92rem; transition: all .15s; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; }
+    .doc-action-btn.pdf { background: #fff; color: #b91c1c; border-color: #fecaca; }
+    .doc-action-btn.pdf:hover { background: #fef2f2; }
+    .doc-action-btn.print { background: #fff; color: #1e3a8a; border-color: #bfdbfe; }
+    .doc-action-btn.print:hover { background: #eff6ff; }
+    .doc-action-btn:disabled { opacity: 0.5; cursor: wait; }
+
+    /* PDF 워터마크용 (전용 컨테이너) */
+    .pdf-export-zone { padding: 1.5rem; background: #fff; position: relative; }
+    .pdf-export-zone::before { content: '본 자료는 모의 안내용 — 실제 자격은 관할 기관 심사로 결정'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg); font-size: 1.3rem; font-weight: 900; color: rgba(220, 38, 38, 0.08); white-space: nowrap; pointer-events: none; z-index: 0; letter-spacing: 0.05em; }
+    .pdf-export-zone > * { position: relative; z-index: 1; }
+    .pdf-header { padding-bottom: 0.85rem; border-bottom: 2px solid #1e40af; margin-bottom: 1rem; }
+    .pdf-header h1 { font-size: 1.4rem; font-weight: 900; color: #0f172a; margin: 0 0 0.3rem; }
+    .pdf-header .pdf-meta { font-size: 0.78rem; color: #64748b; }
+    .pdf-section { margin-bottom: 1rem; }
+    .pdf-section-title { font-size: 0.95rem; font-weight: 800; color: #1e40af; margin-bottom: 0.4rem; padding-left: 0.4rem; border-left: 4px solid #1e40af; }
+    .pdf-section ul { margin: 0.3rem 0; padding-left: 1.3rem; }
+    .pdf-section li { font-size: 0.85rem; color: #1e293b; line-height: 1.6; margin-bottom: 0.2rem; }
+    .pdf-foot { margin-top: 1rem; padding-top: 0.6rem; border-top: 1px solid #e2e8f0; font-size: 0.7rem; color: #94a3b8; text-align: center; }
+
+    /* ===== 인쇄 스타일 ===== */
+    @media print {
+      .top-nav, .floating-game-btn, #floating-game-btn,
+      .a11y-bar, .home-footer, .home-search-section, #home-search-section,
+      .gap-check-card, .home-card-section:not(.print-keep),
+      .cb-toolbar, .cb-comments, .cb-detail-foot, .cb-detail-actions,
+      .doc-actions, .wff-step:not(.active), .wff-progress, .wff-nav,
+      .wf-back, .home-hero, .home-quick-grid, .home-cat-grid,
+      [data-wf-back], #wff-share-btn,
+      [data-tx-tab], .tx-pane:not(.active),
+      iframe, video, audio, canvas { display: none !important; }
+      body, .home-section, section { background: #fff !important; color: #000 !important; }
+      .wf-card, .wff-card, .home-card-section, .gap-rec-card,
+      .prep-card, .pdf-export-zone { box-shadow: none !important; border: 1px solid #ccc !important; page-break-inside: avoid; }
+      a { color: #000 !important; text-decoration: underline; }
+      .pdf-export-zone::before { color: rgba(150, 150, 150, 0.15) !important; }
+      h1, h2, h3 { color: #000 !important; page-break-after: avoid; }
+      table { page-break-inside: avoid; }
+    }
+
+    /* ===== 용어 사전 툴팁 ===== */
+    .gloss-term { border-bottom: 2px dotted #1e40af; cursor: pointer; position: relative; transition: color .12s; padding: 0 1px; }
+    .gloss-term:hover { color: #1e40af; }
+    body.high-contrast .gloss-term { border-bottom-color: #ffeb3b !important; color: #ffeb3b !important; }
+    .gloss-tooltip { position: absolute; z-index: 9998; background: #0f172a; color: #fff; padding: 0.85rem 1rem; border-radius: 0.65rem; font-size: 0.85rem; line-height: 1.55; max-width: 320px; min-width: 240px; box-shadow: 0 12px 32px rgba(0,0,0,0.25); display: none; }
+    .gloss-tooltip.show { display: block; }
+    .gloss-tooltip-title { font-weight: 800; color: #fbbf24; margin-bottom: 0.3rem; font-size: 0.92rem; }
+    .gloss-tooltip-body { font-size: 0.82rem; line-height: 1.65; }
+    .gloss-tooltip::after { content: ''; position: absolute; top: -6px; left: 24px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 6px solid #0f172a; }
+
+    /* 모바일 — bottom sheet */
+    @media (max-width: 640px) {
+      .gloss-tooltip { position: fixed !important; bottom: 0; left: 0; right: 0; top: auto; max-width: none; min-width: auto; border-radius: 1rem 1rem 0 0; padding: 1.1rem 1.3rem 1.5rem; box-shadow: 0 -8px 32px rgba(0,0,0,0.3); animation: glossSlide .25s ease; }
+      .gloss-tooltip::after { display: none; }
+      .gloss-tooltip-close { display: block; position: absolute; top: 0.5rem; right: 1rem; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0.3rem; }
+      @keyframes glossSlide { from {transform: translateY(100%);} to {transform: translateY(0);} }
+    }
+    .gloss-tooltip-close { display: none; background: none; border: none; color: #fff; font-size: 1.3rem; cursor: pointer; position: absolute; top: 0.4rem; right: 0.6rem; padding: 0.25rem 0.5rem; }
+    .gloss-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 9997; }
+    .gloss-overlay.show { display: block; }
 
     /* ===== Navigation ===== */
     .top-nav { background: rgba(255,255,255,.85); backdrop-filter: blur(12px); border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 50; }
@@ -878,6 +1059,35 @@
 </head>
 <body class="bg-slate-50">
 
+  <!-- ===== 접근성 도구 바 ===== -->
+  <div id="a11y-bar" class="a11y-bar collapsed" role="region" aria-label="접근성 도구">
+    <button class="a11y-toggle" id="a11y-toggle" title="접근성 메뉴" aria-label="접근성 메뉴 열기/닫기">♿</button>
+    <div class="a11y-items">
+      <button class="a11y-btn" id="a11y-font" title="글자 크기 변경">
+        <span class="ic">🔤</span><span id="a11y-font-label">100%</span>
+      </button>
+      <div class="a11y-divider"></div>
+      <button class="a11y-btn" id="a11y-contrast" title="고대비 모드">
+        <span class="ic">🌓</span>고대비
+      </button>
+      <button class="a11y-btn" id="a11y-cf" title="색약 친화 모드">
+        <span class="ic">🎨</span>색약친화
+      </button>
+      <div class="a11y-divider"></div>
+      <button class="a11y-btn" id="a11y-reset" title="기본값으로">
+        <span class="ic">↺</span>초기화
+      </button>
+    </div>
+  </div>
+
+  <!-- 용어 사전 툴팁 (글로벌) -->
+  <div id="gloss-overlay" class="gloss-overlay"></div>
+  <div id="gloss-tooltip" class="gloss-tooltip" role="tooltip">
+    <button id="gloss-tooltip-close" class="gloss-tooltip-close" aria-label="닫기">×</button>
+    <div class="gloss-tooltip-title" id="gloss-tooltip-title"></div>
+    <div class="gloss-tooltip-body" id="gloss-tooltip-body"></div>
+  </div>
+
   <!-- ===== Navigation ===== -->
   <nav id="top-nav" class="top-nav hidden">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -981,6 +1191,60 @@
     </header>
 
     <main class="home-main">
+
+      <!-- ===== 사각지대 자가진단 (30초) ===== -->
+      <section class="gap-check-card" id="gap-check-card">
+        <h2 class="gap-check-title"><span>⚠️</span> 혹시 못 받고 있는 혜택이 있나요? — 30초 자가진단</h2>
+        <p class="gap-check-desc">간단한 5문항으로 <strong>놓치고 있을 수 있는 복지 혜택</strong>을 빠르게 확인해드려요. 예/아니오로만 답해주세요.</p>
+
+        <div class="gap-check-q" data-gq="1">
+          <div class="gap-check-q-text"><span class="num">Q1.</span>최근 1년 내 <strong>실직</strong> 또는 <strong>소득 50% 이상 감소</strong>가 있었나요?</div>
+          <div class="gap-check-yn">
+            <button class="yes" data-gv="1-y">예</button>
+            <button class="no" data-gv="1-n">아니오</button>
+          </div>
+        </div>
+
+        <div class="gap-check-q" data-gq="2">
+          <div class="gap-check-q-text"><span class="num">Q2.</span>현재 <strong>월세</strong>에 거주 중이신가요?</div>
+          <div class="gap-check-yn">
+            <button class="yes" data-gv="2-y">예</button>
+            <button class="no" data-gv="2-n">아니오</button>
+          </div>
+        </div>
+
+        <div class="gap-check-q" data-gq="3">
+          <div class="gap-check-q-text"><span class="num">Q3.</span>가구원 중 <strong>만성질환 또는 장애</strong>가 있나요?</div>
+          <div class="gap-check-yn">
+            <button class="yes" data-gv="3-y">예</button>
+            <button class="no" data-gv="3-n">아니오</button>
+          </div>
+        </div>
+
+        <div class="gap-check-q" data-gq="4">
+          <div class="gap-check-q-text"><span class="num">Q4.</span><strong>미취학·초·중·고 자녀</strong>가 있나요?</div>
+          <div class="gap-check-yn">
+            <button class="yes" data-gv="4-y">예</button>
+            <button class="no" data-gv="4-n">아니오</button>
+          </div>
+        </div>
+
+        <div class="gap-check-q" data-gq="5">
+          <div class="gap-check-q-text"><span class="num">Q5.</span>본인 또는 배우자가 <strong>만 65세 이상</strong>인가요?</div>
+          <div class="gap-check-yn">
+            <button class="yes" data-gv="5-y">예</button>
+            <button class="no" data-gv="5-n">아니오</button>
+          </div>
+        </div>
+
+        <div class="gap-check-actions">
+          <button id="gap-check-go" class="gap-check-go">📋 추천 혜택 확인하기 →</button>
+          <button id="gap-check-reset" class="gap-check-reset">↺ 다시</button>
+        </div>
+
+        <div id="gap-check-result" class="gap-check-result"></div>
+      </section>
+
       <!-- 통합 복지 매칭 모의계산기 (위저드 형식) -->
       <section class="wff-card">
         <h2 class="wff-title"><span class="wff-title-icon">🎯</span>나에게 맞는 복지 혜택 찾기</h2>
@@ -4697,11 +4961,20 @@
           benefit: eligible ? benefit : 0
         };
 
+        // PDF/인쇄 버튼 추가
+        html += `
+          <div class="doc-actions">
+            <button type="button" id="pension-pdf-btn" class="doc-action-btn pdf">📄 PDF로 저장</button>
+            <button type="button" id="pension-print-btn" class="doc-action-btn print">🖨️ 인쇄</button>
+          </div>`;
+
         resultDiv.innerHTML = html;
         resultDiv.style.display = 'block';
 
         // 결과 공유 버튼 이벤트 바인딩
         document.getElementById('share-result-btn')?.addEventListener('click', () => this.shareResult());
+        document.getElementById('pension-pdf-btn')?.addEventListener('click', () => this.exportPdf());
+        document.getElementById('pension-print-btn')?.addEventListener('click', () => window.print());
 
         applyDiv.innerHTML = `
           <div class="mt-5 p-5 bg-blue-50 rounded-xl border border-blue-200">
@@ -4715,6 +4988,57 @@
           </div>`;
         applyDiv.style.display = 'block';
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      },
+
+      async exportPdf() {
+        const ctx = this.lastResultContext;
+        if (!ctx) return;
+        const btn = document.getElementById('pension-pdf-btn');
+        if (btn) { btn.disabled = true; btn.textContent = '📄 생성 중...'; }
+        const today = new Date();
+        const dateStr = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
+        const zone = document.createElement('div');
+        zone.className = 'pdf-export-zone';
+        zone.style.cssText = 'position:fixed; top:-9999px; left:0; width:780px; background:#fff;';
+        zone.innerHTML = `
+          <div class="pdf-header">
+            <h1>💰 기초연금 모의계산 결과</h1>
+            <div class="pdf-meta">발급일: ${dateStr} · 만 ${ctx.age}세 · ${ctx.household === 'single' ? '단독' : '부부'} 가구</div>
+          </div>
+          <div class="pdf-section">
+            <div class="pdf-section-title">📊 결과 요약</div>
+            <ul>
+              <li><strong>판정:</strong> ${ctx.eligible ? '✅ 수급 가능성 높음' : '❌ 현재 기준 미충족'}</li>
+              ${ctx.eligible ? `<li><strong>예상 월 지급액:</strong> ${this.formatKRWNum(ctx.benefit)}${ctx.household === 'couple' ? ` (부부 합계 ${this.formatKRWNum(ctx.benefit * 2)})` : ''}</li>` : ''}
+              <li><strong>소득인정액:</strong> ${this.formatKRWNum(ctx.totalIncome)}</li>
+              <li><strong>선정기준액:</strong> ${this.formatKRWNum(ctx.threshold)} (${ctx.household === 'single' ? '단독' : '부부'})</li>
+            </ul>
+          </div>
+          <div class="pdf-section">
+            <div class="pdf-section-title">📋 필요 서류 (신청 시)</div>
+            <ul>
+              <li>신분증 (주민등록증·운전면허증 등)</li>
+              <li>본인 명의 통장 사본</li>
+              <li>주민등록등본</li>
+              <li>기초연금 신청서 (주민센터 비치)</li>
+              <li>소득·재산 조사 동의서</li>
+              ${ctx.household === 'couple' ? '<li>배우자 신분증 사본 + 부부 동의서</li>' : ''}
+            </ul>
+          </div>
+          <div class="pdf-section">
+            <div class="pdf-section-title">📞 신청처 / 문의처</div>
+            <ul>
+              <li><strong>방문 신청:</strong> 주민센터 또는 국민연금공단 지사</li>
+              <li><strong>온라인:</strong> 복지로 www.bokjiro.go.kr</li>
+              <li><strong>전화 문의:</strong> 국민연금공단 1355 / 보건복지상담센터 129</li>
+            </ul>
+          </div>
+          <div class="pdf-foot">본 자료는 ${dateStr} 기준 입력 정보로 생성된 모의 안내용이며, 실제 자격 판정은 국민연금공단 심사로 결정됩니다.</div>`;
+        document.body.appendChild(zone);
+        await new Promise(r => setTimeout(r, 100));
+        await window.docExport.toPdf(zone, `기초연금_모의계산_${today.toISOString().slice(0,10)}.pdf`);
+        document.body.removeChild(zone);
+        if (btn) { btn.disabled = false; btn.textContent = '📄 PDF로 저장'; }
       },
 
       scrollToCalculator() {
@@ -5545,8 +5869,71 @@
           </div>`;
         applyDiv.style.display = 'block';
 
+        // PDF/인쇄 버튼 추가
+        resultDiv.insertAdjacentHTML('beforeend', `
+          <div class="doc-actions">
+            <button type="button" id="dp-pdf-btn" class="doc-action-btn pdf">📄 PDF로 저장</button>
+            <button type="button" id="dp-print-btn" class="doc-action-btn print">🖨️ 인쇄</button>
+          </div>`);
+
         document.getElementById('dp-share-result-btn')?.addEventListener('click', () => this.shareResult());
+        document.getElementById('dp-pdf-btn')?.addEventListener('click', () => this.exportPdf());
+        document.getElementById('dp-print-btn')?.addEventListener('click', () => window.print());
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      },
+
+      async exportPdf() {
+        const ctx = this.lastResultContext;
+        if (!ctx) return;
+        const btn = document.getElementById('dp-pdf-btn');
+        if (btn) { btn.disabled = true; btn.textContent = '📄 생성 중...'; }
+        const today = new Date();
+        const dateStr = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
+        const zone = document.createElement('div');
+        zone.className = 'pdf-export-zone';
+        zone.style.cssText = 'position:fixed; top:-9999px; left:0; width:780px; background:#fff;';
+        zone.innerHTML = `
+          <div class="pdf-header">
+            <h1>♿ 장애인연금 모의계산 결과</h1>
+            <div class="pdf-meta">발급일: ${dateStr} · 만 ${ctx.age}세${ctx.over65 ? ' (65세 이상 — 기초연금 전환)' : ''}</div>
+          </div>
+          <div class="pdf-section">
+            <div class="pdf-section-title">📊 결과 요약</div>
+            <ul>
+              <li><strong>판정:</strong> ${ctx.eligible ? '✅ 수급 가능성 높음' : '❌ 현재 기준 미충족'}</li>
+              ${ctx.eligible ? `<li><strong>예상 월 수령액:</strong> ${this.formatKRWNum(ctx.totalBenefit)}${ctx.over65 ? ' (부가급여만, 기초연금 별도)' : ''}</li>
+              <li>기초급여: ${this.formatKRWNum(ctx.baseBenefit)}</li>
+              <li>부가급여: ${this.formatKRWNum(ctx.extraBenefit)}</li>` : ''}
+              <li><strong>소득인정액:</strong> ${this.formatKRWNum(ctx.totalIncome)}</li>
+              <li><strong>선정기준액:</strong> ${this.formatKRWNum(ctx.threshold)}</li>
+            </ul>
+          </div>
+          <div class="pdf-section">
+            <div class="pdf-section-title">📋 필요 서류 (신청 시)</div>
+            <ul>
+              <li>장애인 등록증 (복지카드)</li>
+              <li>신분증 (주민등록증·운전면허증)</li>
+              <li>본인 명의 통장 사본</li>
+              <li>주민등록등본</li>
+              <li>장애 정도 심사 결과 통지서</li>
+              <li>소득·재산 증빙 서류 (필요 시 주민센터 안내)</li>
+            </ul>
+          </div>
+          <div class="pdf-section">
+            <div class="pdf-section-title">📞 신청처 / 문의처</div>
+            <ul>
+              <li><strong>방문 신청:</strong> 주소지 읍·면·동 주민센터</li>
+              <li><strong>온라인:</strong> 복지로 www.bokjiro.go.kr</li>
+              <li><strong>전화 문의:</strong> 보건복지상담센터 ☎ 129</li>
+              <li><strong>대리 신청 가능:</strong> 배우자·직계혈족·장애인거주시설장</li>
+            </ul>
+          </div>
+          <div class="pdf-foot">본 자료는 ${dateStr} 기준 입력 정보로 생성된 모의 안내용이며, 실제 자격 판정은 관할 기관 심사로 결정됩니다.</div>`;
+        document.body.appendChild(zone);
+        await new Promise(r => setTimeout(r, 100));
+        await window.docExport.toPdf(zone, `장애인연금_모의계산_${today.toISOString().slice(0,10)}.pdf`);
+        document.body.removeChild(zone);
+        if (btn) { btn.disabled = false; btn.textContent = '📄 PDF로 저장'; }
       },
 
       scrollToCalculator() {
@@ -7564,6 +7951,433 @@
       };
       homeSearchUI.init();
 
+      /* ================================================
+         [기능1] 접근성 도구 바
+         ================================================ */
+      const a11y = {
+        KEY: 'a11y_settings_v1',
+        FONT_STEPS: [0.9, 1, 1.15, 1.3],
+        FONT_LABELS: ['90%', '100%', '115%', '130%'],
+        state: { fontIdx: 1, contrast: false, colorFriendly: false },
+
+        load() {
+          try { return JSON.parse(localStorage.getItem(this.KEY) || 'null') || this.state; }
+          catch (e) { return this.state; }
+        },
+        save() { try { localStorage.setItem(this.KEY, JSON.stringify(this.state)); } catch(e){} },
+
+        apply() {
+          document.documentElement.setAttribute('data-font-scale', this.FONT_STEPS[this.state.fontIdx]);
+          document.body.classList.toggle('high-contrast', this.state.contrast);
+          document.body.classList.toggle('color-friendly', this.state.colorFriendly);
+          document.getElementById('a11y-font-label').textContent = this.FONT_LABELS[this.state.fontIdx];
+          document.getElementById('a11y-font').classList.toggle('active', this.state.fontIdx !== 1);
+          document.getElementById('a11y-contrast').classList.toggle('active', this.state.contrast);
+          document.getElementById('a11y-cf').classList.toggle('active', this.state.colorFriendly);
+        },
+
+        cycleFont() {
+          this.state.fontIdx = (this.state.fontIdx + 1) % this.FONT_STEPS.length;
+          this.save(); this.apply();
+        },
+        toggleContrast() { this.state.contrast = !this.state.contrast; this.save(); this.apply(); },
+        toggleCF() { this.state.colorFriendly = !this.state.colorFriendly; this.save(); this.apply(); },
+        reset() { this.state = { fontIdx: 1, contrast: false, colorFriendly: false }; this.save(); this.apply(); },
+
+        init() {
+          this.state = this.load();
+          this.apply();
+          const bar = document.getElementById('a11y-bar');
+          document.getElementById('a11y-toggle').addEventListener('click', () => {
+            if (window.innerWidth <= 640) {
+              bar.classList.toggle('expanded');
+              bar.classList.remove('collapsed');
+            } else {
+              bar.classList.toggle('collapsed');
+            }
+          });
+          document.getElementById('a11y-font').addEventListener('click', () => this.cycleFont());
+          document.getElementById('a11y-contrast').addEventListener('click', () => this.toggleContrast());
+          document.getElementById('a11y-cf').addEventListener('click', () => this.toggleCF());
+          document.getElementById('a11y-reset').addEventListener('click', () => this.reset());
+        }
+      };
+      a11y.init();
+
+      /* ================================================
+         [기능4] 용어 사전 툴팁
+         ================================================ */
+      const glossary = {
+        TERMS: {
+          '소득인정액': { title: '소득인정액', body: '소득 + 재산을 모두 더한 후 정해진 공제(공제금액)을 빼서 계산한 "복지 자격 판단용 월 환산 소득"이에요. 실제 통장에 들어오는 월 소득과는 다릅니다. 기초연금·기초생활보장 등 자격 심사에 사용됩니다.' },
+          '중위소득': { title: '중위소득', body: '대한민국 모든 가구를 소득 순으로 줄 세웠을 때 정확히 가운데에 있는 가구의 소득을 말해요. 매년 정부가 발표하며, 복지 혜택의 자격 기준선으로 사용됩니다.' },
+          '기준 중위소득': { title: '기준 중위소득', body: '복지 제도의 기준선으로 사용하는 중위소득 수치예요. 2026년 기준 1인 약 256만원, 4인 약 649만원입니다. "중위 50%"는 이 금액의 절반을 뜻해요.' },
+          '선정기준액': { title: '선정기준액', body: '복지 혜택을 받을 수 있는 소득인정액의 한계선이에요. 본인의 소득인정액이 이 금액보다 작거나 같아야 해당 복지를 받을 수 있어요. (예: 2026 기초연금 단독 247만원)' },
+          '차상위계층': { title: '차상위계층', body: '기초생활수급자는 아니지만 그에 준할 정도로 소득이 낮은 계층(중위소득 50% 이하 + 기초수급 미해당)이에요. 의료비 경감·통신비 감면·자녀 교육비 등 별도 혜택이 있어요.' },
+          '재산의 소득환산액': { title: '재산의 소득환산액', body: '주택·자동차·예금 등 재산을 매월 얼마의 소득으로 환산할지 계산한 값이에요. 예금·주식은 연 4% 정도로 환산됩니다. 소득인정액 계산에 포함됩니다.' },
+          '부양의무자': { title: '부양의무자', body: '본인의 부모·자녀·배우자처럼 법적으로 부양 책임이 있는 가족을 말해요. 과거에는 부양의무자 소득도 따져 복지를 결정했지만, 2021년부터 생계급여는 부양의무자 기준이 폐지됐어요.' },
+          '근로소득공제': { title: '근로소득공제', body: '근로소득 중 일부를 "없는 소득"으로 빼주는 제도예요. 2026년 기초연금 기준 116만원 + 초과분의 30%가 공제됩니다. 즉, 일을 해도 일정 금액까지는 자격 심사에서 빠져요.' },
+          '보장시설 수급자': { title: '보장시설 수급자', body: '요양시설·장애인 거주시설 등 정부가 정한 시설에 입소해 보호받는 기초생활수급자예요. 일반 수급자와 구분하여 별도 기준이 적용됩니다.' },
+          '의료급여 1종': { title: '의료급여 1종', body: '의료비 본인부담이 거의 없는(외래 1,000~2,000원, 약국 500원) 의료급여 등급이에요. 근로 능력이 없는 기초생활수급자(노인·장애인·임산부 등)가 해당됩니다.' },
+          '의료급여 2종': { title: '의료급여 2종', body: '1종보다 본인부담이 약간 더 있는 의료급여 등급이에요. 외래 진료 시 일정 비율을 본인이 부담합니다. 근로 능력이 있는 기초생활수급자가 해당돼요.' }
+        },
+
+        scan(rootEl) {
+          const root = rootEl || document.body;
+          const skipTags = new Set(['SCRIPT','STYLE','TEXTAREA','INPUT','SELECT','BUTTON','A','LABEL','OPTION','MARK','CODE']);
+          const skipAttrs = ['data-gloss-scanned'];
+          const terms = Object.keys(this.TERMS).sort((a, b) => b.length - a.length); // 긴 단어 우선
+          const pattern = new RegExp(terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g');
+
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+            acceptNode: (node) => {
+              if (!node.parentElement) return NodeFilter.FILTER_REJECT;
+              const tag = node.parentElement.tagName;
+              if (skipTags.has(tag)) return NodeFilter.FILTER_REJECT;
+              if (node.parentElement.closest('.gloss-term, .gloss-tooltip, .a11y-bar, #cb-modal, #cb-pw-modal, #cb-fb-modal, .pdf-export-zone')) return NodeFilter.FILTER_REJECT;
+              if (skipAttrs.some(a => node.parentElement.hasAttribute(a))) return NodeFilter.FILTER_REJECT;
+              if (!node.nodeValue || !pattern.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+              pattern.lastIndex = 0;
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          });
+
+          const nodes = [];
+          let n;
+          while (n = walker.nextNode()) nodes.push(n);
+
+          nodes.forEach(node => {
+            const text = node.nodeValue;
+            pattern.lastIndex = 0;
+            let lastIdx = 0;
+            let match;
+            const frag = document.createDocumentFragment();
+            while ((match = pattern.exec(text)) !== null) {
+              const before = text.slice(lastIdx, match.index);
+              if (before) frag.appendChild(document.createTextNode(before));
+              const span = document.createElement('span');
+              span.className = 'gloss-term';
+              span.dataset.term = match[0];
+              span.textContent = match[0];
+              frag.appendChild(span);
+              lastIdx = match.index + match[0].length;
+            }
+            const rest = text.slice(lastIdx);
+            if (rest) frag.appendChild(document.createTextNode(rest));
+            if (node.parentElement) node.parentElement.replaceChild(frag, node);
+          });
+        },
+
+        showTooltip(el) {
+          const term = el.dataset.term;
+          const data = this.TERMS[term];
+          if (!data) return;
+          const tip = document.getElementById('gloss-tooltip');
+          const overlay = document.getElementById('gloss-overlay');
+          document.getElementById('gloss-tooltip-title').textContent = data.title;
+          document.getElementById('gloss-tooltip-body').textContent = data.body;
+          if (window.innerWidth <= 640) {
+            // 모바일: bottom sheet
+            tip.style.top = ''; tip.style.left = '';
+            overlay.classList.add('show');
+          } else {
+            const rect = el.getBoundingClientRect();
+            tip.style.left = Math.max(8, Math.min(window.innerWidth - 340, rect.left)) + 'px';
+            tip.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+          }
+          tip.classList.add('show');
+        },
+        hideTooltip() {
+          document.getElementById('gloss-tooltip').classList.remove('show');
+          document.getElementById('gloss-overlay').classList.remove('show');
+        },
+
+        init() {
+          this.scan(document.body);
+          document.addEventListener('click', (e) => {
+            const term = e.target.closest('.gloss-term');
+            if (term) {
+              e.stopPropagation();
+              this.showTooltip(term);
+            } else if (!e.target.closest('.gloss-tooltip')) {
+              this.hideTooltip();
+            }
+          });
+          document.getElementById('gloss-tooltip-close')?.addEventListener('click', () => this.hideTooltip());
+          document.getElementById('gloss-overlay')?.addEventListener('click', () => this.hideTooltip());
+        }
+      };
+      window.initGlossary = () => glossary.init();
+      // DOM 안정 후 스캔 (다른 동적 콘텐츠와 충돌 방지)
+      setTimeout(() => glossary.init(), 1500);
+
+      /* ================================================
+         [기능5] 사각지대 자가진단
+         ================================================ */
+      const gapCheck = {
+        answers: {}, // { '1': 'y'|'n', ... }
+        catalog: [
+          { id: 'fuel-support', title: '⛽ 고유가 피해지원금 (3차 민생지원금)', desc: '소득 하위 70%에 1인 10~60만원. 자격 자가진단 카드 내장.', condition: () => true /* 거의 모두 해당 */ },
+          { id: 'welfare-emergency', title: '🆘 긴급복지지원', desc: '실직·질병·화재 등 위기 시 즉시 지원. 생계비·의료비·주거비 일시 지원.', condition: (a) => a['1'] === 'y' || a['3'] === 'y' },
+          { id: 'welfare-housing', title: '🏠 주거급여', desc: '월세·전세 가구에 월 임차료 지원 (서울 1인 약 37만원). 중위 48% 이하.', condition: (a) => a['2'] === 'y' },
+          { id: 'welfare-medical', title: '🏥 의료급여 / 차상위 본인부담경감', desc: '저소득층 의료비 본인부담 경감(외래 1~2천원, 약국 500원).', condition: (a) => a['3'] === 'y' || a['1'] === 'y' },
+          { id: 'disability-pension', title: '♿ 장애인연금·장애수당', desc: '중증장애 월 최대 43만원, 경증장애 월 4~11만원.', condition: (a) => a['3'] === 'y' },
+          { id: 'welfare-childcare', title: '👶 부모급여·아동수당·첫만남이용권', desc: '0세 100만/1세 50만, 만 9세 미만 월 10만, 첫째 200만/둘째 300만.', condition: (a) => a['4'] === 'y' },
+          { id: 'welfare-education', title: '🎓 교육급여 (학생 학습비)', desc: '중위 50% 이하 가구 초·중·고 학생에게 연 50~86만원 학습비.', condition: (a) => a['4'] === 'y' && a['1'] === 'y' },
+          { id: 'pension-container', title: '💰 기초연금', desc: '만 65세 이상 + 소득 하위 70% → 월 최대 34만 9,700원.', condition: (a) => a['5'] === 'y' },
+          { id: 'welfare-singleparent', title: '👨‍👩‍👧 한부모·다자녀 지원', desc: '한부모 자녀당 월 23만원, 다자녀 우대카드 등.', condition: (a) => a['4'] === 'y' },
+          { id: 'welfare-youth', title: '💼 청년·구직지원', desc: '청년월세(보증금 8천/월세 60만 이하 → 월 20만 24개월), 청년도약계좌, 국민취업지원.', condition: (a) => a['1'] === 'y' && a['5'] !== 'y' }
+        ],
+
+        setAns(qid, val) {
+          this.answers[qid] = val;
+          // 버튼 토글 UI
+          const row = document.querySelector(`[data-gq="${qid}"]`);
+          if (!row) return;
+          row.querySelectorAll('button').forEach(b => b.classList.remove('on'));
+          row.querySelector(`[data-gv="${qid}-${val}"]`)?.classList.add('on');
+        },
+
+        showResult() {
+          const a = this.answers;
+          const yesCount = Object.values(a).filter(v => v === 'y').length;
+          const matches = this.catalog.filter(item => item.condition(a));
+          const result = document.getElementById('gap-check-result');
+
+          if (Object.keys(a).length < 5) {
+            result.innerHTML = `<div style="color:#92400e; font-weight:700; padding:0.5rem;">⚠️ 5문항을 모두 답해주세요. (현재 ${Object.keys(a).length}/5 답변)</div>`;
+            result.classList.add('show');
+            return;
+          }
+
+          let html = `
+            <div class="gap-check-result-head">
+              ${yesCount === 0
+                ? '😊 모든 항목에 "아니오"를 선택하셨네요. 그래도 아래 혜택을 한번 살펴보세요.'
+                : `🎯 "예" ${yesCount}개 — 받을 가능성이 있는 혜택 ${matches.length}개를 추천드려요`}
+            </div>`;
+          matches.forEach(item => {
+            html += `
+              <div class="gap-rec-card" data-go="${item.id}">
+                <div class="gap-rec-card-title">${item.title}</div>
+                <div class="gap-rec-card-desc">${item.desc}</div>
+                <div class="gap-rec-card-cta">자세히 보기 →</div>
+              </div>`;
+          });
+          if (matches.length === 0) {
+            html += `<div style="padding:0.75rem; background:#f1f5f9; border-radius:0.5rem; color:#64748b; font-size:0.85rem;">아래 통합 매칭 위저드로 더 정확히 확인해보세요!</div>`;
+          }
+          result.innerHTML = html;
+          result.classList.add('show');
+          result.querySelectorAll('.gap-rec-card[data-go]').forEach(card => {
+            card.addEventListener('click', () => {
+              showSection(card.dataset.go);
+              window.scrollTo(0, 0);
+            });
+          });
+          result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        },
+
+        reset() {
+          this.answers = {};
+          document.querySelectorAll('.gap-check-yn button').forEach(b => b.classList.remove('on'));
+          document.getElementById('gap-check-result').classList.remove('show');
+          document.getElementById('gap-check-result').innerHTML = '';
+        },
+
+        init() {
+          document.querySelectorAll('.gap-check-yn button').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const v = btn.dataset.gv; // "1-y" 형식
+              const [qid, val] = v.split('-');
+              this.setAns(qid, val);
+            });
+          });
+          document.getElementById('gap-check-go').addEventListener('click', () => this.showResult());
+          document.getElementById('gap-check-reset').addEventListener('click', () => this.reset());
+        }
+      };
+      gapCheck.init();
+
+      /* ================================================
+         [기능3] PDF 다운로드 / 인쇄 헬퍼
+         ================================================ */
+      window.docExport = {
+        async toPdf(zoneEl, filename) {
+          if (!zoneEl) return;
+          if (typeof window.jspdf === 'undefined' || typeof html2canvas === 'undefined') {
+            alert('PDF 라이브러리 로드 실패. 인터넷 연결을 확인해주세요.');
+            return;
+          }
+          try {
+            const canvas = await html2canvas(zoneEl, {
+              scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false
+            });
+            const imgData = canvas.toDataURL('image/jpeg', 0.92);
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfW = 210, pdfH = 297;
+            const imgW = pdfW - 20;
+            const imgH = (canvas.height * imgW) / canvas.width;
+            let position = 10;
+            if (imgH < pdfH - 20) {
+              pdf.addImage(imgData, 'JPEG', 10, position, imgW, imgH);
+            } else {
+              // 여러 페이지로 분할
+              let heightLeft = imgH;
+              pdf.addImage(imgData, 'JPEG', 10, 10, imgW, imgH);
+              heightLeft -= (pdfH - 20);
+              while (heightLeft > 0) {
+                position = -(imgH - heightLeft) + 10;
+                pdf.addPage();
+                pdf.addImage(imgData, 'JPEG', 10, position, imgW, imgH);
+                heightLeft -= (pdfH - 20);
+              }
+            }
+            pdf.save(filename || `복지도우미_결과_${new Date().toISOString().slice(0,10)}.pdf`);
+          } catch (e) {
+            console.error(e);
+            alert('PDF 생성 실패: ' + e.message);
+          }
+        },
+        print(zoneEl) {
+          window.print();
+        }
+      };
+
+      /* ================================================
+         [기능2] 신청 준비 체크리스트
+         ================================================ */
+      window.prepChecklist = {
+        STORAGE_KEY: 'prepChecklist_v1',
+        loadState() { try { return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}'); } catch(e) { return {}; } },
+        saveState(s) { try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(s)); } catch(e){} },
+
+        // 사용자 답변(wff.state)으로부터 필요한 서류 결정
+        buildItems(state) {
+          const items = [];
+          // 공통 (모두 필요)
+          items.push({ id: 'id', name: '신분증 (주민등록증·운전면허증·여권 등)', where: '본인 소지', link: null });
+          items.push({ id: 'bankbook', name: '본인 명의 통장 사본', where: '본인 거래 은행 또는 인터넷 뱅킹 발급', link: 'https://www.gov.kr' });
+          items.push({ id: 'register', name: '주민등록등본 (가족 포함)', where: '정부24 또는 주민센터', link: 'https://www.gov.kr/portal/onepStop/regCertOne' });
+
+          const age = state.birthYear ? (2026 - parseInt(state.birthYear)) : null;
+          const t = state.toggles || {};
+
+          // 65세 이상 → 기초연금 신청
+          if (age && age >= 65) {
+            items.push({ id: 'pension-app', name: '기초연금 신청서', where: '주민센터 비치 또는 복지로 다운로드', link: 'https://www.bokjiro.go.kr' });
+            items.push({ id: 'consent', name: '소득·재산 조사 동의서', where: '주민센터 비치', link: null });
+          }
+          // 부부 가구
+          if (state.household === 'couple') {
+            items.push({ id: 'spouse-id', name: '배우자 신분증 사본', where: '배우자 소지', link: null });
+            items.push({ id: 'spouse-consent', name: '부부 동의서 (양쪽 서명)', where: '주민센터 비치', link: null });
+          }
+          // 자가
+          if (state.housing === 'own') {
+            items.push({ id: 'real-estate', name: '부동산 등기부등본', where: '인터넷등기소 또는 주민센터', link: 'https://www.iros.go.kr' });
+          }
+          // 임차 (전세/월세)
+          if (state.housing === 'jeonse' || state.housing === 'monthly') {
+            items.push({ id: 'lease', name: '임대차계약서 사본', where: '본인 소지 (계약 시 받은 사본)', link: null });
+            items.push({ id: 'rent-receipt', name: '월세 이체 내역 (최근 3개월)', where: '거래 은행 인터넷뱅킹', link: null });
+          }
+          // 자녀 있음
+          const hasChild = t.child0 || t.child1 || t.child2to7 || t.childElem || t.childMid || t.childHigh;
+          if (hasChild) {
+            items.push({ id: 'family-cert', name: '가족관계증명서', where: '정부24 또는 주민센터', link: 'https://efamily.scourt.go.kr' });
+          }
+          // 출산
+          if (t.newborn) {
+            items.push({ id: 'birth-cert', name: '출생증명서 (병원 발급)', where: '출산 병원', link: null });
+            items.push({ id: 'happy-card', name: '국민행복카드 (임신·출산 진료비)', where: '카드사 또는 정부24', link: 'https://www.voucher.go.kr' });
+          }
+          // 장애
+          if (t.disability || t.mildDisability) {
+            items.push({ id: 'dis-cert', name: '장애인등록증 사본', where: '본인 소지', link: null });
+            items.push({ id: 'dis-detail', name: '장애 정도 심사 결과 통지서', where: '국민연금공단', link: 'https://www.nps.or.kr' });
+          }
+          // 한부모
+          if (state.household === 'single-parent') {
+            items.push({ id: 'sp-cert', name: '한부모가족 증명서', where: '정부24 또는 주민센터', link: 'https://www.gov.kr' });
+          }
+          // 기초·차상위
+          if (state.income === 'basic' || state.income === 'nearpoor') {
+            items.push({ id: 'recipient-cert', name: '수급자증명서·차상위계층 확인서', where: '정부24 또는 주민센터', link: 'https://www.gov.kr' });
+          }
+          // 임대차/소득 일반
+          if (state.income !== 'basic') {
+            items.push({ id: 'income-proof', name: '소득금액증명원 (직장인은 근로소득원천징수영수증)', where: '국세청 홈택스', link: 'https://hometax.go.kr' });
+            items.push({ id: 'health-fee', name: '건강보험료 납부확인서', where: '국민건강보험공단 홈페이지', link: 'https://www.nhis.or.kr' });
+          }
+
+          return items;
+        },
+
+        render(state) {
+          const wrap = document.getElementById('prep-checklist-wrap');
+          if (!wrap) return;
+          const items = this.buildItems(state || {});
+          const saved = this.loadState();
+          let html = `
+            <div class="prep-card" id="prep-card">
+              <h3 class="prep-title">📋 신청 준비 체크리스트</h3>
+              <p class="prep-desc">입력하신 정보 기준으로 <strong>실제 신청 시 필요한 서류 ${items.length}개</strong>를 정리했어요. 체크할 때마다 자동 저장됩니다.</p>
+              <div class="prep-progress-wrap"><div class="prep-progress-bar" id="prep-progress-bar" style="width:0%;"></div></div>
+              <div class="prep-progress-text" id="prep-progress-text">0 / ${items.length} 준비됨</div>
+              <div id="prep-items-wrap">`;
+          items.forEach(item => {
+            const checked = !!saved[item.id];
+            html += `
+              <label class="prep-item ${checked ? 'checked' : ''}" data-prep-id="${item.id}">
+                <input type="checkbox" class="prep-item-cb" ${checked ? 'checked' : ''} />
+                <div class="prep-item-body">
+                  <div class="prep-item-name">${item.name}</div>
+                  <div class="prep-item-where">📍 ${item.where}${item.link ? ` · <a href="${item.link}" target="_blank" rel="noopener">발급 바로가기</a>` : ''}</div>
+                </div>
+              </label>`;
+          });
+          html += `
+              </div>
+              <div class="prep-done-msg" id="prep-done-msg">🎉 모든 서류가 준비됐어요! 이제 주민센터에 방문하시면 됩니다.</div>
+            </div>`;
+          wrap.innerHTML = html;
+          wrap.style.display = 'block';
+
+          // 체크박스 핸들러
+          wrap.querySelectorAll('.prep-item-cb').forEach(cb => {
+            cb.addEventListener('change', () => {
+              const label = cb.closest('.prep-item');
+              const id = label.dataset.prepId;
+              const saved2 = this.loadState();
+              if (cb.checked) saved2[id] = true; else delete saved2[id];
+              this.saveState(saved2);
+              label.classList.toggle('checked', cb.checked);
+              this.updateProgress(items.length);
+            });
+          });
+          this.updateProgress(items.length);
+        },
+
+        updateProgress(total) {
+          const saved = this.loadState();
+          const done = Object.keys(saved).filter(k => saved[k]).length;
+          const validIds = Array.from(document.querySelectorAll('.prep-item')).map(el => el.dataset.prepId);
+          const validDone = validIds.filter(id => saved[id]).length;
+          const pct = total > 0 ? (validDone / total) * 100 : 0;
+          const bar = document.getElementById('prep-progress-bar');
+          const txt = document.getElementById('prep-progress-text');
+          const msg = document.getElementById('prep-done-msg');
+          if (bar) bar.style.width = pct + '%';
+          if (txt) {
+            txt.textContent = `${validDone} / ${total} 준비됨`;
+            txt.classList.toggle('done', validDone === total);
+          }
+          if (msg) msg.classList.toggle('show', validDone === total && total > 0);
+        }
+      };
+
       // ===== 복지 매칭 모의계산기 (Welfare Finder — 위저드 형식) =====
       const wff = {
         state: { step: 1, sido: '', area: '', birthYear: 0, household: '', income: '', housing: '', toggles: {} },
@@ -8165,12 +8979,26 @@
               본 결과는 입력하신 정보를 기반으로 한 <strong>예상 매칭 결과</strong>이며, 실제 자격 판정 및 지급 여부는 관할 기관(주민센터·국민연금공단·시·군·구청)의 심사를 통해 결정됩니다. 정확한 자격 확인은 <strong>복지로 자가진단(www.bokjiro.go.kr)</strong> 또는 <strong>보건복지상담센터 ☎ 129</strong>에서 받아보세요.
               ${r.sido ? `<br>지자체별 혜택은 변경될 수 있어 <strong>${r.sido} 거주지 시·군·구청</strong>에 직접 확인하시는 것을 권장드립니다.` : ''}
             </div>
+            <div class="doc-actions">
+              <button type="button" id="wff-pdf-btn" class="doc-action-btn pdf">📄 PDF로 저장</button>
+              <button type="button" id="wff-print-btn" class="doc-action-btn print">🖨️ 인쇄</button>
+            </div>
             <button type="button" id="wff-share-btn" style="width:100%; padding:0.95rem; margin-top:0.85rem; background:linear-gradient(135deg,#334155,#64748b); color:#fff; border:none; border-radius:0.7rem; font-size:0.95rem; font-weight:800; cursor:pointer; font-family:inherit; box-shadow:0 3px 10px rgba(15,23,42,.2);">
               💬 커뮤니티에 결과 공유하기
-            </button>`;
+            </button>
+            <div id="prep-checklist-wrap"></div>`;
 
           div.innerHTML = html;
           div.style.display = 'block';
+
+          // 신청 준비 체크리스트 렌더
+          if (window.prepChecklist) {
+            window.prepChecklist.render(this.state);
+          }
+
+          // PDF / 인쇄 버튼
+          document.getElementById('wff-pdf-btn')?.addEventListener('click', () => this.exportPdf(r));
+          document.getElementById('wff-print-btn')?.addEventListener('click', () => window.print());
 
           // 결과 카드 클릭 → 해당 페이지로 이동
           div.querySelectorAll('.wff-result-card[data-go]').forEach(card => {
@@ -8192,6 +9020,51 @@
 
           // 결과 영역으로 스크롤
           setTimeout(() => div.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        },
+
+        // PDF로 저장
+        async exportPdf(r) {
+          const btn = document.getElementById('wff-pdf-btn');
+          if (btn) { btn.disabled = true; btn.textContent = '📄 생성 중...'; }
+          // PDF 전용 zone 생성
+          const zone = document.createElement('div');
+          zone.className = 'pdf-export-zone';
+          zone.style.cssText = 'position:fixed; top:-9999px; left:0; width:780px; background:#fff;';
+          const today = new Date();
+          const dateStr = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일`;
+          zone.innerHTML = `
+            <div class="pdf-header">
+              <h1>📋 복지 혜택 매칭 결과 — 모의 안내</h1>
+              <div class="pdf-meta">발급일: ${dateStr} · 만 ${r.age}세 · ${r.sido || '거주지 미입력'}</div>
+            </div>
+            <div class="pdf-section">
+              <div class="pdf-section-title">✅ 받을 가능성 높은 혜택 (${r.high.length}개)</div>
+              <ul>${r.high.map(x => `<li><strong>${x.name}</strong> — ${x.detail}</li>`).join('') || '<li>해당 없음</li>'}</ul>
+            </div>
+            <div class="pdf-section">
+              <div class="pdf-section-title">🔎 조건 확인 필요 (${r.review.length}개)</div>
+              <ul>${r.review.map(x => `<li><strong>${x.name}</strong> — ${x.detail}</li>`).join('') || '<li>해당 없음</li>'}</ul>
+            </div>
+            <div class="pdf-section">
+              <div class="pdf-section-title">🗺️ 거주지 지자체 추가 혜택 (${r.localBenefits.length}개)</div>
+              <ul>${r.localBenefits.map(x => `<li><strong>${x.name}</strong> — ${x.detail}</li>`).join('') || '<li>해당 없음</li>'}</ul>
+            </div>
+            <div class="pdf-section">
+              <div class="pdf-section-title">📞 신청처 / 문의처</div>
+              <ul>
+                <li><strong>거주지 주민센터</strong> — 모든 복지 신청 1차 접수처</li>
+                <li><strong>복지로</strong> www.bokjiro.go.kr — 온라인 자가진단·신청</li>
+                <li><strong>보건복지상담센터</strong> ☎ 129 — 24시간 상담</li>
+                <li><strong>국민연금공단</strong> ☎ 1355 — 기초연금·장애인연금</li>
+              </ul>
+            </div>
+            <div class="pdf-foot">본 자료는 ${dateStr} 기준 입력 정보로 생성된 모의 안내용입니다. 실제 자격 판정 및 지급은 관할 기관(주민센터·국민연금공단·시·군·구청) 심사로 결정됩니다.</div>
+          `;
+          document.body.appendChild(zone);
+          await new Promise(r => setTimeout(r, 100));
+          await window.docExport.toPdf(zone, `복지매칭결과_${today.toISOString().slice(0,10)}.pdf`);
+          document.body.removeChild(zone);
+          if (btn) { btn.disabled = false; btn.textContent = '📄 PDF로 저장'; }
         }
       };
       wff.init();
