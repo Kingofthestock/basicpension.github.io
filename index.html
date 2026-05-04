@@ -8048,12 +8048,29 @@
         },
 
         // ===== Firebase 모드 =====
+        // 기본 Firebase 설정 (my first homepage 프로젝트)
+        DEFAULT_FB_CONFIG: {
+          apiKey: "AIzaSyDcS3epZgRQ2WO55Abj2uSwzxaszy_fEk4",
+          authDomain: "my-first-homepage-5624f.firebaseapp.com",
+          databaseURL: "https://my-first-homepage-5624f-default-rtdb.firebaseio.com",
+          projectId: "my-first-homepage-5624f",
+          storageBucket: "my-first-homepage-5624f.firebasestorage.app",
+          messagingSenderId: "952513097865",
+          appId: "1:952513097865:web:8058da28dfd7a59fd09658",
+          measurementId: "G-JS8NRXMH5Y"
+        },
+
         async initFirebase() {
+          let cfg;
           let cfgRaw;
           try { cfgRaw = localStorage.getItem(this.FB_CONFIG_KEY); } catch(e) { cfgRaw = null; }
-          if (!cfgRaw) return false;
-          let cfg;
-          try { cfg = JSON.parse(cfgRaw); } catch(e) { return false; }
+          if (cfgRaw) {
+            try { cfg = JSON.parse(cfgRaw); } catch(e) { cfg = null; }
+          }
+          // localStorage에 설정이 없으면 기본 config 사용
+          if (!cfg || !cfg.databaseURL) {
+            cfg = this.DEFAULT_FB_CONFIG;
+          }
           if (!cfg.databaseURL) return false;
           if (typeof firebase === 'undefined') {
             console.warn('Firebase SDK 로드 실패');
@@ -8140,9 +8157,9 @@
           const el = document.getElementById('cb-storage-mode');
           if (!el) return;
           if (this.fbReady) {
-            el.innerHTML = '🔥 <strong style="color:#047857;">Firebase 연동됨</strong> — 모든 사용자의 글이 실시간으로 동기화됩니다.';
+            el.innerHTML = '🔥 <strong style="color:#047857;">Firebase 실시간 동기화 ON</strong> — 모든 방문자가 같은 게시판을 공유합니다 (다른 기기에서 글을 쓰면 자동 반영).';
           } else {
-            el.innerHTML = '※ 현재 글은 이 브라우저(localStorage)에만 저장됩니다. <strong>🔥 Firebase 설정</strong> 버튼을 눌러 다중 사용자 모드를 활성화하세요.';
+            el.innerHTML = '⚠️ Firebase 연결에 실패했어요. localStorage 모드로 동작 중 (이 브라우저에서만 보임). 새로고침하거나 인터넷 연결을 확인해주세요.';
           }
         },
 
@@ -8482,18 +8499,40 @@
         },
 
         async init() {
-          // Firebase 시도 (저장된 config 있으면)
+          // Firebase 자동 연결 (코드에 박힌 기본 config 사용)
           await this.initFirebase();
           this.updateStorageMode();
 
-          // 초기 시드 (localStorage 모드일 때만, 첫 진입 시 환영 공지)
-          if (!this.fbReady && this.load().length === 0) {
+          // 첫 진입 환영 공지 — Firebase 모드일 때 글이 0개면 자동 추가, localStorage 모드는 기존 로직
+          const welcomeBody = '자유롭게 글을 쓰고 게임 점수·모의계산 결과를 공유해주세요.\n\n📝 사용법\n1) "✏️ 글쓰기" 버튼을 눌러 글 작성\n2) 비밀번호를 설정 (4자 이상) — 메모해두세요\n3) 본인 글은 입력한 비밀번호로 수정·삭제 가능\n\n🎮 게임 결과 공유\n- 플래피 새, 테트리스 등에서 점수를 자랑해보세요!\n\n🧮 모의계산 결과 공유\n- 받을 수 있는 복지 혜택 결과를 함께 나눠보세요.\n\n🔥 이 게시판은 Firebase로 모든 방문자에게 실시간 공유됩니다.\n\n👑 관리자만 공지글을 작성할 수 있고, 모든 글을 관리할 수 있어요.';
+
+          if (this.fbReady) {
+            // Firebase 모드: 한 번만 시드 (다른 사용자가 이미 추가했을 수 있음 → 0개일 때만)
+            try {
+              const snap = await this.fbDb.ref('posts').limitToFirst(1).once('value');
+              if (!snap.exists()) {
+                const ref = this.fbDb.ref('posts').push();
+                await ref.set({
+                  category: 'notice',
+                  author: '관리자',
+                  title: '커뮤니티 게시판이 열렸습니다 🎉',
+                  body: welcomeBody,
+                  pwHash: null,
+                  adminPost: true,
+                  createdAt: Date.now(),
+                  updatedAt: null,
+                  attachedResult: null
+                });
+              }
+            } catch (e) { console.warn('환영 공지 시드 실패:', e); }
+          } else if (this.load().length === 0) {
+            // localStorage 모드 폴백
             const welcome = {
               id: 'p_welcome',
               category: 'notice',
               author: '관리자',
               title: '커뮤니티 게시판이 열렸습니다 🎉',
-              body: '자유롭게 글을 쓰고 게임 점수·모의계산 결과를 공유해주세요.\n\n📝 사용법\n1) "✏️ 글쓰기" 버튼을 눌러 글 작성\n2) 비밀번호를 설정 (4자 이상) — 메모해두세요\n3) 본인 글은 입력한 비밀번호로 수정·삭제 가능\n\n🎮 게임 결과 공유\n- 플래피 새, 테트리스 등에서 점수를 자랑해보세요!\n\n🧮 모의계산 결과 공유\n- 받을 수 있는 복지 혜택 결과를 함께 나눠보세요.\n\n🔥 Firebase 연동 시 모든 방문자가 같은 게시판을 공유합니다 (우상단 "Firebase 설정" 버튼).\n\n👑 관리자만 공지글을 작성할 수 있고, 모든 글을 관리할 수 있어요.',
+              body: welcomeBody,
               pwHash: null,
               adminPost: true,
               createdAt: Date.now(),
