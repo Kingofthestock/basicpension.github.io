@@ -681,29 +681,88 @@
     .cb-empty { padding: 3rem 1.5rem; text-align: center; color: #94a3b8; font-size: 0.95rem; background: #f8fafc; border-radius: 0.85rem; }
     .cb-empty .em { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
 
-    .cb-post { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.85rem; padding: 1rem 1.1rem; margin-bottom: 0.65rem; transition: all .15s; }
-    .cb-post:hover { border-color: #93c5fd; box-shadow: 0 4px 14px rgba(30,64,175,.08); }
-    .cb-post.notice { background: linear-gradient(135deg,#fef3c7,#fffbeb); border-color: #fbbf24; border-left: 4px solid #d97706; }
-    .cb-post.notice .cb-post-cat-badge { background: #d97706; color: #fff; }
-    .cb-post-head { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.45rem; flex-wrap: wrap; }
-    .cb-post-cat-badge { padding: 0.18rem 0.55rem; background: #eff6ff; color: #1e40af; font-size: 0.72rem; font-weight: 800; border-radius: 999px; }
-    .cb-post-cat-badge.game { background: #dcfce7; color: #166534; }
-    .cb-post-cat-badge.calc { background: #fce7f3; color: #9d174d; }
-    .cb-post-cat-badge.free { background: #e0e7ff; color: #3730a3; }
-    .cb-post-author { font-weight: 700; color: #0f172a; font-size: 0.88rem; }
-    .cb-post-author.admin { color: #b91c1c; }
-    .cb-post-author.admin::after { content: ' 👑'; }
-    .cb-post-time { font-size: 0.75rem; color: #94a3b8; margin-left: auto; }
-    .cb-post-title { font-size: 1.05rem; font-weight: 800; color: #0f172a; line-height: 1.4; margin-bottom: 0.3rem; cursor: pointer; }
-    .cb-post-title:hover { color: #1e40af; }
-    .cb-post-preview { font-size: 0.88rem; color: #475569; line-height: 1.55; max-height: 3.2em; overflow: hidden; }
-    .cb-post-actions { display: flex; gap: 0.4rem; margin-top: 0.6rem; flex-wrap: wrap; }
-    .cb-post-action { padding: 0.35rem 0.7rem; border: 1px solid #e2e8f0; border-radius: 0.4rem; font-size: 0.78rem; font-weight: 600; color: #475569; background: #fff; cursor: pointer; font-family: inherit; }
+    /* 글 목록 — 한 줄 row 형식 */
+    .cb-list-wrap { background: #fff; border-radius: 0.85rem; overflow: hidden; border: 1px solid #e2e8f0; margin-bottom: 1rem; }
+    .cb-list-head-row { display: grid; grid-template-columns: 70px 1fr 80px 80px; gap: 0.6rem; padding: 0.65rem 1rem; background: #f1f5f9; font-size: 0.78rem; font-weight: 800; color: #475569; border-bottom: 1px solid #e2e8f0; }
+    .cb-list-head-row .num { text-align: center; }
+    .cb-list-head-row .stat { text-align: right; }
+    .cb-post-row { display: grid; grid-template-columns: 70px 1fr 80px 80px; gap: 0.6rem; padding: 0.85rem 1rem; align-items: center; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: background .12s; }
+    .cb-post-row:last-child { border-bottom: none; }
+    .cb-post-row:hover { background: #f8fafc; }
+    .cb-post-row.notice { background: linear-gradient(90deg,#fef3c7,#fffbeb); border-left: 4px solid #d97706; padding-left: 0.85rem; }
+    .cb-post-row.notice:hover { background: linear-gradient(90deg,#fde68a,#fef3c7); }
+    .cb-post-row-cat { font-size: 0.72rem; font-weight: 800; color: #1e40af; text-align: center; padding: 0.2rem 0.4rem; background: #eff6ff; border-radius: 999px; align-self: center; justify-self: center; }
+    .cb-post-row-cat.notice { background: #d97706; color: #fff; }
+    .cb-post-row-cat.game { background: #dcfce7; color: #166534; }
+    .cb-post-row-cat.calc { background: #fce7f3; color: #9d174d; }
+    .cb-post-row-cat.free { background: #e0e7ff; color: #3730a3; }
+    .cb-post-row-main { min-width: 0; overflow: hidden; }
+    .cb-post-row-title { font-size: 0.96rem; font-weight: 700; color: #0f172a; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 0.4rem; }
+    .cb-post-row-title:hover { color: #1e40af; }
+    .cb-post-row-title .cmnt-count { color: #047857; font-size: 0.78rem; font-weight: 700; }
+    .cb-post-row-meta { font-size: 0.76rem; color: #64748b; margin-top: 0.18rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .cb-post-row-meta .author { font-weight: 700; color: #334155; }
+    .cb-post-row-meta .author.admin { color: #b91c1c; }
+    .cb-post-row-meta .author.admin::after { content: ' 👑'; }
+    .cb-post-row-stat { text-align: right; font-size: 0.85rem; font-weight: 700; color: #475569; align-self: center; }
+    .cb-post-row-stat .icon { color: #94a3b8; margin-right: 0.15rem; }
+    .cb-post-row-stat.yarr-on { color: #e11d48; }
+    .cb-post-row-stat.yarr-on .icon { color: #e11d48; }
+
+    /* 글 상세 — 댓글, 추천 영역 */
+    .cb-detail-foot { display: flex; gap: 0.5rem; margin-top: 1rem; align-items: center; padding-top: 1rem; border-top: 1px solid #e2e8f0; flex-wrap: wrap; }
+    .cb-vote-btn { padding: 0.55rem 1rem; border: 1.5px solid; border-radius: 0.6rem; font-size: 0.92rem; font-weight: 800; cursor: pointer; font-family: inherit; transition: all .15s; display: inline-flex; align-items: center; gap: 0.35rem; }
+    .cb-vote-btn.yarr { border-color: #fecdd3; color: #e11d48; background: #fff; }
+    .cb-vote-btn.yarr:hover { background: #fff1f2; border-color: #f43f5e; }
+    .cb-vote-btn.yarr.on { background: linear-gradient(135deg,#e11d48,#f43f5e); color: #fff; border-color: #e11d48; box-shadow: 0 3px 10px rgba(225,29,72,.3); transform: scale(1.05); }
+    .cb-vote-btn.down { border-color: #cbd5e1; color: #475569; background: #fff; }
+    .cb-vote-btn.down:hover { background: #f1f5f9; }
+    .cb-vote-btn.down.on { background: #475569; color: #fff; border-color: #475569; }
+    .cb-vote-btn .ct { font-variant-numeric: tabular-nums; }
+
+    /* 댓글 영역 */
+    .cb-comments { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 2px dashed #e2e8f0; }
+    .cb-comments-title { font-weight: 800; color: #0f172a; font-size: 1rem; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.4rem; }
+    .cb-comments-title .ct { color: #047857; }
+    .cb-comment-input-row { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 0.65rem; padding: 0.75rem; margin-bottom: 0.85rem; }
+    .cb-comment-meta-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .cb-comment-author, .cb-comment-pw { padding: 0.6rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.4rem; font-size: 0.85rem; font-family: inherit; background: #fff; }
+    .cb-comment-body-input { width: 100%; min-height: 60px; padding: 0.65rem 0.8rem; border: 1px solid #e2e8f0; border-radius: 0.4rem; font-size: 0.9rem; font-family: inherit; resize: vertical; line-height: 1.55; background: #fff; }
+    .cb-comment-actions { display: flex; gap: 0.4rem; justify-content: flex-end; margin-top: 0.5rem; }
+    .cb-comment-submit { padding: 0.5rem 1rem; background: linear-gradient(135deg,#1e40af,#3b82f6); color: #fff; border: none; border-radius: 0.4rem; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 0.85rem; }
+    .cb-comment-submit:hover { background: linear-gradient(135deg,#1e3a8a,#2563eb); }
+
+    .cb-comment-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .cb-comment-empty { padding: 1.5rem; text-align: center; color: #94a3b8; font-size: 0.88rem; background: #f8fafc; border-radius: 0.55rem; }
+    .cb-comment { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.55rem; padding: 0.75rem 0.9rem; }
+    .cb-comment-head { display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.3rem; flex-wrap: wrap; }
+    .cb-comment-author-name { font-weight: 700; color: #0f172a; font-size: 0.85rem; }
+    .cb-comment-author-name.admin { color: #b91c1c; }
+    .cb-comment-author-name.admin::after { content: ' 👑'; }
+    .cb-comment-time { font-size: 0.72rem; color: #94a3b8; margin-left: auto; }
+    .cb-comment-body { font-size: 0.88rem; color: #1e293b; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+    .cb-comment-foot { display: flex; gap: 0.3rem; margin-top: 0.4rem; justify-content: flex-end; }
+    .cb-comment-del { font-size: 0.75rem; color: #b91c1c; background: none; border: none; cursor: pointer; padding: 0.2rem 0.5rem; font-family: inherit; }
+    .cb-comment-del:hover { text-decoration: underline; }
+
+    /* 글쓴이 액션 (수정/삭제) — 상세에서만 표시 */
+    .cb-detail-actions { display: flex; gap: 0.4rem; margin-top: 0.6rem; flex-wrap: wrap; }
+    .cb-post-action { padding: 0.4rem 0.85rem; border: 1px solid #e2e8f0; border-radius: 0.4rem; font-size: 0.82rem; font-weight: 600; color: #475569; background: #fff; cursor: pointer; font-family: inherit; }
     .cb-post-action:hover { border-color: #94a3b8; background: #f8fafc; }
     .cb-post-action.danger { color: #b91c1c; border-color: #fecaca; }
     .cb-post-action.danger:hover { background: #fef2f2; }
     .cb-post-action.primary { color: #1e40af; border-color: #bfdbfe; }
     .cb-post-action.primary:hover { background: #eff6ff; }
+
+    /* 어드민 메뉴 (햄버거) */
+    .cb-menu-btn { width: 38px; height: 38px; border-radius: 0.5rem; border: 1px solid #e2e8f0; background: #fff; color: #64748b; cursor: pointer; font-size: 1.1rem; display: inline-flex; align-items: center; justify-content: center; transition: all .15s; flex-shrink: 0; }
+    .cb-menu-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .cb-menu-dropdown { position: absolute; top: 100%; right: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 0.6rem; box-shadow: 0 8px 24px rgba(15,23,42,.12); min-width: 200px; padding: 0.4rem; margin-top: 0.4rem; z-index: 100; display: none; }
+    .cb-menu-dropdown.show { display: block; }
+    .cb-menu-item { display: block; width: 100%; padding: 0.6rem 0.75rem; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 0.85rem; color: #334155; text-align: left; border-radius: 0.4rem; font-weight: 600; }
+    .cb-menu-item:hover { background: #f1f5f9; }
+    .cb-menu-item.admin { color: #b91c1c; }
+    .cb-menu-item.admin.on { background: #fee2e2; }
 
     /* 글 상세 보기 */
     .cb-detail { background: #fff; border-radius: 0.85rem; padding: 1.5rem 1.4rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; }
@@ -912,7 +971,7 @@
         </div>
       </div>
       <div class="home-hero">
-        <span class="home-hero-tag">📅 2026년 4월 기준 · 정부 발표 정책 반영</span>
+        <span class="home-hero-tag">📅 2026년 5월 기준 · 정부 발표 정책 반영</span>
         <h1 class="home-hero-title">내가 받을 수 있는<br>복지 혜택, 1분 안에 확인하세요</h1>
         <p class="home-hero-subtitle">기초연금 · 장애인연금 · 민생지원금부터 의료급여까지<br class="hidden sm:block">자격 조건과 신청 방법을 한곳에서 빠르게 확인하실 수 있어요.</p>
         <p style="margin-top:1.25rem; font-size:0.92rem; color:rgba(255,255,255,.85);">
@@ -1150,6 +1209,11 @@
             <div class="home-cat-name">고유가 피해지원금</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
+          <div class="home-cat-card active" data-go="tax-helper" style="--tone:#047857;">
+            <span class="home-cat-icon">💰</span>
+            <div class="home-cat-name">세금 도우미</div>
+            <span class="home-cat-status">연말정산·종소세</span>
+          </div>
           <div class="home-cat-card active" data-go="welfare-basic-living" style="--tone:#0f766e;">
             <span class="home-cat-icon">📋</span>
             <div class="home-cat-name">기초생활보장</div>
@@ -1189,11 +1253,6 @@
             <span class="home-cat-icon">👨‍👩‍👧</span>
             <div class="home-cat-name">한부모·다자녀</div>
             <span class="home-cat-status">정보 제공</span>
-          </div>
-          <div class="home-cat-card active" data-go="tax-helper" style="--tone:#047857;">
-            <span class="home-cat-icon">💰</span>
-            <div class="home-cat-name">세금 도우미</div>
-            <span class="home-cat-status">연말정산·종소세</span>
           </div>
           <div class="home-cat-card active" data-go="community-board" style="--tone:#334155;">
             <span class="home-cat-icon">💬</span>
@@ -1289,7 +1348,7 @@
     <footer class="home-footer">
       <p><strong>본 사이트는 정부 공식 사이트가 아닌 정보 안내 목적의 홈페이지입니다.</strong></p>
       <p class="mt-1">최종 자격 판정 및 지급 결정은 관할 기관의 심사를 통해 이루어집니다.</p>
-      <p class="mt-1 opacity-70">© 2026 복지 도우미 · 본 사이트의 정보는 2026년 4월 기준 정부 발표 내용을 반영하였습니다.</p>
+      <p class="mt-1 opacity-70">© 2026 복지 도우미 · 본 사이트의 정보는 2026년 5월 기준 정부 발표 내용을 반영하였습니다.</p>
     </footer>
   </section>
 
@@ -1958,7 +2017,7 @@
       <!-- 주의사항 -->
       <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl mb-6">
         <p class="text-sm text-amber-800 leading-relaxed">
-          <strong>안내:</strong> 이 페이지의 정보는 2026년 4월 기준 정부 발표 내용을 바탕으로 작성되었습니다.
+          <strong>안내:</strong> 이 페이지의 정보는 2026년 5월 기준 정부 발표 내용을 바탕으로 작성되었습니다.
           세부 사항은 변경될 수 있으니, <strong>최신 정보는 민생지원금 콜센터(1533-1300)</strong>에서 확인하세요.
         </p>
       </div>
@@ -3591,16 +3650,21 @@
 
     <main class="wf-main">
 
-      <div class="cb-info-callout" id="cb-info-callout">
-        <strong>📌 이용 안내</strong> 누구나 글을 쓸 수 있어요. 글을 작성할 때 입력한 <strong>비밀번호</strong>로만 본인 글을 수정·삭제할 수 있습니다. 공지(👑 관리자)는 변경할 수 없어요.<br>
-        <span id="cb-storage-mode" style="color:#64748b;">※ 저장 방식 확인 중...</span>
-      </div>
-
       <div class="cb-toolbar">
         <button type="button" id="cb-write-btn" class="cb-write-btn">✏️ 글쓰기</button>
-        <button type="button" id="cb-admin-btn" class="cb-admin-btn">🔑 관리자 로그인</button>
-        <button type="button" id="cb-fb-btn" class="cb-admin-btn" style="color:#047857; border-color:#a7f3d0;">🔥 Firebase 설정</button>
         <span style="margin-left:auto; font-size:0.82rem; color:#64748b;">총 <strong id="cb-count" style="color:#1e40af;">0</strong>개 글</span>
+        <span id="cb-storage-mode" style="display:none;"></span>
+        <div style="position:relative;">
+          <button type="button" id="cb-menu-btn" class="cb-menu-btn" title="더 보기">⋮</button>
+          <div id="cb-menu-dropdown" class="cb-menu-dropdown">
+            <button type="button" class="cb-menu-item" id="cb-admin-btn">🔑 관리자 로그인</button>
+            <button type="button" class="cb-menu-item" id="cb-fb-btn">🔥 Firebase 설정</button>
+            <div style="border-top:1px solid #e2e8f0; margin:0.3rem 0;"></div>
+            <div style="padding:0.5rem 0.75rem; font-size:0.75rem; color:#94a3b8; line-height:1.5;">
+              본인 글은 작성 시 입력한 비밀번호로만 수정·삭제 가능합니다.
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="cb-cat-tabs" id="cb-cat-tabs">
@@ -4038,6 +4102,11 @@
       const target = document.getElementById(sectionName);
       if (target) { target.classList.remove('hidden'); currentSection = sectionName; }
       else { sectionName = 'home'; document.getElementById('home')?.classList.remove('hidden'); currentSection = 'home'; }
+
+      // 커뮤니티 진입 시 항상 글 목록을 새로 렌더 (Firebase 캐시가 그동안 갱신됐을 수 있음)
+      if (sectionName === 'community-board' && window.community && typeof window.community.renderList === 'function') {
+        try { window.community.renderList(); window.community.updateStorageMode(); } catch(e) {}
+      }
 
       const topNav = document.getElementById('top-nav');
       const floatingBtn = document.getElementById('floating-game-btn');
@@ -8022,18 +8091,35 @@
       const community = {
         STORAGE_KEY: 'welfareCommunityPosts_v1',
         FB_CONFIG_KEY: 'welfareCommunityFirebaseConfig_v1',
+        USER_KEY: 'cb_user_uuid_v1',
+        COMMENTS_KEY: 'welfareCommunityComments_v1',
         ADMIN_HASH: '7f5b2d2f8ebca7b9b25c4e62a6e09e7d4c66a6dc1e56e5ebb9d4d1d8e93b2e7f',
         ADMIN_FALLBACK_PW: 'admin1234',
         adminMode: false,
         currentCategory: 'all',
+        currentView: 'list', // 'list' | 'detail'
+        currentPostId: null,
         editTargetId: null,
         pendingAction: null,
         // Firebase 상태
         fbApp: null,
         fbDb: null,
         fbReady: false,
-        fbCache: [], // Firebase에서 받은 최신 글 목록
+        fbCache: [],
+        fbCommentsCache: {}, // {postId: [comments]}
         fbUnsub: null,
+        fbCommentsUnsubs: {}, // postId별 리스너
+
+        // ===== 사용자 ID (추천 1인 1회 식별) =====
+        getUserId() {
+          let id;
+          try { id = localStorage.getItem(this.USER_KEY); } catch(e) {}
+          if (!id) {
+            id = 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+            try { localStorage.setItem(this.USER_KEY, id); } catch(e) {}
+          }
+          return id;
+        },
 
         async sha256(text) {
           if (!window.crypto?.subtle) {
@@ -8085,12 +8171,42 @@
             }
             this.fbDb = firebase.database();
             this.fbReady = true;
-            // 실시간 리스너
+
+            // 첫 데이터를 한 번 받아오고 나서 ready 상태로 만들어
+            // 첫 진입 시 "글이 없어요" 가 잠깐 보이는 깜빡임을 방지
+            try {
+              const firstSnap = await this.fbDb.ref('posts').once('value');
+              const firstObj = firstSnap.val() || {};
+              this.fbCache = Object.keys(firstObj).map(k => ({ ...firstObj[k], id: k }));
+            } catch (e) {
+              console.warn('Firebase 첫 로드 실패:', e);
+            }
+
+            // 실시간 리스너 — 화면 가시 여부와 무관하게 항상 캐시·DOM 갱신
             this.fbUnsub = this.fbDb.ref('posts').on('value', (snap) => {
               const obj = snap.val() || {};
               this.fbCache = Object.keys(obj).map(k => ({ ...obj[k], id: k }));
-              if (document.getElementById('community-board') && !document.getElementById('community-board').classList.contains('hidden')) {
+              if (document.getElementById('cb-list')) {
+                if (this.currentView === 'detail' && this.currentPostId) {
+                  const p = this.fbCache.find(x => x.id === this.currentPostId);
+                  if (p) this.renderDetail(p);
+                } else {
+                  this.renderList();
+                }
+              }
+            });
+            // 모든 글의 댓글 동기화 (카운트 목록 표시용)
+            this.fbDb.ref('comments').on('value', (snap) => {
+              const obj = snap.val() || {};
+              this.fbCommentsCache = {};
+              Object.keys(obj).forEach(postId => {
+                const cmnts = obj[postId] || {};
+                this.fbCommentsCache[postId] = Object.keys(cmnts).map(k => ({ ...cmnts[k], id: k }));
+              });
+              if (this.currentView === 'list' && document.getElementById('cb-list')) {
                 this.renderList();
+              } else if (this.currentView === 'detail' && this.currentPostId) {
+                this.renderComments(this.currentPostId);
               }
             });
             return true;
@@ -8136,21 +8252,31 @@
             const ref = this.fbDb.ref('posts').push();
             post.id = ref.key;
             await ref.set(post);
+            // 리스너 콜백을 기다리지 않고 즉시 캐시·화면 반영 (UI 체감 속도 ↑)
+            const exists = this.fbCache.some(p => p.id === post.id);
+            if (!exists) this.fbCache.push({ ...post });
             return true;
           } catch (e) {
-            alert('Firebase 저장 실패: ' + e.message);
+            alert('Firebase 저장 실패: ' + e.message + '\n\n보안 규칙(Realtime Database → 규칙)에서 posts 경로의 .write 가 true 인지 확인해주세요.');
             return false;
           }
         },
         async fbUpdatePost(id, updates) {
           if (!this.fbReady) return false;
-          try { await this.fbDb.ref('posts/' + id).update(updates); return true; }
-          catch (e) { alert('수정 실패: ' + e.message); return false; }
+          try {
+            await this.fbDb.ref('posts/' + id).update(updates);
+            const i = this.fbCache.findIndex(p => p.id === id);
+            if (i >= 0) this.fbCache[i] = { ...this.fbCache[i], ...updates };
+            return true;
+          } catch (e) { alert('수정 실패: ' + e.message); return false; }
         },
         async fbDeletePost(id) {
           if (!this.fbReady) return false;
-          try { await this.fbDb.ref('posts/' + id).remove(); return true; }
-          catch (e) { alert('삭제 실패: ' + e.message); return false; }
+          try {
+            await this.fbDb.ref('posts/' + id).remove();
+            this.fbCache = this.fbCache.filter(p => p.id !== id);
+            return true;
+          } catch (e) { alert('삭제 실패: ' + e.message); return false; }
         },
 
         updateStorageMode() {
@@ -8158,8 +8284,10 @@
           if (!el) return;
           if (this.fbReady) {
             el.innerHTML = '🔥 <strong style="color:#047857;">Firebase 실시간 동기화 ON</strong> — 모든 방문자가 같은 게시판을 공유합니다 (다른 기기에서 글을 쓰면 자동 반영).';
+          } else if (typeof firebase === 'undefined') {
+            el.innerHTML = '📴 <strong style="color:#b45309;">오프라인 모드</strong> — Firebase SDK 가 차단되었거나 인터넷이 끊어져 이 브라우저에만 글이 저장됩니다.';
           } else {
-            el.innerHTML = '⚠️ Firebase 연결에 실패했어요. localStorage 모드로 동작 중 (이 브라우저에서만 보임). 새로고침하거나 인터넷 연결을 확인해주세요.';
+            el.innerHTML = '⚠️ <strong style="color:#b45309;">Firebase 연결 대기 중</strong> — 잠시 후에도 같은 표시면 우측 상단 🔥 버튼으로 설정을 확인해주세요. 그동안 이 브라우저에 임시 저장됩니다.';
           }
         },
 
@@ -8181,9 +8309,23 @@
           return ({notice:'notice', free:'free', game:'game', calc:'calc'})[cat] || 'free';
         },
 
+        // 글의 댓글 가져오기
+        getComments(postId) {
+          if (this.fbReady) return this.fbCommentsCache[postId] || [];
+          try {
+            const all = JSON.parse(localStorage.getItem(this.COMMENTS_KEY) || '{}');
+            return all[postId] || [];
+          } catch(e) { return []; }
+        },
+        // 댓글 카운트만 (목록용)
+        getCommentCount(postId) {
+          return this.getComments(postId).length;
+        },
+
         renderList() {
+          this.currentView = 'list';
+          this.currentPostId = null;
           const all = this.load();
-          // 공지를 항상 위에, 그 다음 최신순
           const filtered = this.currentCategory === 'all'
             ? all
             : all.filter(p => p.category === this.currentCategory);
@@ -8200,51 +8342,85 @@
 
           if (sorted.length === 0) {
             list.innerHTML = `<div class="cb-empty"><span class="em">📭</span>아직 글이 없어요.<br>첫 번째 글을 남겨보세요!</div>`;
+            document.getElementById('cb-detail-wrap').style.display = 'none';
+            document.getElementById('cb-list').style.display = 'block';
             return;
           }
 
-          list.innerHTML = sorted.map(p => {
+          const uid = this.getUserId();
+
+          let html = `
+            <div class="cb-list-wrap">
+              <div class="cb-list-head-row">
+                <span class="num">분류</span>
+                <span>제목</span>
+                <span class="stat">💬 댓글</span>
+                <span class="stat">🔥 야르</span>
+              </div>`;
+          sorted.forEach(p => {
             const isNotice = p.category === 'notice';
             const isAdminPost = p.adminPost;
-            const preview = (p.body || '').slice(0, 100).replace(/</g,'&lt;') + (p.body && p.body.length > 100 ? '...' : '');
-            return `
-              <div class="cb-post ${isNotice ? 'notice' : ''}" data-post-id="${p.id}">
-                <div class="cb-post-head">
-                  <span class="cb-post-cat-badge ${this.catClass(p.category)}">${this.catLabel(p.category)}</span>
-                  <span class="cb-post-author ${isAdminPost ? 'admin' : ''}">${this.escape(p.author || '익명')}</span>
-                  <span class="cb-post-time">${this.formatTime(p.createdAt)}${p.updatedAt ? ' (수정됨)' : ''}</span>
+            const cmntCount = this.getCommentCount(p.id);
+            const yarrUsers = p.yarrUsers || {};
+            const downUsers = p.downUsers || {};
+            const yarrCount = Object.keys(yarrUsers).length;
+            const downCount = Object.keys(downUsers).length;
+            const isYarrOn = !!yarrUsers[uid];
+            html += `
+              <div class="cb-post-row ${isNotice ? 'notice' : ''}" data-cb-view="${this.escape(p.id)}">
+                <span class="cb-post-row-cat ${this.catClass(p.category)}">${this.catLabel(p.category)}</span>
+                <div class="cb-post-row-main">
+                  <div class="cb-post-row-title">
+                    ${isNotice ? '📢 ' : ''}${this.escape(p.title)}
+                    ${cmntCount > 0 ? `<span class="cmnt-count">[${cmntCount}]</span>` : ''}
+                    ${p.attachedResult ? '📎' : ''}
+                  </div>
+                  <div class="cb-post-row-meta">
+                    <span class="author ${isAdminPost ? 'admin' : ''}">${this.escape(p.author || '익명')}</span>
+                    <span>·</span>
+                    <span>${this.formatTime(p.createdAt)}${p.updatedAt ? ' (수정됨)' : ''}</span>
+                  </div>
                 </div>
-                <div class="cb-post-title" data-cb-view="${p.id}">${this.escape(p.title)}</div>
-                <div class="cb-post-preview">${preview || '<em style="color:#94a3b8;">(내용 없음)</em>'}</div>
-                ${p.attachedResult ? `<div style="margin-top:0.5rem; font-size:0.8rem; color:#047857; font-weight:700;">📎 결과 첨부됨</div>` : ''}
-                <div class="cb-post-actions">
-                  <button class="cb-post-action primary" data-cb-view="${p.id}">자세히 보기</button>
-                  <button class="cb-post-action" data-cb-edit="${p.id}">수정</button>
-                  <button class="cb-post-action danger" data-cb-delete="${p.id}">삭제</button>
-                </div>
+                <span class="cb-post-row-stat"><span class="icon">💬</span>${cmntCount}</span>
+                <span class="cb-post-row-stat ${isYarrOn ? 'yarr-on' : ''}"><span class="icon">🔥</span>${yarrCount}</span>
               </div>`;
-          }).join('');
+          });
+          html += `</div>`;
+          list.innerHTML = html;
 
-          // 이벤트 바인딩
           list.querySelectorAll('[data-cb-view]').forEach(el => {
             el.addEventListener('click', () => this.viewPost(el.dataset.cbView));
-          });
-          list.querySelectorAll('[data-cb-edit]').forEach(el => {
-            el.addEventListener('click', () => this.requestEdit(el.dataset.cbEdit));
-          });
-          list.querySelectorAll('[data-cb-delete]').forEach(el => {
-            el.addEventListener('click', () => this.requestDelete(el.dataset.cbDelete));
           });
 
           document.getElementById('cb-detail-wrap').style.display = 'none';
           document.getElementById('cb-list').style.display = 'block';
         },
 
-        viewPost(id) {
+        async viewPost(id) {
           const all = this.load();
           const p = all.find(x => x.id === id);
           if (!p) return;
+          this.currentView = 'detail';
+          this.currentPostId = id;
+
+          // Firebase 모드: 해당 글 댓글 리스너 시작
+          if (this.fbReady) await this.subscribeComments(id);
+
+          this.renderDetail(p);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+
+        renderDetail(p) {
           const wrap = document.getElementById('cb-detail-wrap');
+          if (!wrap) return;
+          const uid = this.getUserId();
+          const yarrUsers = p.yarrUsers || {};
+          const downUsers = p.downUsers || {};
+          const yarrCount = Object.keys(yarrUsers).length;
+          const downCount = Object.keys(downUsers).length;
+          const isYarrOn = !!yarrUsers[uid];
+          const isDownOn = !!downUsers[uid];
+
           wrap.innerHTML = `
             <div class="cb-detail">
               <div class="cb-detail-head">
@@ -8258,22 +8434,216 @@
               </div>
               <div class="cb-detail-body">${this.escape(p.body || '')}</div>
               ${p.attachedResult ? `<div class="cb-attached-result"><strong>📎 첨부된 결과</strong>${this.escape(p.attachedResult)}</div>` : ''}
-              <div class="cb-post-actions" style="margin-top:1.2rem;">
+
+              <div class="cb-detail-foot">
+                <button class="cb-vote-btn yarr ${isYarrOn ? 'on' : ''}" data-cb-vote="yarr">
+                  🔥 야르 <span class="ct">${yarrCount}</span>
+                </button>
+                <button class="cb-vote-btn down ${isDownOn ? 'on' : ''}" data-cb-vote="down">
+                  👎 비추천 <span class="ct">${downCount}</span>
+                </button>
+              </div>
+
+              <div class="cb-detail-actions">
                 <button class="cb-post-action primary" id="cb-back-list">← 목록</button>
-                <button class="cb-post-action" data-cb-edit="${p.id}">수정</button>
-                <button class="cb-post-action danger" data-cb-delete="${p.id}">삭제</button>
+                <button class="cb-post-action" data-cb-edit="${this.escape(p.id)}">수정</button>
+                <button class="cb-post-action danger" data-cb-delete="${this.escape(p.id)}">삭제</button>
+              </div>
+
+              <div class="cb-comments">
+                <div class="cb-comments-title">💬 댓글 <span class="ct" id="cb-cmnt-count">0</span></div>
+                <div class="cb-comment-input-row">
+                  <div class="cb-comment-meta-row">
+                    <input type="text" id="cb-cmnt-author" class="cb-comment-author" maxlength="20" placeholder="닉네임" />
+                    <input type="password" id="cb-cmnt-pw" class="cb-comment-pw" maxlength="32" placeholder="비밀번호 (4자+, 삭제 시 필요)" />
+                  </div>
+                  <textarea id="cb-cmnt-body" class="cb-comment-body-input" maxlength="500" placeholder="댓글을 입력하세요"></textarea>
+                  <div class="cb-comment-actions">
+                    <button id="cb-cmnt-submit" class="cb-comment-submit">댓글 등록</button>
+                  </div>
+                </div>
+                <div id="cb-comment-list" class="cb-comment-list"></div>
               </div>
             </div>`;
           wrap.style.display = 'block';
           document.getElementById('cb-list').style.display = 'none';
+
+          // 이벤트 바인딩
           document.getElementById('cb-back-list').addEventListener('click', () => this.renderList());
-          wrap.querySelectorAll('[data-cb-edit]').forEach(el => {
-            el.addEventListener('click', () => this.requestEdit(el.dataset.cbEdit));
-          });
-          wrap.querySelectorAll('[data-cb-delete]').forEach(el => {
-            el.addEventListener('click', () => this.requestDelete(el.dataset.cbDelete));
-          });
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          wrap.querySelectorAll('[data-cb-edit]').forEach(el =>
+            el.addEventListener('click', () => this.requestEdit(el.dataset.cbEdit)));
+          wrap.querySelectorAll('[data-cb-delete]').forEach(el =>
+            el.addEventListener('click', () => this.requestDelete(el.dataset.cbDelete)));
+          wrap.querySelectorAll('[data-cb-vote]').forEach(el =>
+            el.addEventListener('click', () => this.toggleVote(p.id, el.dataset.cbVote)));
+          document.getElementById('cb-cmnt-submit').addEventListener('click', () => this.submitComment(p.id));
+
+          // 댓글 렌더
+          this.renderComments(p.id);
+        },
+
+        renderComments(postId) {
+          const list = document.getElementById('cb-comment-list');
+          const cntEl = document.getElementById('cb-cmnt-count');
+          if (!list) return;
+          const comments = [...this.getComments(postId)].sort((a, b) => a.createdAt - b.createdAt);
+          if (cntEl) cntEl.textContent = comments.length;
+          if (comments.length === 0) {
+            list.innerHTML = `<div class="cb-comment-empty">아직 댓글이 없어요. 첫 댓글을 남겨보세요!</div>`;
+            return;
+          }
+          list.innerHTML = comments.map(c => `
+            <div class="cb-comment">
+              <div class="cb-comment-head">
+                <span class="cb-comment-author-name ${c.adminPost ? 'admin' : ''}">${this.escape(c.author || '익명')}</span>
+                <span class="cb-comment-time">${this.formatTime(c.createdAt)}</span>
+              </div>
+              <div class="cb-comment-body">${this.escape(c.body || '')}</div>
+              <div class="cb-comment-foot">
+                <button class="cb-comment-del" data-cb-cmnt-del="${this.escape(c.id)}">삭제</button>
+              </div>
+            </div>
+          `).join('');
+          list.querySelectorAll('[data-cb-cmnt-del]').forEach(el =>
+            el.addEventListener('click', () => this.requestDeleteComment(postId, el.dataset.cbCmntDel)));
+        },
+
+        async submitComment(postId) {
+          const author = document.getElementById('cb-cmnt-author').value.trim() || '익명';
+          const body = document.getElementById('cb-cmnt-body').value.trim();
+          const pw = document.getElementById('cb-cmnt-pw').value;
+          if (!body) { alert('댓글 내용을 입력해주세요.'); return; }
+          if (!this.adminMode && (!pw || pw.length < 4)) {
+            alert('비밀번호를 4자 이상 입력해주세요. (삭제 시 필요)');
+            return;
+          }
+          const comment = {
+            author, body,
+            pwHash: this.adminMode ? null : await this.sha256(pw),
+            adminPost: this.adminMode,
+            createdAt: Date.now()
+          };
+          if (this.fbReady) {
+            try {
+              const ref = this.fbDb.ref(`comments/${postId}`).push();
+              comment.id = ref.key;
+              await ref.set(comment);
+            } catch (e) { alert('댓글 저장 실패: ' + e.message); return; }
+          } else {
+            comment.id = 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+            try {
+              const all = JSON.parse(localStorage.getItem(this.COMMENTS_KEY) || '{}');
+              if (!all[postId]) all[postId] = [];
+              all[postId].push(comment);
+              localStorage.setItem(this.COMMENTS_KEY, JSON.stringify(all));
+            } catch (e) { alert('저장 실패'); return; }
+            this.renderComments(postId);
+          }
+          // 입력 초기화
+          document.getElementById('cb-cmnt-author').value = '';
+          document.getElementById('cb-cmnt-pw').value = '';
+          document.getElementById('cb-cmnt-body').value = '';
+        },
+
+        async requestDeleteComment(postId, commentId) {
+          const comments = this.getComments(postId);
+          const c = comments.find(x => x.id === commentId);
+          if (!c) return;
+          if (this.adminMode) {
+            if (confirm('관리자 권한으로 이 댓글을 삭제하시겠습니까?')) {
+              await this.deleteComment(postId, commentId);
+            }
+            return;
+          }
+          if (c.adminPost) {
+            alert('관리자 댓글은 관리자만 삭제할 수 있어요.');
+            return;
+          }
+          const pw = prompt('댓글 작성 시 입력한 비밀번호:');
+          if (!pw) return;
+          const hash = await this.sha256(pw);
+          if (hash !== c.pwHash) { alert('비밀번호가 일치하지 않습니다.'); return; }
+          if (confirm('정말 삭제하시겠습니까?')) {
+            await this.deleteComment(postId, commentId);
+          }
+        },
+
+        async deleteComment(postId, commentId) {
+          if (this.fbReady) {
+            try { await this.fbDb.ref(`comments/${postId}/${commentId}`).remove(); }
+            catch (e) { alert('삭제 실패: ' + e.message); }
+          } else {
+            try {
+              const all = JSON.parse(localStorage.getItem(this.COMMENTS_KEY) || '{}');
+              if (all[postId]) {
+                all[postId] = all[postId].filter(c => c.id !== commentId);
+                localStorage.setItem(this.COMMENTS_KEY, JSON.stringify(all));
+              }
+            } catch (e) {}
+            this.renderComments(postId);
+          }
+        },
+
+        // 댓글 실시간 구독 (Firebase 모드)
+        async subscribeComments(postId) {
+          if (!this.fbReady) return;
+          if (this.fbCommentsUnsubs[postId]) return; // 이미 구독 중
+          const ref = this.fbDb.ref(`comments/${postId}`);
+          const cb = (snap) => {
+            const obj = snap.val() || {};
+            this.fbCommentsCache[postId] = Object.keys(obj).map(k => ({ ...obj[k], id: k }));
+            // 현재 보고 있는 글이면 실시간 갱신
+            if (this.currentView === 'detail' && this.currentPostId === postId) {
+              this.renderComments(postId);
+            }
+            // 목록 화면이면 댓글 카운트 갱신
+            if (this.currentView === 'list') this.renderList();
+          };
+          ref.on('value', cb);
+          this.fbCommentsUnsubs[postId] = { ref, cb };
+        },
+
+        // ===== 추천(야르) / 비추천 토글 =====
+        async toggleVote(postId, type) {
+          const uid = this.getUserId();
+          const all = this.load();
+          const p = all.find(x => x.id === postId);
+          if (!p) return;
+
+          const yarrUsers = { ...(p.yarrUsers || {}) };
+          const downUsers = { ...(p.downUsers || {}) };
+
+          if (type === 'yarr') {
+            if (yarrUsers[uid]) {
+              delete yarrUsers[uid];
+            } else {
+              yarrUsers[uid] = true;
+              if (downUsers[uid]) delete downUsers[uid];
+            }
+          } else if (type === 'down') {
+            if (downUsers[uid]) {
+              delete downUsers[uid];
+            } else {
+              downUsers[uid] = true;
+              if (yarrUsers[uid]) delete yarrUsers[uid];
+            }
+          }
+
+          if (this.fbReady) {
+            try {
+              await this.fbDb.ref(`posts/${postId}`).update({ yarrUsers, downUsers });
+              // 로컬 캐시 즉시 업데이트
+              const cached = this.fbCache.find(x => x.id === postId);
+              if (cached) { cached.yarrUsers = yarrUsers; cached.downUsers = downUsers; }
+            } catch (e) { alert('투표 실패: ' + e.message); return; }
+          } else {
+            p.yarrUsers = yarrUsers;
+            p.downUsers = downUsers;
+            this.save(all);
+          }
+          // 화면 갱신
+          const updated = this.load().find(x => x.id === postId);
+          if (updated) this.renderDetail(updated);
         },
 
         escape(s) {
@@ -8382,11 +8752,8 @@
           const all = this.load();
           const p = all.find(x => x.id === id);
           if (!p) return;
-          if (this.adminMode || p.adminPost === false && !p.pwHash) {
-            this.openWriteModal(p);
-            return;
-          }
-          if (this.adminMode) {
+          // 관리자 모드면 무조건 수정 허용 / 비번이 없는 일반글은 그냥 열어줌
+          if (this.adminMode || (p.adminPost === false && !p.pwHash)) {
             this.openWriteModal(p);
             return;
           }
@@ -8499,6 +8866,14 @@
         },
 
         async init() {
+          // 첫 화면 깜빡임 방지: SDK 로드/연결 중에는 로딩 표시
+          const earlyList = document.getElementById('cb-list');
+          if (earlyList) {
+            earlyList.innerHTML = '<div class="cb-empty"><span class="em">⏳</span>게시판을 불러오는 중...<br><span style="font-size:.85rem;color:#94a3b8;">Firebase 실시간 동기화에 연결하고 있어요</span></div>';
+          }
+          const earlyMode = document.getElementById('cb-storage-mode');
+          if (earlyMode) earlyMode.innerHTML = '⏳ Firebase 연결 중...';
+
           // Firebase 자동 연결 (코드에 박힌 기본 config 사용)
           await this.initFirebase();
           this.updateStorageMode();
@@ -8543,8 +8918,26 @@
           }
 
           document.getElementById('cb-write-btn')?.addEventListener('click', () => this.openWriteModal(null));
-          document.getElementById('cb-admin-btn')?.addEventListener('click', () => this.toggleAdmin());
-          document.getElementById('cb-fb-btn')?.addEventListener('click', () => this.openFbModal());
+          // 햄버거 메뉴 토글
+          const menuBtn = document.getElementById('cb-menu-btn');
+          const menuDrop = document.getElementById('cb-menu-dropdown');
+          menuBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuDrop?.classList.toggle('show');
+          });
+          document.addEventListener('click', (e) => {
+            if (!menuDrop?.contains(e.target) && e.target !== menuBtn) {
+              menuDrop?.classList.remove('show');
+            }
+          });
+          document.getElementById('cb-admin-btn')?.addEventListener('click', () => {
+            menuDrop?.classList.remove('show');
+            this.toggleAdmin();
+          });
+          document.getElementById('cb-fb-btn')?.addEventListener('click', () => {
+            menuDrop?.classList.remove('show');
+            this.openFbModal();
+          });
           document.getElementById('cb-modal-cancel')?.addEventListener('click', () => this.closeWriteModal());
           document.getElementById('cb-modal-submit')?.addEventListener('click', () => this.submitPost());
           document.getElementById('cb-pw-modal-cancel')?.addEventListener('click', () => this.closePwModal());
