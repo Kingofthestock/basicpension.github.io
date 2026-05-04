@@ -1821,6 +1821,116 @@
         <button id="fuel-back-to-pension" class="mt-4 w-full py-3 rounded-xl font-bold text-white" style="background:linear-gradient(135deg,#ea580c,#f97316); box-shadow:0 2px 10px rgba(249,115,22,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
       </div>
 
+      <!-- 🎯 자가진단 — 내가 대상인가? -->
+      <div class="p-5 bg-white rounded-2xl border-2 border-orange-300 shadow-md mb-6" style="background: linear-gradient(135deg,#fff7ed 0%,#fff 50%);">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">🎯</span>
+          <h2 class="text-lg font-bold text-orange-900">내가 대상인가? — 1분 자가진단</h2>
+        </div>
+        <p class="text-sm text-slate-600 mb-4 leading-relaxed">아래 <strong class="text-orange-700">3가지 중 하나라도 해당</strong>되면 받을 수 있습니다. <strong class="text-orange-700">2026년 3월 납부 건강보험료</strong>를 기준으로 판정됩니다.</p>
+
+        <!-- 케이스 1: 자동 대상자 -->
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-3">
+          <div class="flex items-start gap-2 mb-2">
+            <span class="text-xl">✅</span>
+            <div class="flex-1">
+              <h3 class="font-bold text-emerald-800 text-base">CASE 1 — "자동 대상자" (별도 확인 불필요)</h3>
+              <p class="text-xs text-emerald-700 mt-0.5">아래에 해당하면 무조건 대상입니다. 건강보험료 확인 안 해도 됩니다.</p>
+            </div>
+          </div>
+          <ul class="space-y-1.5 text-sm text-slate-700 ml-7">
+            <li class="flex gap-2"><span>🟢</span><div><strong>기초생활수급자</strong> (생계·의료급여) — 자동 대상 + 우선 지급(4월 27일~)</div></li>
+            <li class="flex gap-2"><span>🟢</span><div><strong>차상위계층</strong> — 자동 대상 + 우선 지급</div></li>
+            <li class="flex gap-2"><span>🟢</span><div><strong>한부모가족</strong> (한부모가족 증명서 보유) — 자동 대상 + 우선 지급</div></li>
+            <li class="flex gap-2"><span>🟢</span><div><strong>장애인연금·기초연금</strong> 수급자 중 위 조건 해당 시</div></li>
+          </ul>
+        </div>
+
+        <!-- 케이스 2: 일반 (건강보험료 기준) -->
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-3">
+          <div class="flex items-start gap-2 mb-3">
+            <span class="text-xl">🔍</span>
+            <div class="flex-1">
+              <h3 class="font-bold text-blue-800 text-base">CASE 2 — 일반 가구 (건강보험료로 판정)</h3>
+              <p class="text-xs text-blue-700 mt-0.5">2026년 3월에 납부한 본인 건강보험료가 아래 표 이하면 대상</p>
+            </div>
+          </div>
+          <p class="text-sm font-bold text-slate-700 mb-2 mt-2">📋 가구원수별 기준표 (월 본인부담금 기준)</p>
+          <div class="overflow-x-auto bg-white rounded-lg border border-blue-100">
+            <table class="w-full text-sm">
+              <thead class="bg-blue-100">
+                <tr class="text-left">
+                  <th class="py-2 px-2 font-bold text-blue-900">가구원 수</th>
+                  <th class="py-2 px-2 font-bold text-blue-900 text-right">직장가입자</th>
+                  <th class="py-2 px-2 font-bold text-blue-900 text-right">지역가입자</th>
+                </tr>
+              </thead>
+              <tbody class="text-slate-700">
+                <tr class="border-b border-blue-50"><td class="py-2 px-2"><strong>1인 가구</strong></td><td class="py-2 px-2 text-right font-bold">약 138,780원</td><td class="py-2 px-2 text-right font-bold">약 68,000원</td></tr>
+                <tr class="border-b border-blue-50"><td class="py-2 px-2"><strong>2인 가구</strong></td><td class="py-2 px-2 text-right font-bold">약 229,357원</td><td class="py-2 px-2 text-right font-bold">약 164,000원</td></tr>
+                <tr class="border-b border-blue-50"><td class="py-2 px-2"><strong>3인 가구</strong></td><td class="py-2 px-2 text-right font-bold">약 290,169원</td><td class="py-2 px-2 text-right font-bold">약 240,000원</td></tr>
+                <tr class="border-b border-blue-50"><td class="py-2 px-2"><strong>4인 가구</strong></td><td class="py-2 px-2 text-right font-bold">약 360,410원</td><td class="py-2 px-2 text-right font-bold">약 320,000원</td></tr>
+                <tr class="border-b border-blue-50"><td class="py-2 px-2"><strong>5인 가구</strong></td><td class="py-2 px-2 text-right font-bold">약 410,000원</td><td class="py-2 px-2 text-right font-bold">약 370,000원</td></tr>
+                <tr><td class="py-2 px-2"><strong>6인 가구</strong></td><td class="py-2 px-2 text-right font-bold">약 490,000원</td><td class="py-2 px-2 text-right font-bold">약 470,000원</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-blue-600 mt-2">💡 <strong>본인부담금</strong>은 매월 받는 월급명세서·고지서의 "건강보험료" 본인 납부분입니다 (회사부담분 제외).</p>
+
+          <!-- 본인 건보료 확인 방법 -->
+          <div class="mt-3 bg-white rounded-lg p-3 border border-blue-200">
+            <p class="font-bold text-blue-800 text-sm mb-2">🔎 본인 건강보험료 확인하는 3가지 방법</p>
+            <div class="space-y-2 text-sm text-slate-700">
+              <div class="flex gap-2"><span>📱</span><div><strong>1) The건강보험 앱</strong> (모바일)<br><span class="text-xs text-slate-500">앱 설치 → 본인인증 → 메인 화면에 당월 납부액 바로 표시</span></div></div>
+              <div class="flex gap-2"><span>💻</span><div><strong>2) 건강보험공단 홈페이지</strong> nhis.or.kr<br><span class="text-xs text-slate-500">로그인 → "보험료 조회·납부" → "월별 건강보험료 부과·납부 내역"</span></div></div>
+              <div class="flex gap-2"><span>📞</span><div><strong>3) 건강보험공단 콜센터 ☎ 1577-1000</strong><br><span class="text-xs text-slate-500">주민등록번호 본인인증 후 조회 (평일 9시~18시)</span></div></div>
+              <div class="flex gap-2"><span>📄</span><div><strong>4) 직장인은 월급명세서 확인</strong><br><span class="text-xs text-slate-500">"건강보험료" 또는 "건보료" 항목의 본인 부담분 (보통 회사·본인 절반씩)</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 케이스 3: 제외 대상 -->
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-3">
+          <div class="flex items-start gap-2 mb-2">
+            <span class="text-xl">❌</span>
+            <div class="flex-1">
+              <h3 class="font-bold text-red-800 text-base">CASE 3 — 제외 대상 (받지 못해요)</h3>
+              <p class="text-xs text-red-700 mt-0.5">건보료 기준을 만족해도 아래에 해당하면 제외됩니다</p>
+            </div>
+          </div>
+          <ul class="space-y-1.5 text-sm text-slate-700 ml-7">
+            <li class="flex gap-2"><span>🚫</span><div><strong>건강보험료 본인부담금이 위 기준을 초과</strong>한 가구</div></li>
+            <li class="flex gap-2"><span>🚫</span><div><strong>고액 자산가</strong> (재산세 과세표준 합산액 9억원 초과 등) — 5월 중 세부 기준 발표</div></li>
+            <li class="flex gap-2"><span>🚫</span><div><strong>금융소득 종합과세 대상자</strong> (이자·배당 합계 2,000만원 초과)</div></li>
+            <li class="flex gap-2"><span>🚫</span><div><strong>해외 거주자</strong> (2026년 3월 30일 기준 국내 미거주)</div></li>
+            <li class="flex gap-2"><span>🚫</span><div>건강보험 <strong>피부양자</strong> 또는 <strong>국가유공자</strong> 등 건강보험료 미납부자는 부양자 가구의 합산 보험료로 판정</div></li>
+          </ul>
+        </div>
+
+        <!-- 지급액 결정 요인 -->
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <h3 class="font-bold text-amber-800 text-base mb-2">💰 받게 되면 얼마? — 지급액 결정 요인</h3>
+          <p class="text-sm text-slate-700 mb-2 leading-relaxed">기본 금액에 <strong>거주 지역·계층별 가산금</strong>이 더해져 1인당 <strong>최소 10만원 ~ 최대 60만원</strong>:</p>
+          <table class="w-full text-sm bg-white rounded-lg border border-amber-100">
+            <tbody class="text-slate-700">
+              <tr class="border-b border-amber-50"><td class="py-2 px-2">📍 <strong>수도권</strong> 일반</td><td class="py-2 px-2 text-right font-bold text-amber-700">10만원</td></tr>
+              <tr class="border-b border-amber-50"><td class="py-2 px-2">📍 <strong>비수도권</strong> 일반 (시 단위)</td><td class="py-2 px-2 text-right font-bold text-amber-700">15만원</td></tr>
+              <tr class="border-b border-amber-50"><td class="py-2 px-2">📍 <strong>인구감소지역</strong> (89개 군 단위)</td><td class="py-2 px-2 text-right font-bold text-amber-700">20~25만원</td></tr>
+              <tr class="border-b border-amber-50"><td class="py-2 px-2">👥 <strong>차상위·한부모</strong></td><td class="py-2 px-2 text-right font-bold text-amber-700">45~50만원</td></tr>
+              <tr><td class="py-2 px-2">🟢 <strong>기초수급</strong> (생계·의료)</td><td class="py-2 px-2 text-right font-bold text-amber-700">55~60만원</td></tr>
+            </tbody>
+          </table>
+          <p class="text-xs text-amber-700 mt-2">※ 같은 가구 내에서도 <strong>1인당 개인 지급</strong>이며, 해당 시·도가 인구감소지역인지 여부에 따라 가산.</p>
+        </div>
+
+        <!-- 마무리 안내 -->
+        <div class="mt-4 p-3 bg-slate-100 rounded-lg">
+          <p class="text-sm text-slate-700 leading-relaxed">
+            🚨 <strong>가장 빠르게 확인하는 법:</strong> 행정안전부 <a href="https://www.mois.go.kr/frt/sub/a06/b07/highOilPriceSupport/screen.do" target="_blank" class="text-orange-700 font-bold underline">고유가 피해지원금 안내 페이지</a>에서 <strong>"대상자 조회"</strong> 또는 카드사 앱(KB·신한·삼성 등)에서 <strong>본인 인증 후 즉시 확인</strong> 가능합니다.
+          </p>
+        </div>
+      </div>
+
       <!-- 지급 금액 상세 -->
       <div class="p-5 bg-white rounded-2xl border border-orange-100 shadow-sm mb-6">
         <div class="flex items-center gap-2 mb-3">
@@ -1899,15 +2009,16 @@
           <details class="faq-item" style="border-color:#fed7aa;">
             <summary class="flex items-center gap-2"><span class="text-lg">👥</span> 누가 받을 수 있나요?</summary>
             <div class="mt-3 text-sm text-slate-700 leading-relaxed space-y-2">
-              <p><strong>건강보험료 기준 소득 하위 70%</strong>에 해당하면 받을 수 있습니다.</p>
+              <p>위 페이지의 <strong class="text-orange-700">"🎯 내가 대상인가? — 1분 자가진단"</strong> 카드에서 가구원수별 건강보험료 기준표·확인 방법·제외 대상까지 자세히 안내드리고 있어요.</p>
               <div class="bg-orange-50 rounded-lg p-3 mt-1">
+                <p class="font-bold text-orange-800 mb-2">⭐ 핵심 요약</p>
                 <ul class="space-y-2">
-                  <li class="flex gap-2"><span>✅</span><div><strong>기초생활수급자</strong> (생계·의료급여)</div></li>
-                  <li class="flex gap-2"><span>✅</span><div><strong>차상위계층 · 한부모가족</strong></div></li>
-                  <li class="flex gap-2"><span>✅</span><div><strong>건강보험료 하위 70% 이내</strong> 일반 국민</div></li>
+                  <li class="flex gap-2"><span>✅</span><div><strong>기초생활수급자·차상위·한부모가족</strong> → 자동 대상 (확인 불필요)</div></li>
+                  <li class="flex gap-2"><span>✅</span><div><strong>일반 가구</strong> → 2026년 3월 납부 건보료 본인부담금이 기준표 이하면 대상</div></li>
+                  <li class="flex gap-2"><span>❌</span><div>건보료 초과·고액자산가·금융소득 2천만원 초과는 제외</div></li>
                 </ul>
               </div>
-              <p class="text-xs text-slate-500 mt-2">※ 본인의 건강보험료 납부액으로 대상 여부를 확인할 수 있습니다. 국민건강보험공단(1577-1000)에 문의하세요.</p>
+              <p class="text-xs text-slate-500 mt-2">※ 본인 건보료 모르면 건강보험공단 ☎ 1577-1000 또는 The건강보험 앱에서 즉시 확인.</p>
             </div>
           </details>
 
@@ -8622,8 +8733,11 @@
             }
           } else if (type === 'down') {
             if (downUsers[uid]) {
+              // 이미 비추천한 상태에서 취소 → 그냥 토글 (확인 없이)
               delete downUsers[uid];
             } else {
+              // 새로 비추천 누르는 경우 → 확인 팝업
+              if (!confirm('정말로 비추천을 누르시겠습니까?')) return;
               downUsers[uid] = true;
               if (yarrUsers[uid]) delete yarrUsers[uid];
             }
