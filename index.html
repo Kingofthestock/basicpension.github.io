@@ -458,6 +458,30 @@
     .result-share-btn.green { background: #16a34a; }
     .result-share-btn.green:hover { background: #15803d; }
 
+    /* 결과 화면 액션 버튼 그룹 (공유 + 신청) */
+    .result-actions-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.85rem; }
+    .result-actions-row .result-share-btn { margin-top: 0; flex: 1; min-width: 140px; justify-content: center; }
+    .result-apply-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+      padding: .65rem 1.1rem;
+      background: linear-gradient(135deg,#dc2626,#ef4444);
+      color: #fff; border: none; border-radius: .6rem;
+      font-weight: 800; font-size: .92rem; cursor: pointer;
+      transition: all .15s;
+      text-decoration: none;
+      flex: 1; min-width: 140px;
+      box-shadow: 0 3px 10px rgba(220,38,38,.25);
+      font-family: inherit;
+    }
+    .result-apply-btn:hover { background: linear-gradient(135deg,#b91c1c,#dc2626); transform: translateY(-1px); box-shadow: 0 5px 14px rgba(220,38,38,.35); color: #fff; }
+    .result-apply-btn .ic { font-size: 1.05rem; }
+    .result-apply-btn.violet { background: linear-gradient(135deg,#6d28d9,#8b5cf6); box-shadow: 0 3px 10px rgba(109,40,217,.25); }
+    .result-apply-btn.violet:hover { background: linear-gradient(135deg,#5b21b6,#7c3aed); box-shadow: 0 5px 14px rgba(109,40,217,.35); }
+    .result-apply-btn.amber { background: linear-gradient(135deg,#d97706,#f59e0b); box-shadow: 0 3px 10px rgba(217,119,6,.25); }
+    .result-apply-btn.amber:hover { background: linear-gradient(135deg,#b45309,#d97706); box-shadow: 0 5px 14px rgba(217,119,6,.35); }
+    .result-apply-hint { font-size: 0.74rem; color: #64748b; margin-top: 0.4rem; line-height: 1.45; }
+    .result-apply-hint a { color: #1e40af; font-weight: 700; }
+
     /* ===== Game Hub ===== */
     .game-card { background: #fff; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,.04); transition: all .25s; cursor: pointer; position: relative; overflow: hidden; border: 1px solid #f1f5f9; }
     .game-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,.1); border-color: #e2e8f0; }
@@ -4916,9 +4940,17 @@
                   <li class="font-bold">선정기준액: ${this.formatKRWNum(threshold)}</li>
                 </ul>
               </div>
-              <button type="button" id="share-result-btn" class="result-share-btn green">
-                <span>📤</span><span>결과 공유하기</span>
-              </button>
+              <div class="result-actions-row">
+                <button type="button" id="share-result-btn" class="result-share-btn green">
+                  <span>📤</span><span>결과 공유하기</span>
+                </button>
+                <a href="https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000007" target="_blank" rel="noopener" class="result-apply-btn">
+                  <span class="ic">🌐</span><span>복지로에서 기초연금 신청하기</span>
+                </a>
+              </div>
+              <p class="result-apply-hint">
+                💡 신청은 <strong>주민센터 방문</strong>도 가능해요. 온라인은 공동인증서·간편인증 필요. 어려우시면 ☎ <a href="tel:1355">국민연금공단 1355</a> · <a href="tel:129">보건복지상담 129</a>에 도움 요청.
+              </p>
             </div>`;
         } else {
           const reasons = [];
@@ -4949,9 +4981,17 @@
                   <li class="font-bold">총 소득인정액: ${this.formatKRWNum(Math.round(totalIncome))}</li>
                 </ul>
               </div>
-              <button type="button" id="share-result-btn" class="result-share-btn">
-                <span>📤</span><span>결과 공유하기</span>
-              </button>
+              <div class="result-actions-row">
+                <button type="button" id="share-result-btn" class="result-share-btn">
+                  <span>📤</span><span>결과 공유하기</span>
+                </button>
+                <a href="https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000007" target="_blank" rel="noopener" class="result-apply-btn">
+                  <span class="ic">🌐</span><span>복지로 정보 보기</span>
+                </a>
+              </div>
+              <p class="result-apply-hint">
+                💡 자격은 매년 재산정되어 변동될 수 있어요. 의문점이 있으면 <strong>주민센터</strong> 또는 <a href="tel:1355">국민연금공단 1355</a>에 직접 문의해보세요.
+              </p>
             </div>`;
         }
 
@@ -5799,9 +5839,17 @@
                 </ul>
               </div>
 
-              <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
-                <span>📤</span><span>결과 공유하기</span>
-              </button>
+              <div class="result-actions-row">
+                <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
+                  <span>📤</span><span>결과 공유하기</span>
+                </button>
+                <a href="https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000076" target="_blank" rel="noopener" class="result-apply-btn violet">
+                  <span class="ic">🌐</span><span>복지로에서 장애인연금 신청하기</span>
+                </a>
+              </div>
+              <p class="result-apply-hint">
+                💡 신청은 <strong>주민센터 방문</strong>도 가능해요. 온라인은 공동인증서·간편인증 필요. 도움이 필요하시면 ☎ <a href="tel:129">보건복지상담 129</a>로 연락해주세요.
+              </p>
             </div>`;
         } else {
           const reasons = [];
@@ -5835,9 +5883,17 @@
                   <li class="font-bold">총 소득인정액: ${this.formatKRWNum(Math.round(r.totalRecognizedIncome))}</li>
                 </ul>
               </div>` : ''}
-              <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
-                <span>📤</span><span>결과 공유하기</span>
-              </button>
+              <div class="result-actions-row">
+                <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
+                  <span>📤</span><span>결과 공유하기</span>
+                </button>
+                <a href="https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000076" target="_blank" rel="noopener" class="result-apply-btn violet">
+                  <span class="ic">🌐</span><span>복지로에서 장애인연금 정보 보기</span>
+                </a>
+              </div>
+              <p class="result-apply-hint">
+                💡 장애 등급이 변경되거나 소득·재산이 달라지면 자격이 생길 수 있어요. 자세한 내용은 <strong>주민센터</strong> 또는 ☎ <a href="tel:129">129</a>로 문의하세요.
+              </p>
             </div>`;
         }
 
@@ -8983,9 +9039,17 @@
               <button type="button" id="wff-pdf-btn" class="doc-action-btn pdf">📄 PDF로 저장</button>
               <button type="button" id="wff-print-btn" class="doc-action-btn print">🖨️ 인쇄</button>
             </div>
-            <button type="button" id="wff-share-btn" style="width:100%; padding:0.95rem; margin-top:0.85rem; background:linear-gradient(135deg,#334155,#64748b); color:#fff; border:none; border-radius:0.7rem; font-size:0.95rem; font-weight:800; cursor:pointer; font-family:inherit; box-shadow:0 3px 10px rgba(15,23,42,.2);">
-              💬 커뮤니티에 결과 공유하기
-            </button>
+            <div class="result-actions-row" style="margin-top:0.85rem;">
+              <button type="button" id="wff-share-btn" style="flex:1; padding:0.85rem; background:linear-gradient(135deg,#334155,#64748b); color:#fff; border:none; border-radius:0.6rem; font-size:0.92rem; font-weight:800; cursor:pointer; font-family:inherit; box-shadow:0 3px 10px rgba(15,23,42,.2); display:inline-flex; align-items:center; justify-content:center; gap:0.4rem;">
+                💬 커뮤니티에 결과 공유
+              </button>
+              <a href="https://www.bokjiro.go.kr/" target="_blank" rel="noopener" class="result-apply-btn amber">
+                <span class="ic">🌐</span><span>복지로에서 신청하기</span>
+              </a>
+            </div>
+            <p class="result-apply-hint">
+              💡 복지로에서 위 매칭된 혜택들을 검색해서 신청할 수 있어요. <strong>주민센터 방문</strong>도 가능하며 ☎ <a href="tel:129">129</a>로 안내받을 수 있습니다.
+            </p>
             <div id="prep-checklist-wrap"></div>`;
 
           div.innerHTML = html;
