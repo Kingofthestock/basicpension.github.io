@@ -530,6 +530,29 @@
 
     .home-main { max-width: 1100px; margin: -1.5rem auto 0; padding: 0 1rem; position: relative; z-index: 2; }
     .home-card-section { background: #fff; border-radius: 1rem; padding: 1.75rem 1.5rem; box-shadow: 0 2px 12px rgba(15,23,42,.04); margin-bottom: 1.25rem; border: 1px solid #e2e8f0; }
+
+    /* ===== 두 갈래길 안내 (간단/자세히) ===== */
+    .home-path-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin: 1rem auto 1.25rem; max-width: 560px; }
+    .home-path-card { background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-radius: 0.85rem; padding: 0.95rem 1rem; cursor: pointer; transition: all .15s; border: 1.5px solid transparent; text-align: left; font-family: inherit; display: flex; gap: 0.6rem; align-items: center; }
+    .home-path-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,.15); border-color: rgba(255,255,255,.5); }
+    .home-path-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .home-path-body { flex: 1; min-width: 0; }
+    .home-path-label { font-weight: 800; color: #0f172a; font-size: 0.95rem; margin-bottom: 0.1rem; }
+    .home-path-desc { font-size: 0.76rem; color: #64748b; line-height: 1.4; }
+    @media (max-width: 640px) { .home-path-row { grid-template-columns: 1fr; max-width: 100%; } }
+
+    /* ===== 접기(details) 카드 — 부가 콘텐츠용 ===== */
+    .home-fold { background: #fff; border-radius: 1rem; padding: 0; box-shadow: 0 2px 12px rgba(15,23,42,.04); margin-bottom: 1.25rem; border: 1px solid #e2e8f0; overflow: hidden; }
+    .home-fold > summary { padding: 1.1rem 1.4rem; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 0.6rem; font-weight: 800; color: #0f172a; font-size: 1.05rem; user-select: none; transition: background .15s; }
+    .home-fold > summary::-webkit-details-marker { display: none; }
+    .home-fold > summary:hover { background: #f8fafc; }
+    .home-fold > summary .home-fold-icon { font-size: 1.25rem; flex-shrink: 0; }
+    .home-fold > summary .home-fold-hint { font-size: 0.78rem; font-weight: 500; color: #94a3b8; margin-left: auto; }
+    .home-fold > summary .home-fold-arrow { font-size: 0.85rem; color: #94a3b8; transition: transform .2s; }
+    .home-fold[open] > summary .home-fold-arrow { transform: rotate(180deg); }
+    .home-fold[open] > summary { border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
+    .home-fold-body { padding: 1.4rem 1.4rem 1.6rem; }
+    @media (max-width: 768px) { .home-fold > summary { padding: 0.95rem 1.1rem; font-size: 1rem; } .home-fold-body { padding: 1.1rem 1.1rem 1.3rem; } }
     .home-section-title { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.35rem; letter-spacing: -0.01em; }
     .home-section-title-bar { width: 4px; height: 22px; background: linear-gradient(180deg,#1e40af,#2563eb); border-radius: 2px; }
     .home-section-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 1.25rem; line-height: 1.55; }
@@ -1207,17 +1230,41 @@
       <div class="home-hero">
         <span class="home-hero-tag">📅 2026년 5월 기준 · 정부 발표 정책 반영</span>
         <h1 class="home-hero-title">내가 받을 수 있는<br>복지 혜택, 1분 안에 확인하세요</h1>
-        <p class="home-hero-subtitle">기초연금 · 장애인연금 · 민생지원금부터 의료급여까지<br class="hidden sm:block">자격 조건과 신청 방법을 한곳에서 빠르게 확인하실 수 있어요.</p>
-        <p style="margin-top:1.25rem; font-size:0.92rem; color:rgba(255,255,255,.85);">
-          ⬇️ 아래 모의계산기로 시작하거나, <strong style="color:#fff;">맨 아래 통합 검색</strong>으로 원하는 혜택을 찾아보세요
-        </p>
+        <p class="home-hero-subtitle">간단히 알고 싶은 분도, 자세히 알고 싶은 분도 환영해요</p>
+
+        <!-- 두 갈래길 안내 -->
+        <div class="home-path-row">
+          <button type="button" class="home-path-card" id="path-quick">
+            <span class="home-path-icon">⚡</span>
+            <div class="home-path-body">
+              <div class="home-path-label">간단히 알고 싶어요</div>
+              <div class="home-path-desc">1분 모의계산으로 빠르게</div>
+            </div>
+          </button>
+          <button type="button" class="home-path-card" id="path-detail">
+            <span class="home-path-icon">📚</span>
+            <div class="home-path-body">
+              <div class="home-path-label">자세히 알고 싶어요</div>
+              <div class="home-path-desc">분야별 상세 안내</div>
+            </div>
+          </button>
+        </div>
       </div>
     </header>
 
     <main class="home-main">
 
-      <!-- ===== 사각지대 자가진단 (30초) ===== -->
-      <section class="gap-check-card" id="gap-check-card">
+      <!-- ===== 사각지대 자가진단 (30초) — 접기 가능 ===== -->
+      <details class="home-fold" id="gap-check-fold" style="background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 50%, #fff 100%); border-color: #fbbf24;">
+        <summary>
+          <span class="home-fold-icon">⚠️</span>
+          <span>혹시 못 받고 있는 혜택이 있나요? — 30초 자가진단</span>
+          <span class="home-fold-hint">아주 빠른 점검</span>
+          <span class="home-fold-arrow">▼</span>
+        </summary>
+        <div class="home-fold-body" style="padding: 0;">
+
+      <section class="gap-check-card" id="gap-check-card" style="margin-bottom: 0; box-shadow: none; border: none; border-radius: 0;">
         <h2 class="gap-check-title"><span>⚠️</span> 혹시 못 받고 있는 혜택이 있나요? — 30초 자가진단</h2>
         <p class="gap-check-desc">간단한 5문항으로 <strong>놓치고 있을 수 있는 복지 혜택</strong>을 빠르게 확인해드려요. 예/아니오로만 답해주세요.</p>
 
@@ -1268,9 +1315,11 @@
 
         <div id="gap-check-result" class="gap-check-result"></div>
       </section>
+        </div>
+      </details>
 
       <!-- 통합 복지 매칭 모의계산기 (위저드 형식) -->
-      <section class="wff-card">
+      <section class="wff-card" id="wff-main-card">
         <h2 class="wff-title"><span class="wff-title-icon">🎯</span>나에게 맞는 복지 혜택 찾기</h2>
 
         <!-- 진행률 (시작 후 표시) -->
@@ -1444,43 +1493,10 @@
         </div>
       </section>
 
-      <!-- 빠른 자격 확인 (활성 서비스) -->
-      <section class="home-card-section">
-        <div class="home-section-title"><span class="home-section-title-bar"></span>지금 바로 확인 가능한 복지 혜택</div>
-        <p class="home-section-desc">소득·재산 정보만 입력하면 1분 안에 수급 가능성을 확인할 수 있어요</p>
-        <div class="home-quick-grid">
-          <button type="button" class="home-quick-card pension" id="home-go-pension">
-            <span class="home-quick-card-icon">💰</span>
-            <h3 class="home-quick-card-title">기초연금</h3>
-            <p class="home-quick-card-desc">만 65세 이상 소득 하위 70%<br><strong>최대 월 34만원</strong> · 단독 247만원 / 부부 395만원 이하</p>
-            <span class="home-quick-card-cta">자격 계산하기 →</span>
-          </button>
-          <button type="button" class="home-quick-card disability" id="home-go-disability">
-            <span class="home-quick-card-icon">♿</span>
-            <h3 class="home-quick-card-title">장애인연금</h3>
-            <p class="home-quick-card-desc">만 18세 이상 중증장애인<br><strong>최대 월 43만 9,700원</strong> · 1·2급 또는 3급+중복장애</p>
-            <span class="home-quick-card-cta">자격 계산하기 →</span>
-          </button>
-          <button type="button" class="home-quick-card fuel" id="home-go-fuel">
-            <span class="home-quick-card-icon">⛽</span>
-            <h3 class="home-quick-card-title">고유가 피해지원금</h3>
-            <p class="home-quick-card-desc">소득 하위 70% (3,200만 명)<br><strong>1인 10~60만원</strong> · 4월 27일부터 지급 시작</p>
-            <span class="home-quick-card-cta">정보 확인하기 →</span>
-          </button>
-          <button type="button" class="home-quick-card tax" id="home-go-tax">
-            <span class="home-quick-card-badge">🔥 5월 종소세 시즌</span>
-            <span class="home-quick-card-icon">💰</span>
-            <h3 class="home-quick-card-title">세금 도우미</h3>
-            <p class="home-quick-card-desc">연말정산·종합소득세 한눈에<br><strong>3.3% 떼인 프리랜서, 환급 받으세요!</strong> · 5월 1일~6월 1일 신고</p>
-            <span class="home-quick-card-cta">꿀팁 보기 →</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- 분야별 복지 혜택 -->
-      <section class="home-card-section">
-        <div class="home-section-title"><span class="home-section-title-bar"></span>분야별 복지 혜택</div>
-        <p class="home-section-desc">관심 있는 복지 분야를 선택해보세요. 활성화된 항목은 자격 확인이 가능합니다.</p>
+      <!-- 분야별 복지 혜택 (자세히 알고 싶을 때) -->
+      <section class="home-card-section" id="home-cat-section">
+        <div class="home-section-title"><span class="home-section-title-bar"></span>📚 분야별 자세히 알아보기</div>
+        <p class="home-section-desc">관심 있는 복지를 클릭하면 <strong>자격·금액·신청법</strong>까지 자세히 안내해드려요. 모의계산이 가능한 항목도 있어요.</p>
         <div class="home-cat-grid">
           <div class="home-cat-card active pension-tone" data-go="pension-container">
             <span class="home-cat-icon">💰</span>
@@ -1555,48 +1571,61 @@
         </div>
       </section>
 
-      <!-- 복지 신청 절차 안내 -->
-      <section class="home-card-section">
-        <div class="home-section-title"><span class="home-section-title-bar"></span>복지 신청, 이렇게 하시면 돼요</div>
-        <p class="home-section-desc">처음 신청하시는 분들을 위한 3단계 안내</p>
-        <div class="home-info-row">
-          <div class="home-info-item">
-            <div class="home-info-icon">1</div>
-            <div class="home-info-text">
-              <strong>자격 확인하기</strong>
-              <span>본인의 소득·재산을 기준으로 받을 수 있는 혜택부터 확인하세요</span>
+      <!-- 복지 신청 절차 안내 (접기) -->
+      <details class="home-fold">
+        <summary>
+          <span class="home-fold-icon">📝</span>
+          <span>처음이라면 — 복지 신청 3단계 안내</span>
+          <span class="home-fold-hint">신청이 처음이신 분</span>
+          <span class="home-fold-arrow">▼</span>
+        </summary>
+        <div class="home-fold-body">
+          <div class="home-info-row">
+            <div class="home-info-item">
+              <div class="home-info-icon">1</div>
+              <div class="home-info-text">
+                <strong>자격 확인하기</strong>
+                <span>본인의 소득·재산을 기준으로 받을 수 있는 혜택부터 확인하세요</span>
+              </div>
             </div>
-          </div>
-          <div class="home-info-item">
-            <div class="home-info-icon">2</div>
-            <div class="home-info-text">
-              <strong>서류 준비하기</strong>
-              <span>신분증, 통장사본, 소득·재산 증빙서류를 미리 준비하세요</span>
+            <div class="home-info-item">
+              <div class="home-info-icon">2</div>
+              <div class="home-info-text">
+                <strong>서류 준비하기</strong>
+                <span>신분증, 통장사본, 소득·재산 증빙서류를 미리 준비하세요</span>
+              </div>
             </div>
-          </div>
-          <div class="home-info-item">
-            <div class="home-info-icon">3</div>
-            <div class="home-info-text">
-              <strong>신청·접수하기</strong>
-              <span>주민센터 방문 또는 복지로(bokjiro.go.kr)에서 온라인 신청</span>
+            <div class="home-info-item">
+              <div class="home-info-icon">3</div>
+              <div class="home-info-text">
+                <strong>신청·접수하기</strong>
+                <span>주민센터 방문 또는 복지로(bokjiro.go.kr)에서 온라인 신청</span>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </details>
 
-      <!-- 공식 사이트 / 문의처 -->
-      <section class="home-card-section">
-        <div class="home-section-title"><span class="home-section-title-bar"></span>공식 사이트 · 상담 문의처</div>
-        <p class="home-section-desc">정확한 정보는 공식 사이트나 상담 콜센터를 통해 확인해주세요</p>
-        <div class="home-link-row">
-          <a class="home-link-btn" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">🌐 복지로 (정부 종합 복지)</a>
-          <a class="home-link-btn" href="https://www.gov.kr" target="_blank" rel="noopener">🌐 정부24</a>
-          <a class="home-link-btn" href="https://www.mohw.go.kr" target="_blank" rel="noopener">🌐 보건복지부</a>
-          <a class="home-link-btn" href="tel:129">📞 보건복지상담센터 129</a>
-          <a class="home-link-btn" href="tel:1355">📞 국민연금공단 1355</a>
-          <a class="home-link-btn" href="tel:15331300">📞 민생지원금 1533-1300</a>
+      <!-- 공식 사이트 / 문의처 (접기) -->
+      <details class="home-fold">
+        <summary>
+          <span class="home-fold-icon">📞</span>
+          <span>공식 사이트 · 상담 콜센터</span>
+          <span class="home-fold-hint">정확한 안내가 필요할 때</span>
+          <span class="home-fold-arrow">▼</span>
+        </summary>
+        <div class="home-fold-body">
+          <p class="home-section-desc" style="margin-bottom:1rem;">정확한 정보는 공식 사이트나 상담 콜센터를 통해 확인해주세요</p>
+          <div class="home-link-row">
+            <a class="home-link-btn" href="https://www.bokjiro.go.kr" target="_blank" rel="noopener">🌐 복지로 (정부 종합 복지)</a>
+            <a class="home-link-btn" href="https://www.gov.kr" target="_blank" rel="noopener">🌐 정부24</a>
+            <a class="home-link-btn" href="https://www.mohw.go.kr" target="_blank" rel="noopener">🌐 보건복지부</a>
+            <a class="home-link-btn" href="tel:129">📞 보건복지상담센터 129</a>
+            <a class="home-link-btn" href="tel:1355">📞 국민연금공단 1355</a>
+            <a class="home-link-btn" href="tel:15331300">📞 민생지원금 1533-1300</a>
+          </div>
         </div>
-      </section>
+      </details>
 
       <!-- ===== 통합 검색 (강화판, 맨 아래) ===== -->
       <section class="hs-section" id="home-search-section">
@@ -7561,6 +7590,14 @@
       document.getElementById('home-go-disability')?.addEventListener('click', () => { showSection('disability-pension'); window.scrollTo(0,0); });
       document.getElementById('home-go-fuel')?.addEventListener('click', () => { showSection('fuel-support'); window.scrollTo(0,0); });
       document.getElementById('home-go-tax')?.addEventListener('click', () => { showSection('tax-helper'); window.scrollTo(0,0); });
+
+      // ===== 두 갈래길 (간단/자세히) 안내 버튼 =====
+      document.getElementById('path-quick')?.addEventListener('click', () => {
+        document.getElementById('wff-main-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      document.getElementById('path-detail')?.addEventListener('click', () => {
+        document.getElementById('home-cat-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
 
       // ===== 세금 도우미 — 탭 전환 =====
       document.querySelectorAll('[data-tx-tab]').forEach(btn => {
