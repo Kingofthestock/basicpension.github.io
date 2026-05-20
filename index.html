@@ -4278,6 +4278,27 @@
           </div>
           <p class="text-sm text-gray-500">빈칸에 1~9를 채워 완성하세요</p>
         </div>
+        <div data-game="quiz" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white text-xl">🧠</div>
+            <div><h3 class="text-xl font-bold">복지 상식 퀴즈</h3><p class="text-sm text-gray-600">학습 + 재미</p></div>
+          </div>
+          <p class="text-sm text-gray-500">10문제로 복지·세금 상식을 알아봐요</p>
+        </div>
+        <div data-game="numguess" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center text-white text-xl">🔢</div>
+            <div><h3 class="text-xl font-bold">숫자 맞추기</h3><p class="text-sm text-gray-600">두뇌 게임</p></div>
+          </div>
+          <p class="text-sm text-gray-500">1~100 사이 숫자를 맞춰보세요 (Up &amp; Down)</p>
+        </div>
+        <div data-game="mole" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-700 to-amber-800 rounded-full flex items-center justify-center text-white text-xl">🦔</div>
+            <div><h3 class="text-xl font-bold">두더지 잡기</h3><p class="text-sm text-gray-600">반응속도</p></div>
+          </div>
+          <p class="text-sm text-gray-500">30초 동안 튀어나오는 두더지를 잡아보세요</p>
+        </div>
       </div>
     </div>
   </section>
@@ -4520,6 +4541,124 @@
     </div>
   </section>
 
+  <!-- ===== 🧠 복지 상식 퀴즈 ===== -->
+  <section id="game-quiz" class="hidden min-h-screen bg-gradient-to-br from-emerald-50 to-teal-100">
+    <div class="max-w-xl mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
+      <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+          <h2 class="text-2xl font-bold">🧠 복지 상식 퀴즈</h2>
+          <div class="flex items-center gap-2">
+            <div class="px-3 py-2 bg-emerald-50 text-emerald-800 rounded text-sm font-bold"><span id="qz-progress">0</span> / 10</div>
+            <div class="px-3 py-2 bg-amber-50 text-amber-800 rounded text-sm font-bold">⭐ <span id="qz-score">0</span></div>
+          </div>
+        </div>
+
+        <!-- 시작 화면 -->
+        <div id="qz-intro" class="text-center py-8">
+          <div class="text-6xl mb-3">🧠</div>
+          <p class="text-lg font-bold text-slate-800 mb-2">복지·세금·생활 상식 10문제</p>
+          <p class="text-sm text-slate-600 mb-1">2026년 최신 정부 정책 기준</p>
+          <p class="text-xs text-slate-500 mb-6">맞춘 문제는 해설로 다시 알려드려요</p>
+          <button id="qz-start" class="w-full max-w-xs mx-auto py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition">시작하기 →</button>
+        </div>
+
+        <!-- 문제 화면 -->
+        <div id="qz-play" class="hidden">
+          <div class="h-2 bg-emerald-100 rounded-full overflow-hidden mb-4">
+            <div id="qz-bar" class="h-full bg-gradient-to-r from-emerald-400 to-teal-500 transition-all" style="width:0%"></div>
+          </div>
+          <div id="qz-question" class="text-lg font-bold text-slate-800 mb-4 leading-relaxed"></div>
+          <div id="qz-choices" class="space-y-2 mb-4"></div>
+          <div id="qz-feedback" class="hidden p-3 rounded-lg text-sm leading-relaxed"></div>
+          <button id="qz-next" class="hidden mt-3 w-full py-2.5 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700">다음 →</button>
+        </div>
+
+        <!-- 결과 화면 -->
+        <div id="qz-result" class="hidden text-center py-6">
+          <div id="qz-result-emoji" class="text-6xl mb-3"></div>
+          <p id="qz-result-title" class="text-xl font-bold text-slate-800 mb-2"></p>
+          <p class="text-2xl font-black text-emerald-700 mb-2"><span id="qz-result-score">0</span> / 10</p>
+          <p id="qz-result-desc" class="text-sm text-slate-600 mb-5"></p>
+          <button id="qz-restart" class="px-6 py-2.5 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700">다시 도전 →</button>
+          <button id="qz-share" class="ml-2 px-6 py-2.5 bg-slate-700 text-white rounded-lg font-bold hover:bg-slate-800">📤 결과 공유</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 🔢 숫자 맞추기 (Up & Down) ===== -->
+  <section id="game-numguess" class="hidden min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
+    <div class="max-w-md mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
+      <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h2 class="text-2xl font-bold">🔢 숫자 맞추기</h2>
+          <div class="flex items-center gap-2">
+            <div class="px-3 py-2 bg-amber-50 text-amber-800 rounded text-sm font-bold">시도 <span id="ng-tries">0</span></div>
+            <div class="px-3 py-2 bg-orange-50 text-orange-800 rounded text-sm font-bold">최고 <span id="ng-best">-</span></div>
+          </div>
+        </div>
+
+        <div class="flex gap-2 mb-3">
+          <button class="ng-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-amber-500 text-white" data-range="100">1~100</button>
+          <button class="ng-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700" data-range="500">1~500</button>
+          <button class="ng-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700" data-range="1000">1~1000</button>
+        </div>
+
+        <div id="ng-target" class="text-center py-4 text-sm text-slate-600 font-bold">
+          <span id="ng-range-text">1과 100</span> 사이의 숫자를 맞춰보세요!
+        </div>
+
+        <div class="flex gap-2 mb-3">
+          <input type="number" id="ng-input" class="flex-1 px-4 py-3 border-2 border-amber-300 rounded-lg text-center text-xl font-bold focus:outline-none focus:border-amber-500" placeholder="숫자 입력" inputmode="numeric" />
+          <button id="ng-submit" class="px-5 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-bold hover:shadow-lg">확인</button>
+        </div>
+
+        <div id="ng-hint" class="text-center text-lg font-bold py-3 min-h-[3.5rem] flex items-center justify-center"></div>
+
+        <div id="ng-history" class="mt-2 max-h-32 overflow-y-auto px-2"></div>
+
+        <button id="ng-new" class="mt-3 w-full py-2.5 bg-slate-100 text-slate-700 rounded-lg font-bold hover:bg-slate-200">↺ 새 게임</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 🦔 두더지 잡기 ===== -->
+  <section id="game-mole" class="hidden min-h-screen bg-gradient-to-br from-amber-100 to-yellow-200">
+    <div class="max-w-md mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
+      <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h2 class="text-2xl font-bold">🦔 두더지 잡기</h2>
+          <div class="flex items-center gap-2">
+            <div class="px-3 py-2 bg-amber-100 text-amber-900 rounded text-sm font-bold">⏱ <span id="mole-timer">30</span>초</div>
+            <div class="px-3 py-2 bg-orange-100 text-orange-900 rounded text-sm font-bold">⭐ <span id="mole-score">0</span></div>
+            <div class="px-3 py-2 bg-emerald-100 text-emerald-900 rounded text-sm font-bold">최고 <span id="mole-best">0</span></div>
+          </div>
+        </div>
+
+        <div class="flex gap-2 mb-3">
+          <button class="mole-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-amber-500 text-white" data-speed="1200">쉬움</button>
+          <button class="mole-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700" data-speed="850">보통</button>
+          <button class="mole-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700" data-speed="550">어려움</button>
+        </div>
+
+        <div id="mole-grid" class="grid grid-cols-3 gap-2 sm:gap-3 mb-3" style="aspect-ratio: 1;"></div>
+
+        <p class="text-xs text-center text-slate-500 mb-2">🦔 두더지가 튀어나오면 클릭/탭하세요! 폭탄 💣은 피해야 -1점이에요</p>
+
+        <button id="mole-start" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg font-bold text-lg shadow hover:shadow-lg">▶ 시작</button>
+
+        <div id="mole-result" class="hidden mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg text-center">
+          <div class="text-4xl mb-2" id="mole-result-emoji">🏆</div>
+          <p class="font-bold text-amber-900 mb-1" id="mole-result-msg"></p>
+          <p class="text-sm text-amber-800">최종 점수: <strong id="mole-result-score" class="text-xl">0</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== JavaScript ===== -->
   <script>
     let activeGame = null;
@@ -4556,6 +4695,11 @@
         floatingBtn.classList.add('hidden');
         tabGames.classList.add('tab-active'); tabGames.classList.remove('tab-inactive');
         tabPension.classList.add('tab-inactive'); tabPension.classList.remove('tab-active');
+      }
+
+      // 두더지 게임 떠날 때 타이머 정리
+      if (activeGame === 'mole' && sectionName !== 'game-mole' && window.moleApp && moleApp.playing) {
+        moleApp.stop();
       }
 
       if (sectionName === 'omok-game') { activeGame = 'omok'; if (window.omokApp) omokApp.resizeCanvas(); }
@@ -7558,6 +7702,369 @@
     };
 
     /* ================================================
+       🧠 복지 상식 퀴즈 (10문제)
+       ================================================ */
+    const quizApp = {
+      QUESTIONS: [
+        {
+          q: '2026년 기초연금을 받을 수 있는 최소 나이는?',
+          choices: ['만 60세', '만 63세', '만 65세', '만 70세'],
+          answer: 2,
+          explain: '2026년 기준 기초연금은 만 65세 이상 + 소득 하위 70% 어르신이 대상이에요. 단독 247만원 / 부부 395만원 이하면 신청 가능합니다.'
+        },
+        {
+          q: '2026년 기초연금 단독가구 최대 월 지급액은?',
+          choices: ['약 25만원', '약 30만원', '약 34만 9,700원', '약 40만원'],
+          answer: 2,
+          explain: '2026년 기초연금 기준연금액은 월 최대 34만 9,700원이에요. 부부 모두 수급 시 각자 20% 감액되어 27만 9,760원씩 받습니다.'
+        },
+        {
+          q: '2026년 부모급여 — 만 0세 자녀에게 지급되는 월 금액은?',
+          choices: ['월 50만원', '월 70만원', '월 100만원', '월 120만원'],
+          answer: 2,
+          explain: '만 0세는 월 100만원, 만 1세는 월 50만원이에요. 소득 무관 모든 부모에게 지급되며, 어린이집 이용 시 보육료 차감 후 차액이 입금돼요.'
+        },
+        {
+          q: '청년월세 특별지원 (2026)의 정확한 조건은?',
+          choices: ['만 19~34세, 보증금 5천만/월세 70만 이하', '만 19~34세, 보증금 8천만/월세 60만 이하', '만 19~39세 전국 동일', '만 19~34세, 월세만 100만 이하'],
+          answer: 1,
+          explain: '2026년 한도가 확대됐어요. 보증금 8천만원·월세 60만원 이하인 부모와 별도 거주 청년에게 월 20만원 × 최대 24개월(총 480만원) 지원합니다.'
+        },
+        {
+          q: '종합소득세 신고 마감일은 매년 언제?',
+          choices: ['3월 31일', '5월 1일', '5월 31일 (2026년은 6월 1일)', '12월 31일'],
+          answer: 2,
+          explain: '매년 5월 1일~5월 31일이 신고 기간이에요. 2026년은 5월 31일이 일요일이라 6월 1일(월)까지 연장됐습니다. 3.3% 떼인 프리랜서는 대부분 환급 대상!'
+        },
+        {
+          q: '아동수당은 만 몇 세 미만 아동에게 지급되나요? (2026년 기준)',
+          choices: ['만 6세 미만', '만 7세 미만', '만 8세 미만', '만 9세 미만'],
+          answer: 3,
+          explain: '2026년부터 만 9세 미만으로 확대됐어요. 모든 아동에게 월 10만원, 비수도권은 최대 13만원까지 지급됩니다 (소득 무관).'
+        },
+        {
+          q: '주거급여 임차가구 대상 — 소득 기준은?',
+          choices: ['중위소득 32% 이하', '중위소득 40% 이하', '중위소득 48% 이하', '중위소득 60% 이하'],
+          answer: 2,
+          explain: '주거급여는 중위소득 48% 이하 임차가구에 월 임차료를 지원해요. 서울 1인 약 37만원, 6인 최대 약 70만원까지 받을 수 있어요.'
+        },
+        {
+          q: '"보건복지상담센터" 콜센터 번호는?',
+          choices: ['☎ 119', '☎ 120', '☎ 129', '☎ 1355'],
+          answer: 2,
+          explain: '☎ 129가 보건복지상담센터입니다. 복지·긴급지원·자살예방 등 24시간 상담 가능해요. 국민연금공단은 ☎ 1355, 민생지원금은 ☎ 1533-1300.'
+        },
+        {
+          q: '긴급복지지원 — 위기상황 시 생계비 지원 금액은? (4인 가구)',
+          choices: ['월 약 100만원', '월 약 150만원', '월 약 199만원', '월 약 300만원'],
+          answer: 2,
+          explain: '2026년 기준 4인 가구 생계지원은 월 약 199만원이에요. 의료지원은 회당 300만원, 주거지원은 약 75만원까지 선지원 후심사로 신속 지원됩니다.'
+        },
+        {
+          q: '복지 신청은 어디서 시작하나요? (가장 일반적)',
+          choices: ['국세청 홈택스', '주민센터 또는 복지로(bokjiro.go.kr)', '국민건강보험공단', '주민자치회'],
+          answer: 1,
+          explain: '거주지 읍·면·동 주민센터 방문 또는 복지로(bokjiro.go.kr) 온라인 신청이 기본이에요. 어려우시면 ☎ 129로 전화 안내를 받을 수 있어요.'
+        }
+      ],
+      idx: 0, score: 0, answered: false, shuffled: [],
+
+      init() {
+        document.getElementById('qz-start')?.addEventListener('click', () => this.start());
+        document.getElementById('qz-next')?.addEventListener('click', () => this.next());
+        document.getElementById('qz-restart')?.addEventListener('click', () => this.start());
+        document.getElementById('qz-share')?.addEventListener('click', () => this.share());
+      },
+
+      start() {
+        this.idx = 0;
+        this.score = 0;
+        this.shuffled = [...this.QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 10);
+        document.getElementById('qz-intro').classList.add('hidden');
+        document.getElementById('qz-result').classList.add('hidden');
+        document.getElementById('qz-play').classList.remove('hidden');
+        this.render();
+      },
+
+      render() {
+        const q = this.shuffled[this.idx];
+        if (!q) return;
+        this.answered = false;
+        document.getElementById('qz-progress').textContent = this.idx + 1;
+        document.getElementById('qz-score').textContent = this.score;
+        document.getElementById('qz-bar').style.width = ((this.idx) / 10 * 100) + '%';
+        document.getElementById('qz-question').textContent = `Q${this.idx + 1}. ${q.q}`;
+        document.getElementById('qz-feedback').classList.add('hidden');
+        document.getElementById('qz-next').classList.add('hidden');
+
+        const choicesEl = document.getElementById('qz-choices');
+        choicesEl.innerHTML = '';
+        q.choices.forEach((c, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'w-full text-left p-3 rounded-lg border-2 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 transition font-medium text-slate-700';
+          btn.textContent = `${String.fromCharCode(65+i)}. ${c}`;
+          btn.addEventListener('click', () => this.choose(i, btn));
+          choicesEl.appendChild(btn);
+        });
+      },
+
+      choose(i, btn) {
+        if (this.answered) return;
+        this.answered = true;
+        const q = this.shuffled[this.idx];
+        const choicesEl = document.getElementById('qz-choices');
+        const correct = i === q.answer;
+        if (correct) this.score++;
+
+        // 모든 버튼 비활성 + 색상 표시
+        Array.from(choicesEl.children).forEach((b, idx) => {
+          b.disabled = true;
+          if (idx === q.answer) {
+            b.className = 'w-full text-left p-3 rounded-lg border-2 border-emerald-500 bg-emerald-100 font-bold text-emerald-900';
+          } else if (idx === i && !correct) {
+            b.className = 'w-full text-left p-3 rounded-lg border-2 border-red-400 bg-red-100 font-medium text-red-800';
+          } else {
+            b.className = 'w-full text-left p-3 rounded-lg border-2 border-slate-200 bg-slate-50 text-slate-400';
+          }
+        });
+
+        const fb = document.getElementById('qz-feedback');
+        fb.classList.remove('hidden');
+        if (correct) {
+          fb.className = 'p-3 rounded-lg text-sm leading-relaxed bg-emerald-50 border border-emerald-200 text-emerald-900';
+          fb.innerHTML = `<strong>✅ 정답!</strong> ${q.explain}`;
+        } else {
+          fb.className = 'p-3 rounded-lg text-sm leading-relaxed bg-red-50 border border-red-200 text-red-900';
+          fb.innerHTML = `<strong>❌ 아쉬워요. 정답은 ${String.fromCharCode(65+q.answer)}번.</strong><br>${q.explain}`;
+        }
+
+        document.getElementById('qz-score').textContent = this.score;
+        document.getElementById('qz-next').classList.remove('hidden');
+        document.getElementById('qz-next').textContent = this.idx === 9 ? '결과 보기 →' : '다음 문제 →';
+      },
+
+      next() {
+        this.idx++;
+        if (this.idx >= this.shuffled.length) {
+          this.showResult();
+        } else {
+          this.render();
+        }
+      },
+
+      showResult() {
+        document.getElementById('qz-play').classList.add('hidden');
+        document.getElementById('qz-result').classList.remove('hidden');
+        document.getElementById('qz-result-score').textContent = this.score;
+        const pct = this.score / 10 * 100;
+        let emoji = '🥉', title = '도전 정신!', desc = '복지 정보가 많이 어렵죠? 분야별 카테고리에서 천천히 알아보세요.';
+        if (pct >= 90) { emoji = '🏆'; title = '복지 박사!'; desc = '거의 모든 문제를 맞히셨어요. 주변 분들에게도 알려주세요!'; }
+        else if (pct >= 70) { emoji = '🥇'; title = '복지 고수!'; desc = '정말 잘 아시네요. 사이트의 분야별 정보로 더 깊이 알아보세요.'; }
+        else if (pct >= 50) { emoji = '🥈'; title = '아는 만큼!'; desc = '절반은 맞히셨어요. 통합 검색에서 헷갈렸던 용어를 찾아보세요.'; }
+        document.getElementById('qz-result-emoji').textContent = emoji;
+        document.getElementById('qz-result-title').textContent = title;
+        document.getElementById('qz-result-desc').textContent = desc;
+      },
+
+      share() {
+        if (typeof window.shareToCommunity === 'function') {
+          window.shareToCommunity('🎮 복지 상식 퀴즈', `복지 상식 퀴즈 점수: ${this.score}/10\n2026년 정부 정책 기준 10문제 중 ${this.score}개 정답`);
+        }
+      }
+    };
+
+    /* ================================================
+       🔢 숫자 맞추기 (Up & Down)
+       ================================================ */
+    const numGuessApp = {
+      target: 0, tries: 0, range: 100, best: {}, history: [],
+
+      init() {
+        try { this.best = JSON.parse(localStorage.getItem('ngBest') || '{}'); } catch(e) { this.best = {}; }
+        this.updateBestDisplay();
+        document.getElementById('ng-submit')?.addEventListener('click', () => this.submit());
+        document.getElementById('ng-new')?.addEventListener('click', () => this.newGame());
+        document.getElementById('ng-input')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') this.submit(); });
+        document.querySelectorAll('.ng-diff').forEach(b => b.addEventListener('click', () => {
+          this.range = parseInt(b.dataset.range);
+          document.querySelectorAll('.ng-diff').forEach(x => x.className = 'ng-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700');
+          b.className = 'ng-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-amber-500 text-white';
+          this.newGame();
+        }));
+        this.newGame();
+      },
+
+      newGame() {
+        this.target = Math.floor(Math.random() * this.range) + 1;
+        this.tries = 0;
+        this.history = [];
+        document.getElementById('ng-tries').textContent = '0';
+        document.getElementById('ng-hint').innerHTML = '';
+        document.getElementById('ng-history').innerHTML = '';
+        document.getElementById('ng-input').value = '';
+        document.getElementById('ng-input').disabled = false;
+        document.getElementById('ng-submit').disabled = false;
+        document.getElementById('ng-range-text').textContent = `1과 ${this.range}`;
+        document.getElementById('ng-input').focus();
+        this.updateBestDisplay();
+      },
+
+      submit() {
+        const input = document.getElementById('ng-input');
+        const val = parseInt(input.value);
+        if (!val || val < 1 || val > this.range) {
+          document.getElementById('ng-hint').innerHTML = `<span class="text-red-600">1과 ${this.range} 사이 숫자를 입력해주세요</span>`;
+          return;
+        }
+        this.tries++;
+        document.getElementById('ng-tries').textContent = this.tries;
+        const hint = document.getElementById('ng-hint');
+        const histEl = document.getElementById('ng-history');
+
+        if (val === this.target) {
+          hint.innerHTML = `<span class="text-emerald-600 text-2xl">🎉 정답! ${this.tries}번 만에 맞히셨어요!</span>`;
+          input.disabled = true;
+          document.getElementById('ng-submit').disabled = true;
+          const prev = this.best[this.range];
+          if (!prev || this.tries < prev) {
+            this.best[this.range] = this.tries;
+            try { localStorage.setItem('ngBest', JSON.stringify(this.best)); } catch(e) {}
+            this.updateBestDisplay();
+            hint.innerHTML += `<br><span class="text-amber-600 text-sm">🏆 최고 기록 갱신!</span>`;
+          }
+        } else if (val < this.target) {
+          hint.innerHTML = `<span class="text-blue-600">⬆️ 더 큰 숫자!</span>`;
+        } else {
+          hint.innerHTML = `<span class="text-rose-600">⬇️ 더 작은 숫자!</span>`;
+        }
+
+        // 히스토리
+        this.history.unshift({ val, result: val === this.target ? '🎉' : (val < this.target ? '⬆️' : '⬇️') });
+        histEl.innerHTML = this.history.slice(0, 10).map(h =>
+          `<div class="flex justify-between items-center py-1 text-sm border-b border-slate-100"><span class="font-bold">${h.val}</span><span>${h.result}</span></div>`
+        ).join('');
+
+        input.value = '';
+        input.focus();
+      },
+
+      updateBestDisplay() {
+        const b = this.best[this.range];
+        document.getElementById('ng-best').textContent = b ? `${b}회` : '-';
+      }
+    };
+
+    /* ================================================
+       🦔 두더지 잡기
+       ================================================ */
+    const moleApp = {
+      score: 0, best: 0, time: 30, speed: 1200, timer: null, popTimer: null, playing: false,
+      currentHole: -1, currentType: '',
+
+      init() {
+        try { this.best = parseInt(localStorage.getItem('moleBest') || '0'); } catch(e) { this.best = 0; }
+        document.getElementById('mole-best').textContent = this.best;
+        this.renderGrid();
+        document.getElementById('mole-start')?.addEventListener('click', () => this.start());
+        document.querySelectorAll('.mole-diff').forEach(b => b.addEventListener('click', () => {
+          if (this.playing) return;
+          this.speed = parseInt(b.dataset.speed);
+          document.querySelectorAll('.mole-diff').forEach(x => x.className = 'mole-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-200 text-gray-700');
+          b.className = 'mole-diff px-3 py-1.5 rounded-lg text-sm font-bold bg-amber-500 text-white';
+        }));
+      },
+
+      renderGrid() {
+        const grid = document.getElementById('mole-grid');
+        grid.innerHTML = '';
+        for (let i = 0; i < 9; i++) {
+          const hole = document.createElement('button');
+          hole.className = 'mole-hole rounded-2xl flex items-center justify-center text-4xl sm:text-5xl font-bold transition-all duration-200 active:scale-95';
+          hole.style.cssText = 'background: radial-gradient(ellipse at center, #78350f 0%, #422006 100%); border: 4px solid #78350f; aspect-ratio: 1; color: transparent;';
+          hole.dataset.idx = i;
+          hole.addEventListener('click', () => this.hit(i));
+          grid.appendChild(hole);
+        }
+      },
+
+      start() {
+        this.score = 0;
+        this.time = 30;
+        this.playing = true;
+        document.getElementById('mole-score').textContent = '0';
+        document.getElementById('mole-timer').textContent = '30';
+        document.getElementById('mole-result').classList.add('hidden');
+        document.getElementById('mole-start').disabled = true;
+        document.getElementById('mole-start').textContent = '▶ 진행 중...';
+        document.getElementById('mole-start').classList.add('opacity-50');
+
+        this.timer = setInterval(() => {
+          this.time--;
+          document.getElementById('mole-timer').textContent = this.time;
+          if (this.time <= 0) this.stop();
+        }, 1000);
+        this.spawnLoop();
+      },
+
+      spawnLoop() {
+        if (!this.playing) return;
+        // 기존 두더지 제거
+        if (this.currentHole >= 0) {
+          const prev = document.querySelector(`[data-idx="${this.currentHole}"]`);
+          if (prev) prev.style.color = 'transparent';
+        }
+        // 새 두더지 또는 폭탄
+        this.currentHole = Math.floor(Math.random() * 9);
+        this.currentType = Math.random() < 0.15 ? '💣' : '🦔';
+        const hole = document.querySelector(`[data-idx="${this.currentHole}"]`);
+        if (hole) {
+          hole.textContent = this.currentType;
+          hole.style.color = '#fff';
+        }
+        this.popTimer = setTimeout(() => this.spawnLoop(), this.speed);
+      },
+
+      hit(idx) {
+        if (!this.playing || idx !== this.currentHole) return;
+        const hole = document.querySelector(`[data-idx="${idx}"]`);
+        if (!hole || !hole.textContent.trim()) return;
+        if (this.currentType === '🦔') {
+          this.score++;
+          hole.textContent = '💥';
+          setTimeout(() => { if (hole.style.color === 'rgb(255, 255, 255)') hole.style.color = 'transparent'; }, 150);
+        } else if (this.currentType === '💣') {
+          this.score = Math.max(0, this.score - 1);
+          hole.textContent = '💀';
+        }
+        this.currentHole = -1;
+        document.getElementById('mole-score').textContent = this.score;
+      },
+
+      stop() {
+        this.playing = false;
+        clearInterval(this.timer);
+        clearTimeout(this.popTimer);
+        document.querySelectorAll('.mole-hole').forEach(h => h.style.color = 'transparent');
+
+        document.getElementById('mole-start').disabled = false;
+        document.getElementById('mole-start').textContent = '▶ 다시 시작';
+        document.getElementById('mole-start').classList.remove('opacity-50');
+
+        const result = document.getElementById('mole-result');
+        const isNew = this.score > this.best;
+        if (isNew) {
+          this.best = this.score;
+          try { localStorage.setItem('moleBest', this.best); } catch(e) {}
+          document.getElementById('mole-best').textContent = this.best;
+        }
+        document.getElementById('mole-result-emoji').textContent = isNew ? '🎉' : (this.score >= 15 ? '🏆' : this.score >= 8 ? '👍' : '🦔');
+        document.getElementById('mole-result-msg').textContent = isNew ? '🎉 새 최고 기록!' : `좋아요! ${this.score >= 15 ? '훌륭한 반응속도!' : '조금만 더 빠르게!'}`;
+        document.getElementById('mole-result-score').textContent = this.score;
+        result.classList.remove('hidden');
+      }
+    };
+
+    /* ================================================
        INITIALIZATION
        ================================================ */
     document.addEventListener('DOMContentLoaded', () => {
@@ -7719,7 +8226,7 @@
         {
           target: 'game-hub', label: '추억의 게임', icon: '🎮',
           desc: '오목, 2048, 스네이크, 테트리스, 플래피 새, 지뢰찾기, 메모리, 스도쿠, 벽돌깨기',
-          keywords: ['게임', '오목', '테트리스', '스도쿠', '벽돌깨기', '2048', '스네이크', '뱀', '플래피', '지뢰찾기', '메모리', '카드맞추기', '아케이드', '퍼즐'],
+          keywords: ['게임', '오목', '테트리스', '스도쿠', '벽돌깨기', '2048', '스네이크', '뱀', '플래피', '지뢰찾기', '메모리', '카드맞추기', '아케이드', '퍼즐', '퀴즈', '복지상식', '숫자맞추기', 'updown', '업다운', '두더지잡기', '반응속도'],
           tags: ['9개 게임', '바로가기']
         }
       ];
@@ -10152,7 +10659,7 @@
       document.querySelectorAll('[data-game]').forEach(card => {
         card.addEventListener('click', () => {
           const game = card.dataset.game;
-          const idMap = { omok: 'omok-game', g2048: 'game-2048' };
+          const idMap = { omok: 'omok-game', g2048: 'game-2048', quiz: 'game-quiz', numguess: 'game-numguess', mole: 'game-mole' };
           showSection(idMap[game] || ('game-' + game));
         });
       });
@@ -10169,6 +10676,9 @@
       minesweeperApp.init();
       memoryApp.init();
       sudokuApp.init();
+      quizApp.init();
+      numGuessApp.init();
+      moleApp.init();
 
       // 초기 섹션 결정: URL hash가 있으면 해당 섹션, 없으면 home
       const initHash = (location.hash || '').replace('#','').trim();
