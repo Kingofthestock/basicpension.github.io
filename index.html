@@ -4841,15 +4841,18 @@
         <div class="flex justify-between items-center mb-3 text-sm font-bold text-slate-700 flex-wrap gap-2">
           <span class="px-3 py-1.5 bg-orange-100 text-orange-900 rounded-lg">⭐ <span id="wr-score">0</span>점</span>
           <span id="wr-lives" class="text-lg">❤️❤️❤️</span>
-          <span class="px-3 py-1.5 bg-emerald-100 text-emerald-900 rounded-lg">최고 <span id="wr-best">0</span>점</span>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1.5 bg-emerald-100 text-emerald-900 rounded-lg">최고 <span id="wr-best">0</span>점</span>
+            <button id="wr-sound" type="button" title="효과음 켜기/끄기" aria-label="효과음 켜기/끄기" class="px-2.5 py-1.5 bg-slate-100 rounded-lg text-base" style="border:1px solid #e2e8f0; cursor:pointer;">🔊</button>
+          </div>
         </div>
-        <canvas id="wr-canvas" class="w-full rounded-xl" style="touch-action: manipulation; display:block;"></canvas>
+        <canvas id="wr-canvas" class="w-full rounded-xl" style="touch-action: manipulation; display:block; max-width:640px; margin:0 auto;"></canvas>
         <div class="grid grid-cols-2 gap-3 mt-4">
           <button id="wr-left" class="py-4 rounded-xl font-bold text-white text-lg active:scale-95" style="background:linear-gradient(135deg,#dc2626,#b91c1c); border:none; cursor:pointer; font-family:inherit; transition:transform .1s;">◀ 왼쪽 공격</button>
           <button id="wr-right" class="py-4 rounded-xl font-bold text-white text-lg active:scale-95" style="background:linear-gradient(135deg,#ea580c,#c2410c); border:none; cursor:pointer; font-family:inherit; transition:transform .1s;">오른쪽 공격 ▶</button>
         </div>
         <button id="wr-start" class="w-full mt-3 py-3 rounded-xl font-bold text-white text-lg" style="background:linear-gradient(135deg,#16a34a,#15803d); border:none; cursor:pointer; font-family:inherit;">▶ 게임 시작</button>
-        <p class="text-xs text-center text-slate-500 mt-3">💡 적이 가까이 왔을 때 잡으면 <strong>+20점 보너스</strong>! 🐗 멧돼지는 빨라요. 적이 용사에게 닿으면 ❤️가 줄어요.</p>
+        <p class="text-xs text-center text-slate-500 mt-3">💡 가까이 온 적을 잡으면 <strong>+10점 보너스</strong>, 헛스윙 없이 <strong>5연속</strong>마다 +30점! 👺 빨간 도깨비는 <strong>두 번</strong> 쳐야 하고, 🐗 멧돼지는 빨라요. 10마리마다 다음 물결이 시작돼요.</p>
       </div>
     </div>
   </section>
@@ -8393,22 +8396,55 @@
     }
 
     /* ================================================
-       외로운 용사 — 양쪽에서 오는 적을 막는 반응속도 게임
+       외로운 용사 — 양쪽에서 오는 적을 막는 반응속도 게임 (개선판)
+       물결(웨이브)·콤보·파티클·효과음·무적시간·신규 적 2종
        ================================================ */
     const warriorApp = {
-      canvas: null, ctx: null, W: 480, H: 280,
-      playing: false, raf: null, lastTs: 0,
-      enemies: [], score: 0, lives: 3, best: 0,
-      spawnTimer: 0, spawnInterval: 1500, speed: 60, // px/초
-      slash: null, hitFlash: 0, floats: [],
+      canvas: null, ctx: null, W: 640, H: 320, RANGE: 120,
+      state: 'idle', playing: false, raf: null, lastTs: 0, t: 0,
+      enemies: [], particles: [], floats: [], clouds: [],
+      score: 0, lives: 3, best: 0, kills: 0, wave: 1,
+      combo: 0, maxCombo: 0,
+      spawnTimer: 0, spawnInterval: 1400, speed: 62,
+      attackCd: 0, slash: null, hitFlash: 0, shake: 0, invuln: 0,
+      waveBanner: 0, countdownT: 0,
+      sfxOn: true, audioCtx: null,
+
+      // 적 종류: mult=속도배율, pts=점수, hp=쳐야 하는 횟수, minWave=등장 물결, w=등장 확률 가중치
+      TYPES: {
+        zombie:  { emoji: '🧟', mult: 0.85, pts: 10, hp: 1, minWave: 1, w: 30 },
+        goblin:  { emoji: '👹', mult: 1.05, pts: 10, hp: 1, minWave: 1, w: 30 },
+        boar:    { emoji: '🐗', mult: 1.7,  pts: 15, hp: 1, minWave: 2, w: 20 },
+        armored: { emoji: '👺', mult: 0.8,  pts: 25, hp: 2, minWave: 3, w: 12 },
+        bat:     { emoji: '🦇', mult: 1.45, pts: 20, hp: 1, minWave: 4, w: 12, fly: true }
+      },
 
       init() {
         this.canvas = document.getElementById('wr-canvas');
         if (!this.canvas) return;
         this.ctx = this.canvas.getContext('2d');
-        this.canvas.width = this.W; this.canvas.height = this.H;
+        // 고해상도 화면에서도 선명하게
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        this.canvas.width = this.W * dpr; this.canvas.height = this.H * dpr;
+        this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         this.best = gameUI.best('warriorBest');
         document.getElementById('wr-best').textContent = this.best;
+        try { this.sfxOn = localStorage.getItem('warriorSfx') !== '0'; } catch (e) {}
+        const sndBtn = document.getElementById('wr-sound');
+        if (sndBtn) {
+          sndBtn.textContent = this.sfxOn ? '🔊' : '🔇';
+          sndBtn.addEventListener('click', () => {
+            this.sfxOn = !this.sfxOn;
+            sndBtn.textContent = this.sfxOn ? '🔊' : '🔇';
+            try { localStorage.setItem('warriorSfx', this.sfxOn ? '1' : '0'); } catch (e) {}
+            if (this.sfxOn) this.sfx('hit');
+          });
+        }
+        this.clouds = [
+          { x: 90, y: 48, s: 1, v: 7 },
+          { x: 300, y: 84, s: 0.7, v: 11 },
+          { x: 500, y: 38, s: 1.2, v: 5 }
+        ];
         document.getElementById('wr-start').addEventListener('click', () => this.start());
         document.getElementById('wr-left').addEventListener('click', () => this.attack(-1));
         document.getElementById('wr-right').addEventListener('click', () => this.attack(1));
@@ -8424,21 +8460,52 @@
         this.drawIdle();
       },
 
+      // ===== 효과음 (작은 신디사이저 — 외부 파일 없이 생성) =====
+      sfx(type) {
+        if (!this.sfxOn) return;
+        try {
+          if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+          const ctx = this.audioCtx, t0 = ctx.currentTime;
+          const beep = (wave, f0, f1, dur, vol, delay = 0) => {
+            const o = ctx.createOscillator(), g = ctx.createGain();
+            o.type = wave;
+            o.frequency.setValueAtTime(f0, t0 + delay);
+            o.frequency.exponentialRampToValueAtTime(Math.max(1, f1), t0 + delay + dur);
+            g.gain.setValueAtTime(vol, t0 + delay);
+            g.gain.exponentialRampToValueAtTime(0.001, t0 + delay + dur);
+            o.connect(g).connect(ctx.destination);
+            o.start(t0 + delay); o.stop(t0 + delay + dur + 0.02);
+          };
+          if (type === 'slash') beep('square', 320, 140, 0.07, 0.05);
+          else if (type === 'hit') { beep('square', 220, 70, 0.09, 0.08); beep('triangle', 440, 110, 0.06, 0.05); }
+          else if (type === 'bonus') { beep('sine', 660, 660, 0.07, 0.06); beep('sine', 880, 880, 0.09, 0.06, 0.07); }
+          else if (type === 'damage') beep('sawtooth', 160, 55, 0.28, 0.09);
+          else if (type === 'wave') { beep('sine', 523, 523, 0.09, 0.06); beep('sine', 659, 659, 0.09, 0.06, 0.09); beep('sine', 784, 784, 0.12, 0.06, 0.18); }
+          else if (type === 'over') { beep('triangle', 392, 392, 0.15, 0.07); beep('triangle', 311, 311, 0.15, 0.07, 0.16); beep('triangle', 262, 200, 0.3, 0.07, 0.32); }
+        } catch (e) {}
+      },
+
       start() {
-        this.enemies = []; this.score = 0; this.lives = 3;
-        this.spawnInterval = 1500; this.speed = 60; this.spawnTimer = 0;
-        this.slash = null; this.hitFlash = 0; this.floats = [];
-        this.playing = true; this.lastTs = 0;
+        this.enemies = []; this.particles = []; this.floats = [];
+        this.score = 0; this.lives = 3; this.kills = 0; this.wave = 1;
+        this.combo = 0; this.maxCombo = 0;
+        this.speed = 62; this.spawnInterval = 1400; this.spawnTimer = 0;
+        this.attackCd = 0; this.slash = null; this.hitFlash = 0; this.shake = 0; this.invuln = 0;
+        this.waveBanner = 0;
+        this.state = 'countdown'; this.countdownT = 1.1;
+        this.playing = true; this.lastTs = 0; this.t = 0;
         document.getElementById('wr-score').textContent = '0';
         document.getElementById('wr-lives').textContent = '❤️❤️❤️';
         const btn = document.getElementById('wr-start');
         btn.textContent = '▶ 진행 중...'; btn.disabled = true; btn.style.opacity = '.5';
+        this.sfx('wave');
         cancelAnimationFrame(this.raf);
         this.raf = requestAnimationFrame((t) => this.loop(t));
       },
 
       stop() { // 정리 전용 (섹션 이탈·게임 종료 공용)
-        this.playing = false;
+        this.playing = false; this.state = 'idle';
         cancelAnimationFrame(this.raf); this.raf = null;
         const btn = document.getElementById('wr-start');
         if (btn) { btn.textContent = '▶ 다시 시작'; btn.disabled = false; btn.style.opacity = '1'; }
@@ -8446,30 +8513,77 @@
 
       spawn() {
         const side = Math.random() < 0.5 ? -1 : 1;
-        const roll = Math.random();
-        const type = roll < 0.18 ? '🐗' : (roll < 0.6 ? '👹' : '🧟');
-        this.enemies.push({ side, x: side === -1 ? -20 : this.W + 20, type, mult: type === '🐗' ? 1.6 : 1 });
+        const sx = side === -1 ? -24 : this.W + 24;
+        // 같은 쪽 스폰 지점이 붐비면 잠시 보류 (한 번에 못 잡는 상황 방지)
+        if (this.enemies.some(en => en.side === side && Math.abs(en.x - sx) < 70)) return false;
+        const pool = [];
+        Object.keys(this.TYPES).forEach(k => {
+          const tp = this.TYPES[k];
+          if (this.wave >= tp.minWave) for (let i = 0; i < tp.w; i++) pool.push(k);
+        });
+        const tp = this.TYPES[pool[Math.floor(Math.random() * pool.length)]];
+        this.enemies.push({ side, x: sx, emoji: tp.emoji, mult: tp.mult, pts: tp.pts, hp: tp.hp, hpMax: tp.hp, fly: !!tp.fly, phase: Math.random() * 6.28 });
+        return true;
+      },
+
+      burst(x, y, color) {
+        for (let i = 0; i < 10; i++) {
+          const a = Math.random() * Math.PI * 2, sp = 60 + Math.random() * 130;
+          this.particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 60, life: 0.45 + Math.random() * 0.25, size: 2 + Math.random() * 2.5, color });
+        }
       },
 
       attack(side) {
-        if (!this.playing) return;
-        const cx = this.W / 2, RANGE = 110;
+        if (!this.playing || this.state !== 'play' || this.attackCd > 0) return;
+        this.attackCd = 0.22; // 연타 방지 — 타이밍이 중요해짐
+        this.slash = { side, t: 0.16 };
+        const cx = this.W / 2;
         let nearest = null, nd = Infinity;
         this.enemies.forEach(en => {
           if (en.side !== side) return;
           const d = Math.abs(en.x - cx);
           if (d < nd) { nd = d; nearest = en; }
         });
-        this.slash = { side, t: 0.18 };
-        if (nearest && nd <= RANGE) {
-          this.enemies.splice(this.enemies.indexOf(nearest), 1);
-          const gain = nd < 55 ? 20 : 10; // 아슬아슬하게 잡으면 보너스
-          this.score += gain;
-          this.floats.push({ x: nearest.x, y: this.H - 110, text: '+' + gain, t: 0.7 });
-          document.getElementById('wr-score').textContent = this.score;
-          // 점수에 따라 난이도 상승
-          this.speed = 60 + this.score * 0.6;
-          this.spawnInterval = Math.max(550, 1500 - this.score * 6);
+        if (nearest && nd <= this.RANGE) {
+          const ey = nearest.fly ? this.H - 134 : this.H - 88;
+          nearest.hp--;
+          if (nearest.hp > 0) {
+            // 방패에 막힘 — 밀쳐내고 한 번 더 쳐야 함
+            nearest.x += side * 52;
+            this.score += 5;
+            this.floats.push({ x: nearest.x, y: ey, text: '막힘! +5', t: 0.7, color: '#6b7280' });
+            this.burst(nearest.x, ey, '#94a3b8');
+            this.sfx('hit');
+            document.getElementById('wr-score').textContent = this.score;
+          } else {
+            this.enemies.splice(this.enemies.indexOf(nearest), 1);
+            let gain = nearest.pts + (nd < 60 ? 10 : 0); // 아슬아슬 보너스
+            this.combo++;
+            if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+            if (this.combo % 5 === 0) {
+              gain += 30;
+              this.floats.push({ x: cx + side * 40, y: this.H - 150, text: `🔥 ${this.combo}연속 +30`, t: 0.9, color: '#dc2626' });
+              this.sfx('bonus');
+            } else {
+              this.sfx('hit');
+            }
+            this.score += gain;
+            this.kills++;
+            this.floats.push({ x: nearest.x, y: ey, text: '+' + gain, t: 0.7, color: '#b45309' });
+            this.burst(nearest.x, ey, '#f59e0b');
+            document.getElementById('wr-score').textContent = this.score;
+            // 10마리 잡을 때마다 다음 물결 — 더 빠르고 다양한 적
+            if (this.kills % 10 === 0) {
+              this.wave++;
+              this.waveBanner = 1.6;
+              this.speed = 62 + (this.wave - 1) * 11;
+              this.spawnInterval = Math.max(470, 1400 - (this.wave - 1) * 115);
+              this.sfx('wave');
+            }
+          }
+        } else {
+          this.combo = 0; // 헛스윙 — 연속 끊김
+          this.sfx('slash');
         }
       },
 
@@ -8478,78 +8592,240 @@
         if (!this.lastTs) this.lastTs = ts;
         const dt = Math.min((ts - this.lastTs) / 1000, 0.05);
         this.lastTs = ts;
+        this.t += dt;
+        this.clouds.forEach(cl => { cl.x += cl.v * dt; if (cl.x > this.W + 60) cl.x = -60; });
+        if (this.attackCd > 0) this.attackCd -= dt;
+        if (this.slash) { this.slash.t -= dt; if (this.slash.t <= 0) this.slash = null; }
+        if (this.hitFlash > 0) this.hitFlash -= dt * 1.6;
+        if (this.shake > 0) this.shake -= dt * 1.4;
+        if (this.invuln > 0) this.invuln -= dt;
+        if (this.waveBanner > 0) this.waveBanner -= dt;
+
+        if (this.state === 'countdown') {
+          this.countdownT -= dt;
+          if (this.countdownT <= 0) { this.state = 'play'; this.spawnTimer = this.spawnInterval * 0.45; }
+          this.draw();
+          this.raf = requestAnimationFrame((t) => this.loop(t));
+          return;
+        }
+
         this.spawnTimer += dt * 1000;
-        if (this.spawnTimer >= this.spawnInterval) { this.spawnTimer = 0; this.spawn(); }
+        if (this.spawnTimer >= this.spawnInterval) {
+          if (this.spawn()) this.spawnTimer = 0;
+          else this.spawnTimer = this.spawnInterval - 180;
+        }
+
         const cx = this.W / 2;
         for (let i = this.enemies.length - 1; i >= 0; i--) {
           const en = this.enemies[i];
           en.x += (en.side === -1 ? 1 : -1) * this.speed * en.mult * dt;
-          if (Math.abs(en.x - cx) < 26) {
-            this.enemies.splice(i, 1);
-            this.lives--; this.hitFlash = 0.25;
-            document.getElementById('wr-lives').textContent = '❤️'.repeat(Math.max(0, this.lives)) || '💔';
-            if (this.lives <= 0) { this.end(); return; }
+          const d = (en.side === -1) ? cx - en.x : en.x - cx;
+          if (d < 28) {
+            if (this.invuln > 0) {
+              en.x = en.side === -1 ? cx - 28 : cx + 28; // 무적 동안 잠시 저지
+            } else {
+              this.enemies.splice(i, 1);
+              this.lives--; this.combo = 0;
+              this.hitFlash = 0.45; this.shake = 0.4; this.invuln = 1.0;
+              this.burst(cx, this.H - 100, '#dc2626');
+              this.sfx('damage');
+              document.getElementById('wr-lives').textContent = '❤️'.repeat(Math.max(0, this.lives)) || '💔';
+              // 주변 적도 잠깐 밀려남 (재정비 시간)
+              this.enemies.forEach(o => {
+                const od = Math.abs(o.x - cx);
+                if (od < 160) o.x += (o.side === -1 ? -1 : 1) * (90 - od * 0.3);
+              });
+              if (this.lives <= 0) { this.end(); return; }
+            }
           }
         }
-        if (this.slash) { this.slash.t -= dt; if (this.slash.t <= 0) this.slash = null; }
-        if (this.hitFlash > 0) this.hitFlash -= dt;
-        this.floats.forEach(f => { f.t -= dt; f.y -= 30 * dt; });
+
+        this.particles.forEach(p => { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 380 * dt; p.life -= dt; });
+        this.particles = this.particles.filter(p => p.life > 0);
+        this.floats.forEach(f => { f.t -= dt; f.y -= 34 * dt; });
         this.floats = this.floats.filter(f => f.t > 0);
+
         this.draw();
         this.raf = requestAnimationFrame((t) => this.loop(t));
       },
 
       end() {
-        const score = this.score;
+        const score = this.score, wave = this.wave, maxCombo = this.maxCombo;
         this.stop();
         this.draw();
+        this.sfx('over');
         const r = gameUI.submitBest('warriorBest', score);
         this.best = r.best;
         document.getElementById('wr-best').textContent = r.best;
         gameUI.show({
-          emoji: r.isNew ? '🎉' : (score >= 300 ? '🏆' : '⚔️'),
+          emoji: r.isNew ? '🎉' : (score >= 400 ? '🏆' : '⚔️'),
           title: '용사의 모험 끝!',
-          scoreText: `점수: ${score.toLocaleString()}점`,
+          scoreText: `점수: ${score.toLocaleString()}점 · 제 ${wave}물결 · 최대 ${maxCombo}연속`,
           bestText: `최고 기록: ${r.best.toLocaleString()}점`,
           isNew: r.isNew,
           onRetry: () => this.start(),
-          share: { category: '🎮 외로운 용사', text: `외로운 용사 점수: ${score.toLocaleString()}점\n최고 기록: ${r.best.toLocaleString()}점` }
+          share: { category: '🎮 외로운 용사', text: `외로운 용사 점수: ${score.toLocaleString()}점 (제 ${wave}물결 도달, 최대 ${maxCombo}연속)\n최고 기록: ${r.best.toLocaleString()}점` }
         });
       },
 
       draw() {
-        const c = this.ctx, W = this.W, H = this.H, cx = W / 2, gy = H - 60;
-        const sky = c.createLinearGradient(0, 0, 0, H);
-        sky.addColorStop(0, '#fef9c3'); sky.addColorStop(1, '#fde68a');
-        c.fillStyle = sky; c.fillRect(0, 0, W, H);
-        c.fillStyle = '#a16207'; c.fillRect(0, gy + 28, W, H - gy - 28);
-        c.fillStyle = '#ca8a04'; c.fillRect(0, gy + 24, W, 6);
-        if (this.hitFlash > 0) { c.fillStyle = `rgba(220,38,38,${Math.min(1, this.hitFlash * 1.2)})`; c.fillRect(0, 0, W, H); }
-        // 공격 가능 범위 (은은한 표시)
-        c.fillStyle = 'rgba(217,119,6,.08)';
-        c.fillRect(cx - 110, gy - 40, 220, 70);
+        const c = this.ctx, W = this.W, H = this.H, cx = W / 2, gy = H - 70;
+        c.save();
+        if (this.shake > 0) c.translate((Math.random() - 0.5) * this.shake * 14, (Math.random() - 0.5) * this.shake * 10);
+        // 하늘·해·구름
+        const sky = c.createLinearGradient(0, 0, 0, gy);
+        sky.addColorStop(0, '#bfe3ff'); sky.addColorStop(0.65, '#fef3c7'); sky.addColorStop(1, '#fde68a');
+        c.fillStyle = sky; c.fillRect(-20, -20, W + 40, gy + 40);
+        c.fillStyle = 'rgba(252,211,77,.25)';
+        c.beginPath(); c.arc(W - 90, 56, 40, 0, Math.PI * 2); c.fill();
+        c.fillStyle = 'rgba(252,211,77,.9)';
+        c.beginPath(); c.arc(W - 90, 56, 26, 0, Math.PI * 2); c.fill();
+        c.fillStyle = 'rgba(255,255,255,.85)';
+        this.clouds.forEach(cl => {
+          c.beginPath();
+          c.ellipse(cl.x, cl.y, 30 * cl.s, 12 * cl.s, 0, 0, Math.PI * 2);
+          c.ellipse(cl.x + 22 * cl.s, cl.y + 4 * cl.s, 22 * cl.s, 10 * cl.s, 0, 0, Math.PI * 2);
+          c.ellipse(cl.x - 24 * cl.s, cl.y + 5 * cl.s, 20 * cl.s, 9 * cl.s, 0, 0, Math.PI * 2);
+          c.fill();
+        });
+        // 먼 산 두 겹
+        c.fillStyle = '#fbbf24';
+        c.beginPath(); c.moveTo(-20, gy + 2);
+        c.lineTo(60, gy - 70); c.lineTo(150, gy + 2);
+        c.lineTo(230, gy - 95); c.lineTo(330, gy + 2);
+        c.lineTo(430, gy - 80); c.lineTo(520, gy + 2);
+        c.lineTo(590, gy - 60); c.lineTo(W + 20, gy + 2);
+        c.closePath(); c.fill();
+        c.fillStyle = '#f59e0b';
+        c.beginPath(); c.moveTo(-20, gy + 2);
+        c.lineTo(120, gy - 44); c.lineTo(260, gy + 2);
+        c.lineTo(400, gy - 52); c.lineTo(540, gy + 2);
+        c.lineTo(W + 20, gy - 20); c.lineTo(W + 20, gy + 2);
+        c.closePath(); c.fill();
+        // 잔디·흙
+        c.fillStyle = '#65a30d'; c.fillRect(-20, gy + 2, W + 40, 14);
+        c.fillStyle = '#a16207'; c.fillRect(-20, gy + 16, W + 40, H - gy + 20);
+        c.fillStyle = 'rgba(120,53,15,.35)';
+        for (let i = 0; i < 14; i++) c.fillRect((i * 53) % W, gy + 24 + (i * 17) % (H - gy - 30), 16, 3);
+        // 공격 범위 표식 (점선)
+        c.strokeStyle = 'rgba(180,83,9,.5)'; c.lineWidth = 2; c.setLineDash([5, 5]);
+        c.beginPath(); c.moveTo(cx - this.RANGE, gy + 2); c.lineTo(cx - this.RANGE, gy - 46); c.stroke();
+        c.beginPath(); c.moveTo(cx + this.RANGE, gy + 2); c.lineTo(cx + this.RANGE, gy - 46); c.stroke();
+        c.setLineDash([]);
         c.textAlign = 'center'; c.textBaseline = 'middle';
-        c.font = '40px serif';
-        c.fillText('💂', cx, gy);
-        if (this.slash) {
+        // 용사 (칼질 시 돌진, 평소엔 숨쉬기, 무적 시 깜빡임)
+        const lunge = this.slash ? this.slash.side * (this.slash.t / 0.16) * 16 : 0;
+        const bobW = Math.sin(this.t * 4) * 2.5;
+        c.fillStyle = 'rgba(0,0,0,.18)';
+        c.beginPath(); c.ellipse(cx + lunge, gy + 8, 22, 6, 0, 0, Math.PI * 2); c.fill();
+        if (this.invuln > 0) c.globalAlpha = Math.sin(this.t * 28) > 0 ? 0.4 : 0.95;
+        c.font = '44px serif';
+        c.fillText('💂', cx + lunge, gy - 22 + bobW);
+        c.globalAlpha = 1;
+        // 적 (걷기 출렁임 + 그림자 + 진행 방향 바라보기)
+        this.enemies.forEach(en => {
+          const bobE = Math.sin(this.t * 8 + en.phase) * (en.fly ? 6 : 3);
+          const ey = en.fly ? gy - 64 + bobE : gy - 18 + bobE;
+          c.fillStyle = 'rgba(0,0,0,.15)';
+          c.beginPath(); c.ellipse(en.x, gy + 8, en.fly ? 12 : 16, 5, 0, 0, Math.PI * 2); c.fill();
           c.save();
-          c.globalAlpha = Math.max(0, this.slash.t / 0.18);
-          c.font = '34px serif';
-          c.fillText('💥', cx + this.slash.side * 70, gy - 6);
+          c.translate(en.x, ey);
+          c.scale(en.side === 1 ? 1 : -1, 1);
+          c.font = '36px serif';
+          c.fillText(en.emoji, 0, 0);
+          c.restore();
+          if (en.hpMax > 1) {
+            for (let i = 0; i < en.hpMax; i++) {
+              c.fillStyle = i < en.hp ? '#dc2626' : 'rgba(0,0,0,.2)';
+              c.beginPath(); c.arc(en.x - 8 + i * 16, ey - 30, 4, 0, Math.PI * 2); c.fill();
+            }
+          }
+        });
+        // 칼질 궤적 (흰 초승달 아크)
+        if (this.slash) {
+          const p = Math.max(0, this.slash.t / 0.16);
+          c.save();
+          c.translate(cx + this.slash.side * 66, gy - 26);
+          c.scale(this.slash.side, 1);
+          c.rotate((1 - p) * 1.5 - 0.75);
+          c.strokeStyle = `rgba(255,255,255,${0.9 * p})`;
+          c.lineWidth = 6; c.lineCap = 'round';
+          c.beginPath(); c.arc(0, 0, 36, -1.0, 1.0); c.stroke();
+          c.strokeStyle = `rgba(251,191,36,${0.7 * p})`;
+          c.lineWidth = 3;
+          c.beginPath(); c.arc(0, 0, 27, -0.85, 0.85); c.stroke();
           c.restore();
         }
-        c.font = '34px serif';
-        this.enemies.forEach(en => { c.fillText(en.type, en.x, gy); });
-        c.font = 'bold 16px sans-serif'; c.fillStyle = '#b45309';
-        this.floats.forEach(f => { c.globalAlpha = Math.max(0, Math.min(1, f.t / 0.7 + .2)); c.fillText(f.text, f.x, f.y); });
+        // 파티클
+        this.particles.forEach(p => {
+          c.globalAlpha = Math.max(0, Math.min(1, p.life / 0.5));
+          c.fillStyle = p.color;
+          c.beginPath(); c.arc(p.x, p.y, p.size, 0, Math.PI * 2); c.fill();
+        });
         c.globalAlpha = 1;
+        // 점수 플로트 (흰 테두리 텍스트)
+        c.font = 'bold 17px sans-serif';
+        this.floats.forEach(f => {
+          c.globalAlpha = Math.max(0, Math.min(1, f.t / 0.5));
+          c.lineWidth = 3; c.strokeStyle = 'rgba(255,255,255,.9)';
+          c.strokeText(f.text, f.x, f.y);
+          c.fillStyle = f.color || '#b45309';
+          c.fillText(f.text, f.x, f.y);
+        });
+        c.globalAlpha = 1;
+        // 진행 HUD (물결·콤보)
+        if (this.playing) {
+          c.textAlign = 'left'; c.font = 'bold 15px sans-serif'; c.fillStyle = '#92400e';
+          c.fillText(`🌊 제 ${this.wave} 물결`, 12, 22);
+          if (this.combo >= 2) {
+            c.textAlign = 'right'; c.font = 'bold 16px sans-serif'; c.fillStyle = '#dc2626';
+            c.fillText(`🔥 ${this.combo}연속`, W - 12, 22);
+          }
+          c.textAlign = 'center';
+        }
+        // 물결 배너
+        if (this.waveBanner > 0) {
+          c.globalAlpha = Math.min(1, this.waveBanner / 0.4);
+          c.font = 'bold 32px sans-serif';
+          c.lineWidth = 6; c.strokeStyle = 'rgba(255,255,255,.95)';
+          c.strokeText(`🌊 제 ${this.wave} 물결!`, cx, 88);
+          c.fillStyle = '#b45309';
+          c.fillText(`🌊 제 ${this.wave} 물결!`, cx, 88);
+          c.globalAlpha = 1;
+        }
+        // 시작 카운트다운
+        if (this.state === 'countdown') {
+          c.font = 'bold 40px sans-serif';
+          c.lineWidth = 7; c.strokeStyle = 'rgba(255,255,255,.95)';
+          const txt = this.countdownT > 0.45 ? '준비...' : '시작!';
+          c.strokeText(txt, cx, H / 2 - 30);
+          c.fillStyle = '#b91c1c';
+          c.fillText(txt, cx, H / 2 - 30);
+        }
+        // 피격 플래시
+        if (this.hitFlash > 0) { c.fillStyle = `rgba(220,38,38,${Math.min(.5, this.hitFlash)})`; c.fillRect(-20, -20, W + 40, H + 40); }
+        c.restore();
       },
 
       drawIdle() {
+        this.t = 0;
+        this.enemies = []; this.particles = []; this.floats = [];
+        this.slash = null; this.hitFlash = 0; this.shake = 0; this.waveBanner = 0;
         this.draw();
-        const c = this.ctx;
-        c.font = 'bold 18px sans-serif'; c.fillStyle = '#92400e'; c.textAlign = 'center';
-        c.fillText('▶ 게임 시작을 눌러주세요', this.W / 2, 50);
+        const c = this.ctx, cx = this.W / 2;
+        c.textAlign = 'center'; c.textBaseline = 'middle';
+        c.font = '30px serif';
+        ['🧟', '👹', '🐗', '👺', '🦇'].forEach((e, i) => c.fillText(e, cx - 120 + i * 60, 64));
+        c.font = 'bold 26px sans-serif';
+        c.lineWidth = 6; c.strokeStyle = 'rgba(255,255,255,.95)';
+        c.strokeText('⚔️ 외로운 용사', cx, 110);
+        c.fillStyle = '#92400e';
+        c.fillText('⚔️ 외로운 용사', cx, 110);
+        c.font = 'bold 16px sans-serif';
+        c.lineWidth = 4;
+        c.strokeText('▶ 게임 시작을 눌러주세요', cx, 142);
+        c.fillStyle = '#b45309';
+        c.fillText('▶ 게임 시작을 눌러주세요', cx, 142);
       }
     };
 
