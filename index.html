@@ -12,15 +12,17 @@
   <meta property="og:title" content="2026 복지 도우미 - 내가 받을 수 있는 복지 혜택 확인">
   <meta property="og:description" content="기초연금·장애인연금·민생지원금 등 2026년 정부 복지 혜택을 한곳에서 확인하세요.">
   <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#1e40af">
+  <meta name="author" content="2026 복지 도우미">
+  <meta property="og:site_name" content="2026 복지 도우미">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <!-- Firebase SDK (게시판 다중 사용자 동기화용) -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-  <!-- PDF 다운로드 / 인쇄용 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- PDF 다운로드 / 인쇄용 라이브러리(jsPDF·html2canvas)는 실제 PDF 저장 시 docExport.loadLibs()로 지연 로드 → 첫 화면 로딩 속도 개선 -->
+
   <script>
     tailwind.config = {
       theme: {
@@ -50,6 +52,31 @@
           "@type": "Question",
           "name": "이 계산 결과가 최종 결과인가요?",
           "acceptedAnswer": { "@type": "Answer", "text": "아닙니다. 본 페이지는 모의 계산이며, 실제 수급 여부는 국민연금공단 심사를 통해 최종 결정됩니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "기초연금이랑 국민연금, 둘 다 받을 수 있나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "네, 동시에 받을 수 있습니다. 다만 국민연금 수령액이 일정 기준을 넘으면 기초연금이 일부 감액될 수 있습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "자녀가 소득이 있으면 기초연금을 못 받나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "자녀의 소득과 재산은 기초연금 산정에 포함되지 않습니다. 본인과 배우자의 소득·재산만 봅니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "장애인연금은 누가 받을 수 있나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "만 18세 이상 중증장애인(종전 1·2급, 3급 중복장애) 중 소득 하위 70%가 대상이며, 2026년 기준 월 최대 43만 9,700원을 받을 수 있습니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "고유가 피해지원금(3차 민생지원금)은 누가 받나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "소득 하위 70%를 대상으로 1인당 10만~60만원이 지급됩니다. 2026년 4월 27일부터 신청·지급이 시작됩니다." }
+        },
+        {
+          "@type": "Question",
+          "name": "주거급여는 어떤 사람이 받나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "소득인정액이 기준 중위소득 48% 이하인 가구가 대상입니다. 월세로 사는 가구는 임차료를, 자기 집에 사는 가구는 수리비를 지원받습니다." }
         }
       ]
     }
@@ -81,16 +108,12 @@
     body.high-contrast .cb-detail-title { color: #ffeb3b !important; }
     body.high-contrast a, body.high-contrast .text-blue-700, body.high-contrast .text-blue-600 { color: #00e5ff !important; text-decoration: underline !important; }
     body.high-contrast button:not(.disabled) { border: 2px solid #fff !important; }
-    body.high-contrast .home-quick-card-cta, body.high-contrast .home-cat-status { color: #ffeb3b !important; }
+    body.high-contrast .home-cat-status { color: #ffeb3b !important; }
     body.high-contrast .text-slate-500, body.high-contrast .text-slate-600, body.high-contrast .text-slate-700 { color: #fff !important; }
     body.high-contrast .bg-orange-50, body.high-contrast .bg-blue-50, body.high-contrast .bg-emerald-50,
     body.high-contrast .bg-amber-50, body.high-contrast .bg-red-50, body.high-contrast .bg-slate-50 { background: #1a1a1a !important; }
 
     /* ===== 색약 친화 모드 (명도 차이 기반) ===== */
-    body.color-friendly .home-quick-card.pension { background: linear-gradient(165deg,#f5f5f5,#fff 60%) !important; border-color: #1a1a1a !important; }
-    body.color-friendly .home-quick-card.disability { background: linear-gradient(165deg,#d4d4d4,#fff 60%) !important; border-color: #404040 !important; }
-    body.color-friendly .home-quick-card.fuel { background: linear-gradient(165deg,#a8a8a8,#fff 60%) !important; border-color: #525252 !important; }
-    body.color-friendly .home-quick-card.tax { background: linear-gradient(165deg,#737373,#fff 60%) !important; border-color: #1a1a1a !important; }
     body.color-friendly .wf-tone-teal .wf-header, body.color-friendly .wf-tone-rose .wf-header,
     body.color-friendly .wf-tone-amber .wf-header, body.color-friendly .wf-tone-blue .wf-header,
     body.color-friendly .wf-tone-pink .wf-header, body.color-friendly .wf-tone-violet .wf-header,
@@ -198,7 +221,7 @@
 
     /* ===== 인쇄 스타일 ===== */
     @media print {
-      .top-nav, .floating-game-btn, #floating-game-btn,
+      .top-nav, .floating-game-btn, #floating-game-btn, #scroll-top-btn,
       .a11y-bar, .home-footer, .home-search-section, #home-search-section,
       .gap-check-card, .home-card-section:not(.print-keep),
       .cb-toolbar, .cb-comments, .cb-detail-foot, .cb-detail-actions,
@@ -248,6 +271,38 @@
     .game-float-btn { position: fixed; bottom: 28px; right: 28px; width: 64px; height: 64px; background: linear-gradient(135deg,#10b981,#059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #fff; box-shadow: 0 4px 16px rgba(16,185,129,.35); z-index: 100; transition: all .3s; cursor: pointer; border: none; animation: floatPulse 2.5s infinite; }
     .game-float-btn:hover { transform: scale(1.12); box-shadow: 0 6px 24px rgba(16,185,129,.45); }
     @keyframes floatPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+
+    /* ===== 오늘의 복지 한 마디 ===== */
+    .home-daily-tip { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding: 0.8rem 1rem; margin-bottom: 1rem; background: linear-gradient(135deg, #eff6ff, #f0f9ff); border: 1.5px solid #bfdbfe; border-radius: 0.85rem; font-size: 0.92rem; color: #1e3a5f; line-height: 1.5; word-break: keep-all; }
+    .home-daily-tip-label { font-weight: 800; color: #1e40af; white-space: nowrap; }
+    body.high-contrast .home-daily-tip { background: #1a1a1a !important; border-color: #fff !important; color: #fff !important; }
+
+    /* ===== 게임 결과 공통 오버레이 ===== */
+    .game-result-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+    .game-result-overlay.show { display: flex; }
+    .game-result-box { background: #fff; border-radius: 1.25rem; padding: 2rem 1.75rem; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.3); animation: grPop .25s ease; }
+    @keyframes grPop { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .game-result-emoji { font-size: 3rem; margin-bottom: .25rem; }
+    .game-result-title { font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: .75rem; }
+    .game-result-score { font-size: 1.05rem; color: #334155; font-weight: 700; }
+    .game-result-best { font-size: .9rem; color: #64748b; margin-top: .25rem; min-height: 1.2em; }
+    .game-result-best .new-record { color: #d97706; font-weight: 800; }
+    .game-result-actions { display: grid; gap: .5rem; margin-top: 1.25rem; }
+    .game-result-actions button { padding: .8rem; border: none; border-radius: .75rem; font-weight: 700; font-size: .95rem; cursor: pointer; font-family: inherit; }
+    #gr-retry { background: linear-gradient(135deg,#2563eb,#1e40af); color: #fff; }
+    #gr-share { background: #f1f5f9; color: #0f172a; }
+    #gr-hub { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+
+    /* ===== 게임 허브 카드 보조 배지 ===== */
+    .game-best-badge { margin-top: .6rem; font-size: .78rem; font-weight: 700; color: #b45309; }
+    .game-best-badge.empty { color: #cbd5e1; font-weight: 500; }
+    .game-new-badge { background: #dc2626; color: #fff; font-size: .65rem; font-weight: 800; padding: .12rem .45rem; border-radius: 999px; vertical-align: middle; margin-left: .25rem; }
+
+    /* ===== 맨 위로 버튼 (긴 페이지에서 한 번에 위로) ===== */
+    .scroll-top-btn { position: fixed; bottom: 104px; right: 28px; padding: 0.55rem 0.9rem; background: #fff; color: #1e40af; border: 2px solid #93c5fd; border-radius: 999px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 4px 14px rgba(15,23,42,.18); z-index: 100; cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .25s, visibility .25s, transform .25s; font-family: inherit; }
+    .scroll-top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+    .scroll-top-btn:hover { background: #eff6ff; }
+    body.high-contrast .scroll-top-btn { background: #000 !important; color: #ffeb3b !important; border-color: #fff !important; }
 
     /* ===== Pension Container ===== */
     #pension-container { --primary: #1e40af; --accent: #2563eb; --warm: #f97316; background: linear-gradient(180deg,#f0f4ff 0%,#fafbff 40%,#f8fafc 100%); min-height: 100vh; padding-bottom: 100px; }
@@ -557,27 +612,7 @@
     .home-section-title-bar { width: 4px; height: 22px; background: linear-gradient(180deg,#1e40af,#2563eb); border-radius: 2px; }
     .home-section-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 1.25rem; line-height: 1.55; }
 
-    .home-quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-    .home-quick-card { padding: 1.5rem 1.25rem 1.25rem; border-radius: 0.9rem; cursor: pointer; transition: all .25s; text-align: left; position: relative; overflow: hidden; border: 1.5px solid; background: #fff; display: flex; flex-direction: column; gap: 0.5rem; min-height: 200px; }
-    .home-quick-card:hover { transform: translateY(-4px); }
-    .home-quick-card.pension { border-color: #bfdbfe; background: linear-gradient(165deg, #eff6ff 0%, #fff 60%); }
-    .home-quick-card.pension:hover { border-color: #3b82f6; box-shadow: 0 12px 28px rgba(37,99,235,.18); }
-    .home-quick-card.disability { border-color: #ddd6fe; background: linear-gradient(165deg, #f5f3ff 0%, #fff 60%); }
-    .home-quick-card.disability:hover { border-color: #8b5cf6; box-shadow: 0 12px 28px rgba(124,58,237,.18); }
-    .home-quick-card.fuel { border-color: #fed7aa; background: linear-gradient(165deg, #fff7ed 0%, #fff 60%); }
-    .home-quick-card.fuel:hover { border-color: #f97316; box-shadow: 0 12px 28px rgba(234,88,12,.18); }
-    .home-quick-card.tax { border-color: #6ee7b7; background: linear-gradient(165deg, #ecfdf5 0%, #fff 60%); }
-    .home-quick-card.tax:hover { border-color: #047857; box-shadow: 0 12px 28px rgba(4,120,87,.18); }
-    .home-quick-card.tax .home-quick-card-cta { color: #047857; border: 1px solid #6ee7b7; }
-    .home-quick-card-badge { display: inline-block; padding: 0.18rem 0.55rem; background: #047857; color: #fff; font-size: 0.72rem; font-weight: 800; border-radius: 999px; margin-bottom: 0.3rem; align-self: flex-start; }
-    .home-quick-card-icon { font-size: 2.4rem; line-height: 1; }
-    .home-quick-card-title { font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 0.15rem; }
-    .home-quick-card-desc { font-size: 0.85rem; color: #475569; line-height: 1.55; flex-grow: 1; }
-    .home-quick-card-cta { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.88rem; font-weight: 700; padding: 0.45rem 0.95rem; border-radius: 999px; background: #fff; align-self: flex-start; transition: all .2s; }
-    .home-quick-card.pension .home-quick-card-cta { color: #1e40af; border: 1px solid #bfdbfe; }
-    .home-quick-card.disability .home-quick-card-cta { color: #6d28d9; border: 1px solid #ddd6fe; }
-    .home-quick-card.fuel .home-quick-card-cta { color: #c2410c; border: 1px solid #fed7aa; }
-    .home-quick-card:hover .home-quick-card-cta { transform: translateX(4px); }
+    /* (홈 '빠른 자격 확인' 카드 제거에 따라 .home-quick-grid/.home-quick-card 스타일 삭제됨) */
 
     .home-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
     .home-cat-card { padding: 1.25rem 0.75rem; border-radius: 0.75rem; text-align: center; background: #f8fafc; border: 1px solid #e2e8f0; transition: all .2s; position: relative; }
@@ -588,7 +623,9 @@
     .home-cat-card.active.fuel-tone:hover { background:#fff7ed; border-color:#f97316; }
     .home-cat-card.active.game-tone:hover { background:#f0fdf4; border-color:#22c55e; }
     .home-cat-icon { font-size: 1.85rem; display: block; margin-bottom: 0.5rem; }
-    .home-cat-name { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 0.4rem; line-height: 1.3; }
+    .home-cat-name { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; line-height: 1.3; }
+    .home-cat-desc { font-size: 0.72rem; color: #64748b; margin-bottom: 0.45rem; line-height: 1.4; letter-spacing: -0.01em; word-break: keep-all; }
+    body.high-contrast .home-cat-desc { color: #fff !important; }
     .home-cat-status { font-size: 0.7rem; padding: 0.18rem 0.6rem; border-radius: 999px; display: inline-block; font-weight: 600; letter-spacing: -0.01em; }
     .home-cat-card.active .home-cat-status { background: #dbeafe; color: #1e40af; }
     .home-cat-card:not(.active) .home-cat-status { background: #f1f5f9; color: #94a3b8; }
@@ -790,6 +827,23 @@
     .wf-related-text span { font-size: 0.78rem; color: #64748b; }
 
     /* 색상 토큰별 헤더 */
+    /* ===== 복지 페이지 간단 계산기 ===== */
+    .wf-calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.85rem; }
+    .wf-calc-field label { display: block; font-size: 0.82rem; font-weight: 700; color: #475569; margin-bottom: 0.35rem; }
+    .wf-calc-field select, .wf-calc-field input { width: 100%; padding: 0.7rem 0.8rem; border: 1.5px solid #cbd5e1; border-radius: 0.6rem; font-size: 1rem; font-family: inherit; background: #fff; color: #0f172a; }
+    .wf-calc-field select:focus, .wf-calc-field input:focus { outline: none; border-color: var(--calc-tone, #0f766e); box-shadow: 0 0 0 3px rgba(15,118,110,.12); }
+    .wf-calc-btn { width: 100%; padding: 0.85rem; border: none; border-radius: 0.7rem; color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; font-family: inherit; background: var(--calc-tone, #0f766e); transition: opacity .2s; }
+    .wf-calc-btn:hover { opacity: .9; }
+    .wf-calc-result { display: none; margin-top: 1rem; padding: 1rem; border-radius: 0.75rem; background: #f8fafc; border: 1.5px solid #e2e8f0; }
+    .wf-calc-result.show { display: block; }
+    .wf-calc-result ul { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+    .wf-calc-result li { padding: 0.45rem 0; border-bottom: 1px dashed #e2e8f0; font-size: 0.92rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+    .wf-calc-result li:last-child { border-bottom: none; }
+    .wf-calc-badge { font-size: 0.78rem; font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 999px; white-space: nowrap; }
+    .wf-calc-badge.ok { background: #dcfce7; color: #15803d; }
+    .wf-calc-badge.no { background: #f1f5f9; color: #94a3b8; }
+    body.high-contrast .wf-calc-result { background: #1a1a1a !important; }
+
     .wf-tone-teal .wf-header { background: linear-gradient(135deg, #134e4a 0%, #0f766e 50%, #14b8a6 100%); }
     .wf-tone-teal .wf-bar, .wf-tone-teal .wf-summary-item { border-color: #5eead4; }
     .wf-tone-teal .wf-summary-item { background: linear-gradient(135deg,#f0fdfa,#fff); }
@@ -1148,6 +1202,23 @@
 
   <!-- ===== Floating Game Button ===== -->
   <button id="floating-game-btn" class="game-float-btn" title="게임 하러가기" aria-label="게임 허브로 이동">🎮</button>
+  <!-- ===== 맨 위로 버튼 ===== -->
+  <button id="scroll-top-btn" class="scroll-top-btn" title="페이지 맨 위로" aria-label="페이지 맨 위로 이동">↑ 맨 위로</button>
+
+  <!-- ===== 게임 결과 공통 오버레이 ===== -->
+  <div id="game-result-overlay" class="game-result-overlay" role="dialog" aria-modal="true" aria-label="게임 결과">
+    <div class="game-result-box">
+      <div class="game-result-emoji" id="gr-emoji">🎮</div>
+      <h3 class="game-result-title" id="gr-title">게임 종료</h3>
+      <p class="game-result-score" id="gr-score"></p>
+      <p class="game-result-best" id="gr-best"></p>
+      <div class="game-result-actions">
+        <button type="button" id="gr-retry">🔄 다시 하기</button>
+        <button type="button" id="gr-share">📤 점수 자랑하기</button>
+        <button type="button" id="gr-hub">📋 게임 목록</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== Share Modal ===== -->
   <div id="share-modal" class="share-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
@@ -1224,6 +1295,7 @@
           <span>2026 복지 도우미</span>
         </div>
         <div class="flex gap-2">
+          <button class="home-nav-btn" id="home-nav-search">🔎 검색</button>
           <button class="home-nav-btn" id="home-nav-game">🎮 게임</button>
         </div>
       </div>
@@ -1254,6 +1326,12 @@
 
     <main class="home-main">
 
+      <!-- ===== 오늘의 복지 한 마디 (매일 바뀜) ===== -->
+      <div class="home-daily-tip" id="home-daily-tip">
+        <span class="home-daily-tip-label">💡 오늘의 복지 한 마디</span>
+        <span id="daily-tip-text"></span>
+      </div>
+
       <!-- ===== 사각지대 자가진단 (30초) — 접기 가능 ===== -->
       <details class="home-fold" id="gap-check-fold" style="background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 50%, #fff 100%); border-color: #fbbf24;">
         <summary>
@@ -1265,7 +1343,6 @@
         <div class="home-fold-body" style="padding: 0;">
 
       <section class="gap-check-card" id="gap-check-card" style="margin-bottom: 0; box-shadow: none; border: none; border-radius: 0;">
-        <h2 class="gap-check-title"><span>⚠️</span> 혹시 못 받고 있는 혜택이 있나요? — 30초 자가진단</h2>
         <p class="gap-check-desc">간단한 5문항으로 <strong>놓치고 있을 수 있는 복지 혜택</strong>을 빠르게 확인해드려요. 예/아니오로만 답해주세요.</p>
 
         <div class="gap-check-q" data-gq="1">
@@ -1501,71 +1578,85 @@
           <div class="home-cat-card active pension-tone" data-go="pension-container">
             <span class="home-cat-icon">💰</span>
             <div class="home-cat-name">기초연금</div>
+            <div class="home-cat-desc">65세 이상 · 월 최대 34만 9,700원</div>
             <span class="home-cat-status">계산 가능</span>
           </div>
           <div class="home-cat-card active disability-tone" data-go="disability-pension">
             <span class="home-cat-icon">♿</span>
             <div class="home-cat-name">장애인연금</div>
+            <div class="home-cat-desc">중증장애인 · 월 최대 43만 9,700원</div>
             <span class="home-cat-status">계산 가능</span>
           </div>
           <div class="home-cat-card active fuel-tone" data-go="fuel-support">
             <span class="home-cat-icon">⛽</span>
             <div class="home-cat-name">고유가 피해지원금</div>
+            <div class="home-cat-desc">소득 하위 70% · 1인 10~60만원</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
           <div class="home-cat-card active" data-go="tax-helper" style="--tone:#047857;">
             <span class="home-cat-icon">💰</span>
             <div class="home-cat-name">세금 도우미</div>
+            <div class="home-cat-desc">환급 받는 방법 쉽게 안내</div>
             <span class="home-cat-status">연말정산·종소세</span>
           </div>
           <div class="home-cat-card active" data-go="welfare-basic-living" style="--tone:#0f766e;">
             <span class="home-cat-icon">📋</span>
             <div class="home-cat-name">기초생활보장</div>
-            <span class="home-cat-status">정보 제공</span>
+            <div class="home-cat-desc">생계·의료·주거·교육 4대 급여</div>
+            <span class="home-cat-status">계산 가능</span>
           </div>
           <div class="home-cat-card active" data-go="welfare-medical" style="--tone:#be123c;">
             <span class="home-cat-icon">🏥</span>
             <div class="home-cat-name">의료급여</div>
+            <div class="home-cat-desc">병원비 부담을 크게 줄여드려요</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
           <div class="home-cat-card active" data-go="welfare-housing" style="--tone:#b45309;">
             <span class="home-cat-icon">🏠</span>
             <div class="home-cat-name">주거급여</div>
-            <span class="home-cat-status">정보 제공</span>
+            <div class="home-cat-desc">월세 지원 · 자가는 수리비 지원</div>
+            <span class="home-cat-status">계산 가능</span>
           </div>
           <div class="home-cat-card active" data-go="welfare-education" style="--tone:#1e40af;">
             <span class="home-cat-icon">🎓</span>
             <div class="home-cat-name">교육급여</div>
+            <div class="home-cat-desc">학생 자녀 교육활동비 지원</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
           <div class="home-cat-card active" data-go="welfare-childcare" style="--tone:#be185d;">
             <span class="home-cat-icon">👶</span>
             <div class="home-cat-name">아동·양육수당</div>
+            <div class="home-cat-desc">부모급여 · 아동수당 한눈에</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
           <div class="home-cat-card active" data-go="welfare-youth" style="--tone:#6d28d9;">
             <span class="home-cat-icon">💼</span>
             <div class="home-cat-name">청년·구직지원</div>
+            <div class="home-cat-desc">청년수당 · 월세 · 도약계좌</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
           <div class="home-cat-card active" data-go="welfare-emergency" style="--tone:#b91c1c;">
             <span class="home-cat-icon">🆘</span>
             <div class="home-cat-name">긴급복지지원</div>
+            <div class="home-cat-desc">실직·질병 등 갑작스러운 위기 시</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
           <div class="home-cat-card active" data-go="welfare-singleparent" style="--tone:#c2410c;">
             <span class="home-cat-icon">👨‍👩‍👧</span>
             <div class="home-cat-name">한부모·다자녀</div>
+            <div class="home-cat-desc">양육비 · 교육비 지원</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
           <div class="home-cat-card active" data-go="community-board" style="--tone:#334155;">
             <span class="home-cat-icon">💬</span>
             <div class="home-cat-name">커뮤니티</div>
+            <div class="home-cat-desc">정보 나눔 · 궁금한 점 질문</div>
             <span class="home-cat-status">자유 게시판</span>
           </div>
           <div class="home-cat-card active game-tone" data-go="game-hub">
             <span class="home-cat-icon">🎮</span>
             <div class="home-cat-name">추억의 게임</div>
+            <div class="home-cat-desc">두뇌 운동 무료 게임 13종</div>
             <span class="home-cat-status">바로 가기</span>
           </div>
         </div>
@@ -1665,6 +1756,7 @@
     <footer class="home-footer">
       <p><strong>본 사이트는 정부 공식 사이트가 아닌 정보 안내 목적의 홈페이지입니다.</strong></p>
       <p class="mt-1">최종 자격 판정 및 지급 결정은 관할 기관의 심사를 통해 이루어집니다.</p>
+      <p class="mt-2"><a href="tel:129" style="color:#93c5fd; font-weight:700; text-decoration:underline;">📞 복지 문의: 보건복지상담센터 129 (무료, 평일 9시~18시)</a></p>
       <p class="mt-1 opacity-70">© 2026 복지 도우미 · 본 사이트의 정보는 2026년 5월 기준 정부 발표 내용을 반영하였습니다.</p>
     </footer>
   </section>
@@ -1698,6 +1790,7 @@
         <div class="flex flex-wrap gap-2 items-center mt-3">
           <button id="jump-to-calc" type="button" class="quick-btn primary">1분 계산 시작하기</button>
           <button id="share-page-btn" type="button" class="quick-btn ghost">페이지 공유</button>
+          <button data-wf-back type="button" class="quick-btn ghost">← 홈으로</button>
         </div>
         <p id="share-feedback" class="share-feedback"></p>
       </section>
@@ -2061,22 +2154,22 @@
       <!-- Benefits Teaser (맨 마지막) -->
       <section class="mt-6 p-5 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200">
         <h2 class="text-lg font-bold text-emerald-800 mb-1">다른 복지 혜택도 확인해보세요</h2>
-        <p class="text-sm text-emerald-700 mb-4">2026년 정부 지원금을 빠짐없이 받으실 수 있도록 준비 중이에요</p>
+        <p class="text-sm text-emerald-700 mb-4">2026년 정부 지원금을 빠짐없이 받으실 수 있도록 모두 모았어요</p>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-basic-living" class="benefit-teaser-card" style="cursor:pointer; border-color:#0f766e;">
             <span class="text-2xl">💰</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">기초생활보장</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-medical" class="benefit-teaser-card" style="cursor:pointer; border-color:#be123c;">
             <span class="text-2xl">🏥</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">의료급여</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-housing" class="benefit-teaser-card" style="cursor:pointer; border-color:#b45309;">
             <span class="text-2xl">🏠</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">주거급여</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
           <div id="goto-disability" class="benefit-teaser-card" style="cursor:pointer; border-color:#6366f1;">
             <span class="text-2xl">♿</span>
@@ -2088,13 +2181,15 @@
             <h3 class="font-bold text-sm mt-1 text-slate-800">고유가 피해지원금</h3>
             <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-emergency" class="benefit-teaser-card" style="cursor:pointer; border-color:#b91c1c;">
             <span class="text-2xl">🆘</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">긴급복지지원</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
         </div>
       </section>
+
+      <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-6 mb-8" style="background:linear-gradient(135deg,#1e40af,#3b82f6); box-shadow:0 2px 10px rgba(30,64,175,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
     </main>
   </section>
 
@@ -2453,7 +2548,7 @@
       <!-- Benefits Teaser -->
       <section class="mt-2 mb-6 p-5 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl border border-orange-200">
         <h2 class="text-lg font-bold text-orange-800 mb-1">다른 복지 혜택도 확인해보세요</h2>
-        <p class="text-sm text-orange-700 mb-4">2026년 정부 지원금을 빠짐없이 받으실 수 있도록 준비 중이에요</p>
+        <p class="text-sm text-orange-700 mb-4">2026년 정부 지원금을 빠짐없이 받으실 수 있도록 모두 모았어요</p>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div id="fuel-goto-pension" class="benefit-teaser-card" style="cursor:pointer; border-color:#2563eb;">
             <span class="text-2xl">💰</span>
@@ -2465,25 +2560,25 @@
             <h3 class="font-bold text-sm mt-1 text-slate-800">장애인연금</h3>
             <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-medium">계산하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-medical" class="benefit-teaser-card" style="cursor:pointer; border-color:#be123c;">
             <span class="text-2xl">🏥</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">의료급여</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-housing" class="benefit-teaser-card" style="cursor:pointer; border-color:#b45309;">
             <span class="text-2xl">🏠</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">주거급여</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-basic-living" class="benefit-teaser-card" style="cursor:pointer; border-color:#0f766e;">
             <span class="text-2xl">📋</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">기초생활보장</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-emergency" class="benefit-teaser-card" style="cursor:pointer; border-color:#b91c1c;">
             <span class="text-2xl">🆘</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">긴급복지지원</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
         </div>
       </section>
@@ -2843,7 +2938,7 @@
           <div class="mt-3 text-sm text-slate-700 space-y-2 leading-relaxed">
             <p>만 65세가 되면 장애인연금 <strong>기초급여는 자동으로 기초연금으로 전환</strong>됩니다.</p>
             <p>단, 장애인연금 <strong>부가급여는 계속 지급</strong>되므로, 65세 이후에는 "기초연금 + 장애인연금 부가급여"를 함께 받게 됩니다.</p>
-            <p>생계·의료급여 수급자의 경우 65세 이후 부가급여가 최대 43만 9,700원까지 인상됩니다.</p>
+            <p>생계·의료급여 수급자의 경우 65세 이후에는 기초연금과 부가급여를 합쳐 최대 43만 9,700원 수준까지 받을 수 있습니다.</p>
           </div>
         </details>
 
@@ -2888,7 +2983,7 @@
       <!-- Benefits Teaser -->
       <section class="mt-6 p-5 bg-gradient-to-br from-indigo-50 to-violet-50 rounded-2xl border border-indigo-200">
         <h2 class="text-lg font-bold text-indigo-800 mb-1">다른 복지 혜택도 확인해보세요</h2>
-        <p class="text-sm text-indigo-700 mb-4">2026년 정부 지원금을 빠짐없이 받으실 수 있도록 준비 중이에요</p>
+        <p class="text-sm text-indigo-700 mb-4">2026년 정부 지원금을 빠짐없이 받으실 수 있도록 모두 모았어요</p>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div id="dp-goto-pension" class="benefit-teaser-card" style="cursor:pointer; border-color:#2563eb;">
             <span class="text-2xl">💰</span>
@@ -2900,25 +2995,25 @@
             <h3 class="font-bold text-sm mt-1 text-slate-800">고유가 피해지원금</h3>
             <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-medical" class="benefit-teaser-card" style="cursor:pointer; border-color:#be123c;">
             <span class="text-2xl">🏥</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">의료급여</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-housing" class="benefit-teaser-card" style="cursor:pointer; border-color:#b45309;">
             <span class="text-2xl">🏠</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">주거급여</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-basic-living" class="benefit-teaser-card" style="cursor:pointer; border-color:#0f766e;">
             <span class="text-2xl">📋</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">기초생활보장</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
-          <div class="benefit-teaser-card">
+          <div data-wf-go="welfare-emergency" class="benefit-teaser-card" style="cursor:pointer; border-color:#b91c1c;">
             <span class="text-2xl">🆘</span>
             <h3 class="font-bold text-sm mt-1 text-slate-800">긴급복지지원</h3>
-            <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">준비 중</span>
+            <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">확인하기 →</span>
           </div>
         </div>
       </section>
@@ -2974,6 +3069,31 @@
           </tbody>
         </table>
         <div class="wf-callout warn"><strong>📌 안내</strong>2026년 정확한 금액은 보건복지부 고시에 따릅니다. 위 금액은 추정치이며, 실제 신청 시 주민센터(129)에서 확인하세요.</div>
+      </div>
+
+      <!-- 간단 모의계산 -->
+      <div class="wf-card" style="--calc-tone:#0f766e;">
+        <div class="wf-card-title"><span class="wf-bar"></span>🧮 우리 집은 받을 수 있을까? — 간단 계산</div>
+        <p class="text-sm text-slate-500 mb-3">가구원 수와 월 <strong>소득인정액</strong>을 넣으면, 받을 가능성이 있는 급여를 바로 알려드려요.</p>
+        <div class="wf-calc-grid">
+          <div class="wf-calc-field">
+            <label for="bl-calc-size">가구원 수</label>
+            <select id="bl-calc-size">
+              <option value="1">1인 가구</option>
+              <option value="2">2인 가구</option>
+              <option value="3">3인 가구</option>
+              <option value="4">4인 가구</option>
+              <option value="5">5인 가구</option>
+              <option value="6">6인 이상</option>
+            </select>
+          </div>
+          <div class="wf-calc-field">
+            <label for="bl-calc-income">월 소득인정액 (만원)</label>
+            <input id="bl-calc-income" type="number" inputmode="numeric" min="0" max="3000" placeholder="예: 90">
+          </div>
+        </div>
+        <button type="button" id="bl-calc-go" class="wf-calc-btn">결과 확인하기</button>
+        <div id="bl-calc-result" class="wf-calc-result" aria-live="polite"></div>
       </div>
 
       <div class="wf-card">
@@ -3204,6 +3324,38 @@
           </tbody>
         </table>
         <div class="wf-callout warn"><strong>📌 안내</strong>위 금액은 2026년 국토교통부 고시 기준의 추정 참고치입니다(전년 대비 약 6% 인상). 실제 임차료가 기준임대료보다 적으면 실 지급액으로 지원됩니다. 정확한 금액은 LH 마이홈콜센터(1600-1004) 또는 주민센터에서 확인해주세요.</div>
+      </div>
+
+      <!-- 간단 모의계산 -->
+      <div class="wf-card" style="--calc-tone:#b45309;">
+        <div class="wf-card-title"><span class="wf-bar"></span>🧮 내 월세, 얼마나 지원받을까? — 간단 계산</div>
+        <p class="text-sm text-slate-500 mb-3">사는 지역·가구원 수·월세를 넣으면 <strong>예상 지원 한도</strong>를 알려드려요. (소득인정액이 중위소득 48% 이하인 경우)</p>
+        <div class="wf-calc-grid">
+          <div class="wf-calc-field">
+            <label for="hb-calc-region">사는 지역</label>
+            <select id="hb-calc-region">
+              <option value="0">서울 (1급지)</option>
+              <option value="1">경기·인천 (2급지)</option>
+              <option value="2">광역시·세종 (3급지)</option>
+              <option value="3">그 외 지역 (4급지)</option>
+            </select>
+          </div>
+          <div class="wf-calc-field">
+            <label for="hb-calc-size">가구원 수</label>
+            <select id="hb-calc-size">
+              <option value="0">1인</option>
+              <option value="1">2인</option>
+              <option value="2">3인</option>
+              <option value="3">4인 이상</option>
+            </select>
+          </div>
+          <div class="wf-calc-field" style="grid-column: 1 / -1;">
+            <label for="hb-calc-rent">현재 월세 (만원)</label>
+            <input id="hb-calc-rent" type="number" inputmode="numeric" min="0" max="500" placeholder="예: 40">
+          </div>
+        </div>
+        <button type="button" id="hb-calc-go" class="wf-calc-btn">예상 지원액 확인하기</button>
+        <div id="hb-calc-result" class="wf-calc-result" aria-live="polite"></div>
       </div>
 
       <div class="wf-card">
@@ -4210,11 +4362,20 @@
   <!-- ===== Game Hub ===== -->
   <section id="game-hub" class="hidden min-h-screen py-8">
     <div class="max-w-6xl mx-auto px-4">
+      <button data-wf-back class="mb-4 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium" style="border:none; cursor:pointer; font-family:inherit;">← 홈으로</button>
       <div class="mb-8 text-center">
         <h1 class="text-3xl font-bold text-gray-800 mb-2">추억의 게임 모음</h1>
-        <p class="text-gray-600">잠시 쉬어가세요</p>
+        <p class="text-gray-600">잠시 쉬어가세요 — 기록은 이 기기에 저장돼요</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div data-game="warrior" class="game-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-600 rounded-full flex items-center justify-center text-white text-xl">⚔️</div>
+            <div><h3 class="text-xl font-bold">외로운 용사<span class="game-new-badge">NEW</span></h3><p class="text-sm text-gray-600">반응속도 액션</p></div>
+          </div>
+          <p class="text-sm text-gray-500">양쪽에서 몰려오는 적을 좌우 공격으로 막아내세요</p>
+          <p class="game-best-badge" data-best="warriorBest" data-prefix="최고" data-unit="점"></p>
+        </div>
         <div data-game="omok" class="game-card">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-12 h-12 bg-gradient-to-br from-gray-800 to-black rounded-full flex items-center justify-center text-white text-xl">⚫</div>
@@ -4228,6 +4389,7 @@
             <div><h3 class="text-xl font-bold">2048</h3><p class="text-sm text-gray-600">숫자 퍼즐</p></div>
           </div>
           <p class="text-sm text-gray-500">슬라이드로 타일을 합쳐 2048 만들기</p>
+          <p class="game-best-badge" data-best="g2048Best" data-prefix="최고" data-unit="점"></p>
         </div>
         <div data-game="snake" class="game-card">
           <div class="flex items-center gap-3 mb-3">
@@ -4235,6 +4397,7 @@
             <div><h3 class="text-xl font-bold">스네이크</h3><p class="text-sm text-gray-600">아케이드</p></div>
           </div>
           <p class="text-sm text-gray-500">추억의 뱀 게임</p>
+          <p class="game-best-badge" data-best="snakeBest" data-prefix="최고" data-unit="점"></p>
         </div>
         <div data-game="breakout" class="game-card">
           <div class="flex items-center gap-3 mb-3">
@@ -4242,6 +4405,7 @@
             <div><h3 class="text-xl font-bold">벽돌깨기</h3><p class="text-sm text-gray-600">아케이드</p></div>
           </div>
           <p class="text-sm text-gray-500">공을 튕겨 벽돌을 모두 깨뜨리세요</p>
+          <p class="game-best-badge" data-best="breakoutBest" data-prefix="최고" data-unit="점"></p>
         </div>
         <div data-game="tetris" class="game-card">
           <div class="flex items-center gap-3 mb-3">
@@ -4249,6 +4413,7 @@
             <div><h3 class="text-xl font-bold">테트리스</h3><p class="text-sm text-gray-600">퍼즐</p></div>
           </div>
           <p class="text-sm text-gray-500">블록을 쌓아 라인을 완성하세요</p>
+          <p class="game-best-badge" data-best="tetrisBest" data-prefix="최고" data-unit="점"></p>
         </div>
         <div data-game="flappy" class="game-card">
           <div class="flex items-center gap-3 mb-3">
@@ -4256,6 +4421,7 @@
             <div><h3 class="text-xl font-bold">플래피 버드</h3><p class="text-sm text-gray-600">아케이드</p></div>
           </div>
           <p class="text-sm text-gray-500">파이프를 피해 날아가세요</p>
+          <p class="game-best-badge" data-best="flappyBest" data-prefix="최고" data-unit="점"></p>
         </div>
         <div data-game="minesweeper" class="game-card">
           <div class="flex items-center gap-3 mb-3">
@@ -4263,6 +4429,7 @@
             <div><h3 class="text-xl font-bold">지뢰찾기</h3><p class="text-sm text-gray-600">두뇌 퍼즐</p></div>
           </div>
           <p class="text-sm text-gray-500">Windows 추억의 지뢰찾기</p>
+          <p class="game-best-badge" data-best="mineBest_easy" data-prefix="최단" data-unit="초"></p>
         </div>
         <div data-game="memory" class="game-card">
           <div class="flex items-center gap-3 mb-3">
@@ -4270,6 +4437,7 @@
             <div><h3 class="text-xl font-bold">카드 짝맞추기</h3><p class="text-sm text-gray-600">기억력 게임</p></div>
           </div>
           <p class="text-sm text-gray-500">같은 그림 카드를 찾아보세요</p>
+          <p class="game-best-badge" data-best="memBest_4" data-prefix="최소" data-unit="번"></p>
         </div>
         <div data-game="sudoku" class="game-card">
           <div class="flex items-center gap-3 mb-3">
@@ -4277,6 +4445,7 @@
             <div><h3 class="text-xl font-bold">스도쿠</h3><p class="text-sm text-gray-600">숫자 퍼즐</p></div>
           </div>
           <p class="text-sm text-gray-500">빈칸에 1~9를 채워 완성하세요</p>
+          <p class="game-best-badge" data-best="sdkBest_easy" data-prefix="최단" data-unit="초"></p>
         </div>
         <div data-game="quiz" class="game-card">
           <div class="flex items-center gap-3 mb-3">
@@ -4298,6 +4467,7 @@
             <div><h3 class="text-xl font-bold">두더지 잡기</h3><p class="text-sm text-gray-600">반응속도</p></div>
           </div>
           <p class="text-sm text-gray-500">30초 동안 튀어나오는 두더지를 잡아보세요</p>
+          <p class="game-best-badge" data-best="moleBest" data-prefix="최고" data-unit="점"></p>
         </div>
       </div>
     </div>
@@ -4659,6 +4829,31 @@
     </div>
   </section>
 
+  <!-- ===== Warrior Game (양방향 디펜스 액션) ===== -->
+  <section id="game-warrior" class="hidden min-h-screen bg-gradient-to-br from-red-50 to-orange-100">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+      <button class="back-btn mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 font-medium">← 게임 목록</button>
+      <div class="text-center mb-4">
+        <h2 class="text-3xl font-bold mb-1">⚔️ 외로운 용사</h2>
+        <p class="text-gray-600 text-sm">양쪽에서 몰려오는 적을 막아내세요!<br>← → 방향키, 화면 좌우 탭, 또는 아래 버튼으로 그쪽을 공격합니다.</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+        <div class="flex justify-between items-center mb-3 text-sm font-bold text-slate-700 flex-wrap gap-2">
+          <span class="px-3 py-1.5 bg-orange-100 text-orange-900 rounded-lg">⭐ <span id="wr-score">0</span>점</span>
+          <span id="wr-lives" class="text-lg">❤️❤️❤️</span>
+          <span class="px-3 py-1.5 bg-emerald-100 text-emerald-900 rounded-lg">최고 <span id="wr-best">0</span>점</span>
+        </div>
+        <canvas id="wr-canvas" class="w-full rounded-xl" style="touch-action: manipulation; display:block;"></canvas>
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <button id="wr-left" class="py-4 rounded-xl font-bold text-white text-lg active:scale-95" style="background:linear-gradient(135deg,#dc2626,#b91c1c); border:none; cursor:pointer; font-family:inherit; transition:transform .1s;">◀ 왼쪽 공격</button>
+          <button id="wr-right" class="py-4 rounded-xl font-bold text-white text-lg active:scale-95" style="background:linear-gradient(135deg,#ea580c,#c2410c); border:none; cursor:pointer; font-family:inherit; transition:transform .1s;">오른쪽 공격 ▶</button>
+        </div>
+        <button id="wr-start" class="w-full mt-3 py-3 rounded-xl font-bold text-white text-lg" style="background:linear-gradient(135deg,#16a34a,#15803d); border:none; cursor:pointer; font-family:inherit;">▶ 게임 시작</button>
+        <p class="text-xs text-center text-slate-500 mt-3">💡 적이 가까이 왔을 때 잡으면 <strong>+20점 보너스</strong>! 🐗 멧돼지는 빨라요. 적이 용사에게 닿으면 ❤️가 줄어요.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== JavaScript ===== -->
   <script>
     let activeGame = null;
@@ -4697,12 +4892,24 @@
         tabPension.classList.add('tab-inactive'); tabPension.classList.remove('tab-active');
       }
 
-      // 두더지 게임 떠날 때 타이머 정리
-      if (activeGame === 'mole' && sectionName !== 'game-mole' && window.moleApp && moleApp.playing) {
+      // 게임 화면 떠날 때 타이머/루프 정리 (메모리·CPU 누수 방지)
+      if (activeGame === 'mole' && sectionName !== 'game-mole' && typeof moleApp !== 'undefined' && moleApp.playing) {
         moleApp.stop();
       }
+      if (activeGame === 'snake' && sectionName !== 'game-snake' && typeof snakeApp !== 'undefined') {
+        try { clearInterval(snakeApp.gameLoop); snakeApp.gameLoop = null; } catch (e) {}
+      }
+      if (activeGame === 'minesweeper' && sectionName !== 'game-minesweeper' && typeof minesweeperApp !== 'undefined') {
+        try { clearInterval(minesweeperApp.timerInterval); minesweeperApp.timerInterval = null; } catch (e) {}
+      }
+      if (activeGame === 'sudoku' && sectionName !== 'game-sudoku' && typeof sudokuApp !== 'undefined') {
+        try { clearInterval(sudokuApp.timerInterval); sudokuApp.timerInterval = null; } catch (e) {}
+      }
+      if (activeGame === 'warrior' && sectionName !== 'game-warrior' && typeof warriorApp !== 'undefined' && warriorApp.playing) {
+        warriorApp.stop();
+      }
 
-      if (sectionName === 'omok-game') { activeGame = 'omok'; if (window.omokApp) omokApp.resizeCanvas(); }
+      if (sectionName === 'omok-game') { activeGame = 'omok'; if (typeof omokApp !== 'undefined') omokApp.resizeCanvas(); }
       else if (sectionName.startsWith('game-')) { activeGame = sectionName.replace('game-', ''); }
       else { activeGame = null; }
 
@@ -5114,7 +5321,7 @@
                 </ul>
               </div>
               <div class="result-actions-row">
-                <button type="button" id="share-result-btn" class="result-share-btn green">
+                <button type="button" class="result-share-btn green js-share-result">
                   <span>📤</span><span>결과 공유하기</span>
                 </button>
                 <a href="https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000007" target="_blank" rel="noopener" class="result-apply-btn">
@@ -5155,7 +5362,7 @@
                 </ul>
               </div>
               <div class="result-actions-row">
-                <button type="button" id="share-result-btn" class="result-share-btn">
+                <button type="button" class="result-share-btn js-share-result">
                   <span>📤</span><span>결과 공유하기</span>
                 </button>
                 <a href="https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000007" target="_blank" rel="noopener" class="result-apply-btn">
@@ -5183,9 +5390,10 @@
 
         resultDiv.innerHTML = html;
         resultDiv.style.display = 'block';
+        if (window.glossary) window.glossary.scan(resultDiv); // 결과 화면 용어 툴팁 적용
 
         // 결과 공유 버튼 이벤트 바인딩
-        document.getElementById('share-result-btn')?.addEventListener('click', () => this.shareResult());
+        resultDiv.querySelector('.js-share-result')?.addEventListener('click', () => this.shareResult());
         document.getElementById('pension-pdf-btn')?.addEventListener('click', () => this.exportPdf());
         document.getElementById('pension-print-btn')?.addEventListener('click', () => window.print());
 
@@ -5773,7 +5981,7 @@
             <span class="result-emoji">${info.emoji}</span>
             <p class="text-xl font-black text-red-800 mb-1">${info.title}</p>
             <p class="text-red-700 text-sm mb-3">${info.msg}</p>
-            <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
+            <button type="button" class="result-share-btn js-dp-share" style="background:#4f46e5;">
               <span>📤</span><span>결과 공유하기</span>
             </button>
             <button type="button" id="dp-restart-btn" class="result-share-btn mt-2" style="background:#64748b;">
@@ -5781,6 +5989,7 @@
             </button>
           </div>`;
         resultDiv.style.display = 'block';
+        if (window.glossary) window.glossary.scan(resultDiv); // 결과 화면 용어 툴팁
 
         applyDiv.innerHTML = `
           <div class="mt-5 p-5 bg-indigo-50 rounded-xl border border-indigo-200">
@@ -5789,7 +5998,7 @@
           </div>`;
         applyDiv.style.display = 'block';
 
-        document.getElementById('dp-share-result-btn')?.addEventListener('click', () => this.shareResult());
+        resultDiv.querySelector('.js-dp-share')?.addEventListener('click', () => this.shareResult());
         document.getElementById('dp-restart-btn')?.addEventListener('click', () => this.resetWizard());
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
       },
@@ -6013,7 +6222,7 @@
               </div>
 
               <div class="result-actions-row">
-                <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
+                <button type="button" class="result-share-btn js-dp-share" style="background:#4f46e5;">
                   <span>📤</span><span>결과 공유하기</span>
                 </button>
                 <a href="https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000076" target="_blank" rel="noopener" class="result-apply-btn violet">
@@ -6057,7 +6266,7 @@
                 </ul>
               </div>` : ''}
               <div class="result-actions-row">
-                <button type="button" id="dp-share-result-btn" class="result-share-btn" style="background:#4f46e5;">
+                <button type="button" class="result-share-btn js-dp-share" style="background:#4f46e5;">
                   <span>📤</span><span>결과 공유하기</span>
                 </button>
                 <a href="https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000076" target="_blank" rel="noopener" class="result-apply-btn violet">
@@ -6083,6 +6292,7 @@
 
         resultDiv.innerHTML = html;
         resultDiv.style.display = 'block';
+        if (window.glossary) window.glossary.scan(resultDiv); // 결과 화면 용어 툴팁
 
         // 신청 방법 안내
         applyDiv.innerHTML = `
@@ -6105,7 +6315,7 @@
             <button type="button" id="dp-print-btn" class="doc-action-btn print">🖨️ 인쇄</button>
           </div>`);
 
-        document.getElementById('dp-share-result-btn')?.addEventListener('click', () => this.shareResult());
+        resultDiv.querySelector('.js-dp-share')?.addEventListener('click', () => this.shareResult());
         document.getElementById('dp-pdf-btn')?.addEventListener('click', () => this.exportPdf());
         document.getElementById('dp-print-btn')?.addEventListener('click', () => window.print());
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -6805,7 +7015,12 @@
         else if(dir==='up'){for(let c=0;c<this.size;c++){const col=[];for(let r=0;r<this.size;r++)col.push(this.grid[r][c]);const m=merge(col);for(let r=0;r<this.size;r++){if(this.grid[r][c]!==m[r])moved=true;this.grid[r][c]=m[r];}}}
         else if(dir==='down'){for(let c=0;c<this.size;c++){const col=[];for(let r=0;r<this.size;r++)col.push(this.grid[r][c]);const m=merge([...col].reverse()).reverse();for(let r=0;r<this.size;r++){if(this.grid[r][c]!==m[r])moved=true;this.grid[r][c]=m[r];}}}
 
-        if(moved){this.addRandomTile();this.draw();if(this.isGameOver())setTimeout(()=>alert('게임 종료! 점수: '+this.score),100);}
+        if(moved){this.addRandomTile();this.draw();if(this.isGameOver())setTimeout(()=>{
+          const r = gameUI.submitBest('g2048Best', this.score);
+          gameUI.show({ emoji:'🔢', title:'더 이상 움직일 수 없어요!', scoreText:`점수: ${this.score.toLocaleString()}점`, bestText:`최고 기록: ${r.best.toLocaleString()}점`, isNew:r.isNew,
+            onRetry:()=>this.newGame(),
+            share:{ category:'🎮 2048', text:`2048 점수: ${this.score.toLocaleString()}점\n최고 기록: ${r.best.toLocaleString()}점` } });
+        },100);}
       },
 
       isGameOver() {
@@ -6856,7 +7071,13 @@
         this.draw();
       },
 
-      gameOverFn(reason) { clearInterval(this.gameLoop); alert((reason?reason+'\n':'')+'게임 종료! 점수: '+this.score); },
+      gameOverFn(reason) {
+        clearInterval(this.gameLoop);
+        const r = gameUI.submitBest('snakeBest', this.score);
+        gameUI.show({ emoji:'🐍', title: reason || '게임 종료!', scoreText:`점수: ${this.score}점`, bestText:`최고 기록: ${r.best}점`, isNew:r.isNew,
+          onRetry:()=>this.newGame(),
+          share:{ category:'🎮 스네이크', text:`스네이크 점수: ${this.score}점\n최고 기록: ${r.best}점` } });
+      },
 
       handleKey(e) {
         if(activeGame!=='snake')return;
@@ -6894,6 +7115,7 @@
       },
 
       newGame() {
+        this.ended=false;
         this.x=this.canvas.width/2;this.y=this.canvas.height-30;this.dx=3;this.dy=-3;
         this.paddleX=(this.canvas.width-this.paddleWidth)/2;this.score=0;this.lives=3;
         this.bricks=[];
@@ -6907,7 +7129,13 @@
         for(let c=0;c<this.brickColumnCount;c++) for(let r=0;r<this.brickRowCount;r++){const b=this.bricks[c][r];
           if(b.status===1&&this.x>b.x&&this.x<b.x+this.brickWidth&&this.y>b.y&&this.y<b.y+this.brickHeight){
             this.dy=-this.dy;b.status=0;this.score++;
-            if(this.score===this.brickRowCount*this.brickColumnCount){alert('축하합니다! 모든 벽돌을 깨뜨렸습니다!');this.newGame();}
+            if(this.score===this.brickRowCount*this.brickColumnCount){
+              this.ended=true;
+              const r = gameUI.submitBest('breakoutBest', this.score);
+              gameUI.show({ emoji:'🏆', title:'모든 벽돌을 깨뜨렸어요!', scoreText:`점수: ${this.score}점 (만점!)`, bestText:`최고 기록: ${r.best}점`, isNew:r.isNew,
+                onRetry:()=>this.newGame(),
+                share:{ category:'🎮 벽돌깨기', text:`벽돌깨기 전부 클리어! ${this.score}점 만점!` } });
+            }
           }}
       },
 
@@ -6926,12 +7154,20 @@
         this.ctx.beginPath();this.ctx.rect(this.paddleX,this.canvas.height-this.paddleHeight,this.paddleWidth,this.paddleHeight);this.ctx.fillStyle='#22c55e';this.ctx.fill();this.ctx.closePath();
 
         this.collisionDetection();
+        if(this.ended)return; // 게임 종료 오버레이 표시 중 — 프레임 정지
 
         if(this.x+this.dx>this.canvas.width-this.ballRadius||this.x+this.dx<this.ballRadius)this.dx=-this.dx;
         if(this.y+this.dy<this.ballRadius)this.dy=-this.dy;
         else if(this.y+this.dy>this.canvas.height-this.ballRadius){
           if(this.x>this.paddleX&&this.x<this.paddleX+this.paddleWidth){this.dy=-this.dy;this.dx=8*((this.x-this.paddleX)/this.paddleWidth-0.5);}
-          else{this.lives--;if(!this.lives){alert('게임 종료! 최종 점수: '+this.score);this.newGame();return;}else{this.x=this.canvas.width/2;this.y=this.canvas.height-30;this.dx=3;this.dy=-3;this.paddleX=(this.canvas.width-this.paddleWidth)/2;}}
+          else{this.lives--;if(!this.lives){
+            this.ended=true;
+            const r = gameUI.submitBest('breakoutBest', this.score);
+            gameUI.show({ emoji:'🧱', title:'게임 종료!', scoreText:`점수: ${this.score}점`, bestText:`최고 기록: ${r.best}점`, isNew:r.isNew,
+              onRetry:()=>this.newGame(),
+              share:{ category:'🎮 벽돌깨기', text:`벽돌깨기 점수: ${this.score}점\n최고 기록: ${r.best}점` } });
+            return;
+          }else{this.x=this.canvas.width/2;this.y=this.canvas.height-30;this.dx=3;this.dy=-3;this.paddleX=(this.canvas.width-this.paddleWidth)/2;}}
         }
         if(this.paddleX<0)this.paddleX=0;else if(this.paddleX+this.paddleWidth>this.canvas.width)this.paddleX=this.canvas.width-this.paddleWidth;
         this.x+=this.dx;this.y+=this.dy;
@@ -7015,7 +7251,13 @@
         if(activeGame!=='tetris')return;
         const now=Date.now();if(now-this.lastDrop>this.dropTime){this.move(0,1);this.lastDrop=now;}
         this.draw();
-        if(!this.gameOver)requestAnimationFrame(()=>this.gameLoop());else alert('게임 종료! 점수: '+this.score);
+        if(!this.gameOver)requestAnimationFrame(()=>this.gameLoop());
+        else {
+          const r = gameUI.submitBest('tetrisBest', this.score);
+          gameUI.show({ emoji:'🎯', title:'게임 종료!', scoreText:`점수: ${this.score.toLocaleString()}점 · ${this.lines}줄`, bestText:`최고 기록: ${r.best.toLocaleString()}점`, isNew:r.isNew,
+            onRetry:()=>this.newGame(),
+            share:{ category:'🎮 테트리스', text:`테트리스 점수: ${this.score.toLocaleString()}점 (${this.lines}줄)\n최고 기록: ${r.best.toLocaleString()}점` } });
+        }
       }
     };
 
@@ -7527,7 +7769,13 @@
       checkWin() {
         let unrevealed=0;for(let r=0;r<this.rows;r++)for(let c=0;c<this.cols;c++)if(!this.revealed[r][c])unrevealed++;
         if(unrevealed===this.mines){this.gameOver=true;clearInterval(this.timerInterval);
-          const msg=document.getElementById('mine-msg');msg.textContent='🎉 축하합니다! '+this.timer+'초 만에 클리어!';msg.style.color='#16a34a';msg.classList.remove('hidden');}
+          const msg=document.getElementById('mine-msg');msg.textContent='🎉 축하합니다! '+this.timer+'초 만에 클리어!';msg.style.color='#16a34a';msg.classList.remove('hidden');
+          const r = gameUI.submitBestLow('mineBest_'+this.difficulty, this.timer);
+          const diffName = ({easy:'쉬움',medium:'보통',hard:'어려움'})[this.difficulty] || this.difficulty;
+          gameUI.show({ emoji:'💣', title:'지뢰찾기 클리어!', scoreText:`${this.timer}초 만에 클리어! (${diffName})`, bestText:`최단 기록: ${r.best}초`, isNew:r.isNew,
+            onRetry:()=>this.newGame(),
+            share:{ category:'🎮 지뢰찾기', text:`지뢰찾기(${diffName}) ${this.timer}초 만에 클리어!\n최단 기록: ${r.best}초` } });
+        }
       },
       render() {
         const el=document.getElementById('mine-board');
@@ -7583,7 +7831,12 @@
           const [a,b]=this.flipped;
           if(this.cards[a]===this.cards[b]){this.matched.push(a,b);this.flipped=[];this.busy=false;
             document.getElementById('mem-pairs').textContent=this.matched.length/2;
-            if(this.matched.length===this.cards.length){const msg=document.getElementById('mem-msg');msg.textContent='🎉 '+this.moves+'번 만에 완성!';msg.style.color='#e11d48';msg.classList.remove('hidden');}
+            if(this.matched.length===this.cards.length){const msg=document.getElementById('mem-msg');msg.textContent='🎉 '+this.moves+'번 만에 완성!';msg.style.color='#e11d48';msg.classList.remove('hidden');
+              const r = gameUI.submitBestLow('memBest_'+this.size, this.moves);
+              gameUI.show({ emoji:'🃏', title:'짝맞추기 완성!', scoreText:`${this.moves}번 만에 완성! (${this.size}×${this.size})`, bestText:`최소 기록: ${r.best}번`, isNew:r.isNew,
+                onRetry:()=>this.newGame(),
+                share:{ category:'🎮 카드 짝맞추기', text:`카드 짝맞추기(${this.size}×${this.size}) ${this.moves}번 만에 완성!\n최소 기록: ${r.best}번` } });
+            }
           } else {setTimeout(()=>{this.renderCard(a,false);this.renderCard(b,false);this.flipped=[];this.busy=false;},800);}
         }
       },
@@ -7677,7 +7930,13 @@
         for(let r=0;r<9;r++)for(let c=0;c<9;c++){if(this.board[r][c]===0)complete=false;else if(this.board[r][c]!==this.solution[r][c])correct=false;}
         const msg=document.getElementById('sdk-msg');msg.classList.remove('hidden');
         if(!complete){msg.textContent='아직 빈칸이 있어요!';msg.style.color='#d97706';}
-        else if(correct){msg.textContent='🎉 정답입니다! '+this.timer+'초 만에 완성!';msg.style.color='#16a34a';clearInterval(this.timerInterval);}
+        else if(correct){msg.textContent='🎉 정답입니다! '+this.timer+'초 만에 완성!';msg.style.color='#16a34a';clearInterval(this.timerInterval);
+          const r = gameUI.submitBestLow('sdkBest_'+this.difficulty, this.timer);
+          const diffName = ({easy:'쉬움',medium:'보통',hard:'어려움'})[this.difficulty] || this.difficulty;
+          gameUI.show({ emoji:'🔢', title:'스도쿠 완성!', scoreText:`${this.timer}초 만에 완성! (${diffName})`, bestText:`최단 기록: ${r.best}초`, isNew:r.isNew,
+            onRetry:()=>this.newGame(),
+            share:{ category:'🎮 스도쿠', text:`스도쿠(${diffName}) ${this.timer}초 만에 완성!\n최단 기록: ${r.best}초` } });
+        }
         else{msg.textContent='❌ 틀린 칸이 있어요. 다시 확인해보세요!';msg.style.color='#dc2626';
           this.render(true);}
       },
@@ -8001,7 +8260,7 @@
         this.timer = setInterval(() => {
           this.time--;
           document.getElementById('mole-timer').textContent = this.time;
-          if (this.time <= 0) this.stop();
+          if (this.time <= 0) this.stop(true);
         }, 1000);
         this.spawnLoop();
       },
@@ -8040,7 +8299,7 @@
         document.getElementById('mole-score').textContent = this.score;
       },
 
-      stop() {
+      stop(showResult) {
         this.playing = false;
         clearInterval(this.timer);
         clearTimeout(this.popTimer);
@@ -8061,6 +8320,236 @@
         document.getElementById('mole-result-msg').textContent = isNew ? '🎉 새 최고 기록!' : `좋아요! ${this.score >= 15 ? '훌륭한 반응속도!' : '조금만 더 빠르게!'}`;
         document.getElementById('mole-result-score').textContent = this.score;
         result.classList.remove('hidden');
+        if (showResult) {
+          gameUI.show({
+            emoji: isNew ? '🎉' : (this.score >= 15 ? '🏆' : '🦔'),
+            title: '두더지 잡기 끝!',
+            scoreText: `점수: ${this.score}점`,
+            bestText: `최고 기록: ${this.best}점`,
+            isNew,
+            onRetry: () => this.start(),
+            share: { category: '🎮 두더지 잡기', text: `두더지 잡기 점수: ${this.score}점\n최고 기록: ${this.best}점` }
+          });
+        }
+      }
+    };
+
+    /* ================================================
+       게임 결과 공통 오버레이 + 최고기록 저장 헬퍼
+       ================================================ */
+    const gameUI = {
+      _wired: false, _onRetry: null, _share: null,
+      best(key) { try { return parseInt(localStorage.getItem(key) || '0', 10) || 0; } catch (e) { return 0; } },
+      // 높을수록 좋은 점수 (점수형 게임)
+      submitBest(key, score) {
+        let best = this.best(key), isNew = false;
+        if (score > best) { best = score; isNew = true; try { localStorage.setItem(key, String(best)); } catch (e) {} }
+        return { best, isNew };
+      },
+      // 낮을수록 좋은 기록 (시간·횟수형 게임)
+      submitBestLow(key, value) {
+        let best = this.best(key), isNew = false;
+        if (value > 0 && (best === 0 || value < best)) { best = value; isNew = true; try { localStorage.setItem(key, String(best)); } catch (e) {} }
+        return { best, isNew };
+      },
+      _wire() {
+        if (this._wired) return; this._wired = true;
+        const ov = document.getElementById('game-result-overlay');
+        document.getElementById('gr-retry').addEventListener('click', () => { this.hide(); if (this._onRetry) this._onRetry(); });
+        document.getElementById('gr-hub').addEventListener('click', () => { this.hide(); showSection('game-hub'); if (typeof updateHubBests === 'function') updateHubBests(); });
+        document.getElementById('gr-share').addEventListener('click', () => {
+          if (this._share && typeof window.shareToCommunity === 'function') { this.hide(); window.shareToCommunity(this._share.category, this._share.text); }
+        });
+        ov.addEventListener('click', (e) => { if (e.target === ov) this.hide(); });
+      },
+      // opts: { emoji, title, scoreText, bestText, isNew, onRetry, share: {category, text} }
+      show(opts) {
+        this._wire();
+        this._onRetry = opts.onRetry || null;
+        this._share = opts.share || null;
+        document.getElementById('gr-emoji').textContent = opts.emoji || '🎮';
+        document.getElementById('gr-title').textContent = opts.title || '게임 종료';
+        document.getElementById('gr-score').textContent = opts.scoreText || '';
+        document.getElementById('gr-best').innerHTML = (opts.isNew ? '<span class="new-record">🎉 새 기록 달성!</span> ' : '') + (opts.bestText || '');
+        document.getElementById('gr-share').style.display = opts.share ? '' : 'none';
+        document.getElementById('game-result-overlay').classList.add('show');
+        if (typeof updateHubBests === 'function') updateHubBests();
+      },
+      hide() { document.getElementById('game-result-overlay').classList.remove('show'); }
+    };
+
+    // 게임 허브 카드의 최고기록 배지 갱신
+    function updateHubBests() {
+      document.querySelectorAll('.game-best-badge').forEach(el => {
+        const v = gameUI.best(el.dataset.best);
+        if (v > 0) {
+          el.textContent = `🏆 ${el.dataset.prefix || '최고'} ${v.toLocaleString()}${el.dataset.unit || '점'}`;
+          el.classList.remove('empty');
+        } else {
+          el.textContent = '아직 기록이 없어요';
+          el.classList.add('empty');
+        }
+      });
+    }
+
+    /* ================================================
+       외로운 용사 — 양쪽에서 오는 적을 막는 반응속도 게임
+       ================================================ */
+    const warriorApp = {
+      canvas: null, ctx: null, W: 480, H: 280,
+      playing: false, raf: null, lastTs: 0,
+      enemies: [], score: 0, lives: 3, best: 0,
+      spawnTimer: 0, spawnInterval: 1500, speed: 60, // px/초
+      slash: null, hitFlash: 0, floats: [],
+
+      init() {
+        this.canvas = document.getElementById('wr-canvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.canvas.width = this.W; this.canvas.height = this.H;
+        this.best = gameUI.best('warriorBest');
+        document.getElementById('wr-best').textContent = this.best;
+        document.getElementById('wr-start').addEventListener('click', () => this.start());
+        document.getElementById('wr-left').addEventListener('click', () => this.attack(-1));
+        document.getElementById('wr-right').addEventListener('click', () => this.attack(1));
+        this.canvas.addEventListener('pointerdown', (e) => {
+          const r = this.canvas.getBoundingClientRect();
+          this.attack((e.clientX - r.left) < r.width / 2 ? -1 : 1);
+        });
+        document.addEventListener('keydown', (e) => {
+          if (activeGame !== 'warrior' || !this.playing) return;
+          if (e.key === 'ArrowLeft') { e.preventDefault(); this.attack(-1); }
+          else if (e.key === 'ArrowRight') { e.preventDefault(); this.attack(1); }
+        });
+        this.drawIdle();
+      },
+
+      start() {
+        this.enemies = []; this.score = 0; this.lives = 3;
+        this.spawnInterval = 1500; this.speed = 60; this.spawnTimer = 0;
+        this.slash = null; this.hitFlash = 0; this.floats = [];
+        this.playing = true; this.lastTs = 0;
+        document.getElementById('wr-score').textContent = '0';
+        document.getElementById('wr-lives').textContent = '❤️❤️❤️';
+        const btn = document.getElementById('wr-start');
+        btn.textContent = '▶ 진행 중...'; btn.disabled = true; btn.style.opacity = '.5';
+        cancelAnimationFrame(this.raf);
+        this.raf = requestAnimationFrame((t) => this.loop(t));
+      },
+
+      stop() { // 정리 전용 (섹션 이탈·게임 종료 공용)
+        this.playing = false;
+        cancelAnimationFrame(this.raf); this.raf = null;
+        const btn = document.getElementById('wr-start');
+        if (btn) { btn.textContent = '▶ 다시 시작'; btn.disabled = false; btn.style.opacity = '1'; }
+      },
+
+      spawn() {
+        const side = Math.random() < 0.5 ? -1 : 1;
+        const roll = Math.random();
+        const type = roll < 0.18 ? '🐗' : (roll < 0.6 ? '👹' : '🧟');
+        this.enemies.push({ side, x: side === -1 ? -20 : this.W + 20, type, mult: type === '🐗' ? 1.6 : 1 });
+      },
+
+      attack(side) {
+        if (!this.playing) return;
+        const cx = this.W / 2, RANGE = 110;
+        let nearest = null, nd = Infinity;
+        this.enemies.forEach(en => {
+          if (en.side !== side) return;
+          const d = Math.abs(en.x - cx);
+          if (d < nd) { nd = d; nearest = en; }
+        });
+        this.slash = { side, t: 0.18 };
+        if (nearest && nd <= RANGE) {
+          this.enemies.splice(this.enemies.indexOf(nearest), 1);
+          const gain = nd < 55 ? 20 : 10; // 아슬아슬하게 잡으면 보너스
+          this.score += gain;
+          this.floats.push({ x: nearest.x, y: this.H - 110, text: '+' + gain, t: 0.7 });
+          document.getElementById('wr-score').textContent = this.score;
+          // 점수에 따라 난이도 상승
+          this.speed = 60 + this.score * 0.6;
+          this.spawnInterval = Math.max(550, 1500 - this.score * 6);
+        }
+      },
+
+      loop(ts) {
+        if (!this.playing || activeGame !== 'warrior') { this.stop(); return; }
+        if (!this.lastTs) this.lastTs = ts;
+        const dt = Math.min((ts - this.lastTs) / 1000, 0.05);
+        this.lastTs = ts;
+        this.spawnTimer += dt * 1000;
+        if (this.spawnTimer >= this.spawnInterval) { this.spawnTimer = 0; this.spawn(); }
+        const cx = this.W / 2;
+        for (let i = this.enemies.length - 1; i >= 0; i--) {
+          const en = this.enemies[i];
+          en.x += (en.side === -1 ? 1 : -1) * this.speed * en.mult * dt;
+          if (Math.abs(en.x - cx) < 26) {
+            this.enemies.splice(i, 1);
+            this.lives--; this.hitFlash = 0.25;
+            document.getElementById('wr-lives').textContent = '❤️'.repeat(Math.max(0, this.lives)) || '💔';
+            if (this.lives <= 0) { this.end(); return; }
+          }
+        }
+        if (this.slash) { this.slash.t -= dt; if (this.slash.t <= 0) this.slash = null; }
+        if (this.hitFlash > 0) this.hitFlash -= dt;
+        this.floats.forEach(f => { f.t -= dt; f.y -= 30 * dt; });
+        this.floats = this.floats.filter(f => f.t > 0);
+        this.draw();
+        this.raf = requestAnimationFrame((t) => this.loop(t));
+      },
+
+      end() {
+        const score = this.score;
+        this.stop();
+        this.draw();
+        const r = gameUI.submitBest('warriorBest', score);
+        this.best = r.best;
+        document.getElementById('wr-best').textContent = r.best;
+        gameUI.show({
+          emoji: r.isNew ? '🎉' : (score >= 300 ? '🏆' : '⚔️'),
+          title: '용사의 모험 끝!',
+          scoreText: `점수: ${score.toLocaleString()}점`,
+          bestText: `최고 기록: ${r.best.toLocaleString()}점`,
+          isNew: r.isNew,
+          onRetry: () => this.start(),
+          share: { category: '🎮 외로운 용사', text: `외로운 용사 점수: ${score.toLocaleString()}점\n최고 기록: ${r.best.toLocaleString()}점` }
+        });
+      },
+
+      draw() {
+        const c = this.ctx, W = this.W, H = this.H, cx = W / 2, gy = H - 60;
+        const sky = c.createLinearGradient(0, 0, 0, H);
+        sky.addColorStop(0, '#fef9c3'); sky.addColorStop(1, '#fde68a');
+        c.fillStyle = sky; c.fillRect(0, 0, W, H);
+        c.fillStyle = '#a16207'; c.fillRect(0, gy + 28, W, H - gy - 28);
+        c.fillStyle = '#ca8a04'; c.fillRect(0, gy + 24, W, 6);
+        if (this.hitFlash > 0) { c.fillStyle = `rgba(220,38,38,${Math.min(1, this.hitFlash * 1.2)})`; c.fillRect(0, 0, W, H); }
+        // 공격 가능 범위 (은은한 표시)
+        c.fillStyle = 'rgba(217,119,6,.08)';
+        c.fillRect(cx - 110, gy - 40, 220, 70);
+        c.textAlign = 'center'; c.textBaseline = 'middle';
+        c.font = '40px serif';
+        c.fillText('💂', cx, gy);
+        if (this.slash) {
+          c.save();
+          c.globalAlpha = Math.max(0, this.slash.t / 0.18);
+          c.font = '34px serif';
+          c.fillText('💥', cx + this.slash.side * 70, gy - 6);
+          c.restore();
+        }
+        c.font = '34px serif';
+        this.enemies.forEach(en => { c.fillText(en.type, en.x, gy); });
+        c.font = 'bold 16px sans-serif'; c.fillStyle = '#b45309';
+        this.floats.forEach(f => { c.globalAlpha = Math.max(0, Math.min(1, f.t / 0.7 + .2)); c.fillText(f.text, f.x, f.y); });
+        c.globalAlpha = 1;
+      },
+
+      drawIdle() {
+        this.draw();
+        const c = this.ctx;
+        c.font = 'bold 18px sans-serif'; c.fillStyle = '#92400e'; c.textAlign = 'center';
+        c.fillText('▶ 게임 시작을 눌러주세요', this.W / 2, 50);
       }
     };
 
@@ -8069,6 +8558,13 @@
        ================================================ */
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('floating-game-btn').addEventListener('click', () => showSection('game-hub'));
+
+      // ===== 맨 위로 버튼: 500px 이상 스크롤하면 표시 =====
+      const scrollTopBtn = document.getElementById('scroll-top-btn');
+      window.addEventListener('scroll', () => {
+        scrollTopBtn.classList.toggle('show', window.scrollY > 500);
+      }, { passive: true });
+      scrollTopBtn.addEventListener('click', () => window.scrollTo(0, 0));
       document.getElementById('tab-pension').addEventListener('click', () => { showSection('home'); window.scrollTo(0,0); });
       document.getElementById('tab-games').addEventListener('click', () => showSection('game-hub'));
       document.getElementById('top-nav-home')?.addEventListener('click', () => { showSection('home'); window.scrollTo(0,0); });
@@ -8093,10 +8589,32 @@
 
       // ===== 홈페이지 네비게이션 =====
       document.getElementById('home-nav-game')?.addEventListener('click', () => showSection('game-hub'));
-      document.getElementById('home-go-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
-      document.getElementById('home-go-disability')?.addEventListener('click', () => { showSection('disability-pension'); window.scrollTo(0,0); });
-      document.getElementById('home-go-fuel')?.addEventListener('click', () => { showSection('fuel-support'); window.scrollTo(0,0); });
-      document.getElementById('home-go-tax')?.addEventListener('click', () => { showSection('tax-helper'); window.scrollTo(0,0); });
+      // 헤더 검색 버튼 → 페이지 하단 통합 검색으로 이동 + 입력창 포커스
+      document.getElementById('home-nav-search')?.addEventListener('click', () => {
+        document.getElementById('home-search-section')?.scrollIntoView();
+        setTimeout(() => document.getElementById('hs-input')?.focus({ preventScroll: true }), 150);
+      });
+
+      // ===== 오늘의 복지 한 마디 (날짜에 따라 매일 바뀜) =====
+      (function(){
+        const tips = [
+          '기초연금은 65세 생일이 속한 달의 한 달 전부터 미리 신청할 수 있어요.',
+          '복지 신청은 대부분 주민센터 한 곳에서 끝나요. 신분증과 통장사본을 챙겨가세요.',
+          '생계급여는 부양의무자 기준이 폐지되어 본인 가구의 소득·재산만 봐요.',
+          '전세·보증금만 있어도 월세로 환산해 주거급여 지원을 받을 수 있어요.',
+          '아동수당과 부모급여는 소득과 상관없이 모든 가정이 받을 수 있어요.',
+          '국민연금을 받고 있어도 기초연금을 함께 받을 수 있어요.',
+          '긴급복지지원은 위기 상황이면 먼저 지원하고 나중에 심사해요. ☎129로 전화하세요.',
+          '복지 혜택은 몰라서 못 받는 경우가 가장 많아요. 아래 30초 자가진단을 해보세요.',
+          '자녀의 소득은 기초연금 심사에 들어가지 않아요. 본인과 배우자 것만 봐요.',
+          '주민센터 방문이 어려우면 복지로(bokjiro.go.kr)에서 온라인 신청이 가능해요.'
+        ];
+        const el = document.getElementById('daily-tip-text');
+        if (!el) return;
+        const now = new Date();
+        const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+        el.textContent = tips[dayOfYear % tips.length];
+      })();
 
       // ===== 두 갈래길 (간단/자세히) 안내 버튼 =====
       document.getElementById('path-quick')?.addEventListener('click', () => {
@@ -8135,6 +8653,85 @@
           if (target) { showSection(target); window.scrollTo(0,0); }
         });
       });
+
+      // ===== 기초생활보장 간단 계산기 (2026 추정 기준 중위소득 — 위 표와 동일 기준) =====
+      (function(){
+        const goBtn = document.getElementById('bl-calc-go');
+        if (!goBtn) return;
+        const MEDIAN = { 1: 254, 2: 417, 3: 534, 4: 648, 5: 755, 6: 856 }; // 만원
+        const BENEFITS = [
+          { name: '생계급여', pct: 0.32 },
+          { name: '의료급여', pct: 0.40 },
+          { name: '주거급여', pct: 0.48 },
+          { name: '교육급여', pct: 0.50 }
+        ];
+        goBtn.addEventListener('click', () => {
+          const size = parseInt(document.getElementById('bl-calc-size').value, 10);
+          const incomeEl = document.getElementById('bl-calc-income');
+          const income = parseFloat(incomeEl.value);
+          const box = document.getElementById('bl-calc-result');
+          if (isNaN(income) || income < 0) {
+            box.innerHTML = '<p class="text-sm" style="color:#b91c1c; font-weight:600;">월 소득인정액을 숫자로 입력해주세요. 정확히 모르면 대략적인 월 소득을 넣어보세요.</p>';
+            box.classList.add('show');
+            incomeEl.focus();
+            return;
+          }
+          const median = MEDIAN[size];
+          let anyOk = false;
+          const rows = BENEFITS.map(b => {
+            const limit = Math.round(median * b.pct);
+            const ok = income <= limit;
+            if (ok) anyOk = true;
+            const extra = (b.name === '생계급여' && ok)
+              ? ` <span style="color:#0f766e; font-weight:700;">(예상 약 ${(limit - Math.round(income)).toLocaleString()}만원/월)</span>` : '';
+            return `<li><span>${b.name} <span style="color:#94a3b8; font-size:.82rem;">기준 약 ${limit.toLocaleString()}만원</span>${extra}</span><span class="wf-calc-badge ${ok ? 'ok' : 'no'}">${ok ? '가능성 있음' : '기준 초과'}</span></li>`;
+          }).join('');
+          const head = anyOk
+            ? '<p style="font-weight:800; color:#0f766e;">✅ 신청해볼 만한 급여가 있어요!</p>'
+            : '<p style="font-weight:800; color:#475569;">아쉽지만 소득 기준을 넘는 것으로 보여요.</p>';
+          box.innerHTML = head + `<ul>${rows}</ul>
+            <p class="text-xs mt-3" style="color:#64748b;">※ 소득인정액은 월급만이 아니라 <strong>재산을 소득으로 환산해 합친 금액</strong>이라 실제와 다를 수 있어요. 2026년 추정 기준이며, 정확한 판정은 주민센터(☎129)에서 받아보세요.</p>`;
+          box.classList.add('show');
+          if (window.glossary) window.glossary.scan(box);
+        });
+      })();
+
+      // ===== 주거급여 간단 계산기 (2026 추정 기준임대료 — 위 표와 동일 기준) =====
+      (function(){
+        const goBtn = document.getElementById('hb-calc-go');
+        if (!goBtn) return;
+        const RENT_CAP = [ // [급지][가구원수-1] 만원
+          [37, 41, 49, 58],
+          [29, 33, 39, 45],
+          [22, 25, 31, 37],
+          [19, 22, 26, 31]
+        ];
+        const REGION_NAME = ['서울', '경기·인천', '광역시·세종', '그 외 지역'];
+        goBtn.addEventListener('click', () => {
+          const region = parseInt(document.getElementById('hb-calc-region').value, 10);
+          const sizeIdx = parseInt(document.getElementById('hb-calc-size').value, 10);
+          const rentEl = document.getElementById('hb-calc-rent');
+          const rent = parseFloat(rentEl.value);
+          const box = document.getElementById('hb-calc-result');
+          if (isNaN(rent) || rent <= 0) {
+            box.innerHTML = '<p class="text-sm" style="color:#b91c1c; font-weight:600;">현재 내고 있는 월세를 숫자로 입력해주세요. (예: 40)</p>';
+            box.classList.add('show');
+            rentEl.focus();
+            return;
+          }
+          const cap = RENT_CAP[region][sizeIdx];
+          const support = Math.min(Math.round(rent), cap);
+          box.innerHTML = `
+            <p style="font-weight:800; color:#b45309;">💰 예상 지원 한도: 월 약 ${support.toLocaleString()}만원</p>
+            <ul>
+              <li><span>${REGION_NAME[region]} 기준임대료 상한</span><span style="font-weight:700;">약 ${cap}만원대</span></li>
+              <li><span>내 월세</span><span style="font-weight:700;">${Math.round(rent).toLocaleString()}만원</span></li>
+            </ul>
+            <p class="text-xs mt-3" style="color:#64748b;">※ 실제 월세와 기준임대료 중 <strong>적은 금액</strong>이 지원 한도예요. 생계급여 수급자가 아니면 소득에 따라 자기부담분만큼 줄어들 수 있어요. 정확한 금액은 마이홈콜센터(☎1600-1004)에서 확인하세요.</p>`;
+          box.classList.add('show');
+          if (window.glossary) window.glossary.scan(box);
+        });
+      })();
 
       // ===== 홈페이지 검색 기능 =====
       // ===== 통합 검색 데이터 (강화: 본문 핵심 정보·금액·연령 포함) =====
@@ -8571,9 +9168,17 @@
           document.body.classList.toggle('high-contrast', this.state.contrast);
           document.body.classList.toggle('color-friendly', this.state.colorFriendly);
           document.getElementById('a11y-font-label').textContent = this.FONT_LABELS[this.state.fontIdx];
-          document.getElementById('a11y-font').classList.toggle('active', this.state.fontIdx !== 1);
-          document.getElementById('a11y-contrast').classList.toggle('active', this.state.contrast);
-          document.getElementById('a11y-cf').classList.toggle('active', this.state.colorFriendly);
+          const fontOn = this.state.fontIdx !== 1;
+          const fontBtn = document.getElementById('a11y-font');
+          const contrastBtn = document.getElementById('a11y-contrast');
+          const cfBtn = document.getElementById('a11y-cf');
+          fontBtn.classList.toggle('active', fontOn);
+          contrastBtn.classList.toggle('active', this.state.contrast);
+          cfBtn.classList.toggle('active', this.state.colorFriendly);
+          // 스크린리더용 토글 상태
+          fontBtn.setAttribute('aria-pressed', fontOn);
+          contrastBtn.setAttribute('aria-pressed', this.state.contrast);
+          cfBtn.setAttribute('aria-pressed', this.state.colorFriendly);
         },
 
         cycleFont() {
@@ -8659,6 +9264,9 @@
               span.className = 'gloss-term';
               span.dataset.term = match[0];
               span.textContent = match[0];
+              span.setAttribute('tabindex', '0');
+              span.setAttribute('role', 'button');
+              span.setAttribute('aria-label', match[0] + ' 용어 설명 보기');
               frag.appendChild(span);
               lastIdx = match.index + match[0].length;
             }
@@ -8703,10 +9311,21 @@
               this.hideTooltip();
             }
           });
+          // 키보드 접근성: 용어에 포커스 후 Enter/Space로 열기, Esc로 닫기
+          document.addEventListener('keydown', (e) => {
+            const term = e.target.closest && e.target.closest('.gloss-term');
+            if (term && (e.key === 'Enter' || e.key === ' ')) {
+              e.preventDefault(); e.stopPropagation();
+              this.showTooltip(term);
+            } else if (e.key === 'Escape') {
+              this.hideTooltip();
+            }
+          });
           document.getElementById('gloss-tooltip-close')?.addEventListener('click', () => this.hideTooltip());
           document.getElementById('gloss-overlay')?.addEventListener('click', () => this.hideTooltip());
         }
       };
+      window.glossary = glossary; // 동적 콘텐츠(결과 화면 등)에서 glossary.scan() 호출용
       window.initGlossary = () => glossary.init();
       // DOM 안정 후 스캔 (다른 동적 콘텐츠와 충돌 방지)
       setTimeout(() => glossary.init(), 1500);
@@ -8769,6 +9388,7 @@
           }
           result.innerHTML = html;
           result.classList.add('show');
+          if (window.glossary) window.glossary.scan(result); // 추천 카드 용어 툴팁
           result.querySelectorAll('.gap-rec-card[data-go]').forEach(card => {
             card.addEventListener('click', () => {
               showSection(card.dataset.go);
@@ -8803,8 +9423,25 @@
          [기능3] PDF 다운로드 / 인쇄 헬퍼
          ================================================ */
       window.docExport = {
+        _libsPromise: null,
+        // jsPDF·html2canvas를 첫 PDF 저장 시점에만 동적으로 불러온다 (초기 로딩 경량화)
+        loadLibs() {
+          if (window.jspdf && window.html2canvas) return Promise.resolve();
+          if (this._libsPromise) return this._libsPromise;
+          const load = (src) => new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.src = src; s.onload = res; s.onerror = () => rej(new Error('로드 실패: ' + src));
+            document.head.appendChild(s);
+          });
+          this._libsPromise = Promise.all([
+            load('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+            load('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
+          ]).catch(e => { this._libsPromise = null; throw e; });
+          return this._libsPromise;
+        },
         async toPdf(zoneEl, filename) {
           if (!zoneEl) return;
+          try { await this.loadLibs(); } catch (e) { /* 아래에서 안내 */ }
           if (typeof window.jspdf === 'undefined' || typeof html2canvas === 'undefined') {
             alert('PDF 라이브러리 로드 실패. 인터넷 연결을 확인해주세요.');
             return;
@@ -9598,6 +10235,7 @@
 
           div.innerHTML = html;
           div.style.display = 'block';
+          if (window.glossary) window.glossary.scan(div); // 결과 화면 용어 툴팁
 
           // 신청 준비 체크리스트 렌더
           if (window.prepChecklist) {
@@ -10655,7 +11293,7 @@
         }, 200);
       };
 
-      document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', () => showSection('game-hub')));
+      document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', () => { showSection('game-hub'); updateHubBests(); }));
       document.querySelectorAll('[data-game]').forEach(card => {
         card.addEventListener('click', () => {
           const game = card.dataset.game;
@@ -10679,6 +11317,8 @@
       quizApp.init();
       numGuessApp.init();
       moleApp.init();
+      warriorApp.init();
+      updateHubBests();
 
       // 초기 섹션 결정: URL hash가 있으면 해당 섹션, 없으면 home
       const initHash = (location.hash || '').replace('#','').trim();
