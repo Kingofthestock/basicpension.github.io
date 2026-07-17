@@ -17,6 +17,7 @@
   <meta property="og:site_name" content="2026 복지 도우미">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <!-- Firebase SDK (게시판 다중 사용자 동기화용) -->
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
@@ -27,7 +28,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Noto Sans KR', 'sans-serif'] },
+          fontFamily: { sans: ['Pretendard Variable', 'Pretendard', 'Noto Sans KR', 'sans-serif'] },
           fontSize: { 'base': '1.05rem' }
         }
       }
@@ -89,7 +90,7 @@
     html[data-font-scale="1"]   { --font-scale: 1; }
     html[data-font-scale="1.15"] { --font-scale: 1.15; }
     html[data-font-scale="1.3"]  { --font-scale: 1.3; }
-    body { font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; touch-action: manipulation; font-size: calc(1rem * var(--font-scale)); }
+    body { font-family: 'Pretendard Variable', Pretendard, 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased; touch-action: manipulation; font-size: calc(1rem * var(--font-scale)); }
     body, p, span, div, button, input, textarea, select, label, li, td, th, a, h1, h2, h3, h4, h5, h6 { font-size: inherit; }
     h1 { font-size: calc(2rem * var(--font-scale)); }
     h2 { font-size: calc(1.5rem * var(--font-scale)); }
@@ -97,6 +98,7 @@
     .hidden { display: none !important; }
 
     /* ===== 고대비 모드 ===== */
+    body.high-contrast, body.high-contrast * { transition: none !important; } /* 고대비 전환은 즉시 적용 (전환 애니메이션 없이) */
     body.high-contrast { background: #000 !important; color: #fff !important; }
     body.high-contrast .home-card-section, body.high-contrast .wf-card, body.high-contrast .wff-card,
     body.high-contrast .home-quick-card, body.high-contrast .home-cat-card,
@@ -273,7 +275,7 @@
     @keyframes floatPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
 
     /* ===== 오늘의 복지 한 마디 ===== */
-    .home-daily-tip { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding: 0.8rem 1rem; margin-bottom: 1rem; background: linear-gradient(135deg, #eff6ff, #f0f9ff); border: 1.5px solid #bfdbfe; border-radius: 0.85rem; font-size: 0.92rem; color: #1e3a5f; line-height: 1.5; word-break: keep-all; }
+    .home-daily-tip { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding: 0.85rem 1.05rem; margin-bottom: 1rem; background: linear-gradient(135deg, #eff6ff, #f0f9ff); border: 1px solid #dbeafe; border-radius: 1rem; font-size: 0.92rem; color: #1e3a5f; line-height: 1.5; word-break: keep-all; box-shadow: 0 4px 14px -10px rgba(30,64,175,.2); }
     .home-daily-tip-label { font-weight: 800; color: #1e40af; white-space: nowrap; }
     body.high-contrast .home-daily-tip { background: #1a1a1a !important; border-color: #fff !important; color: #fff !important; }
 
@@ -538,8 +540,8 @@
     .result-apply-hint a { color: #1e40af; font-weight: 700; }
 
     /* ===== Game Hub ===== */
-    .game-card { background: #fff; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,.04); transition: all .25s; cursor: pointer; position: relative; overflow: hidden; border: 1px solid #f1f5f9; }
-    .game-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,.1); border-color: #e2e8f0; }
+    .game-card { background: #fff; border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 1px 2px rgba(15,23,42,.03), 0 8px 22px -14px rgba(15,23,42,.1); transition: all .22s; cursor: pointer; position: relative; overflow: hidden; border: 1px solid #eef2f7; }
+    .game-card:hover { transform: translateY(-4px); box-shadow: 0 18px 34px -14px rgba(15,23,42,.18); border-color: #dbe5f0; }
 
     /* ===== Omok ===== */
     .board-container { position: relative; width: 95vw; max-width: 600px; margin: auto; aspect-ratio: 1/1; }
@@ -561,19 +563,22 @@
     }
 
     /* ===== Home (Welfare Portal) ===== */
-    #home { background: #f8fafc; min-height: 100vh; padding-bottom: 0; }
-    .home-header { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%); color: #fff; position: relative; overflow: hidden; }
-    .home-header::before { content:''; position:absolute; top:-50%; right:-10%; width:500px; height:500px; background:radial-gradient(circle, rgba(255,255,255,.08) 0%, transparent 70%); pointer-events:none; }
-    .home-header::after { content:''; position:absolute; bottom:-1px; left:0; right:0; height:32px; background:#f8fafc; border-radius:50% 50% 0 0/100% 100% 0 0; }
-    .home-header-inner { max-width: 1100px; margin: 0 auto; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
-    .home-logo { display: flex; align-items: center; gap: 0.6rem; font-weight: 800; font-size: 1.1rem; color: #fff; }
-    .home-logo-mark { width: 38px; height: 38px; border-radius: 10px; background: #fff; color: #1e40af; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.15rem; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
-    .home-nav-btn { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.18); padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all .2s; backdrop-filter: blur(8px); }
-    .home-nav-btn:hover { background: rgba(255,255,255,.22); }
-    .home-hero { padding: 2.5rem 1.25rem 3.5rem; text-align: center; max-width: 920px; margin: 0 auto; position: relative; z-index: 1; }
-    .home-hero-tag { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,.14); padding: 0.4rem 1rem; border-radius: 999px; font-size: 0.85rem; margin-bottom: 1.25rem; border: 1px solid rgba(255,255,255,.22); font-weight: 500; }
-    .home-hero-title { font-size: 2.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.025em; }
-    .home-hero-subtitle { font-size: 1.05rem; color: rgba(255,255,255,.88); line-height: 1.65; max-width: 580px; margin: 0 auto 1.75rem; }
+    #home { background: #f6f8fb; min-height: 100vh; padding-bottom: 0; }
+    .home-header { background: linear-gradient(160deg, #101f4d 0%, #1e40af 48%, #2f6fed 100%); color: #fff; position: relative; overflow: hidden; }
+    .home-header::before { content:''; position:absolute; inset:0; pointer-events:none; background:
+      radial-gradient(620px 380px at 88% -12%, rgba(96,165,250,.4), transparent 62%),
+      radial-gradient(520px 320px at -6% 112%, rgba(45,212,191,.16), transparent 60%),
+      radial-gradient(circle at 50% -10%, rgba(255,255,255,.07), transparent 55%); }
+    .home-header::after { content:''; position:absolute; bottom:-1px; left:0; right:0; height:40px; background:#f6f8fb; border-radius:50% 50% 0 0/100% 100% 0 0; }
+    .home-header-inner { max-width: 1100px; margin: 0 auto; padding: 1.1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+    .home-logo { display: flex; align-items: center; gap: 0.6rem; font-weight: 800; font-size: 1.1rem; color: #fff; letter-spacing: -0.02em; }
+    .home-logo-mark { width: 40px; height: 40px; border-radius: 13px; background: linear-gradient(145deg,#fff,#dbeafe); color: #1e40af; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.15rem; box-shadow: 0 4px 12px rgba(2,6,23,.25), inset 0 1px 0 rgba(255,255,255,.9); }
+    .home-nav-btn { background: rgba(255,255,255,.13); color: #fff; border: 1px solid rgba(255,255,255,.25); padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all .2s; backdrop-filter: blur(10px); }
+    .home-nav-btn:hover { background: rgba(255,255,255,.24); transform: translateY(-1px); }
+    .home-hero { padding: 2.75rem 1.25rem 3.75rem; text-align: center; max-width: 920px; margin: 0 auto; position: relative; z-index: 1; }
+    .home-hero-tag { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,.13); padding: 0.45rem 1.05rem; border-radius: 999px; font-size: 0.85rem; margin-bottom: 1.35rem; border: 1px solid rgba(255,255,255,.28); font-weight: 600; backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(2,6,23,.12); }
+    .home-hero-title { font-size: 2.7rem; font-weight: 800; line-height: 1.22; margin-bottom: 1rem; letter-spacing: -0.04em; text-wrap: balance; }
+    .home-hero-subtitle { font-size: 1.08rem; color: rgba(224,238,255,.92); line-height: 1.65; max-width: 580px; margin: 0 auto 1.75rem; letter-spacing: -0.01em; }
     .home-search { max-width: 560px; margin: 0 auto; position: relative; background: #fff; border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,.16); padding: 0.45rem 0.45rem 0.45rem 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
     .home-search-icon { font-size: 1.15rem; color: #94a3b8; flex-shrink: 0; }
     .home-search input { flex: 1; border: none; outline: none; font-size: 1rem; padding: 0.55rem 0.25rem; background: transparent; color: #0f172a; font-family: inherit; }
@@ -584,20 +589,20 @@
     .home-search-hint strong { color: #fff; font-weight: 600; }
 
     .home-main { max-width: 1100px; margin: -1.5rem auto 0; padding: 0 1rem; position: relative; z-index: 2; }
-    .home-card-section { background: #fff; border-radius: 1rem; padding: 1.75rem 1.5rem; box-shadow: 0 2px 12px rgba(15,23,42,.04); margin-bottom: 1.25rem; border: 1px solid #e2e8f0; }
+    .home-card-section { background: #fff; border-radius: 1.4rem; padding: 1.9rem 1.6rem; box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 28px -16px rgba(15,23,42,.1); margin-bottom: 1.25rem; border: 1px solid #eef2f7; }
 
     /* ===== 두 갈래길 안내 (간단/자세히) ===== */
-    .home-path-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin: 1rem auto 1.25rem; max-width: 560px; }
-    .home-path-card { background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-radius: 0.85rem; padding: 0.95rem 1rem; cursor: pointer; transition: all .15s; border: 1.5px solid transparent; text-align: left; font-family: inherit; display: flex; gap: 0.6rem; align-items: center; }
-    .home-path-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,.15); border-color: rgba(255,255,255,.5); }
-    .home-path-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .home-path-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem auto 1.25rem; max-width: 580px; }
+    .home-path-card { background: rgba(255,255,255,.96); backdrop-filter: blur(10px); border-radius: 1.1rem; padding: 1rem 1.05rem; cursor: pointer; transition: all .18s; border: 1.5px solid rgba(255,255,255,.5); text-align: left; font-family: inherit; display: flex; gap: 0.75rem; align-items: center; box-shadow: 0 6px 20px -8px rgba(2,6,23,.28); }
+    .home-path-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -8px rgba(2,6,23,.35); }
+    .home-path-icon { width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg,#eff6ff,#e0e7ff); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
     .home-path-body { flex: 1; min-width: 0; }
-    .home-path-label { font-weight: 800; color: #0f172a; font-size: 0.95rem; margin-bottom: 0.1rem; }
-    .home-path-desc { font-size: 0.76rem; color: #64748b; line-height: 1.4; }
+    .home-path-label { font-weight: 800; color: #0f172a; font-size: 0.98rem; margin-bottom: 0.12rem; letter-spacing: -0.01em; }
+    .home-path-desc { font-size: 0.78rem; color: #64748b; line-height: 1.4; }
     @media (max-width: 640px) { .home-path-row { grid-template-columns: 1fr; max-width: 100%; } }
 
     /* ===== 접기(details) 카드 — 부가 콘텐츠용 ===== */
-    .home-fold { background: #fff; border-radius: 1rem; padding: 0; box-shadow: 0 2px 12px rgba(15,23,42,.04); margin-bottom: 1.25rem; border: 1px solid #e2e8f0; overflow: hidden; }
+    .home-fold { background: #fff; border-radius: 1.4rem; padding: 0; box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 28px -16px rgba(15,23,42,.1); margin-bottom: 1.25rem; border: 1px solid #eef2f7; overflow: hidden; }
     .home-fold > summary { padding: 1.1rem 1.4rem; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 0.6rem; font-weight: 800; color: #0f172a; font-size: 1.05rem; user-select: none; transition: background .15s; }
     .home-fold > summary::-webkit-details-marker { display: none; }
     .home-fold > summary:hover { background: #f8fafc; }
@@ -608,22 +613,22 @@
     .home-fold[open] > summary { border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
     .home-fold-body { padding: 1.4rem 1.4rem 1.6rem; }
     @media (max-width: 768px) { .home-fold > summary { padding: 0.95rem 1.1rem; font-size: 1rem; } .home-fold-body { padding: 1.1rem 1.1rem 1.3rem; } }
-    .home-section-title { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.35rem; letter-spacing: -0.01em; }
-    .home-section-title-bar { width: 4px; height: 22px; background: linear-gradient(180deg,#1e40af,#2563eb); border-radius: 2px; }
+    .home-section-title { display: flex; align-items: center; gap: 0.6rem; font-size: 1.22rem; font-weight: 800; color: #0f172a; margin-bottom: 0.35rem; letter-spacing: -0.02em; }
+    .home-section-title-bar { width: 5px; height: 24px; background: linear-gradient(180deg,#2563eb,#06b6d4); border-radius: 999px; }
     .home-section-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 1.25rem; line-height: 1.55; }
 
     /* (홈 '빠른 자격 확인' 카드 제거에 따라 .home-quick-grid/.home-quick-card 스타일 삭제됨) */
 
-    .home-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
-    .home-cat-card { padding: 1.25rem 0.75rem; border-radius: 0.75rem; text-align: center; background: #f8fafc; border: 1px solid #e2e8f0; transition: all .2s; position: relative; }
-    .home-cat-card.active { cursor: pointer; background: #fff; }
-    .home-cat-card.active:hover { background: #eff6ff; border-color: #3b82f6; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(30,64,175,.12); }
-    .home-cat-card.active.pension-tone:hover { background:#eff6ff; border-color:#3b82f6; }
-    .home-cat-card.active.disability-tone:hover { background:#f5f3ff; border-color:#8b5cf6; }
-    .home-cat-card.active.fuel-tone:hover { background:#fff7ed; border-color:#f97316; }
-    .home-cat-card.active.game-tone:hover { background:#f0fdf4; border-color:#22c55e; }
-    .home-cat-icon { font-size: 1.85rem; display: block; margin-bottom: 0.5rem; }
-    .home-cat-name { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; line-height: 1.3; }
+    .home-cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; }
+    .home-cat-card { padding: 1.3rem 0.75rem 1.2rem; border-radius: 1.1rem; text-align: center; background: #f8fafc; border: 1px solid #eef2f7; transition: all .2s; position: relative; --tone: #1e40af; }
+    .home-cat-card.active { cursor: pointer; background: #fff; box-shadow: 0 1px 2px rgba(15,23,42,.03); }
+    .home-cat-card.active:hover { background: #fff; border-color: color-mix(in srgb, var(--tone) 45%, #fff); transform: translateY(-3px); box-shadow: 0 14px 26px -12px color-mix(in srgb, var(--tone) 35%, transparent); }
+    .home-cat-card.pension-tone { --tone: #1e40af; }
+    .home-cat-card.disability-tone { --tone: #6d28d9; }
+    .home-cat-card.fuel-tone { --tone: #ea580c; }
+    .home-cat-card.game-tone { --tone: #16a34a; }
+    .home-cat-icon { width: 54px; height: 54px; margin: 0 auto 0.55rem; display: flex; align-items: center; justify-content: center; border-radius: 17px; background: #f1f5f9; background: color-mix(in srgb, var(--tone) 9%, #fff); font-size: 1.7rem; line-height: 1; }
+    .home-cat-name { font-size: 0.92rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; line-height: 1.3; letter-spacing: -0.01em; }
     .home-cat-desc { font-size: 0.72rem; color: #64748b; margin-bottom: 0.45rem; line-height: 1.4; letter-spacing: -0.01em; word-break: keep-all; }
     body.high-contrast .home-cat-desc { color: #fff !important; }
 
@@ -650,26 +655,26 @@
     .home-cat-card.active.game-tone .home-cat-status { background: #dcfce7; color: #15803d; }
 
     .home-info-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
-    .home-info-item { display: flex; gap: 0.85rem; padding: 1rem 1.1rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; align-items: flex-start; }
+    .home-info-item { display: flex; gap: 0.85rem; padding: 1.05rem 1.15rem; background: #fbfcfe; border-radius: 1rem; border: 1px solid #eef2f7; align-items: flex-start; }
     .home-info-icon { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,#1e40af,#2563eb); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; font-weight: 800; }
     .home-info-text strong { display: block; font-size: 0.95rem; color: #0f172a; margin-bottom: 0.2rem; font-weight: 700; }
     .home-info-text span { font-size: 0.85rem; color: #64748b; line-height: 1.55; }
 
     .home-link-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-    .home-link-btn { padding: 0.85rem 0.75rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.6rem; text-decoration: none; color: #334155; font-weight: 600; font-size: 0.9rem; text-align: center; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
-    .home-link-btn:hover { background: #eff6ff; border-color: #3b82f6; color: #1e40af; transform: translateY(-1px); }
+    .home-link-btn { padding: 0.9rem 0.75rem; background: #fbfcfe; border: 1px solid #eef2f7; border-radius: 0.85rem; text-decoration: none; color: #334155; font-weight: 600; font-size: 0.9rem; text-align: center; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+    .home-link-btn:hover { background: #eff6ff; border-color: #93c5fd; color: #1e40af; transform: translateY(-2px); box-shadow: 0 8px 18px -10px rgba(30,64,175,.25); }
 
     .home-search-result { margin-top: 1rem; padding: 0.85rem 1.1rem; background: rgba(255,255,255,.95); border-radius: 12px; color: #0f172a; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,.1); display: none; max-width: 560px; margin-left: auto; margin-right: auto; text-align: left; }
     .home-search-result.visible { display: block; }
     .home-search-result a { color: #1e40af; font-weight: 700; text-decoration: underline; cursor: pointer; }
     .home-search-result .no-result { color: #64748b; }
 
-    .home-footer { background: #1e293b; color: #cbd5e1; padding: 2rem 1rem; text-align: center; font-size: 0.85rem; line-height: 1.7; margin-top: 1rem; }
+    .home-footer { background: #0f172a; color: #cbd5e1; padding: 2.25rem 1rem; text-align: center; font-size: 0.85rem; line-height: 1.7; margin-top: 1.5rem; }
     .home-footer strong { color: #fff; }
 
     /* ===== Welfare Finder (홈페이지 통합 모의계산기 — 위저드 형식) ===== */
-    .wff-card { background: #fff; border-radius: 1rem; padding: 1.75rem 1.5rem; box-shadow: 0 4px 16px rgba(15,23,42,.06); margin-bottom: 1.25rem; border: 1px solid #e2e8f0; position: relative; overflow: hidden; }
-    .wff-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg,#1e40af,#3b82f6,#06b6d4); }
+    .wff-card { background: #fff; border-radius: 1.4rem; padding: 1.9rem 1.6rem; box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 28px -16px rgba(15,23,42,.12); margin-bottom: 1.25rem; border: 1px solid #eef2f7; position: relative; overflow: hidden; }
+    .wff-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg,#2563eb,#06b6d4,#10b981); }
     .wff-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
     .wff-title-icon { font-size: 1.5rem; }
     .wff-desc { font-size: 0.92rem; color: #64748b; margin-bottom: 1.25rem; line-height: 1.55; }
@@ -793,7 +798,7 @@
     .wf-subtitle { font-size: 1rem; color: rgba(255,255,255,.85); line-height: 1.55; }
 
     .wf-main { max-width: 720px; margin: -1.5rem auto 0; padding: 0 1rem; position: relative; z-index: 2; }
-    .wf-card { background: #fff; border-radius: 1rem; padding: 1.5rem 1.4rem; box-shadow: 0 2px 12px rgba(15,23,42,.05); margin-bottom: 1rem; border: 1px solid #e2e8f0; }
+    .wf-card { background: #fff; border-radius: 1.25rem; padding: 1.6rem 1.5rem; box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 10px 26px -16px rgba(15,23,42,.1); margin-bottom: 1rem; border: 1px solid #eef2f7; }
     .wf-card-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 0.85rem; letter-spacing: -0.01em; }
     .wf-bar { width: 4px; height: 22px; border-radius: 2px; }
     .wf-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-top: 0.5rem; }
@@ -902,7 +907,8 @@
     .wf-tone-slate .wf-summary-item { border-color: #cbd5e1; background: linear-gradient(135deg,#f8fafc,#fff); }
 
     /* ===== 통합 검색 (강화판, 홈 맨 아래) ===== */
-    .hs-section { background: linear-gradient(135deg, #1e293b, #334155); border-radius: 1.1rem; padding: 1.75rem 1.5rem; margin: 1.25rem 0; box-shadow: 0 8px 24px rgba(15,23,42,.18); position: relative; }
+    .hs-section { background: linear-gradient(150deg, #101a33, #1e293b 55%, #1d3a5f); border-radius: 1.4rem; padding: 1.9rem 1.6rem; margin: 1.25rem 0; box-shadow: 0 16px 36px -14px rgba(2,6,23,.45); position: relative; overflow: hidden; }
+    .hs-section::before { content:''; position:absolute; inset:0; pointer-events:none; background: radial-gradient(420px 240px at 92% -20%, rgba(59,130,246,.28), transparent 65%); }
     .hs-title { color: #fff; font-size: 1.3rem; font-weight: 800; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
     .hs-desc { color: rgba(255,255,255,.78); font-size: 0.88rem; margin-bottom: 1.1rem; line-height: 1.55; }
     .hs-input-wrap { position: relative; background: #fff; border-radius: 0.85rem; padding: 0.5rem 0.5rem 0.5rem 1.1rem; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
@@ -1674,7 +1680,7 @@
           <div class="home-cat-card active" data-go="welfare-youth" style="--tone:#6d28d9;">
             <span class="home-cat-icon">💼</span>
             <div class="home-cat-name">청년·구직지원</div>
-            <div class="home-cat-desc">청년수당 · 월세 · 도약계좌</div>
+            <div class="home-cat-desc">월세 · 저축 · 청약 · 면접수당</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
           <div class="home-cat-card active" data-go="welfare-emergency" style="--tone:#b91c1c;">
@@ -3747,22 +3753,25 @@
         <button class="wf-back" data-wf-back>← 홈으로</button>
         <span class="wf-emoji">💼</span>
         <h1 class="wf-title">청년 · 구직 지원</h1>
-        <p class="wf-subtitle">청년의 자립과 구직 활동을 돕는<br>주요 정부 지원 제도를 한곳에서 확인하세요</p>
+        <p class="wf-subtitle">20~30대가 받을 수 있는 자산·주거·취업 지원을<br>한곳에 모았어요 — 몰라서 놓치지 마세요</p>
       </div>
     </header>
     <main class="wf-main">
       <div class="wf-card">
-        <div class="wf-card-title"><span class="wf-bar"></span>주요 청년 지원 제도</div>
+        <div class="wf-card-title"><span class="wf-bar"></span>주요 청년 지원 제도 한눈에 보기</div>
         <table class="wf-table">
           <thead><tr><th>제도</th><th>대상</th><th class="num">지원 내용</th></tr></thead>
           <tbody>
             <tr><td><strong>청년도약계좌</strong></td><td>만 19~34세<br>총급여 7,500만원 이하</td><td class="num">5년 만기<br>최대 5,000만원</td></tr>
+            <tr><td><strong>청년내일저축계좌</strong></td><td>만 19~34세<br>일하는 저소득 청년</td><td class="num">3년 만기<br>본인 360만 + 정부 360만~1,080만</td></tr>
             <tr><td><strong>청년월세 특별지원</strong></td><td>만 19~34세<br>독립가구 청년</td><td class="num">월 20만원<br>최대 24개월(480만원)</td></tr>
+            <tr><td><strong>청년 주택드림 청약통장</strong></td><td>만 19~34세<br>무주택 청년</td><td class="num">금리 최대 4.5% + 비과세<br>당첨 시 분양가 80% 저리 대출</td></tr>
             <tr><td><strong>국민취업지원제도 1유형</strong></td><td>저소득 구직자</td><td class="num">월 60만원 × 6개월<br>+ 취업지원</td></tr>
-            <tr><td><strong>국민취업지원제도 2유형</strong></td><td>일반 구직자<br>(청년 포함)</td><td class="num">취업활동비<br>최대 195만원</td></tr>
+            <tr><td><strong>면접수당·청년수당 (지자체)</strong></td><td>미취업 청년<br>(지역별 상이)</td><td class="num">면접 1회 5만원 안팎<br>서울은 월 50만 × 6개월</td></tr>
             <tr><td><strong>청년내일채움공제</strong></td><td>중소기업 정규직 청년</td><td class="num">2년 1,200만원<br>(본인+기업+정부)</td></tr>
           </tbody>
         </table>
+        <div class="wf-callout info"><strong>💡 중복 가능</strong>성격이 다른 제도끼리는 대부분 <strong>함께 받을 수 있어요</strong>. 예: 청년월세 + 도약계좌 + 면접수당 동시 수급 가능. 아래에서 하나씩 확인하세요.</div>
       </div>
 
       <div class="wf-card">
@@ -3797,12 +3806,54 @@
       </div>
 
       <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>청년내일저축계좌 (저축 매칭 지원)</div>
+        <p class="text-sm text-slate-500 mb-3">내가 10만원 저축하면 정부가 10만~30만원을 <strong>얹어주는</strong> 통장이에요. 일하는 저소득 청년이라면 꼭 확인하세요.</p>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">👤</span><div><strong>대상:</strong> 만 19~34세 일하는 청년, 월 근로소득 약 50만~250만원 + 가구 중위소득 100% 이하 (수급자·차상위는 만 15~39세로 완화)</div></li>
+          <li><span class="wf-list-icon">💵</span><div><strong>구조:</strong> 본인 월 10만원 저축 → 정부가 월 10만원 매칭 (수급자·차상위는 월 30만원)</div></li>
+          <li><span class="wf-list-icon">🎉</span><div><strong>3년 만기:</strong> 본인 360만 + 정부 지원 360만~1,080만 + 이자 = <strong>최대 약 1,500만원</strong></div></li>
+          <li><span class="wf-list-icon">📋</span><div><strong>유지 조건:</strong> 3년간 근로 지속 + 교육 이수 + 자금사용계획서 제출</div></li>
+          <li><span class="wf-list-icon">💻</span><div><strong>신청:</strong> 복지로(bokjiro.go.kr) 또는 주민센터 — 보통 <strong>매년 5월경 모집</strong>하니 시기를 놓치지 마세요</div></li>
+          <li><span class="wf-list-icon">➕</span><div><strong>중복:</strong> 청년도약계좌와 <strong>동시 가입 가능</strong> (여력이 되면 둘 다!)</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>청년 주택드림 청약통장 (내 집 마련 · 분양)</div>
+        <p class="text-sm text-slate-500 mb-3">청약통장 중 청년 전용 우대형이에요. <strong>분양 당첨까지 이어지면 저리 대출</strong>로 연결되는 것이 가장 큰 장점입니다.</p>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">👤</span><div><strong>가입 대상:</strong> 만 19~34세 무주택 청년, 연소득 5,000만원 이하</div></li>
+          <li><span class="wf-list-icon">💰</span><div><strong>혜택:</strong> 금리 최대 연 4.5% + 이자소득 비과세(한도 있음) + 연말정산 소득공제 — 일반 청약통장보다 유리</div></li>
+          <li><span class="wf-list-icon">💵</span><div><strong>납입:</strong> 월 2만~100만원 자유 납입, 기존 주택청약종합저축에서 <strong>전환 가능</strong>(기존 납입 횟수 인정)</div></li>
+          <li><span class="wf-list-icon">🏠</span><div><strong>청년 주택드림 대출:</strong> 이 통장으로 청약 <strong>당첨 시 분양가의 최대 80%</strong>를 최저 2%대 금리로 대출 (만 39세 이하, 통장 가입 1년 이상)</div></li>
+          <li><span class="wf-list-icon">🏗️</span><div><strong>분양 기회:</strong> 공공분양(뉴:홈)에는 <strong>미혼 청년 특별공급</strong> 물량이 따로 있어요 — 청약홈에서 공고 확인</div></li>
+          <li><span class="wf-list-icon">🏦</span><div><strong>가입처:</strong> 주요 시중은행 창구·앱</div></li>
+        </ul>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-card-title"><span class="wf-bar"></span>면접수당 · 지자체 구직 지원</div>
+        <p class="text-sm text-slate-500 mb-3">사는 지역에 따라 <strong>면접만 봐도 수당</strong>을 주는 곳이 많아요. 몰라서 못 받는 대표적인 혜택입니다.</p>
+        <ul class="wf-list">
+          <li><span class="wf-list-icon">🗼</span><div><strong>서울 청년수당:</strong> 미취업 청년(만 19~34세)에게 <strong>월 50만원 × 최대 6개월</strong> — 구직활동 계획서 제출, 연초 모집</div></li>
+          <li><span class="wf-list-icon">🏞️</span><div><strong>경기 청년 면접수당:</strong> 면접 <strong>1회당 5만원, 최대 30만원</strong>(6회) — 면접 확인서로 신청</div></li>
+          <li><span class="wf-list-icon">🌆</span><div><strong>다른 지역도 확인:</strong> 부산·인천·대전 등 대부분 지자체에 청년 구직수당·면접정장 무료 대여 등이 있어요 — 청년정책포털(youth.go.kr) 또는 시·구청 청년정책과</div></li>
+          <li><span class="wf-list-icon">📝</span><div><strong>국가기술자격 응시료 50% 할인:</strong> 만 34세 이하 청년, 연 3회까지 (큐넷 q-net.or.kr)</div></li>
+        </ul>
+        <div class="wf-callout warn"><strong>📌 안내</strong>지자체 사업은 지역·연도에 따라 이름과 금액, 모집 시기가 달라요. 신청 전 반드시 해당 지자체 공고를 확인하세요.</div>
+      </div>
+
+      <div class="wf-card">
         <div class="wf-card-title"><span class="wf-bar"></span>🎁 함께 챙기면 좋은 혜택 (놓치기 쉬워요!)</div>
         <ul class="wf-list">
           <li><span class="wf-list-icon">🎓</span><div><strong>국가장학금</strong> — 대학생이라면 소득구간별 등록금 지원. <strong>매 학기 신청 기간</strong>(보통 5~6월, 11~12월)을 놓치면 못 받아요 (한국장학재단 ☎ 1599-2000)</div></li>
           <li><span class="wf-list-icon">🧳</span><div><strong>자립준비청년 자립수당</strong> — 보호(시설·위탁) 종료 후 5년 이내 청년에게 <strong>월 50만원</strong> (주민센터 신청)</div></li>
           <li><span class="wf-list-icon">🧠</span><div><strong>청년마음건강 지원</strong> — 심리상담 바우처 지원 (주민센터·복지로 신청)</div></li>
           <li><span class="wf-list-icon">🏠</span><div><strong>주거급여 분리지급</strong> — 부모가 주거급여 수급 가구라면, 따로 사는 미혼 청년도 별도로 월세 지원 가능</div></li>
+          <li><span class="wf-list-icon">🏦</span><div><strong>중소기업 취업청년 전월세보증금 대출</strong> — 중소기업 재직 청년(만 19~34세)에게 보증금 <strong>최대 1억원, 연 1%대</strong> 저리 대출 (주택도시기금)</div></li>
+          <li><span class="wf-list-icon">🚌</span><div><strong>K-패스 (교통비 환급)</strong> — 월 15회 이상 대중교통 이용 시 청년(만 19~34세)은 <strong>요금의 30% 환급</strong> (일반 20%, 저소득 53%)</div></li>
+          <li><span class="wf-list-icon">🎭</span><div><strong>청년 문화예술패스</strong> — 성년이 되는 19세에게 공연·전시 관람비 <strong>최대 15만원</strong> 지원</div></li>
+          <li><span class="wf-list-icon">🛡️</span><div><strong>전세보증금 반환보증 보증료 지원</strong> — 청년·신혼부부 전세사기 예방, 보증료 최대 30만원 환급 (지자체 신청)</div></li>
         </ul>
       </div>
 
@@ -3820,6 +3871,12 @@
         <details class="wf-faq"><summary>❓ 지자체별 청년 지원도 따로 있나요?</summary><div class="wf-faq-body">
           <p>네. 서울 청년수당, 경기 청년기본소득 등 지자체별 다양한 청년 지원사업이 있어 거주지 시·구청 청년정책과나 청년정책포털(youth.go.kr)에서 추가 확인하세요.</p>
         </div></details>
+        <details class="wf-faq"><summary>❓ 청년도약계좌와 청년내일저축계좌, 둘 다 가입할 수 있나요?</summary><div class="wf-faq-body">
+          <p>네, <strong>중복 가입 가능</strong>합니다. 성격이 달라요 — 도약계좌는 폭넓은 청년 대상 5년 장기 자산형성, 내일저축계좌는 일하는 저소득 청년 대상 3년 매칭 저축입니다. 내일저축계좌 소득 요건에 해당한다면 매칭률이 높은 내일저축계좌부터 챙기는 것이 유리해요.</p>
+        </div></details>
+        <details class="wf-faq"><summary>❓ 주택드림 청약통장이 기존 청약통장보다 뭐가 좋나요?</summary><div class="wf-faq-body">
+          <p>세 가지가 달라요. ① 금리가 최대 연 4.5%로 더 높고 ② 이자소득 비과세 혜택이 있으며 ③ 이 통장으로 <strong>청약에 당첨되면 분양가의 최대 80%를 2%대 저금리로 빌려주는 전용 대출</strong>로 이어집니다. 기존 통장의 납입 횟수를 인정받으면서 전환할 수 있으니, 자격이 되면 전환하는 것이 손해가 없어요.</p>
+        </div></details>
       </div>
 
       <div class="wf-card">
@@ -3828,6 +3885,8 @@
           <a class="wf-contact-btn" href="https://www.youth.go.kr" target="_blank" rel="noopener">🌐 청년정책포털</a>
           <a class="wf-contact-btn" href="https://www.work.go.kr" target="_blank" rel="noopener">🌐 워크넷</a>
           <a class="wf-contact-btn" href="https://ylaccount.kinfa.or.kr" target="_blank" rel="noopener">🌐 청년도약계좌</a>
+          <a class="wf-contact-btn" href="https://www.applyhome.co.kr" target="_blank" rel="noopener">🏠 청약홈 (분양 공고)</a>
+          <a class="wf-contact-btn" href="https://nhuf.molit.go.kr" target="_blank" rel="noopener">🏦 주택도시기금</a>
           <a class="wf-contact-btn" href="tel:1350">📞 고용노동부 1350</a>
           <a class="wf-contact-btn" href="tel:1397">📞 서민금융 1397</a>
           <a class="wf-contact-btn" href="tel:1599-0001">📞 청년월세 1599-0001</a>
@@ -10456,6 +10515,24 @@ window.QUIZ_QUESTION_COUNT = 10;
           tags: ['19~34세', '월 20~60만']
         },
         {
+          target: 'welfare-youth', label: '청년내일저축계좌', icon: '💰',
+          desc: '일하는 저소득 청년 저축 매칭 · 월 10만 저축 시 정부 10만~30만 추가 · 3년 최대 1,080만 지원',
+          keywords: ['청년내일저축계좌', '내일저축', '저축', '청년저축', '매칭', '통장', '10만', '30만', '1080만', '자산형성', '차상위', '수급자'],
+          tags: ['19~34세', '정부 매칭 저축']
+        },
+        {
+          target: 'welfare-youth', label: '청년 주택드림 청약통장', icon: '🏠',
+          desc: '무주택 청년 우대 청약통장 · 금리 최대 4.5% + 비과세 · 당첨 시 분양가 80% 저리 대출',
+          keywords: ['주택드림', '청약', '청약통장', '분양', '분양권', '내집마련', '특별공급', '특공', '뉴홈', '4.5%', '주택드림대출', '80%'],
+          tags: ['19~34세', '분양·청약']
+        },
+        {
+          target: 'welfare-youth', label: '면접수당·청년수당', icon: '📝',
+          desc: '지자체 구직 지원 · 경기 면접 1회 5만원(최대 30만) · 서울 청년수당 월 50만 × 6개월',
+          keywords: ['면접수당', '청년수당', '구직수당', '면접', '서울청년수당', '경기면접수당', '50만', '5만', '미취업', '취준생', '응시료'],
+          tags: ['미취업 청년', '지자체']
+        },
+        {
           target: 'welfare-emergency', label: '긴급복지지원', icon: '🆘',
           desc: '위기상황 일시 지원 · 생계 199만(4인)/의료 회당 300만/주거 75만 (선지원 후심사)',
           keywords: ['긴급복지', '긴급지원', '위기', '실직', '폐업', '화재', '질병', '199만', '300만', '75만', '129', '선지원후심사', '주거지원', '의료지원', '생계지원'],
@@ -11719,6 +11796,20 @@ window.QUIZ_QUESTION_COUNT = 10;
               detail: '만 19~34세, 총급여 7,500만원 이하 청년의 자산 형성 적금. 5년간 월 70만원 한도 적립 + 정부 기여금 + 비과세.',
               cta: '청년 지원 자세히 보기 →'
             });
+            if (income === 'basic' || income === 'nearpoor' || income === 'low') {
+              high.push({
+                icon: '💰', name: '청년내일저축계좌', target: 'welfare-youth',
+                detail: '일하는 저소득 청년이 월 10만원 저축하면 정부가 10만~30만원을 매칭. 3년 만기 시 본인 360만 + 정부 최대 1,080만원. 매년 5월경 모집.',
+                cta: '내일저축계좌 자세히 보기 →'
+              });
+            }
+            if (housing !== 'own') {
+              review.push({
+                icon: '🏠', name: '청년 주택드림 청약통장', target: 'welfare-youth',
+                detail: '무주택 청년(연소득 5천만 이하) 우대 청약통장 — 금리 최대 4.5% + 비과세, 당첨 시 분양가 80%까지 2%대 저리 대출 연결.',
+                cta: '주택드림 청약통장 안내 →'
+              });
+            }
             if (t.youthMoving && (housing === 'monthly' || housing === 'jeonse')) {
               high.push({
                 icon: '🏠', name: '청년월세 특별지원', target: 'welfare-youth',
@@ -11731,6 +11822,11 @@ window.QUIZ_QUESTION_COUNT = 10;
                 icon: '💼', name: '국민취업지원제도', target: 'welfare-youth',
                 detail: '구직 중인 청년에게 1유형(월 60만원 × 6개월) 또는 2유형(취업활동비 195만원) 지원 + 직업훈련·취업알선.',
                 cta: '취업지원 자세히 보기 →'
+              });
+              review.push({
+                icon: '📝', name: '면접수당·청년수당 (지자체)', target: 'welfare-youth',
+                detail: '지역에 따라 면접 1회당 5만원 안팎의 면접수당(경기 최대 30만원), 서울 청년수당(월 50만 × 6개월) 등 — 거주 지자체 공고 확인.',
+                cta: '면접수당 안내 →'
               });
             }
           }
