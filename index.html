@@ -4,13 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2026 복지 도우미 | 내가 받을 수 있는 복지 혜택 1분 확인</title>
-  <meta name="description" content="기초연금·장애인연금·고유가 피해지원금부터 의료·주거·교육급여까지. 2026년 정부 복지 혜택의 자격 조건과 신청 방법을 한곳에서 1분 안에 확인하세요.">
-  <meta name="keywords" content="2026 복지, 복지 혜택, 복지 도우미, 기초연금 계산기, 장애인연금 계산기, 고유가 피해지원금, 민생지원금, 기초생활보장, 의료급여, 주거급여, 복지로, 정부지원금, 복지 자격 확인">
+  <meta name="description" content="기초연금·장애인연금 계산기부터 기초생활보장·의료·주거·교육급여, 아동수당·청년지원·한부모까지. 2026년 정부 복지 혜택의 자격 조건과 신청 방법을 대상별로 1분 안에 확인하세요.">
+  <meta name="keywords" content="2026 복지, 복지 혜택, 복지 도우미, 기초연금 계산기, 장애인연금 계산기, 기초생활보장, 의료급여, 주거급여, 교육급여, 아동수당, 부모급여, 청년월세, 한부모 지원, 긴급복지지원, 연말정산, 복지로, 정부지원금, 복지 자격 확인">
   <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://kingofthestock.github.io/basicpension.github.io/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
+  <meta property="og:url" content="https://kingofthestock.github.io/basicpension.github.io/">
   <meta property="og:title" content="2026 복지 도우미 - 내가 받을 수 있는 복지 혜택 확인">
-  <meta property="og:description" content="기초연금·장애인연금·민생지원금 등 2026년 정부 복지 혜택을 한곳에서 확인하세요.">
+  <meta property="og:description" content="기초연금·장애인연금·기초생활보장·아동수당 등 2026년 정부 복지 혜택을 대상별로 한곳에서 확인하세요.">
   <meta name="twitter:card" content="summary">
   <meta name="theme-color" content="#1e40af">
   <meta name="author" content="2026 복지 도우미">
@@ -71,8 +73,8 @@
         },
         {
           "@type": "Question",
-          "name": "고유가 피해지원금(3차 민생지원금)은 누가 받나요?",
-          "acceptedAnswer": { "@type": "Answer", "text": "소득 하위 70%를 대상으로 1인당 10만~60만원이 지급되었습니다. 신청은 2026년 7월 3일에 마감되었으며, 이미 받은 지원금은 8월 31일까지 사용해야 합니다." }
+          "name": "부모급여와 아동수당은 함께 받을 수 있나요?",
+          "acceptedAnswer": { "@type": "Answer", "text": "네, 중복 수급이 가능합니다. 만 0세는 부모급여 100만 원 + 아동수당 10만 원, 만 1세는 부모급여 50만 원 + 아동수당 10만 원을 함께 받습니다. 두 제도 모두 소득·재산 기준이 없습니다." }
         },
         {
           "@type": "Question",
@@ -101,12 +103,22 @@
     body.high-contrast, body.high-contrast * { transition: none !important; } /* 고대비 전환은 즉시 적용 (전환 애니메이션 없이) */
     body.high-contrast { background: #000 !important; color: #fff !important; }
     body.high-contrast .home-card-section, body.high-contrast .wf-card, body.high-contrast .wff-card,
-    body.high-contrast .home-quick-card, body.high-contrast .home-cat-card,
+    body.high-contrast .home-cat-card,
     body.high-contrast .cb-list-wrap, body.high-contrast .cb-detail,
-    body.high-contrast .home-search-card { background: #000 !important; color: #fff !important; border-color: #fff !important; }
+    body.high-contrast .home-fold, body.high-contrast .gap-check-card,
+    body.high-contrast .prep-card, body.high-contrast .prep-item,
+    body.high-contrast .tx-tip, body.high-contrast .tx-step,
+    body.high-contrast .wff-result-card, body.high-contrast .cb-modal-box,
+    body.high-contrast .game-result-box, body.high-contrast .cb-comment,
+    body.high-contrast .wf-faq, body.high-contrast .faq-item { background: #000 !important; color: #fff !important; border-color: #fff !important; }
+    body.high-contrast .home-fold > summary { background: #000 !important; color: #ffeb3b !important; }
+    body.high-contrast .home-fold[open] > summary { border-bottom-color: #fff !important; }
+    body.high-contrast .tx-tip, body.high-contrast .wf-callout { border-left-color: #ffeb3b !important; }
+    body.high-contrast .wff-result-badge, body.high-contrast .wf-calc-badge { background: #ffeb3b !important; color: #000 !important; }
     body.high-contrast h1, body.high-contrast h2, body.high-contrast h3,
     body.high-contrast strong, body.high-contrast .home-section-title,
-    body.high-contrast .home-quick-card-title, body.high-contrast .home-cat-name,
+    body.high-contrast .home-cat-name, body.high-contrast .wff-result-name,
+    body.high-contrast .tx-tip-title, body.high-contrast .prep-item-name,
     body.high-contrast .cb-detail-title { color: #ffeb3b !important; }
     body.high-contrast a, body.high-contrast .text-blue-700, body.high-contrast .text-blue-600 { color: #00e5ff !important; text-decoration: underline !important; }
     body.high-contrast button:not(.disabled) { border: 2px solid #fff !important; }
@@ -224,11 +236,11 @@
     /* ===== 인쇄 스타일 ===== */
     @media print {
       .top-nav, .floating-game-btn, #floating-game-btn, #scroll-top-btn,
-      .a11y-bar, .home-footer, .home-search-section, #home-search-section,
-      .gap-check-card, .home-card-section:not(.print-keep),
+      .a11y-bar, .home-footer, #home-search-section,
+      .gap-check-card, .home-card-section,
       .cb-toolbar, .cb-comments, .cb-detail-foot, .cb-detail-actions,
       .doc-actions, .wff-step:not(.active), .wff-progress, .wff-nav,
-      .wf-back, .home-hero, .home-quick-grid, .home-cat-grid,
+      .wf-back, .home-hero, .home-cat-grid,
       [data-wf-back], #wff-share-btn,
       [data-tx-tab], .tx-pane:not(.active),
       iframe, video, audio, canvas { display: none !important; }
@@ -579,14 +591,8 @@
     .home-hero-tag { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,.13); padding: 0.45rem 1.05rem; border-radius: 999px; font-size: 0.85rem; margin-bottom: 1.35rem; border: 1px solid rgba(255,255,255,.28); font-weight: 600; backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(2,6,23,.12); }
     .home-hero-title { font-size: 2.7rem; font-weight: 800; line-height: 1.22; margin-bottom: 1rem; letter-spacing: -0.04em; text-wrap: balance; }
     .home-hero-subtitle { font-size: 1.08rem; color: rgba(224,238,255,.92); line-height: 1.65; max-width: 580px; margin: 0 auto 1.75rem; letter-spacing: -0.01em; }
-    .home-search { max-width: 560px; margin: 0 auto; position: relative; background: #fff; border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,.16); padding: 0.45rem 0.45rem 0.45rem 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
-    .home-search-icon { font-size: 1.15rem; color: #94a3b8; flex-shrink: 0; }
-    .home-search input { flex: 1; border: none; outline: none; font-size: 1rem; padding: 0.55rem 0.25rem; background: transparent; color: #0f172a; font-family: inherit; }
-    .home-search input::placeholder { color: #94a3b8; }
-    .home-search-btn { background: #1e40af; color: #fff; border: none; padding: 0.6rem 1.4rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background .2s; font-family: inherit; font-size: 0.95rem; }
-    .home-search-btn:hover { background: #1e3a8a; }
-    .home-search-hint { margin-top: 0.85rem; font-size: 0.8rem; color: rgba(255,255,255,.7); }
-    .home-search-hint strong { color: #fff; font-weight: 600; }
+    /* (홈 히어로 검색창은 '두 갈래길' 카드로 대체됨 — 관련 .home-search* 스타일 삭제됨.
+        통합 검색은 페이지 하단 .hs-section 스타일을 사용) */
 
     .home-main { max-width: 1100px; margin: -1.5rem auto 0; padding: 0 1rem; position: relative; z-index: 2; }
     .home-card-section { background: #fff; border-radius: 1.4rem; padding: 1.9rem 1.6rem; box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 28px -16px rgba(15,23,42,.1); margin-bottom: 1.25rem; border: 1px solid #eef2f7; }
@@ -653,6 +659,10 @@
     .home-cat-card.active.disability-tone .home-cat-status { background: #ede9fe; color: #6d28d9; }
     .home-cat-card.active.fuel-tone .home-cat-status { background: #ffedd5; color: #c2410c; }
     .home-cat-card.active.game-tone .home-cat-status { background: #dcfce7; color: #15803d; }
+    /* 신청 마감·기한 임박 등 주의 상태 배지 */
+    .home-cat-card .home-cat-status.closed { background: #fee2e2 !important; color: #b91c1c !important; }
+    .home-cat-card .home-cat-status.urgent { background: #fef3c7 !important; color: #b45309 !important; }
+    body.high-contrast .home-cat-status.closed, body.high-contrast .home-cat-status.urgent { background: #ffeb3b !important; color: #000 !important; }
 
     .home-info-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
     .home-info-item { display: flex; gap: 0.85rem; padding: 1.05rem 1.15rem; background: #fbfcfe; border-radius: 1rem; border: 1px solid #eef2f7; align-items: flex-start; }
@@ -663,11 +673,6 @@
     .home-link-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
     .home-link-btn { padding: 0.9rem 0.75rem; background: #fbfcfe; border: 1px solid #eef2f7; border-radius: 0.85rem; text-decoration: none; color: #334155; font-weight: 600; font-size: 0.9rem; text-align: center; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
     .home-link-btn:hover { background: #eff6ff; border-color: #93c5fd; color: #1e40af; transform: translateY(-2px); box-shadow: 0 8px 18px -10px rgba(30,64,175,.25); }
-
-    .home-search-result { margin-top: 1rem; padding: 0.85rem 1.1rem; background: rgba(255,255,255,.95); border-radius: 12px; color: #0f172a; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(0,0,0,.1); display: none; max-width: 560px; margin-left: auto; margin-right: auto; text-align: left; }
-    .home-search-result.visible { display: block; }
-    .home-search-result a { color: #1e40af; font-weight: 700; text-decoration: underline; cursor: pointer; }
-    .home-search-result .no-result { color: #64748b; }
 
     .home-footer { background: #0f172a; color: #cbd5e1; padding: 2.25rem 1rem; text-align: center; font-size: 0.85rem; line-height: 1.7; margin-top: 1.5rem; }
     .home-footer strong { color: #fff; }
@@ -1073,6 +1078,15 @@
     .cb-detail-head { padding-bottom: 0.85rem; border-bottom: 2px dashed #e2e8f0; margin-bottom: 1rem; }
     .cb-detail-title { font-size: 1.4rem; font-weight: 900; color: #0f172a; line-height: 1.4; margin: 0.35rem 0 0.45rem; }
     .cb-detail-meta { display: flex; gap: 0.5rem; align-items: center; font-size: 0.82rem; color: #64748b; flex-wrap: wrap; }
+    /* 상세 화면 분류 배지 · 작성자 (목록의 .cb-post-row-cat 과 같은 톤) */
+    .cb-post-cat-badge { display: inline-block; font-size: 0.72rem; font-weight: 800; color: #1e40af; padding: 0.2rem 0.6rem; background: #eff6ff; border-radius: 999px; }
+    .cb-post-cat-badge.notice { background: #d97706; color: #fff; }
+    .cb-post-cat-badge.game { background: #dcfce7; color: #166534; }
+    .cb-post-cat-badge.calc { background: #fce7f3; color: #9d174d; }
+    .cb-post-cat-badge.free { background: #e0e7ff; color: #3730a3; }
+    .cb-post-author { font-weight: 700; color: #334155; }
+    .cb-post-author.admin { color: #b91c1c; }
+    .cb-post-author.admin::after { content: ' 👑'; }
     .cb-detail-body { font-size: 0.96rem; color: #1e293b; line-height: 1.75; white-space: pre-wrap; word-break: break-word; min-height: 120px; }
     .cb-detail-body strong { color: #0f172a; }
     .cb-attached-result { margin-top: 1rem; padding: 0.95rem 1rem; background: linear-gradient(135deg,#f0fdf4,#fff); border-left: 4px solid #10b981; border-radius: 0.55rem; font-size: 0.85rem; color: #064e3b; }
@@ -1104,7 +1118,6 @@
       .cb-detail { padding: 1.1rem 1rem; }
       .cb-detail-title { font-size: 1.15rem; }
       .cb-modal-box { padding: 1.2rem 1rem; }
-      .cb-post-time { margin-left: 0; }
     }
 
     /* 세금 도우미 전용 */
@@ -1164,13 +1177,9 @@
       .home-hero { padding: 1.75rem 1rem 2.5rem; }
       .home-hero-title { font-size: 1.75rem; line-height: 1.25; }
       .home-hero-subtitle { font-size: 0.95rem; }
-      .home-quick-grid { grid-template-columns: 1fr; gap: 0.75rem; }
-      .home-quick-card { min-height: auto; }
       .home-cat-grid { grid-template-columns: repeat(2, 1fr); }
       .home-info-row { grid-template-columns: 1fr; }
       .home-link-row { grid-template-columns: 1fr; }
-      .home-search-btn { padding: 0.55rem 0.9rem; font-size: 0.88rem; }
-      .home-search input { font-size: 0.95rem; }
       .home-main { margin-top: -0.75rem; padding: 0 0.85rem; }
       .home-card-section { padding: 1.4rem 1.1rem; border-radius: 0.85rem; }
       .home-section-title { font-size: 1.1rem; }
@@ -1322,7 +1331,7 @@
         </div>
       </div>
       <div class="home-hero">
-        <span class="home-hero-tag">📅 2026년 5월 기준 · 정부 발표 정책 반영</span>
+        <span class="home-hero-tag">📅 2026년 8월 기준 · 정부 발표 정책 반영</span>
         <h1 class="home-hero-title">내가 받을 수 있는<br>복지 혜택, 1분 안에 확인하세요</h1>
         <p class="home-hero-subtitle">간단히 알고 싶은 분도, 자세히 알고 싶은 분도 환영해요</p>
 
@@ -1374,7 +1383,7 @@
             <div class="home-target-name">아이 키우는 집</div>
             <div class="home-target-desc">부모급여 · 아동수당 · 보육료 · 돌봄</div>
           </div>
-          <div class="home-target-card" data-go="target-youth" style="--tg:#a5b4fc;">
+          <div class="home-target-card" data-go="target-youth" style="--tg:#5eead4;">
             <span class="home-target-icon">🧑</span>
             <div class="home-target-name">청년<br>(19~34세)</div>
             <div class="home-target-desc">도약계좌 · 월세 · 취업 · 장학금</div>
@@ -1520,8 +1529,8 @@
           <span class="wff-step-num">STEP 2</span>
           <div class="wff-step-question">🎂 출생 연도를 알려주세요</div>
           <div class="wff-step-help">서기 <strong>4자리 숫자</strong>로 입력해주세요. (예: 1958, 1990, 2020)</div>
-          <input type="number" id="wff-birth" class="wff-input" placeholder="예: 1958" min="1900" max="2026" inputmode="numeric" autocomplete="off">
-          <div class="wff-error" id="wff-error-2">출생 연도를 1900~2026 사이의 4자리 숫자로 입력해주세요.</div>
+          <input type="number" id="wff-birth" class="wff-input" placeholder="예: 1958" min="1900" inputmode="numeric" autocomplete="off">
+          <div class="wff-error" id="wff-error-2">출생 연도를 4자리 숫자로 올바르게 입력해주세요.</div>
         </div>
 
         <!-- Step 3: 가구 형태 -->
@@ -1695,11 +1704,11 @@
             <div class="home-cat-desc">양육비 · 교육비 지원</div>
             <span class="home-cat-status">정보 제공</span>
           </div>
-          <div class="home-cat-card active fuel-tone" data-go="fuel-support">
+          <div class="home-cat-card active fuel-tone" id="home-cat-fuel" data-go="fuel-support">
             <span class="home-cat-icon">⛽</span>
             <div class="home-cat-name">고유가 피해지원금</div>
-            <div class="home-cat-desc">신청 7/3 마감 · 사용기한 8/31</div>
-            <span class="home-cat-status" style="color:#dc2626;">신청 마감</span>
+            <div class="home-cat-desc" id="home-cat-fuel-desc">신청 7/3 마감 · 사용기한 8/31</div>
+            <span class="home-cat-status closed" id="home-cat-fuel-status">신청 마감</span>
           </div>
           <div class="home-cat-card active" data-go="tax-helper" style="--tone:#047857;">
             <span class="home-cat-icon">🧾</span>
@@ -1817,7 +1826,7 @@
       <p><strong>본 사이트는 정부 공식 사이트가 아닌 정보 안내 목적의 홈페이지입니다.</strong></p>
       <p class="mt-1">최종 자격 판정 및 지급 결정은 관할 기관의 심사를 통해 이루어집니다.</p>
       <p class="mt-2"><a href="tel:129" style="color:#93c5fd; font-weight:700; text-decoration:underline;">📞 복지 문의: 보건복지상담센터 129 (무료, 평일 9시~18시)</a></p>
-      <p class="mt-1 opacity-70">© 2026 복지 도우미 · 본 사이트의 정보는 2026년 5월 기준 정부 발표 내용을 반영하였습니다.</p>
+      <p class="mt-1 opacity-70">© 2026 복지 도우미 · 본 사이트의 정보는 2026년 8월 기준 정부 발표 내용을 반영하였습니다.</p>
     </footer>
   </section>
 
@@ -2268,11 +2277,11 @@
 
       <!-- 핵심 요약 -->
       <div class="p-5 rounded-2xl bg-white border border-orange-200 shadow-sm -mt-4 relative z-10 mb-6">
-        <div class="bg-red-50 border-2 border-red-300 rounded-xl p-4 mb-4">
-          <p class="text-base font-black text-red-800 mb-1">⏰ 신청 접수가 7월 3일(금)로 마감됩니다</p>
-          <p class="text-sm text-red-700 leading-relaxed">
-            아직 신청하지 않으셨다면 <strong>서둘러 신청하세요!</strong> 마감 후에는 신청할 수 없습니다.<br>
-            이미 받으신 분은 <strong>8월 31일까지</strong> 사용하지 않으면 잔액이 자동 소멸됩니다.
+        <div class="bg-red-50 border-2 border-red-300 rounded-xl p-4 mb-4" id="fuel-top-banner">
+          <p class="text-base font-black text-red-800 mb-1" id="fuel-banner-title">⏰ 신청은 7월 3일(금)에 마감되었습니다</p>
+          <p class="text-sm text-red-700 leading-relaxed" id="fuel-banner-body">
+            지금은 <strong>새로 신청할 수 없습니다.</strong><br>
+            이미 받으신 분은 <strong>8월 31일(월)까지</strong> 쓰지 않으면 남은 금액이 자동으로 사라집니다.
           </p>
         </div>
         <h2 class="text-lg font-bold text-slate-800 mb-2">한눈에 보기</h2>
@@ -2614,8 +2623,9 @@
       <!-- 주의사항 -->
       <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl mb-6">
         <p class="text-sm text-amber-800 leading-relaxed">
-          <strong>안내:</strong> 이 페이지의 정보는 2026년 5월 기준 정부 발표 내용을 바탕으로 작성되었습니다.
-          세부 사항은 변경될 수 있으니, <strong>최신 정보는 민생지원금 콜센터(1533-1300)</strong>에서 확인하세요.
+          <strong>안내:</strong> 이 페이지의 정보는 2026년 정부 발표 내용을 바탕으로 작성되었습니다.
+          <strong>신청은 7월 3일에 종료</strong>되었고, 남은 절차는 <strong>8월 31일까지 사용</strong>하는 것뿐입니다.
+          세부 사항은 <strong>민생지원금 콜센터(1533-1300)</strong>에서 확인하세요.
         </p>
       </div>
 
@@ -3340,7 +3350,12 @@
           <p>단, 재난적 의료비 지원제도를 통해 일부 비급여 항목도 지원받을 수 있습니다.</p>
         </div></details>
         <details class="wf-faq"><summary>❓ 본인부담 상한제도 적용되나요?</summary><div class="wf-faq-body">
-          <p>네. 1종은 매월 5만원, 2종은 매월 5만원(연 80만원) 등 본인부담 상한액을 초과하면 초과액을 환급받을 수 있습니다.</p>
+          <p>네. 의료급여에도 본인부담 상한제가 있어 정해진 한도를 넘게 낸 금액은 돌려받을 수 있습니다.</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>1종</strong> · 매월 5만원(30일 기준) 한도</li>
+            <li><strong>2종</strong> · 연간 80만원 한도 (요양병원 장기입원 등은 별도 기준)</li>
+          </ul>
+          <p class="text-xs" style="color:#94a3b8;">※ 정확한 상한액·환급 절차는 주민센터 또는 국민건강보험공단 ☎ 1577-1000에서 확인하세요.</p>
         </div></details>
       </div>
 
@@ -3883,7 +3898,7 @@
         <div class="wf-card-title"><span class="wf-bar"></span>공식 사이트 · 문의</div>
         <div class="wf-contact-grid">
           <a class="wf-contact-btn" href="https://www.youth.go.kr" target="_blank" rel="noopener">🌐 청년정책포털</a>
-          <a class="wf-contact-btn" href="https://www.work.go.kr" target="_blank" rel="noopener">🌐 워크넷</a>
+          <a class="wf-contact-btn" href="https://www.work24.go.kr" target="_blank" rel="noopener">🌐 고용24</a>
           <a class="wf-contact-btn" href="https://ylaccount.kinfa.or.kr" target="_blank" rel="noopener">🌐 청년도약계좌</a>
           <a class="wf-contact-btn" href="https://www.applyhome.co.kr" target="_blank" rel="noopener">🏠 청약홈 (분양 공고)</a>
           <a class="wf-contact-btn" href="https://nhuf.molit.go.kr" target="_blank" rel="noopener">🏦 주택도시기금</a>
@@ -3940,7 +3955,7 @@
       </div>
 
       <div class="wf-card">
-        <div class="wf-card-title"><span class="wf-bar"></span>위기 상황 (12가지)</div>
+        <div class="wf-card-title"><span class="wf-bar"></span>어떤 상황이 "위기"에 해당하나요?</div>
         <ul class="wf-list">
           <li><span class="wf-list-icon">💔</span><div>주소득자의 사망·가출·행방불명·구금시설 수용</div></li>
           <li><span class="wf-list-icon">💼</span><div>휴·폐업, 실직, 사업 실패</div></li>
@@ -3949,8 +3964,11 @@
           <li><span class="wf-list-icon">🔥</span><div>화재·자연재해 등으로 거주지 상실</div></li>
           <li><span class="wf-list-icon">🏚️</span><div>주거지 임차료를 6개월 이상 연체하여 거주 불안정</div></li>
           <li><span class="wf-list-icon">⚠️</span><div>전기·가스 등 단전·단수 위기</div></li>
-          <li><span class="wf-list-icon">📋</span><div>그밖에 시·군·구청장이 인정하는 위기상황</div></li>
+          <li><span class="wf-list-icon">👨‍👩‍👧</span><div>이혼·가족 해체, 또는 방임·유기·학대를 당한 경우</div></li>
+          <li><span class="wf-list-icon">🏠</span><div>교정시설 출소 후 생계가 곤란한 경우, 노숙 상태</div></li>
+          <li><span class="wf-list-icon">📋</span><div>그밖에 시·군·구청장이 인정하는 위기 상황 (지자체 조례로 추가 인정)</div></li>
         </ul>
+        <div class="wf-callout info"><strong>💡 애매하면 일단 전화하세요</strong>위 목록에 딱 맞지 않아도 <strong>시·군·구청장이 인정하면</strong> 지원받을 수 있습니다. 판단은 담당자가 하니, 먼저 ☎ <strong>129</strong>로 상황을 설명해보세요.</div>
       </div>
 
       <div class="wf-card">
@@ -4501,7 +4519,7 @@
     <header class="wf-header">
       <div class="wf-header-inner">
         <button data-wf-back class="wf-back">← 홈으로</button>
-        <span class="wf-emoji">💰</span>
+        <span class="wf-emoji">🧾</span>
         <h1 class="wf-title">세금 도우미</h1>
         <p class="wf-subtitle">연말정산·종합소득세, 헷갈리지 말고 한눈에<br>꿀팁과 함께 정확히 알려드릴게요</p>
       </div>
@@ -4729,10 +4747,13 @@
       <!-- 공통 — 도움받을 곳 -->
       <div class="wf-card">
         <div class="wf-card-title"><span class="wf-bar"></span>📞 도움 받을 곳</div>
-        <a class="wf-contact-btn" href="tel:126">📞 국세상담센터 ☎ 126</a>
-        <a class="wf-contact-btn" href="https://hometax.go.kr" target="_blank" rel="noopener">🖥️ 홈택스 (hometax.go.kr)</a>
-        <a class="wf-contact-btn" href="tel:1588-0560">📞 영세납세자 무료 세무상담 ☎ 1588-0560</a>
-        <p class="wf-tip" style="margin-top:0.85rem; padding:0.75rem 0.95rem; background:#f0fdf4; border-radius:0.6rem; font-size:0.85rem; color:#064e3b;"><strong>💡 무료 세무 상담:</strong> 한국세무사회·중소기업청 운영. 매출 작은 영세사업자·프리랜서는 무료로 세무사 상담 가능. 첫 신고 막막할 때 적극 활용하세요.</p>
+        <div class="wf-contact-grid">
+          <a class="wf-contact-btn" href="tel:126">📞 국세상담센터 126</a>
+          <a class="wf-contact-btn" href="https://hometax.go.kr" target="_blank" rel="noopener">🖥️ 홈택스</a>
+          <a class="wf-contact-btn" href="tel:1588-0560">📞 무료 세무상담 1588-0560</a>
+          <a class="wf-contact-btn" href="https://www.nts.go.kr" target="_blank" rel="noopener">🌐 국세청</a>
+        </div>
+        <p style="margin-top:0.85rem; padding:0.75rem 0.95rem; background:#f0fdf4; border-radius:0.6rem; font-size:0.85rem; color:#064e3b;"><strong>💡 무료 세무 상담:</strong> 한국세무사회·중소기업청 운영. 매출 작은 영세사업자·프리랜서는 무료로 세무사 상담 가능. 첫 신고 막막할 때 적극 활용하세요.</p>
       </div>
 
       <button data-wf-back class="w-full py-3.5 rounded-xl font-bold text-white mt-4 mb-8" style="background:linear-gradient(135deg,#047857,#10b981); box-shadow:0 2px 10px rgba(4,120,87,.3); border:none; cursor:pointer; font-family:inherit; font-size:1rem;">← 홈으로 돌아가기</button>
@@ -4760,7 +4781,7 @@
           <button type="button" id="cb-menu-btn" class="cb-menu-btn" title="더 보기">⋮</button>
           <div id="cb-menu-dropdown" class="cb-menu-dropdown">
             <button type="button" class="cb-menu-item" id="cb-admin-btn">🔑 관리자 로그인</button>
-            <button type="button" class="cb-menu-item" id="cb-fb-btn">🔥 Firebase 설정</button>
+            <button type="button" class="cb-menu-item" id="cb-fb-btn" style="display:none;">🔥 Firebase 설정</button>
             <div style="border-top:1px solid #e2e8f0; margin:0.3rem 0;"></div>
             <div style="padding:0.5rem 0.75rem; font-size:0.75rem; color:#94a3b8; line-height:1.5;">
               본인 글은 작성 시 입력한 비밀번호로만 수정·삭제 가능합니다.
@@ -4853,8 +4874,29 @@
         <p class="cb-modal-help">⚠️ <strong>databaseURL</strong>이 꼭 포함되어야 해요. Realtime Database 활성화 후 주소 확인.</p>
       </div>
       <div class="cb-info-callout" style="margin:0.85rem 0;">
-        <strong>🔒 보안 규칙</strong> Firebase Console → Realtime Database → 규칙 탭에서 아래로 설정:<br>
-        <code style="display:block; background:#0f172a; color:#a7f3d0; padding:0.6rem; border-radius:0.4rem; margin-top:0.4rem; font-size:0.78rem;">{<br>&nbsp;&nbsp;"rules": {<br>&nbsp;&nbsp;&nbsp;&nbsp;"posts": { ".read": true, ".write": true }<br>&nbsp;&nbsp;}<br>}</code>
+        <strong>🔒 보안 규칙</strong> Firebase Console → Realtime Database → 규칙 탭에서 아래로 설정하세요.<br>
+        <span style="color:#b91c1c; font-weight:700;">⚠️ <code>".write": true</code> 만 쓰면 누구나 게시판 전체를 지울 수 있습니다.</span> 아래 규칙은 글 목록 통째 삭제를 막아줍니다.
+        <code style="display:block; background:#0f172a; color:#a7f3d0; padding:0.6rem; border-radius:0.4rem; margin-top:0.4rem; font-size:0.75rem; line-height:1.6; white-space:pre; overflow-x:auto;">{
+  "rules": {
+    "posts": {
+      ".read": true,
+      "$postId": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['title','body','createdAt'])",
+        "title": { ".validate": "newData.isString() &amp;&amp; newData.val().length &lt;= 80" },
+        "body":  { ".validate": "newData.isString() &amp;&amp; newData.val().length &lt;= 3000" }
+      }
+    },
+    "comments": {
+      ".read": true,
+      "$postId": { "$cid": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['body','createdAt'])",
+        "body": { ".validate": "newData.isString() &amp;&amp; newData.val().length &lt;= 500" }
+      } }
+    }
+  }
+}</code>
       </div>
       <div class="cb-modal-error" id="cb-fb-error"></div>
       <div class="cb-modal-actions">
@@ -6137,7 +6179,32 @@ window.QUIZ_QUESTION_COUNT = 10;
   <!-- ===== JavaScript ===== -->
   <script>
     let activeGame = null;
-    let currentSection = 'pension';
+    let currentSection = 'home';
+
+    /* ================================================
+       고유가 피해지원금(3차 민생지원금) 노출 제어
+       - 신청 마감 2026-07-03 / 사용기한 2026-08-31
+       - 사용기한이 지나면 홈 카드·추천·검색에서 자동으로 내려간다.
+         (매년 수동으로 지우지 않아도 되도록 날짜 기준 1곳에서 관리)
+       ================================================ */
+    const FUEL_SUPPORT = {
+      useDeadline: new Date(2026, 7, 31, 23, 59, 59), // month는 0부터 → 7 = 8월
+      isActive() { return Date.now() <= this.useDeadline.getTime(); },
+      daysLeft() { return Math.max(0, Math.ceil((this.useDeadline.getTime() - Date.now()) / 86400000)); },
+      applyHomeCard() {
+        const card = document.getElementById('home-cat-fuel');
+        if (!card) return;
+        if (!this.isActive()) { card.remove(); return; } // 사용기한 종료 → 카드 제거
+        const d = this.daysLeft();
+        const desc = document.getElementById('home-cat-fuel-desc');
+        const status = document.getElementById('home-cat-fuel-status');
+        if (desc) desc.textContent = '신청 마감 · 8/31까지 사용';
+        if (status) {
+          status.textContent = d <= 30 ? `사용기한 D-${d}` : '신청 마감';
+          status.className = 'home-cat-status ' + (d <= 30 ? 'urgent' : 'closed');
+        }
+      }
+    };
 
     function showSection(sectionName, pushHistory = true) {
       document.querySelectorAll('body > section').forEach(s => s.classList.add('hidden'));
@@ -6464,9 +6531,10 @@ window.QUIZ_QUESTION_COUNT = 10;
         str = str.replace(/\s|원|,/g, '');
         if (str === '없음' || str === '없어요' || str === '모름') return 0;
         let total = 0;
+        let hadEok = false;
 
         const okMatch = str.match(/([0-9.]+)억/);
-        if (okMatch) { total += parseFloat(okMatch[1]) * 100000000; str = str.replace(okMatch[0], ''); }
+        if (okMatch) { total += parseFloat(okMatch[1]) * 100000000; str = str.replace(okMatch[0], ''); hadEok = true; }
 
         const cheonManMatch = str.match(/([0-9.]+)천만/);
         if (cheonManMatch) { total += parseFloat(cheonManMatch[1]) * 10000000; str = str.replace(cheonManMatch[0], ''); }
@@ -6474,8 +6542,13 @@ window.QUIZ_QUESTION_COUNT = 10;
         const manMatch = str.match(/([0-9.]+)만/);
         if (manMatch) { total += parseFloat(manMatch[1]) * 10000; str = str.replace(manMatch[0], ''); }
 
+        // "1억5천"처럼 억 뒤에 붙는 '천'은 관용적으로 '5천만원'을 뜻한다.
+        // (억 없이 그냥 "5천"이라고 쓴 경우에만 5,000원으로 해석)
         const cheonMatch = str.match(/([0-9.]+)천/);
-        if (cheonMatch) { total += parseFloat(cheonMatch[1]) * 1000; str = str.replace(cheonMatch[0], ''); }
+        if (cheonMatch) {
+          total += parseFloat(cheonMatch[1]) * (hadEok ? 10000000 : 1000);
+          str = str.replace(cheonMatch[0], '');
+        }
 
         const numMatch = str.match(/[0-9]+/);
         if (numMatch) { total += parseInt(numMatch[0], 10); }
@@ -6503,6 +6576,9 @@ window.QUIZ_QUESTION_COUNT = 10;
       },
 
       calculateAge(year, month) {
+        // 입력이 연·월까지뿐이라 '일'은 알 수 없다.
+        // 생일이 속한 달은 나이가 찬 것으로 본다 — 기초연금은 생일이 속한 달의
+        // 한 달 전부터 신청 가능하므로, 신청 가능 시점 기준으로는 이 계산이 맞다.
         const today = new Date();
         let age = today.getFullYear() - year;
         if (month > today.getMonth() + 1) age--;
@@ -7347,6 +7423,9 @@ window.QUIZ_QUESTION_COUNT = 10;
       formatKRWNum(a) { return pensionApp.formatKRWNum(a); },
 
       calculateAge(year, month) {
+        // 입력이 연·월까지뿐이라 '일'은 알 수 없다.
+        // 생일이 속한 달은 나이가 찬 것으로 본다 — 기초연금은 생일이 속한 달의
+        // 한 달 전부터 신청 가능하므로, 신청 가능 시점 기준으로는 이 계산이 맞다.
         const today = new Date();
         let age = today.getFullYear() - year;
         if (month > today.getMonth() + 1) age--;
@@ -7461,6 +7540,12 @@ window.QUIZ_QUESTION_COUNT = 10;
         const applyDiv = document.getElementById('dp-applyInfo');
         let html = '';
         const totalBenefit = r.baseBenefit + r.extraBenefit;
+        // 65세 이상 생계·의료급여 수급자의 부가급여(439,700원)는 기초연금액이 이미 포함된 금액이다.
+        // 그 외 유형의 부가급여는 순수 부가급여라 기초연금을 따로 받는다 → 라벨을 구분해야 오해가 없다.
+        const inclBasicPension = r.over65 && r.welfare === 'basic12';
+        const benefitNote = r.over65
+          ? (inclBasicPension ? '(기초연금 포함 합계)' : '(부가급여 · 기초연금은 별도)')
+          : '(기초급여 + 부가급여)';
 
         if (r.eligible) {
           html = `
@@ -7472,7 +7557,7 @@ window.QUIZ_QUESTION_COUNT = 10;
               </p>
 
               <div class="dp-benefit-total">
-                <span class="label">예상 월 수령액 ${r.over65 ? '(부가급여만, 기초연금 별도)' : '(기초급여 + 부가급여)'}</span>
+                <span class="label">예상 월 수령액 ${benefitNote}</span>
                 <strong class="amount">${this.formatKRWNum(totalBenefit)}</strong>
               </div>
 
@@ -7481,7 +7566,8 @@ window.QUIZ_QUESTION_COUNT = 10;
                 <ul class="space-y-0.5">
                   ${r.baseBenefit > 0 ? `<li>${r.baseBenefitLabel}: <strong>${this.formatKRWNum(r.baseBenefit)}</strong></li>` : `<li>${r.baseBenefitLabel}</li>`}
                   ${r.extraBenefit > 0 ? `<li>${r.extraBenefitLabel}: <strong>${this.formatKRWNum(r.extraBenefit)}</strong></li>` : ''}
-                  ${r.over65 && r.welfare === 'basic12' ? `<li class="text-xs text-indigo-700">* 65세 이상 생계·의료급여 수급자의 부가급여는 기초연금액 포함 최대 43만 9,700원입니다.</li>` : ''}
+                  ${inclBasicPension ? `<li class="text-xs text-indigo-700">* 위 금액은 <strong>기초연금이 이미 포함된 합계</strong>입니다. 기초연금을 여기에 또 더하지 마세요.</li>` : ''}
+                  ${r.over65 && !inclBasicPension ? `<li class="text-xs text-indigo-700">* 위 금액은 부가급여만입니다. 만 65세부터는 <strong>기초연금(월 최대 34만 9,700원)</strong>을 별도로 신청해 함께 받을 수 있어요.</li>` : ''}
                 </ul>
               </div>
 
@@ -7515,7 +7601,7 @@ window.QUIZ_QUESTION_COUNT = 10;
             </div>`;
         } else {
           const reasons = [];
-          if (r.severity === 'grade3single') reasons.push(`<li><strong>3급 단일 장애는 경증으로 분류</strong>되어 장애인연금 대상이 아닙니다. <br><span class="text-xs">→ 기초수급·차상위라면 장애수당(기초수급 월 11만원/차상위 월 4만원)을 알아보세요. 다른 장애가 추가로 생긴 경우 중복 등록으로 중증 전환 가능.</span></li>`);
+          if (r.severity === 'grade3single') reasons.push(`<li><strong>3급 단일 장애는 경증으로 분류</strong>되어 장애인연금 대상이 아닙니다. <br><span class="text-xs">→ 기초수급·차상위라면 장애수당(월 6만원, 보장시설 수급자 월 3만원)을 알아보세요. 다른 장애가 추가로 생긴 경우 중복 등록으로 중증 전환 가능.</span></li>`);
           else if (r.severity === 'mild') reasons.push(`<li><strong>경증(심하지 않은) 장애인</strong>은 장애인연금 대상이 아닙니다. <br><span class="text-xs">→ 장애수당(월 6만원, 기초수급자·차상위 기준)을 알아보세요.</span></li>`);
           else if (r.severity === 'none') reasons.push(`<li><strong>장애인 등록이 필요합니다.</strong> <br><span class="text-xs">→ 주소지 읍·면·동 주민센터에서 장애 등록을 먼저 진행하세요.</span></li>`);
           if (!r.ageOK) reasons.push(`<li>연령 미충족: 만 18세 이상 필요 (현재 만 ${r.age}세)</li>`);
@@ -7567,7 +7653,8 @@ window.QUIZ_QUESTION_COUNT = 10;
           baseBenefit: r.baseBenefit,
           extraBenefit: r.extraBenefit,
           age: r.age,
-          over65: r.over65
+          over65: r.over65,
+          benefitNote
         };
 
         resultDiv.innerHTML = html;
@@ -7620,7 +7707,7 @@ window.QUIZ_QUESTION_COUNT = 10;
             <div class="pdf-section-title">📊 결과 요약</div>
             <ul>
               <li><strong>판정:</strong> ${ctx.eligible ? '✅ 수급 가능성 높음' : '❌ 현재 기준 미충족'}</li>
-              ${ctx.eligible ? `<li><strong>예상 월 수령액:</strong> ${this.formatKRWNum(ctx.totalBenefit)}${ctx.over65 ? ' (부가급여만, 기초연금 별도)' : ''}</li>
+              ${ctx.eligible ? `<li><strong>예상 월 수령액:</strong> ${this.formatKRWNum(ctx.totalBenefit)} ${ctx.benefitNote || ''}</li>
               <li>기초급여: ${this.formatKRWNum(ctx.baseBenefit)}</li>
               <li>부가급여: ${this.formatKRWNum(ctx.extraBenefit)}</li>` : ''}
               <li><strong>소득인정액:</strong> ${this.formatKRWNum(ctx.totalIncome)}</li>
@@ -7676,7 +7763,7 @@ window.QUIZ_QUESTION_COUNT = 10;
         const ctx = this.lastResultContext;
         if (!ctx) { this.sharePage(); return; }
         const summary = ctx.eligible
-          ? `🎉 장애인연금 수급 가능성 높음\n예상 월 수령액: ${this.formatKRWNum(ctx.totalBenefit)}${ctx.over65 ? ' (부가급여만)' : ''}\n소득인정액: ${this.formatKRWNum(ctx.totalIncome)} / 기준: ${this.formatKRWNum(ctx.threshold)}`
+          ? `🎉 장애인연금 수급 가능성 높음\n예상 월 수령액: ${this.formatKRWNum(ctx.totalBenefit)} ${ctx.benefitNote || ''}\n소득인정액: ${this.formatKRWNum(ctx.totalIncome)} / 기준: ${this.formatKRWNum(ctx.threshold)}`
           : `📋 현재 기준으로는 수급이 어려울 수 있어요\n소득인정액: ${this.formatKRWNum(ctx.totalIncome)} / 기준: ${this.formatKRWNum(ctx.threshold)}`;
         shareModal.open({
           title: '결과 공유하기',
@@ -10256,7 +10343,6 @@ window.QUIZ_QUESTION_COUNT = 10;
       document.getElementById('dp-share-page-btn')?.addEventListener('click', () => disabilityApp.sharePage());
       // 장애인연금 페이지 → 다른 복지 혜택 카드
       document.getElementById('dp-goto-pension')?.addEventListener('click', () => { showSection('pension-container'); window.scrollTo(0,0); });
-      document.getElementById('dp-goto-fuel')?.addEventListener('click', () => { showSection('fuel-support'); window.scrollTo(0,0); });
 
       // ===== 홈페이지 네비게이션 =====
       document.getElementById('home-nav-game')?.addEventListener('click', () => showSection('game-hub'));
@@ -10473,8 +10559,8 @@ window.QUIZ_QUESTION_COUNT = 10;
           tags: ['경증', '월 6만원']
         },
         {
-          target: 'fuel-support', label: '고유가 피해지원금', icon: '⛽',
-          desc: '3차 민생지원금 · 1인 10~60만원 · 신청 7/3 마감 · 사용기한 8/31까지',
+          target: 'fuel-support', label: '고유가 피해지원금 (신청 마감)', icon: '⛽',
+          desc: '3차 민생지원금 · 1인 10~60만원 · 신청 7/3 마감 · 남은 금액은 8/31까지 사용',
           keywords: ['고유가', '피해지원금', '민생지원금', '에너지', '유류', '3차', '60만원', '10만원', '취약계층', '바우처', '민생회복', '사용기한', '마감'],
           tags: ['신청 마감', '사용기한 8/31']
         },
@@ -10492,8 +10578,8 @@ window.QUIZ_QUESTION_COUNT = 10;
         },
         {
           target: 'welfare-housing', label: '주거급여', icon: '🏠',
-          desc: '중위 48% 이하 · 임차가구 서울 1인 약 37만원 · 자가가구 수선 최대 1,241만원',
-          keywords: ['주거급여', '월세', '임차', '전세', '주택수선', '37만', '55만', '1241만', '849만', '457만', '경보수', '중보수', '대보수', '기준임대료', 'lh'],
+          desc: '중위 48% 이하 · 임차가구 서울 1인 약 37만원 · 자가가구 수선 최대 1,601만원',
+          keywords: ['주거급여', '월세', '임차', '전세', '주택수선', '37만', '55만', '1601만', '1095만', '590만', '경보수', '중보수', '대보수', '기준임대료', 'lh'],
           tags: ['임차료', '주택 수선']
         },
         {
@@ -10545,7 +10631,7 @@ window.QUIZ_QUESTION_COUNT = 10;
           tags: ['한부모 월 23만', '다자녀 우대']
         },
         {
-          target: 'tax-helper', label: '세금 도우미 (연말정산·종소세)', icon: '💰',
+          target: 'tax-helper', label: '세금 도우미 (연말정산·종소세)', icon: '🧾',
           desc: '연말정산 꿀팁 + 종합소득세 신고 (5월 1일~6월 1일) · 3.3% 프리랜서 환급 가이드',
           keywords: ['세금', '연말정산', '종합소득세', '종소세', '환급', '13월의월급', '프리랜서', '3.3', '3.3%', '홈택스', '국세청', '소득공제', '세액공제', '월세공제', '연금저축', 'irp', '의료비공제', '신용카드공제', '체크카드', '인적공제', '부양가족', '혼인공제', '모두채움', '경비율'],
           tags: ['연말정산', '종소세 5월', '환급']
@@ -10558,11 +10644,18 @@ window.QUIZ_QUESTION_COUNT = 10;
         },
         {
           target: 'game-hub', label: '추억의 게임', icon: '🎮',
-          desc: '오목, 2048, 스네이크, 테트리스, 플래피 새, 지뢰찾기, 메모리, 스도쿠, 벽돌깨기',
-          keywords: ['게임', '오목', '테트리스', '스도쿠', '벽돌깨기', '2048', '스네이크', '뱀', '플래피', '지뢰찾기', '메모리', '카드맞추기', '아케이드', '퍼즐', '퀴즈', '복지상식', '숫자맞추기', 'updown', '업다운', '두더지잡기', '반응속도'],
-          tags: ['9개 게임', '바로가기']
+          desc: '외로운 용사, 오목, 2048, 스네이크, 벽돌깨기, 테트리스, 플래피 새, 지뢰찾기, 카드 짝맞추기, 스도쿠, 상식 퀴즈, 숫자 맞추기, 두더지 잡기',
+          keywords: ['게임', '오목', '테트리스', '스도쿠', '벽돌깨기', '2048', '스네이크', '뱀', '플래피', '지뢰찾기', '메모리', '카드맞추기', '짝맞추기', '아케이드', '퍼즐', '퀴즈', '상식퀴즈', '복지상식', '맞춤법', '한국사', '숫자맞추기', 'updown', '업다운', '두더지잡기', '반응속도', '용사'],
+          tags: ['13종 게임', '바로가기']
         }
       ];
+
+      // 사용기한이 끝난 고유가 지원금은 검색 대상에서 제외
+      if (!FUEL_SUPPORT.isActive()) {
+        const fi = homeSearchData.findIndex(x => x.target === 'fuel-support');
+        if (fi >= 0) homeSearchData.splice(fi, 1);
+      }
+      FUEL_SUPPORT.applyHomeCard();
 
       // ===== 검색 엔진: 한글 초성 검색 + 점수 기반 랭킹 =====
       const searchEngine = {
@@ -11072,11 +11165,11 @@ window.QUIZ_QUESTION_COUNT = 10;
       const gapCheck = {
         answers: {}, // { '1': 'y'|'n', ... }
         catalog: [
-          { id: 'fuel-support', title: '⛽ 고유가 피해지원금 (3차 민생지원금)', desc: '소득 하위 70%에 1인 10~60만원. 자격 자가진단 카드 내장.', condition: () => true /* 거의 모두 해당 */ },
+          { id: 'fuel-support', title: '⛽ 고유가 피해지원금 — 사용기한 확인', desc: '신청은 7/3 마감. 이미 받으셨다면 8/31까지 쓰지 않으면 잔액이 사라져요.', condition: () => FUEL_SUPPORT.isActive() },
           { id: 'welfare-emergency', title: '🆘 긴급복지지원', desc: '실직·질병·화재 등 위기 시 즉시 지원. 생계비·의료비·주거비 일시 지원.', condition: (a) => a['1'] === 'y' || a['3'] === 'y' },
           { id: 'welfare-housing', title: '🏠 주거급여', desc: '월세·전세 가구에 월 임차료 지원 (서울 1인 약 37만원). 중위 48% 이하.', condition: (a) => a['2'] === 'y' },
           { id: 'welfare-medical', title: '🏥 의료급여 / 차상위 본인부담경감', desc: '저소득층 의료비 본인부담 경감(외래 1~2천원, 약국 500원).', condition: (a) => a['3'] === 'y' || a['1'] === 'y' },
-          { id: 'disability-pension', title: '♿ 장애인연금·장애수당', desc: '중증장애 월 최대 43만원, 경증장애 월 4~11만원.', condition: (a) => a['3'] === 'y' },
+          { id: 'disability-pension', title: '♿ 장애인연금·장애수당', desc: '중증장애 월 최대 43만 9,700원, 경증장애 월 6만원(기초수급·차상위).', condition: (a) => a['3'] === 'y' },
           { id: 'welfare-childcare', title: '👶 부모급여·아동수당·첫만남이용권', desc: '0세 100만/1세 50만, 만 9세 미만 월 10만, 첫째 200만/둘째 300만.', condition: (a) => a['4'] === 'y' },
           { id: 'welfare-education', title: '🎓 교육급여 (학생 학습비)', desc: '중위 50% 이하 가구 초·중·고 학생에게 연 50~86만원 학습비.', condition: (a) => a['4'] === 'y' && a['1'] === 'y' },
           { id: 'pension-container', title: '💰 기초연금', desc: '만 65세 이상 + 소득 하위 70% → 월 최대 34만 9,700원.', condition: (a) => a['5'] === 'y' },
@@ -11234,7 +11327,7 @@ window.QUIZ_QUESTION_COUNT = 10;
           items.push({ id: 'bankbook', name: '본인 명의 통장 사본', where: '본인 거래 은행 또는 인터넷 뱅킹 발급', link: 'https://www.gov.kr' });
           items.push({ id: 'register', name: '주민등록등본 (가족 포함)', where: '정부24 또는 주민센터', link: 'https://www.gov.kr/portal/onepStop/regCertOne' });
 
-          const age = state.birthYear ? (2026 - parseInt(state.birthYear)) : null;
+          const age = state.birthYear ? (new Date().getFullYear() - parseInt(state.birthYear)) : null;
           const t = state.toggles || {};
 
           // 65세 이상 → 기초연금 신청
@@ -11403,6 +11496,7 @@ window.QUIZ_QUESTION_COUNT = 10;
           // 출생연도 input
           const birthIn = document.getElementById('wff-birth');
           if (birthIn) {
+            birthIn.max = String(new Date().getFullYear()); // 해가 바뀌어도 자동 반영
             birthIn.addEventListener('input', () => {
               this.state.birthYear = parseInt(birthIn.value) || 0;
               this.hideError(2);
@@ -11471,7 +11565,7 @@ window.QUIZ_QUESTION_COUNT = 10;
           }
           if (step === 2) {
             const y = this.state.birthYear;
-            if (!y || y < 1900 || y > 2026) { this.showError(2); return false; }
+            if (!y || y < 1900 || y > new Date().getFullYear()) { this.showError(2); return false; }
           }
           if (step === 3) {
             if (!this.state.household) { this.showError(3); return false; }
@@ -11567,7 +11661,7 @@ window.QUIZ_QUESTION_COUNT = 10;
 
         getAge(birthYear) {
           if (!birthYear) return null;
-          return 2026 - parseInt(birthYear);
+          return new Date().getFullYear() - parseInt(birthYear);
         },
 
         // 자녀 정보 정리
@@ -11665,7 +11759,7 @@ window.QUIZ_QUESTION_COUNT = 10;
           } else if (t.mildDisability && (income === 'basic' || income === 'nearpoor')) {
             high.push({
               icon: '♿', name: '장애수당', target: 'disability-pension',
-              detail: '경증장애인(4~6급) 중 기초수급자·주거·교육급여 수급자 월 11만원, 차상위계층 월 4만원 지급 (2026년 인상). 장애인연금과는 별도 제도.',
+              detail: '경증장애인(4~6급) 중 기초생활수급자·차상위계층에게 월 6만원 지급 (보장시설 수급자는 월 3만원). 장애인연금과는 별도 제도입니다.',
               cta: '관련 정보 보기 →'
             });
           }
@@ -11716,7 +11810,7 @@ window.QUIZ_QUESTION_COUNT = 10;
           } else if ((income === 'basic' || income === 'nearpoor' || income === 'low') && housing === 'own') {
             high.push({
               icon: '🏠', name: '주거급여 (자가가구 수선)', target: 'welfare-housing',
-              detail: '중위소득 48% 이하 자가가구는 주택 수선비 지원. 경보수 457만/중보수 849만/대보수 1,241만원 (3·5·7년 주기).',
+              detail: '중위소득 48% 이하 자가가구는 주택 수선비 지원. 경보수 590만/중보수 1,095만/대보수 1,601만원 (3·5·7년 주기).',
               cta: '주거급여 안내 →'
             });
           }
@@ -11737,12 +11831,12 @@ window.QUIZ_QUESTION_COUNT = 10;
             });
           }
 
-          // === 고유가 피해지원금 (민생지원금) — 신청 마감(7/3), 사용기한 안내용으로만 노출 ===
-          if (income !== 'high') {
+          // === 고유가 피해지원금 (민생지원금) — 신청 마감(7/3). 사용기한(8/31) 지나면 노출 중단 ===
+          if (income !== 'high' && FUEL_SUPPORT.isActive()) {
             review.push({
-              icon: '⛽', name: '고유가 피해지원금 (신청 마감)', target: 'fuel-support',
-              detail: '소득 하위 70% 대상 1인당 10~60만원 지원. 신청은 7월 3일 마감. 이미 받으셨다면 8월 31일까지 사용해야 잔액이 사라지지 않아요.',
-              cta: '사용기한 확인하기 →'
+              icon: '⛽', name: `고유가 피해지원금 (사용기한 D-${FUEL_SUPPORT.daysLeft()})`, target: 'fuel-support',
+              detail: '신청은 7월 3일에 마감됐어요. 이미 받으셨다면 8월 31일까지 쓰지 않으면 남은 금액이 사라집니다.',
+              cta: '사용기한·사용처 확인하기 →'
             });
           }
 
@@ -11868,7 +11962,7 @@ window.QUIZ_QUESTION_COUNT = 10;
           if (t.pregnant) {
             high.push({
               icon: '🤰', name: '임신·출산 진료비 지원 (국민행복카드)', target: 'welfare-childcare',
-              detail: '임신 1회당 100만원(다태아 140만원, 태아당 100만원이 되도록 추가 지급) 진료비 바우처. 분만취약지는 +20만원. 출산 후 첫만남이용권(200/300만)과 함께 신청 가능.',
+              detail: '임신 1회당 100만원(쌍둥이 등 다태아는 태아당 100만원) 진료비 바우처. 분만취약지 거주는 20만원 추가. 출산 후 첫만남이용권(첫째 200만/둘째 이상 300만)과 함께 신청 가능.',
               cta: '아동·양육수당 안내 →'
             });
           }
@@ -12078,8 +12172,11 @@ window.QUIZ_QUESTION_COUNT = 10;
         FB_CONFIG_KEY: 'welfareCommunityFirebaseConfig_v1',
         USER_KEY: 'cb_user_uuid_v1',
         COMMENTS_KEY: 'welfareCommunityComments_v1',
-        ADMIN_HASH: '7f5b2d2f8ebca7b9b25c4e62a6e09e7d4c66a6dc1e56e5ebb9d4d1d8e93b2e7f',
-        ADMIN_FALLBACK_PW: 'admin1234',
+        // 관리자 비밀번호는 SHA-256 해시로만 보관한다 (평문 저장 금지).
+        // 비밀번호 변경 방법: 브라우저 콘솔(F12)에서 아래를 실행하고 나온 값으로 교체
+        //   crypto.subtle.digest('SHA-256', new TextEncoder().encode('새비밀번호'))
+        //     .then(b => console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
+        ADMIN_HASH: 'ac9689e2272427085e35b9d3e3e8bed88cb3434828b43b86fc0596cad4c6e270',
         adminMode: false,
         currentCategory: 'all',
         currentView: 'list', // 'list' | 'detail'
@@ -12802,7 +12899,7 @@ window.QUIZ_QUESTION_COUNT = 10;
           const inputHash = await this.sha256(pw);
           if (p.adminPost) {
             // 관리자 글은 관리자만
-            if (inputHash === this.ADMIN_HASH || pw === this.ADMIN_FALLBACK_PW) {
+            if (inputHash === this.ADMIN_HASH) {
               this.adminMode = true;
               this.updateAdminBtn();
             } else {
@@ -12829,10 +12926,10 @@ window.QUIZ_QUESTION_COUNT = 10;
             this.updateAdminBtn();
             return;
           }
-          const pw = prompt('🔑 관리자 비밀번호를 입력하세요\n(기본: admin1234 — 코드에서 변경 가능)');
+          const pw = prompt('🔑 관리자 비밀번호를 입력하세요');
           if (pw === null) return;
           const hash = await this.sha256(pw);
-          if (hash === this.ADMIN_HASH || pw === this.ADMIN_FALLBACK_PW) {
+          if (hash === this.ADMIN_HASH) {
             this.adminMode = true;
             this.updateAdminBtn();
             alert('✅ 관리자 모드 ON\n공지글 작성·모든 글 수정/삭제가 가능합니다.');
@@ -12843,6 +12940,9 @@ window.QUIZ_QUESTION_COUNT = 10;
 
         updateAdminBtn() {
           const btn = document.getElementById('cb-admin-btn');
+          // Firebase 설정은 운영자만 건드릴 영역 → 관리자 모드에서만 노출
+          const fbBtn = document.getElementById('cb-fb-btn');
+          if (fbBtn) fbBtn.style.display = this.adminMode ? 'block' : 'none';
           if (!btn) return;
           if (this.adminMode) {
             btn.classList.add('on');
